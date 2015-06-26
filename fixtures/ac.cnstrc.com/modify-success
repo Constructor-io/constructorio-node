@@ -1,0 +1,19 @@
+PUT /v1/item?autocomplete_key=autocompleteKey
+host: ac.cnstrc.com
+authorization: Basic YXBpVG9rZW46
+accept: application/json
+content-type: application/json
+body: {\"item_name\":\"power drill\",\"suggested_score\":100,\"autocomplete_section\":\"standard\"}
+
+204 HTTP/1.1
+server: nginx/1.4.6 (Ubuntu)
+content-type: text/html; charset=utf-8
+content-length: 0
+set-cookie: session=eyJwd19oYXNoIjp7IiBiIjoiSkRKaEpEQTRKRkZ2UzNSMlkzWk5kbkJ3YldwamJERjZTek0yTW1WM1MxZFFPRFl6V1hCTVF6RkRRV3BLUjBrM01uUTNRbHBYVkdOWVVIbGgifX0.CGogtg.2oF87obX71IKw0f5DUv-dP4uROA; HttpOnly; Path=/
+accept-ranges: bytes
+date: Mon, 22 Jun 2015 22:41:58 GMT
+x-varnish: 1482789566
+age: 0
+via: 1.1 varnish
+connection: keep-alive
+

@@ -1,0 +1,26 @@
+{
+  "name": "constructorio",
+  "version": "0.0.1",
+  "description": "Constructor.io API client",
+  "homepage": "https://github.com/Constructor-io/constructorio-javascript",
+  "main": "lib/constructorio.js",
+  "author": "Dan McCormick <dan@constructor.io> (http://constructor.io)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Constructor-io/constructorio-javascript.git"
+  },
+  "engines": {
+    "node": ">= v0.8.0"
+  },
+  "dependencies": {
+    "request": "~2.34.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.0",
+    "replay": "~1.10.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}
