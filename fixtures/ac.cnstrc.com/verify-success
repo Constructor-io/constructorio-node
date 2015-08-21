@@ -1,0 +1,16 @@
+GET /v1/verify?autocomplete_key=autocompleteKey
+host: ac.cnstrc.com
+authorization: Basic YXBpVG9rZW46
+
+200 HTTP/1.1
+server: nginx/1.4.6 (Ubuntu)
+content-type: text/html; charset=utf-8
+accept-ranges: bytes
+date: Mon, 22 Jun 2015 22:24:55 GMT
+x-varnish: 1482789544
+via: 1.1 varnish
+connection: keep-alive
+
+{
+  "message": "successful authentication"
+}

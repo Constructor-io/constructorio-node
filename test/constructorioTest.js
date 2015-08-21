@@ -18,6 +18,23 @@ describe('constructorio', function() {
     })
   })
 
+  describe('verify', function() {
+    it('verifies authentication', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey",
+        protocol: "http",
+        host: "ac.cnstrc.com",
+      })
+
+      constructorio.verify(function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response.message, "successful authentication");
+        done();
+      });
+    });
+  })
+
   describe('add', function() {
     it('adds an item', function(done) {
       var constructorio = new Constructorio({
