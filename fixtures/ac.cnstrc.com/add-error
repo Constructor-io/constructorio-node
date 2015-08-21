@@ -1,0 +1,21 @@
+POST /v1/item?autocomplete_key=bad-autocompleteKey
+host: ac.cnstrc.com
+authorization: Basic YXBpVG9rZW46
+accept: application/json
+content-type: application/json
+body: {\"item_name\":\"power drill\",\"autocomplete_section\":\"standard\"}
+
+401 HTTP/1.1
+accept-ranges: bytes
+age: 0
+content-type: application/json
+date: Fri, 21 Aug 2015 23:09:56 GMT
+server: nginx/1.4.6 (Ubuntu)
+via: 1.1 varnish
+x-varnish: 1000933745
+content-length: 126
+connection: keep-alive
+
+{
+  "message": "You have supplied an invalid autocomplete key. Look up your valid autocomplete key in your admin dashboard."
+}

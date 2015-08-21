@@ -53,6 +53,24 @@ describe('constructorio', function() {
         done();
       });
     })
+
+    it('receives an error when adding item with wrong autocomplete key', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "bad-autocompleteKey",
+        protocol: "http",
+        host: "ac.cnstrc.com",
+      })
+
+      constructorio.add({
+        item_name: "power drill",
+        autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err.message, "You have supplied an invalid autocomplete key. Look up your valid autocomplete key in your admin dashboard.");
+        assert.equal(response, undefined);
+        done();
+      });
+    })
   })
 
   describe('remove', function() {
