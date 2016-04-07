@@ -73,6 +73,66 @@ describe('constructorio', function() {
     })
   })
 
+  describe('add batch', function() {
+    it('adds multiple items in a batch', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey",
+        protocol: "http",
+        host: "ac.cnstrc.com",
+      })
+
+      constructorio.add_batch({
+        items: [ { item_name: "reciprocating saw" } ],
+        autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+  })
+
+  describe('add or update', function() {
+    it('adds/updates an item', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey",
+        protocol: "http",
+        host: "ac.cnstrc.com",
+      })
+
+      constructorio.add_or_update({
+        item_name: "power drill",
+        autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+  })
+
+  describe('add or update batch', function() {
+    it('adds/updates multiple items in a batch', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey",
+        protocol: "http",
+        host: "ac.cnstrc.com",
+      })
+
+      constructorio.add_or_update_batch({
+        items: [ { item_name: "reciprocating saw" } ],
+        autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+  })
+
   describe('remove', function() {
     it('removes an item', function(done) {
       var constructorio = new Constructorio({
