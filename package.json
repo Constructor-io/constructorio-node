@@ -4,7 +4,7 @@
   "description": "Constructor.io API client",
   "homepage": "https://github.com/Constructor-io/constructorio-javascript",
   "main": "lib/constructorio.js",
-  "author": "Dan McCormick <dan@constructor.io> (http://constructor.io)",
+  "author": "Dan McCormick <dan@constructor.io> (https://constructor.io)",
   "license": "MIT",
   "repository": {
     "type": "git",
