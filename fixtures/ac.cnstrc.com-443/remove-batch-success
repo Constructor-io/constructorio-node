@@ -1,0 +1,20 @@
+DELETE /v1/batch_items?autocomplete_key=autocompleteKey
+host: ac.cnstrc.com
+authorization: Basic YXBpVG9rZW46
+accept: application/json
+content-type: application/json
+body: {\"items\":[{\"item_name\":\"reciprocating saw\"}],\"autocomplete_section\":\"standard\"}
+
+204 HTTP/1.1
+accept-ranges: bytes
+age: 0
+content-length: 0
+content-type: text/html; charset=utf-8
+date: Mon, 17 Oct 2016 21:32:26 GMT
+server: nginx/1.4.6 (Ubuntu)
+set-cookie: session=eyJwd19oYXNoIjp7IiBiIjoiSkRKaEpEQTRKR1ZWUkdwc1ZEaGFWVUpQWmpJNEwzQllVREJuU2k1blZrSllSbFk1VWtKaE5WZE1SMUZZU201UWFrdGxOME51ZW1kM00ySlgifX0.CubU6g.7XL4ykQx-JGAzC0gpxrdBvbSAzg; HttpOnly; Path=/
+strict-transport-security: max-age=31536000
+via: 1.1 varnish
+x-varnish: 869375003
+connection: keep-alive
+

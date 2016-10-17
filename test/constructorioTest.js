@@ -22,9 +22,7 @@ describe('constructorio', function() {
     it('verifies authentication', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.verify(function(err, response) {
@@ -39,9 +37,7 @@ describe('constructorio', function() {
     it('adds an item', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.add({
@@ -57,9 +53,7 @@ describe('constructorio', function() {
     it('receives an error when adding item with wrong autocomplete key', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "bad-autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "bad-autocompleteKey"
       })
 
       constructorio.add({
@@ -77,9 +71,7 @@ describe('constructorio', function() {
     it('adds multiple items in a batch', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.add_batch({
@@ -97,9 +89,7 @@ describe('constructorio', function() {
     it('adds/updates an item', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.add_or_update({
@@ -117,9 +107,7 @@ describe('constructorio', function() {
     it('adds/updates multiple items in a batch', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.add_or_update_batch({
@@ -137,9 +125,7 @@ describe('constructorio', function() {
     it('removes an item', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.remove({
@@ -153,13 +139,29 @@ describe('constructorio', function() {
     })
   })
 
+  describe('remove batch', function() {
+    it('removes multiple items in a batch', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey"
+      })
+
+      constructorio.remove_batch({
+        items: [ { item_name: "reciprocating saw" } ],
+        autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+  })
+
   describe('modify', function() {
     it('modifies an item', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
-        autocompleteKey: "autocompleteKey",
-        protocol: "http",
-        host: "ac.cnstrc.com",
+        autocompleteKey: "autocompleteKey"
       })
 
       constructorio.modify({
