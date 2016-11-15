@@ -50,6 +50,27 @@ describe('constructorio', function() {
       });
     })
 
+    it('adds an item with metadata', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey"
+      })
+
+      constructorio.add({
+        item_name: "power drill 2",
+        autocomplete_section: "Products",
+        url: "http://url.com",
+        metadata: {
+          key1: "value1",
+          key2: "value2"
+        }
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+
     it('receives an error when adding item with wrong autocomplete key', function(done) {
       var constructorio = new Constructorio({
         apiToken: "apiToken",
@@ -77,6 +98,27 @@ describe('constructorio', function() {
       constructorio.add_batch({
         items: [ { item_name: "reciprocating saw" } ],
         autocomplete_section: "standard",
+      }, function(err, response) {
+        assert.equal(err, undefined);
+        assert.equal(response, "");
+        done();
+      });
+    })
+  })
+
+  describe('add batch with metadata', function() {
+    it('adds multiple items in a batch', function(done) {
+      var constructorio = new Constructorio({
+        apiToken: "apiToken",
+        autocompleteKey: "autocompleteKey"
+      })
+
+      constructorio.add_batch({
+        items: [
+          { item_name: "reciprocating saw 1", url: "http://url.com", metadata: { key1: "value1", key2: "value2" } },
+          { item_name: "reciprocating saw 2", url: "http://url.com", metadata: { keyA: "valueA", keyB: "valueB" } },
+        ],
+        autocomplete_section: "Products",
       }, function(err, response) {
         assert.equal(err, undefined);
         assert.equal(response, "");
