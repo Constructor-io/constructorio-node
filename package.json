@@ -7,7 +7,6 @@
   "scripts": {
     "clean": "rm -rf node_modules",
     "check-deps": "npm-check",
-    "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "eslint lib test",
     "test": "mocha"
   },
@@ -19,7 +18,6 @@
   },
   "eslintConfig": {
     "env": {
-      "browser": true,
       "node": true,
       "mocha": true,
       "es6": true
@@ -80,7 +78,6 @@
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",
-    "license-checker": "^25.0.1",
     "mocha": "^6.1.4",
     "npm-check": "^5.9.0",
     "nyc": "^14.1.1",
