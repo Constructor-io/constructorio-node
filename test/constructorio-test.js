@@ -1,6 +1,5 @@
 const assert = require('assert');
 const Constructorio = require('../lib/constructorio');
-replay = require('replay');
 
 describe('constructorio', () => {
   describe('config', () => {

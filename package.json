@@ -80,7 +80,6 @@
     "eslint-plugin-import": "^2.15.0",
     "mocha": "^6.1.4",
     "npm-check": "^5.9.0",
-    "nyc": "^14.1.1",
-    "replay": "^2.4.0"
+    "nyc": "^14.1.1"
   }
 }
