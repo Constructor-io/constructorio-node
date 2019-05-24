@@ -8,7 +8,10 @@
     "clean": "rm -rf node_modules",
     "check-deps": "npm-check",
     "lint": "eslint lib test",
-    "test": "mocha"
+    "test": "mocha --timeout 5000",
+    "precoverage": "rm -rf ./coverage",
+    "coverage": "NODE_ENV=dev-local nyc --all --reporter=html mocha --timeout 5000",
+    "postcoverage": "http-server ./coverage -p 8080"
   },
   "author": "Dan McCormick <dan@constructor.io> (https://constructor.io)",
   "license": "MIT",
@@ -55,7 +58,7 @@
       ],
       "max-nested-callbacks": [
         "error",
-        4
+        5
       ],
       "max-params": [
         "error",
@@ -71,6 +74,7 @@
     "node": ">= v0.8.0"
   },
   "dependencies": {
+    "http-server": "^0.11.1",
     "request": "^2.34.0"
   },
   "devDependencies": {

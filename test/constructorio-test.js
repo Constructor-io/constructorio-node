@@ -173,23 +173,23 @@ describe('constructorio', () => {
     });
   });
 
-  // describe('modify', () => {
-  //   it('modifies an item', (done) => {
-  //     const constructorio = new Constructorio({
-  //       apiToken: 'apiToken',
-  //       autocompleteKey: 'autocompleteKey',
-  //     });
+  describe('modifyItem', () => {
+    it('should return nothing when modifying an item in an autocomplete section', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = createProductItem();
+      data.autocomplete_section = 'Products';
+      constructorio.addItem(data, () => {
+        data.suggested_score = 12;
+        data.url = 'http://url.com';
+        data.new_item_name = `${data.item_name}-new`;
 
-  //     constructorio.modify({
-  //       item_name: 'power drill',
-  //       suggested_score: 100,
-  //       autocomplete_section: 'standard',
-  //     }, (err, response) => {
-  //       assert.equal(err, undefined);
-  //       assert.equal(response, '');
-  //       done();
-  //     });
-  //   });
-  // });
-
+        constructorio.modifyItem(data, (err, response) => {
+          console.log(err);
+          expect(err).to.be.undefined;
+          expect(response).to.be.undefined;
+          done();
+        });
+      });
+    });
+  });
 });
