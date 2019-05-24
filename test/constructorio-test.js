@@ -21,18 +21,19 @@ describe('constructorio', () => {
   describe('new', () => {
     it('should set the API token and key', () => {
       const constructorio = new Constructorio(testConfig);
+
       expect(constructorio.config.apiToken).to.eq(testConfig.apiToken);
       expect(constructorio.config.apiKey).to.eq(testConfig.apiKey);
     });
   });
 
   describe('verify', () => {
-    it('should return success when given a valid key/token pair', (done) => {
+    it('should return successful authentication when given a valid key/token pair', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.verify((err, response) => {
         expect(err).to.be.undefined;
-        expect(response.message).to.eq('successful authentication');
+        expect(response.message).to.match(/successful authentication/);
         done();
       });
     });
@@ -50,45 +51,39 @@ describe('constructorio', () => {
         done();
       });
     });
+
+    it('should return nothing when adding an item with metadata to an autocomplete section', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = createProductItem();
+      data.autocomplete_section = 'Products';
+      data.url = 'http://url.com';
+      data.metadata = {
+        key1: 'value1',
+        key2: 'value2',
+      };
+
+      constructorio.addItem(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when adding an item with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+      const data = createProductItem();
+      data.autocomplete_section = 'Products';
+
+      constructorio.addItem(data, (err, response) => {
+        expect(err.message).to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
   });
-
-  //   it('adds an item with metadata', (done) => {
-  //     const constructorio = new Constructorio({
-  //       apiToken: 'apiToken',
-  //       autocompleteKey: 'autocompleteKey',
-  //     });
-
-  //     constructorio.add({
-  //       item_name: 'power drill 2',
-  //       autocomplete_section: 'Products',
-  //       url: 'http://url.com',
-  //       metadata: {
-  //         key1: 'value1',
-  //         key2: 'value2',
-  //       },
-  //     }, (err, response) => {
-  //       assert.equal(err, undefined);
-  //       assert.equal(response, '');
-  //       done();
-  //     });
-  //   });
-
-  //   it('receives an error when adding item with wrong autocomplete key', (done) => {
-  //     const constructorio = new Constructorio({
-  //       apiToken: 'apiToken',
-  //       autocompleteKey: 'bad-autocompleteKey',
-  //     });
-
-  //     constructorio.add({
-  //       item_name: 'power drill',
-  //       autocomplete_section: 'standard',
-  //     }, (err, response) => {
-  //       assert.equal(err.message, 'You have supplied an invalid autocomplete key. Look up your valid autocomplete key in your admin dashboard.');
-  //       assert.equal(response, undefined);
-  //       done();
-  //     });
-  //   });
-  // });
 
   // describe('add batch', () => {
   //   it('adds multiple items in a batch', (done) => {
