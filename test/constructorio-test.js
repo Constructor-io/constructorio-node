@@ -4,6 +4,11 @@ const expect = require('chai').expect;
 const uuidv1 = require('uuid/v1');
 const Constructorio = require('../lib/constructorio');
 
+const testConfig = {
+  apiToken: 'YSOxV00F0Kk2R0KnPQN8',
+  apiKey: 'ZqXaOfXuBWD4s3XzCI1q',
+};
+
 function createProductItem() {
   const uuid = uuidv1();
   return {
@@ -13,26 +18,17 @@ function createProductItem() {
 }
 
 describe('constructorio', () => {
-  describe('config', () => {
-    it('should set the API token', () => {
-      const apiToken = 'a-test-api-key';
-      const constructorio = new Constructorio({ apiToken });
-      expect(constructorio.config.apiToken).to.eq(apiToken);
-    });
-
-    it('should set the API key', () => {
-      const apiKey = 'a-test-autocomplete-key';
-      const constructorio = new Constructorio({ apiKey });
-      expect(constructorio.config.apiKey).to.eq(apiKey);
+  describe('new', () => {
+    it('should set the API token and key', () => {
+      const constructorio = new Constructorio(testConfig);
+      expect(constructorio.config.apiToken).to.eq(testConfig.apiToken);
+      expect(constructorio.config.apiKey).to.eq(testConfig.apiKey);
     });
   });
 
   describe('verify', () => {
-    it('should return success with a valid key/token pair', (done) => {
-      const constructorio = new Constructorio({
-        apiToken: 'YSOxV00F0Kk2R0KnPQN8',
-        apiKey: 'ZqXaOfXuBWD4s3XzCI1q',
-      });
+    it('should return success when given a valid key/token pair', (done) => {
+      const constructorio = new Constructorio(testConfig);
 
       constructorio.verify((err, response) => {
         expect(err).to.be.undefined;
@@ -43,11 +39,8 @@ describe('constructorio', () => {
   });
 
   describe('addItem', () => {
-    it('should add an item to the autocomplete section', (done) => {
-      const constructorio = new Constructorio({
-        apiToken: 'YSOxV00F0Kk2R0KnPQN8',
-        apiKey: 'ZqXaOfXuBWD4s3XzCI1q',
-      });
+    it('should return nothing when adding an item to an autocomplete section', (done) => {
+      const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
