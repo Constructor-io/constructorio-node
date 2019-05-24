@@ -4,23 +4,86 @@
   "description": "Constructor.io API client",
   "homepage": "https://github.com/Constructor-io/constructorio-javascript",
   "main": "lib/constructorio.js",
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "check-deps": "npm-check",
+    "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
+    "lint": "eslint lib test",
+    "test": "mocha"
+  },
   "author": "Dan McCormick <dan@constructor.io> (https://constructor.io)",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:Constructor-io/constructorio-javascript.git"
   },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true,
+      "es6": true
+    },
+    "extends": "airbnb-base",
+    "globals": {
+      "expect": true
+    },
+    "rules": {
+      "global-require": "off",
+      "max-len": [
+        "error",
+        120,
+        2,
+        {
+          "ignoreUrls": true,
+          "ignoreComments": false,
+          "ignoreRegExpLiterals": true,
+          "ignoreStrings": true,
+          "ignoreTemplateLiterals": true
+        }
+      ],
+      "object-curly-newline": "off",
+      "padded-blocks": "off",
+      "react/prefer-stateless-function": "off",
+      "no-unused-vars": [
+        "error",
+        {
+          "varsIgnorePattern": "style"
+        }
+      ],
+      "max-depth": [
+        "error",
+        4
+      ],
+      "max-nested-callbacks": [
+        "error",
+        4
+      ],
+      "max-params": [
+        "error",
+        4
+      ],
+      "complexity": [
+        "error",
+        20
+      ]
+    }
+  },
   "engines": {
     "node": ">= v0.8.0"
   },
   "dependencies": {
-    "request": "~2.34.0"
+    "request": "^2.34.0"
   },
   "devDependencies": {
-    "mocha": "~1.18.0",
-    "replay": "~1.10.2"
-  },
-  "scripts": {
-    "test": "mocha"
+    "chai": "^4.2.0",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.15.0",
+    "license-checker": "^25.0.1",
+    "mocha": "^6.1.4",
+    "npm-check": "^5.9.0",
+    "nyc": "^14.1.1",
+    "replay": "^2.4.0"
   }
 }
