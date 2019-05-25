@@ -184,7 +184,6 @@ describe('constructorio', () => {
         data.new_item_name = `${data.item_name}-new`;
 
         constructorio.modifyItem(data, (err, response) => {
-          console.log(err);
           expect(err).to.be.undefined;
           expect(response).to.be.undefined;
           done();
