@@ -25,7 +25,7 @@ function createProductItemGroup() {
   };
 }
 
-function createProductItemToTrack(done) {
+function createProductItemToTest(done) {
   const constructorio = new Constructorio(testConfig);
   const data = {
     item_name: 'Alphabet soup',
@@ -45,7 +45,7 @@ function createProductItemGroupToTest(done) {
       },
     ],
   };
-  constructorio.addItemGroups(data, done);
+  constructorio.addOrUpdateItemGroups(data, done);
 }
 
 describe('constructorio', () => {
@@ -224,7 +224,7 @@ describe('constructorio', () => {
   });
 
   describe('addItemGroups', () => {
-    it('should return nothing when adding an item group', (done) => {
+    it('should return status when adding an item group', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         item_groups: [
@@ -242,9 +242,49 @@ describe('constructorio', () => {
     });
   });
 
-  describe('trackSearch', () => {
-    before(createProductItemToTrack);
+  describe('getItemGroup', () => {
+    before(createProductItemGroupToTest);
+    it('should return an item group', (done) => {
+      const constructorio = new Constructorio(testConfig);
 
+      constructorio.getItemGroup({ group_id: 'SoupGroup' }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.deep.eq({
+          item_groups: [
+            {
+              children: [],
+              id: 'SoupGroup',
+              name: 'Soup Group',
+            },
+          ],
+          total_count: 1,
+        });
+        done();
+      });
+    });
+  });
+
+  describe('addOrUpdateItemGroups', () => {
+    it('should return status when adding an item group', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = {
+        item_groups: [
+          createProductItemGroup(),
+        ],
+      };
+
+      constructorio.addOrUpdateItemGroups(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.deep.eq({
+          item_groups: { inserted: 1, processed: 1, updated: 0 },
+        });
+        done();
+      });
+    });
+  });
+
+  describe('trackSearch', () => {
+    before(createProductItemToTest);
     it('should return nothing when tracking a search', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
@@ -261,8 +301,7 @@ describe('constructorio', () => {
   });
 
   describe('trackClickThrough', () => {
-    before(createProductItemToTrack);
-
+    before(createProductItemToTest);
     it('should return nothing when tracking a click through', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
@@ -280,8 +319,7 @@ describe('constructorio', () => {
   });
 
   describe('trackConversion', () => {
-    before(createProductItemToTrack);
-
+    before(createProductItemToTest);
     it('should return nothing when tracking a conversion', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
