@@ -17,6 +17,14 @@ function createProductItem() {
   };
 }
 
+function createProductItemGroup() {
+  const uuid = uuidv1();
+  return {
+    id: `Group${uuid}`,
+    name: `GroupName${uuid}`,
+  };
+}
+
 function createProductItemToTrack(done) {
   const constructorio = new Constructorio(testConfig);
   const data = {
@@ -25,6 +33,19 @@ function createProductItemToTrack(done) {
     autocomplete_section: 'Products',
   };
   constructorio.addOrUpdateItem(data, done);
+}
+
+function createProductItemGroupToTest(done) {
+  const constructorio = new Constructorio(testConfig);
+  const data = {
+    item_groups: [
+      {
+        id: 'SoupGroup',
+        name: 'Soup Group',
+      },
+    ],
+  };
+  constructorio.addItemGroups(data, done);
 }
 
 describe('constructorio', () => {
@@ -50,7 +71,7 @@ describe('constructorio', () => {
   });
 
   describe('addItem', () => {
-    it('should return nothing when adding an item to an autocomplete section', (done) => {
+    it('should return nothing when adding an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
@@ -62,7 +83,7 @@ describe('constructorio', () => {
       });
     });
 
-    it('should return nothing when adding an item with metadata to an autocomplete section', (done) => {
+    it('should return nothing when adding an item with metadata', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
@@ -96,7 +117,7 @@ describe('constructorio', () => {
   });
 
   describe('addItemBatch', () => {
-    it('should return nothing when adding multiple items to an autocomplete section', (done) => {
+    it('should return nothing when adding multiple items', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         items: [
@@ -116,7 +137,7 @@ describe('constructorio', () => {
   });
 
   describe('addOrUpdateItem', () => {
-    it('should return nothing when upserting an item to an autocomplete section', (done) => {
+    it('should return nothing when upserting an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
@@ -130,7 +151,7 @@ describe('constructorio', () => {
   });
 
   describe('addOrUpdateItemBatch', () => {
-    it('should return nothing when upserting multiple items to an autocomplete section', (done) => {
+    it('should return nothing when upserting multiple items', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         items: [
@@ -164,7 +185,7 @@ describe('constructorio', () => {
   });
 
   describe('removeItemBatch', () => {
-    it('should return nothing when removing multiple items to an autocomplete section', (done) => {
+    it('should return nothing when removing multiple items', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         items: [
@@ -198,6 +219,25 @@ describe('constructorio', () => {
           expect(response).to.be.undefined;
           done();
         });
+      });
+    });
+  });
+
+  describe('addItemGroups', () => {
+    it('should return nothing when adding an item group', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = {
+        item_groups: [
+          createProductItemGroup(),
+        ],
+      };
+
+      constructorio.addItemGroups(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.deep.eq({
+          item_groups: { inserted: 1, processed: 1, updated: 0 },
+        });
+        done();
       });
     });
   });
