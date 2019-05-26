@@ -51,7 +51,7 @@ describe('ConstructorIO - Item Groups', () => {
   });
 
   describe('addOrUpdateItemGroups', () => {
-    it('should return status when adding an item group', (done) => {
+    it('should return status when upserting an item group', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         item_groups: [
@@ -94,7 +94,7 @@ describe('ConstructorIO - Item Groups', () => {
 
   describe('modifyItemGroup', () => {
     before(createProductItemGroupToTest);
-    it('should return status when modifying an item group', (done) => {
+    it('should return the modified response when modifying an item group', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
         id: 'SoupGroup',
@@ -108,6 +108,19 @@ describe('ConstructorIO - Item Groups', () => {
           name: 'No Soup Group For You',
           parent_id: null,
           path: '/',
+        });
+        done();
+      });
+    });
+  });
+
+  describe('removeItemGroups', () => {
+    it('should return status when deleting all item groups', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      constructorio.removeItemGroups(undefined, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.deep.eq({
+          message: 'We\'ve started deleting all of your groups. This may take some time to complete.',
         });
         done();
       });
