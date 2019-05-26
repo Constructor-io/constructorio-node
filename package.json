@@ -74,10 +74,12 @@
     "node": ">= v0.8.0"
   },
   "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "deepfreeze": "^2.0.0",
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",
