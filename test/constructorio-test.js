@@ -17,6 +17,16 @@ function createProductItem() {
   };
 }
 
+function createProductItemToTrack(done) {
+  const constructorio = new Constructorio(testConfig);
+  const data = {
+    item_name: 'Alphabet soup',
+    url: 'https://constructor.io/products/alphabet-soup',
+    autocomplete_section: 'Products',
+  };
+  constructorio.addOrUpdateItem(data, done);
+}
+
 describe('constructorio', () => {
   describe('new', () => {
     it('should set the API token and key', () => {
@@ -188,6 +198,62 @@ describe('constructorio', () => {
           expect(response).to.be.undefined;
           done();
         });
+      });
+    });
+  });
+
+  describe('trackSearch', () => {
+    before(createProductItemToTrack);
+
+    it('should return nothing when tracking a search', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = {
+        term: 'xyz',
+        num_results: 302,
+      };
+
+      constructorio.trackSearch(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
+
+  describe('trackClickThrough', () => {
+    before(createProductItemToTrack);
+
+    it('should return nothing when tracking a click through', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = {
+        term: 'xyz',
+        item: 'Alphabet soup',
+        autocomplete_section: 'Products',
+      };
+
+      constructorio.trackClickThrough(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
+
+  describe('trackConversion', () => {
+    before(createProductItemToTrack);
+
+    it('should return nothing when tracking a conversion', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = {
+        term: 'xyz',
+        item: 'Alphabet soup',
+        autocomplete_section: 'Products',
+      };
+
+      constructorio.trackConversion(data, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.undefined;
+        done();
       });
     });
   });
