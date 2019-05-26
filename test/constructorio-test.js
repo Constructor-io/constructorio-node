@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring, no-unused-expressions */
 
 const expect = require('chai').expect;
+const deepfreeze = require('deepfreeze');
 const Constructorio = require('../lib/constructorio');
 
 const testConfig = {
@@ -15,7 +16,7 @@ function createProductItemToTest(done) {
     url: 'https://constructor.io/products/alphabet-soup',
     autocomplete_section: 'Products',
   };
-  constructorio.addOrUpdateItem(data, done);
+  constructorio.addOrUpdateItem(deepfreeze(data), done);
 }
 
 describe('ConstructorIO', () => {
@@ -49,7 +50,7 @@ describe('ConstructorIO', () => {
         num_results: 302,
       };
 
-      constructorio.trackSearch(data, (err, response) => {
+      constructorio.trackSearch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -67,7 +68,7 @@ describe('ConstructorIO', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.trackClickThrough(data, (err, response) => {
+      constructorio.trackClickThrough(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -85,7 +86,7 @@ describe('ConstructorIO', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.trackConversion(data, (err, response) => {
+      constructorio.trackConversion(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();

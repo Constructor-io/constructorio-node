@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring, no-unused-expressions */
 
 const expect = require('chai').expect;
+const deepfreeze = require('deepfreeze');
 const uuidv1 = require('uuid/v1');
 const Constructorio = require('../lib/constructorio');
 
@@ -24,7 +25,7 @@ describe('ConstructorIO - Items', () => {
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
-      constructorio.addItem(data, (err, response) => {
+      constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -41,7 +42,7 @@ describe('ConstructorIO - Items', () => {
         key2: 'value2',
       };
 
-      constructorio.addItem(data, (err, response) => {
+      constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -56,7 +57,7 @@ describe('ConstructorIO - Items', () => {
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
-      constructorio.addItem(data, (err, response) => {
+      constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err.message).to.match(/You have supplied an invalid/);
         expect(response).to.be.undefined;
         done();
@@ -76,7 +77,7 @@ describe('ConstructorIO - Items', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.addItemBatch(data, (err, response) => {
+      constructorio.addItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -90,7 +91,7 @@ describe('ConstructorIO - Items', () => {
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
-      constructorio.addOrUpdateItem(data, (err, response) => {
+      constructorio.addOrUpdateItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -110,7 +111,7 @@ describe('ConstructorIO - Items', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.addOrUpdateItemBatch(data, (err, response) => {
+      constructorio.addOrUpdateItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -124,7 +125,7 @@ describe('ConstructorIO - Items', () => {
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
-      constructorio.removeItem(data, (err, response) => {
+      constructorio.removeItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -144,7 +145,7 @@ describe('ConstructorIO - Items', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.removeItemBatch(data, (err, response) => {
+      constructorio.removeItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -157,12 +158,12 @@ describe('ConstructorIO - Items', () => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
-      constructorio.addItem(data, () => {
+      constructorio.addItem(deepfreeze(data), () => {
         data.suggested_score = 12;
         data.url = 'http://url.com';
         data.new_item_name = `${data.item_name}-new`;
 
-        constructorio.modifyItem(data, (err, response) => {
+        constructorio.modifyItem(deepfreeze(data), (err, response) => {
           expect(err).to.be.undefined;
           expect(response).to.be.undefined;
           done();

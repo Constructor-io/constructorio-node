@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring, no-unused-expressions */
 
 const expect = require('chai').expect;
+const deepfreeze = require('deepfreeze');
 const uuidv1 = require('uuid/v1');
 const Constructorio = require('../lib/constructorio');
 
@@ -27,7 +28,7 @@ function createProductItemGroupToTest(done) {
       },
     ],
   };
-  constructorio.addOrUpdateItemGroups(data, done);
+  constructorio.addOrUpdateItemGroups(deepfreeze(data), done);
 }
 
 describe('ConstructorIO - Item Groups', () => {
@@ -40,7 +41,7 @@ describe('ConstructorIO - Item Groups', () => {
         ],
       };
 
-      constructorio.addItemGroups(data, (err, response) => {
+      constructorio.addItemGroups(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
           item_groups: { inserted: 1, processed: 1, updated: 0 },
@@ -60,7 +61,7 @@ describe('ConstructorIO - Item Groups', () => {
         ],
       };
 
-      constructorio.addOrUpdateItemGroups(data, (err, response) => {
+      constructorio.addOrUpdateItemGroups(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
           item_groups: { inserted: 2, processed: 2, updated: 0 },
@@ -101,7 +102,7 @@ describe('ConstructorIO - Item Groups', () => {
         name: 'No Soup Group For You',
       };
 
-      constructorio.modifyItemGroup(data, (err, response) => {
+      constructorio.modifyItemGroup(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
           id: 'SoupGroup',
