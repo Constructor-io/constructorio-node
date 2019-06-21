@@ -189,7 +189,7 @@ describe('ConstructorIO - Items', () => {
       constructorio.getItem({
         section: 'Products',
         num_results_per_page: 25,
-        page: 1
+        page: 1,
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response.items.length).to.eq(25);
@@ -201,7 +201,7 @@ describe('ConstructorIO - Items', () => {
       const constructorio = new Constructorio(testConfig);
       constructorio.getItem({
         section: 'Products',
-        item_id: 'product052c94d0-93cc-11e9-945b-f3beea83fd15-new'
+        item_id: 'product052c94d0-93cc-11e9-945b-f3beea83fd15-new',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response.id).to.eq('product052c94d0-93cc-11e9-945b-f3beea83fd15-new');
