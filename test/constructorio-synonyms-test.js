@@ -145,21 +145,15 @@ describe('ConstructorIO - Synonym Groups', () => {
   });
 
   describe('removeSynonymGroup', () => {
-    let addedSynonymGroupIds = [];
+    let addedSynonymGroupId = null;
 
     before((done) => {
-      // Create three test synonym groups for use in tests
-      Promise.all([
-        addTestSynonymGroup(),
-        addTestSynonymGroup(),
-        addTestSynonymGroup(),
-      ]).then((responses) => {
-        responses.forEach((response) => {
-          addedSynonymGroupIds.push(response.group_id);
-        });
+      // Create test synonym group for use in tests
+      addTestSynonymGroup().then((response) => {
+        addedSynonymGroupId = response.group_id
         done();
       }).catch((err) => {
-        console.warn('Test synonym groups within `removeSynonymGroup` could not be created');
+        console.warn('Test synonym group within `removeSynonymGroup` could not be created');
         console.warn(err);
         done();
       });
@@ -169,7 +163,7 @@ describe('ConstructorIO - Synonym Groups', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.removeSynonymGroup({
-        group_id: addedSynonymGroupIds[0]
+        group_id: addedSynonymGroupId
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -178,65 +172,70 @@ describe('ConstructorIO - Synonym Groups', () => {
       });
     });
 
-    //it('should return an error when adding a group with the same synonyms', (done) => {
-      //const constructorio = new Constructorio(testConfig);
-      //constructorio.addSynonymGroup({
-        //synonyms: ['0% milk', 'skim milk', 'nonfat milk']
-      //}, (err, response) => {
-        //expect(err).to.be.an('object');
-        //expect(err).to.have.property('message', 'An identical or superset synonym group already exists.');
-        //expect(response).to.be.undefined;
-        //done();
-      //});
-    //});
+    it('should return an error when supplying a valid group id that has already been removed', (done) => {
+      const constructorio = new Constructorio(testConfig);
 
-    //it('should return an error id when adding a group with no synonyms', (done) => {
-      //const constructorio = new Constructorio(testConfig);
-      //constructorio.addSynonymGroup({
-        //synonyms: []
-      //}, (err, response) => {
-        //expect(err).to.be.an('object');
-        //expect(err).to.have.property('message', 'This method requires at least one synonym passed in JSON. See the docs for more details.');
-        //expect(response).to.be.undefined;
-        //done();
-      //});
-    //});
+      constructorio.removeSynonymGroup({
+        group_id: addedSynonymGroupId
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'There is no synonym group with this id associated with your autocomplete_key');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
 
-    //it('should return an error id when adding a group with synonyms of incorrect type', (done) => {
-      //const constructorio = new Constructorio(testConfig);
-      //constructorio.addSynonymGroup({
-        //synonyms: 'abc'
-      //}, (err, response) => {
-        //expect(err).to.be.an('object');
-        //expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
-        //expect(response).to.be.undefined;
-        //done();
-      //});
-    //});
+    it('should return an error when supplying an invalid group id', (done) => {
+      const constructorio = new Constructorio(testConfig);
 
-    //it('should return an error id when adding a group without synonyms property', (done) => {
-      //const constructorio = new Constructorio(testConfig);
-      //constructorio.addSynonymGroup({}, (err, response) => {
-        //expect(err).to.be.an('object');
-        //expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
-        //expect(response).to.be.undefined;
-        //done();
-      //});
-    //});
+      constructorio.removeSynonymGroup({
+        group_id: 1
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'There is no synonym group with this id associated with your autocomplete_key');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
 
-    //it('should return error when adding a group with an invalid key/token', (done) => {
-      //const constructorio = new Constructorio({
-        //apiToken: 'bad-token',
-        //apiKey: 'bad-key',
-      //});
-      //constructorio.addSynonymGroup({
-        //synonyms: ['0% milk', 'skim milk', 'nonfat milk']
-      //}, (err, response) => {
-        //expect(err).to.be.an('object');
-        //expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
-        //expect(response).to.be.undefined;
-        //done();
-      //});
-    //});
+    it('should return an error when supplying a group id of invalid type', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.removeSynonymGroup({
+        group_id: 'abc'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'There is no synonym group with this id associated with your autocomplete_key');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error when not supplying a group id', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.removeSynonymGroup({}, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'There is no synonym group with this id associated with your autocomplete_key');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when adding a group with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.removeSynonymGroup({
+        group_id: addedSynonymGroupId
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
   });
 });
