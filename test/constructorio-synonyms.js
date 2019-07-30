@@ -253,6 +253,119 @@ describe('ConstructorIO - Synonym Groups', () => {
     });
   });
 
+  describe.only('getSynonymGroups', () => {
+    let addedSynonymGroupIds = [];
+
+    before((done) => {
+      const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
+
+      // Create test synonym groups for use in tests
+      Promise.all(addPromiseList).then((results) => {
+        results.forEach((result) => addedSynonymGroupIds.push(result.group_id));
+        done();
+      }).catch((err) => {
+        console.warn('Test synonym groups within `getSynonymGroups` could not be created');
+        console.warn(err);
+        done();
+      });
+    });
+
+    after((done) => {
+      const removePromiseList = [];
+
+      addedSynonymGroupIds.forEach((groupId) => {
+        removePromiseList.push(removeTestSynonymGroup(groupId));
+      });
+
+      // Remove test synonym groups for use in tests
+      Promise.all(removePromiseList).then(() => {
+        done();
+      }).catch((err) => {
+        console.warn('Test synonym groups within `getSynonymGroups` could not be created');
+        console.warn(err);
+        done();
+      });
+    });
+
+    it('should retrieve a listing of all groups', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({}, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('synonym_groups').an('array').length(3);
+        done();
+      });
+    });
+
+    it('should retrieve a listing of one group when supplying num results per page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({
+        num_results_per_page: 1
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('synonym_groups').an('array').length(1);
+        done();
+      });
+    });
+
+    it('should return error when retrieving a listing of groups with invalid num results per page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({
+        num_results_per_page: 'abc'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'num_results_per_page must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return no results when retrieving a listing of groups with invalid num results per page and page combination', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({
+        num_results_per_page: 1,
+        page: 7,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('synonym_groups').an('array').length(0);
+        done();
+      });
+    });
+
+    it('should return error when retrieving a listing of groups with invalid page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({
+        page: 'abc'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'page must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when getting group listing with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.getSynonymGroups({}, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
+
   describe('removeSynonymGroup', () => {
     let addedSynonymGroupId = null;
 
