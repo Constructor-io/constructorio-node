@@ -478,6 +478,66 @@ describe('ConstructorIO - Synonym Groups', () => {
     });
   });
 
+  describe('removeSynonymGroups', () => {
+    let addedSynonymGroupIds = [];
+
+    before((done) => {
+      const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
+
+      // Create test synonym groups for use in tests
+      Promise.all(addPromiseList).then((results) => {
+        results.forEach((result) => addedSynonymGroupIds.push(result.group_id));
+        done();
+      }).catch((err) => {
+        console.warn('Test synonym groups within `getSynonymGroups` could not be created');
+        console.warn(err);
+        done();
+      });
+    });
+
+    it('should start removal of all groups', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.removeSynonymGroups({
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('message', 'We\'ve started deleting all of your synonym groups. This may take some time to complete.');
+        done();
+      });
+    });
+
+    it('should notify that all groups have already been deleted', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      // It can take some time for the system to remove all items
+      setTimeout(() => {
+        constructorio.removeSynonymGroups({
+        }, (err, response) => {
+          expect(err).to.be.undefined;
+          expect(response).to.be.an('object');
+          expect(response).to.have.property('message', 'It appears there aren\'t any items to delete');
+          done();
+        });
+      }, 2000);
+    });
+
+    it('should return error when removing groups with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.removeSynonymGroups({
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
+
   describe('removeSynonymGroup', () => {
     let addedSynonymGroupId = null;
 
