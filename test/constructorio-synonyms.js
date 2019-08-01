@@ -255,6 +255,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
   describe.only('getSynonymGroups', () => {
     let addedSynonymGroupIds = [];
+    let firstPhrase = '';
 
     before((done) => {
       const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
@@ -291,9 +292,41 @@ describe('ConstructorIO - Synonym Groups', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSynonymGroups({}, (err, response) => {
+        firstPhrase = response.synonym_groups
+          && response.synonym_groups[0]
+          && response.synonym_groups[0].synonyms
+          && response.synonym_groups[0].synonyms[0];
+
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response).to.have.property('synonym_groups').an('array').length(3);
+        done();
+      });
+    });
+
+    it('should retrieve a listing of one group when supplying phrase parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      // Note: Result set is not being checked for match as phrase can take many seconds to be indexed / returned
+      constructorio.getSynonymGroups({
+        phrase: firstPhrase
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('synonym_groups').an('array');
+        done();
+      });
+    });
+
+    it('should return error when retrieving a listing of groups with non-existent phrase parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSynonymGroups({
+        phrase: 'mallorca'
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('synonym_groups').an('array').length(0);
         done();
       });
     });
