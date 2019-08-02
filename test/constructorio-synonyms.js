@@ -462,8 +462,7 @@ describe('ConstructorIO - Synonym Groups', () => {
     it('should return error when retrieving a group without supplying a group id', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.getSynonymGroup({
-      }, (err, response) => {
+      constructorio.getSynonymGroup({}, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'There is no synonym group with this id associated with your autocomplete_key');
         expect(response).to.be.undefined;
@@ -509,8 +508,7 @@ describe('ConstructorIO - Synonym Groups', () => {
     it('should start removal of all groups', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.removeSynonymGroups({
-      }, (err, response) => {
+      constructorio.removeSynonymGroups({}, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response).to.have.property('message', 'We\'ve started deleting all of your synonym groups. This may take some time to complete.');
@@ -523,8 +521,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
       // It can take some time for the system to remove all items
       setTimeout(() => {
-        constructorio.removeSynonymGroups({
-        }, (err, response) => {
+        constructorio.removeSynonymGroups({}, (err, response) => {
           expect(err).to.be.undefined;
           expect(response).to.be.an('object');
           expect(response).to.have.property('message', 'It appears there aren\'t any items to delete');
@@ -539,8 +536,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         apiKey: 'bad-key',
       });
 
-      constructorio.removeSynonymGroups({
-      }, (err, response) => {
+      constructorio.removeSynonymGroups({}, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
         expect(response).to.be.undefined;
