@@ -311,7 +311,7 @@ describe('ConstructorIO - Synonym Groups', () => {
     it('should retrieve a listing of one group when supplying phrase parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as phrase can take many seconds to be indexed / returned
+      // Note: Result set is not being checked for match as groups can take many seconds to be indexed / returned
       constructorio.getSynonymGroups({
         phrase: firstPhrase,
       }, (err, response) => {
@@ -338,7 +338,7 @@ describe('ConstructorIO - Synonym Groups', () => {
     it('should retrieve a listing of one group when supplying num results per page parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as phrase can take many seconds to be indexed / returned
+      // Note: Result set is not being checked for match as groups can take many seconds to be indexed / returned
       constructorio.getSynonymGroups({
         num_results_per_page: 1,
       }, (err, response) => {

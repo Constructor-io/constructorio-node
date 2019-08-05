@@ -14,9 +14,12 @@ function addTestRedirectRule() {
 
   return new Promise((resolve, reject) => {
     constructorio.addRedirectRule({
-      synonyms: [
-        `${Math.random().toString(36).substring(2, 15)}`,
-        `${Math.random().toString(36).substring(2, 15)}`,
+      url: `https://constructor.io`,
+      matches: [
+        {
+          match_type: 'EXACT',
+          pattern: `${Math.random().toString(36).substring(2, 15)}`,
+        },
       ],
     }, (err, response) => {
       if (err) {
@@ -56,11 +59,11 @@ describe('ConstructorIO - Redirect Rules', () => {
         removePromiseList.push(removeTestRedirectRule(redirectRuleId));
       });
 
-      // Remove test synonym groups for use in tests
+      // Remove test redirect rules for use in tests
       Promise.all(removePromiseList).then(() => {
         done();
       }).catch((err) => {
-        console.warn('Test synonym groups within `addRedirectRule` could not be created');
+        console.warn('Test redirect rules within `addRedirectRule` could not be created');
         console.warn(err);
         done();
       });
@@ -285,7 +288,186 @@ describe('ConstructorIO - Redirect Rules', () => {
     });
   });
 
-  describe('getRedirectRules', () => {});
+  describe('getRedirectRules', () => {
+    const addedRedirectRuleIds = [];
+
+    before((done) => {
+      // Introduce latency to avoid throttling issues
+      setTimeout(() => {
+        const addPromiseList = [addTestRedirectRule(), addTestRedirectRule(), addTestRedirectRule()];
+
+        // Create test redirect rules for use in tests
+        Promise.all(addPromiseList).then((results) => {
+          results.forEach(result => addedRedirectRuleIds.push(result.id));
+          done();
+        }).catch((err) => {
+          console.warn('Test redirect rules within `getRedirectRules` could not be created');
+          console.warn(err);
+          done();
+        });
+      }, 3000);
+    });
+
+    after((done) => {
+      const removePromiseList = [];
+
+      addedRedirectRuleIds.forEach((redirectRuleId) => {
+        removePromiseList.push(removeTestRedirectRule(redirectRuleId));
+      });
+
+      // Remove test redirect rules for use in tests
+      Promise.all(removePromiseList).then(() => {
+        done();
+      }).catch((err) => {
+        console.warn('Test redirect rules within `getRedirectRules` could not be created');
+        console.warn(err);
+        done();
+      });
+    });
+
+    it('should retrieve a listing of redirect rules', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({}, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array');
+        done();
+      });
+    });
+
+    it('should retrieve a listing of one redirect rules when specifying num results per page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        num_results_per_page: 1
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array').length(1);
+        done();
+      });
+    });
+
+    it('should an error when retrieving a listing of redirect rules with invalid num results per page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        num_results_per_page: 'abc'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'num_results_per_page must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should retrieve a listing of one redirect rules when specifying page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        page: 1
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array');
+        done();
+      });
+    });
+
+    it('should an error when retrieving a listing of redirect rules with invalid page parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        page: 'abc'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'page must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should retrieve an empty listing of redirect rules when specifying invalid num results per page and page parameters', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        page: 99,
+        num_results_per_page: 1
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array').length(0);
+        done();
+      });
+    });
+
+    it('should retrieve listing of redirect rules when specifying a valid query parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        query: 'constructor'
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array');
+        done();
+      });
+    });
+
+    it('should retrieve an empty listing of redirect rules when specifying a non-existent query parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        query: 'not-a-valid-query'
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array').length(0);
+        done();
+      });
+    });
+
+    it('should retrieve listing of redirect rules when specifying a status', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        status: 'current'
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('redirect_rules').an('array');
+        done();
+      });
+    });
+
+    it('should retrieve an empty listing of redirect rules when specifying an invalid status', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRules({
+        status: 'not-a-valid-status'
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Invalid value for parameter: "status"');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when getting group listing with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.getRedirectRules({}, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
 
   describe('getRedirectRule', () => {});
 
