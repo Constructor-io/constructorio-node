@@ -1,4 +1,4 @@
-/* eslint-disable prefer-destructuring, no-unused-expressions, no-console, max-nested-callbacks */
+/* eslint-disable prefer-destructuring, no-unused-expressions */
 
 const expect = require('chai').expect;
 const Constructorio = require('../lib/constructorio');
@@ -46,16 +46,19 @@ function removeTestSynonymGroup(id) {
 }
 
 describe('ConstructorIO - Synonym Groups', () => {
+  // Introduce latency to avoid throttling issues
+  beforeEach((done) => {
+    setTimeout(() => {
+      done();
+    }, 100);
+  });
+
   describe('addSynonymGroup', () => {
     let addedSynonymGroupId = null;
 
     after((done) => {
       // Clean up - remove synonym group created for tests
-      removeTestSynonymGroup(addedSynonymGroupId).then(done).catch((err) => {
-        console.warn('Created test synonym group within `addSynonymGroup` could not be removed');
-        console.warn(err);
-        done();
-      });
+      removeTestSynonymGroup(addedSynonymGroupId).then(done).catch(done);
     });
 
     it('should return a group id when adding a group with synonyms', (done) => {
@@ -144,29 +147,18 @@ describe('ConstructorIO - Synonym Groups', () => {
     let addedSynonymGroupId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test synonym group for use in tests
-        addTestSynonymGroup().then((response) => {
-          addedSynonymGroupId = response.group_id;
-          done();
-        }).catch((err) => {
-          console.warn('Test synonym group within `modifySynonymGroup` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test synonym group for use in tests
+      addTestSynonymGroup().then((response) => {
+        addedSynonymGroupId = response.group_id;
+        done();
+      }).catch(done);
     });
 
     after((done) => {
       // Clean up - remove synonym group created for tests
       removeTestSynonymGroup(addedSynonymGroupId).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Created test synonym group within `modifySynonymGroup` could not be removed');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should modify a group when supplying a valid group id', (done) => {
@@ -259,20 +251,13 @@ describe('ConstructorIO - Synonym Groups', () => {
     let firstPhrase = '';
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
+      const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
 
-        // Create test synonym groups for use in tests
-        Promise.all(addPromiseList).then((results) => {
-          results.forEach(result => addedSynonymGroupIds.push(result.group_id));
-          done();
-        }).catch((err) => {
-          console.warn('Test synonym groups within `getSynonymGroups` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test synonym groups for use in tests
+      Promise.all(addPromiseList).then((results) => {
+        results.forEach(result => addedSynonymGroupIds.push(result.group_id));
+        done();
+      }).catch(done);
     });
 
     after((done) => {
@@ -285,11 +270,7 @@ describe('ConstructorIO - Synonym Groups', () => {
       // Remove test synonym groups for use in tests
       Promise.all(removePromiseList).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Test synonym groups within `getSynonymGroups` could not be created');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should retrieve a listing of all groups', (done) => {
@@ -408,29 +389,18 @@ describe('ConstructorIO - Synonym Groups', () => {
     let addedSynonymGroupId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test synonym group for use in tests
-        addTestSynonymGroup().then((response) => {
-          addedSynonymGroupId = response.group_id;
-          done();
-        }).catch((err) => {
-          console.warn('Test synonym group within `getSynonymGroup` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test synonym group for use in tests
+      addTestSynonymGroup().then((response) => {
+        addedSynonymGroupId = response.group_id;
+        done();
+      }).catch(done);
     });
 
     after((done) => {
       // Clean up - remove synonym group created for tests
       removeTestSynonymGroup(addedSynonymGroupId).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Created test synonym group within `getSynonymGroup` could not be removed');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should retrieve a group for supplied valid group id', (done) => {
@@ -489,20 +459,13 @@ describe('ConstructorIO - Synonym Groups', () => {
     const addedSynonymGroupIds = [];
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
+      const addPromiseList = [addTestSynonymGroup(), addTestSynonymGroup(), addTestSynonymGroup()];
 
-        // Create test synonym groups for use in tests
-        Promise.all(addPromiseList).then((results) => {
-          results.forEach(result => addedSynonymGroupIds.push(result.group_id));
-          done();
-        }).catch((err) => {
-          console.warn('Test synonym groups within `getSynonymGroups` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test synonym groups for use in tests
+      Promise.all(addPromiseList).then((results) => {
+        results.forEach(result => addedSynonymGroupIds.push(result.group_id));
+        done();
+      }).catch(done);
     });
 
     it('should start removal of all groups', (done) => {
@@ -549,18 +512,11 @@ describe('ConstructorIO - Synonym Groups', () => {
     let addedSynonymGroupId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test synonym group for use in tests
-        addTestSynonymGroup().then((response) => {
-          addedSynonymGroupId = response.group_id;
-          done();
-        }).catch((err) => {
-          console.warn('Test synonym group within `removeSynonymGroup` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test synonym group for use in tests
+      addTestSynonymGroup().then((response) => {
+        addedSynonymGroupId = response.group_id;
+        done();
+      }).catch(done);
     });
 
     it('should remove a group when supplying a valid group id', (done) => {

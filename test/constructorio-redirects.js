@@ -1,4 +1,4 @@
-/* eslint-disable prefer-destructuring, no-unused-expressions, no-console, max-nested-callbacks */
+/* eslint-disable prefer-destructuring, no-unused-expressions */
 
 const expect = require('chai').expect;
 const Constructorio = require('../lib/constructorio');
@@ -49,6 +49,13 @@ function removeTestRedirectRule(id) {
 }
 
 describe('ConstructorIO - Redirect Rules', () => {
+  // Introduce latency to avoid throttling issues
+  beforeEach((done) => {
+    setTimeout(() => {
+      done();
+    }, 100);
+  });
+
   describe('addRedirectRule', () => {
     let addedRedirectRuleIds = [];
 
@@ -62,11 +69,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       // Remove test redirect rules for use in tests
       Promise.all(removePromiseList).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Test redirect rules within `addRedirectRule` could not be created');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should return a redirect rule id when adding a redirect rule with valid properties', (done) => {
@@ -305,20 +308,13 @@ describe('ConstructorIO - Redirect Rules', () => {
     const addedRedirectRuleIds = [];
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        const addPromiseList = [addTestRedirectRule(), addTestRedirectRule(), addTestRedirectRule()];
+      const addPromiseList = [addTestRedirectRule(), addTestRedirectRule(), addTestRedirectRule()];
 
-        // Create test redirect rules for use in tests
-        Promise.all(addPromiseList).then((results) => {
-          results.forEach(result => addedRedirectRuleIds.push(result.id));
-          done();
-        }).catch((err) => {
-          console.warn('Test redirect rules within `getRedirectRules` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test redirect rules for use in tests
+      Promise.all(addPromiseList).then((results) => {
+        results.forEach(result => addedRedirectRuleIds.push(result.id));
+        done();
+      }).catch(done);
     });
 
     after((done) => {
@@ -331,11 +327,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       // Remove test redirect rules for use in tests
       Promise.all(removePromiseList).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Test redirect rules within `getRedirectRules` could not be created');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should retrieve a listing of redirect rules', (done) => {
@@ -486,29 +478,18 @@ describe('ConstructorIO - Redirect Rules', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test redirect rule for use in tests
-        addTestRedirectRule().then((response) => {
-          addedRedirectRuleId = response.id;
-          done();
-        }).catch((err) => {
-          console.warn('Test redirect rule within `getRedirectRule` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test redirect rule for use in tests
+      addTestRedirectRule().then((response) => {
+        addedRedirectRuleId = response.id;
+        done();
+      }).catch(done);
     });
 
     after((done) => {
       // Clean up - remove redirct rule created for tests
       removeTestRedirectRule(addedRedirectRuleId).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Created test redirect rule within `getRedirectRule` could not be removed');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should retrieve a redirect rule for supplied valid redirect rule id', (done) => {
@@ -562,29 +543,18 @@ describe('ConstructorIO - Redirect Rules', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test redirect rule for use in tests
-        addTestRedirectRule().then((response) => {
-          addedRedirectRuleId = response.id;
-          done();
-        }).catch((err) => {
-          console.warn('Test redirect rule within `setRedirectRule` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test redirect rule for use in tests
+      addTestRedirectRule().then((response) => {
+        addedRedirectRuleId = response.id;
+        done();
+      }).catch(done);
     });
 
     after((done) => {
       // Clean up - remove redirct rule created for tests
       removeTestRedirectRule(addedRedirectRuleId).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Created test redirect rule within `setRedirectRule` could not be removed');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should return a redirect rule when completely updating a redirect rule with valid properties', (done) => {
@@ -805,29 +775,18 @@ describe('ConstructorIO - Redirect Rules', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test redirect rule for use in tests
-        addTestRedirectRule().then((response) => {
-          addedRedirectRuleId = response.id;
-          done();
-        }).catch((err) => {
-          console.warn('Test redirect rule within `modifyRedirectRule` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test redirect rule for use in tests
+      addTestRedirectRule().then((response) => {
+        addedRedirectRuleId = response.id;
+        done();
+      }).catch(done);
     });
 
     after((done) => {
       // Clean up - remove redirct rule created for tests
       removeTestRedirectRule(addedRedirectRuleId).then(() => {
         done();
-      }).catch((err) => {
-        console.warn('Created test redirect rule within `modifyRedirectRule` could not be removed');
-        console.warn(err);
-        done();
-      });
+      }).catch(done);
     });
 
     it('should return a redirect rule when setting the url of a redirect rule (partial update) with valid properties', (done) => {
@@ -1042,18 +1001,11 @@ describe('ConstructorIO - Redirect Rules', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
-      // Introduce latency to avoid throttling issues
-      setTimeout(() => {
-        // Create test redirect rule for use in tests
-        addTestRedirectRule().then((response) => {
-          addedRedirectRuleId = response.id;
-          done();
-        }).catch((err) => {
-          console.warn('Test redirect rule within `removeRedirectRule` could not be created');
-          console.warn(err);
-          done();
-        });
-      }, 3000);
+      // Create test redirect rule for use in tests
+      addTestRedirectRule().then((response) => {
+        addedRedirectRuleId = response.id;
+        done();
+      }).catch(done);
     });
 
     it('should remove a redirect rule for supplied valid redirect rule id', (done) => {
