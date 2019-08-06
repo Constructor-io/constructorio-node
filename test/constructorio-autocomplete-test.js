@@ -43,5 +43,69 @@ describe('ConstructorIO - Autocomplete', () => {
         done();
       });
     });
+
+    it('should return limited number of autocomplete results when specifying a num results parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        num_results: 4
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length(2);
+        expect(response.sections).to.have.property('Products').that.is.an('array').length(2);
+        done();
+      });
+    });
+
+    it('should return limited number of autocomplete results for sections when specifying num results parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        'num_results_Search Suggestions': 3,
+        num_results_Products: 4,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length(3);
+        expect(response.sections).to.have.property('Products').that.is.an('array').length(4);
+        done();
+      });
+    });
+
+    it('should return limited number of autocomplete results based on num results parameter, not num results per section parameters', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        'num_results_Search Suggestions': 3,
+        num_results_Products: 4,
+        num_results: 2,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length(1);
+        expect(response.sections).to.have.property('Products').that.is.an('array').length(1);
+        done();
+      });
+    });
+
+    it('should return no autocomplete results when non-matching filter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        filters: ['xylophone'],
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length(0);
+        expect(response.sections).to.have.property('Products').that.is.an('array').length(0);
+        expect(response.request).to.have.property('filters').that.is.an('object');
+        done();
+      });
+    });
   });
 });
