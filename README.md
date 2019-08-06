@@ -57,27 +57,3 @@ constructorio.modifyItem({
   console.log(response);
 });
 ```
-
-You can also track behavioral data to improve the rankings of your search and autosuggest results:
-
-```javascript
-// track the number of results for a given search
-constructorio.trackSearch({
-  term: "xyz",
-  num_results: 302
-});
-
-// track when a user clicks on a search result
-constructorio.trackClickThrough({
-  term: "xyz", 
-  item: "Alphabet soup",
-  autocomplete_section: "products_autocomplete"
-});
-
-// track when a user adds an item to their cart
-constructorio.trackConversion({
-  term: "xyz",
-  item: "Alphabet soup",
-  autocomplete_section: "products_autocomplete"
-});
-```
