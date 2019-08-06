@@ -539,7 +539,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     });
   });
 
-  describe('setRedirectRule', () => {
+  describe('modifyRedirectRule', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
@@ -561,7 +561,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedUrl = 'https://construct.or';
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: updatedUrl,
         matches: [
@@ -589,7 +589,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule with an invalid match type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: 'https://constructor.io',
         matches: [
@@ -609,7 +609,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule without a url parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         matches: [
           {
@@ -628,7 +628,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule without a match type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: 'https://constructor.io',
         matches: [
@@ -647,7 +647,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule without a pattern', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: 'https://constructor.io',
         matches: [
@@ -666,7 +666,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule with an invalid start time', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         start_time: 10,
         url: 'https://constructor.io',
@@ -687,7 +687,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule with an invalid end time', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         end_time: 10,
         url: 'https://constructor.io',
@@ -708,7 +708,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule with an invalid user segments parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         user_segments: 'abc',
         url: 'https://constructor.io',
@@ -729,7 +729,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when completely updating a redirect rule with invalid metadata', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         metadata: 'abc',
         url: 'https://constructor.io',
@@ -753,7 +753,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         apiKey: 'bad-key',
       });
 
-      constructorio.setRedirectRule({
+      constructorio.modifyRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: 'https://constructor.io',
         matches: [
@@ -771,7 +771,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     });
   });
 
-  describe('modifyRedirectRule', () => {
+  describe('updateRedirectRule', () => {
     let addedRedirectRuleId = null;
 
     before((done) => {
@@ -793,7 +793,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedUrl = 'https://construct.or';
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: updatedUrl,
       }, (err, response) => {
@@ -821,7 +821,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         },
       ];
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         matches: updatedMatches,
       }, (err, response) => {
@@ -835,7 +835,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedStartTime = (new Date()).toISOString();
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         start_time: updatedStartTime,
       }, (err, response) => {
@@ -849,7 +849,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedEndTime = (new Date()).toISOString();
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         end_time: updatedEndTime,
       }, (err, response) => {
@@ -863,7 +863,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedUserSegments = ['foo', 'bar'];
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         user_segments: updatedUserSegments,
       }, (err, response) => {
@@ -877,7 +877,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
       const updatedMetadata = { foo: 'bar' };
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         metadata: updatedMetadata,
       }, (err, response) => {
@@ -893,7 +893,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         apiKey: 'bad-key',
       });
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         url: 'https://constructor.io',
       }, (err, response) => {
@@ -907,7 +907,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting the matches of a redirect rule without a matches type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         matches: [
           {
@@ -925,7 +925,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting the matches of a redirect rule without a pattern', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         matches: [
           {
@@ -943,7 +943,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting an invalid start time of a redirect rule', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         start_time: 10,
       }, (err, response) => {
@@ -957,7 +957,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting a redirect rule with an an invalid start time', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         end_time: 10,
       }, (err, response) => {
@@ -971,7 +971,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting a redirect rule with an an invalid user settings parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         user_segments: 'abc',
       }, (err, response) => {
@@ -985,7 +985,7 @@ describe('ConstructorIO - Redirect Rules', () => {
     it('should return error when setting a redirect rule with an an invalid metadata', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.modifyRedirectRule({
+      constructorio.updateRedirectRule({
         redirect_rule_id: addedRedirectRuleId,
         metadata: 'abc',
       }, (err, response) => {
