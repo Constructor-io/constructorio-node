@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring, no-unused-expressions */
+
 const expect = require('chai').expect;
 const Constructorio = require('../lib/constructorio');
 
@@ -49,7 +51,7 @@ describe('ConstructorIO - Autocomplete', () => {
 
       constructorio.getAutocompleteResults({
         query: 'drill',
-        num_results: 4
+        num_results: 4,
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -104,6 +106,76 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length(0);
         expect(response.sections).to.have.property('Products').that.is.an('array').length(0);
         expect(response.request).to.have.property('filters').that.is.an('object');
+        done();
+      });
+    });
+
+    it('should return error when invalid num results parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        num_results: 'abc',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'num_results must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when invalid num results section parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        num_results_Products: 'abc',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'num_results_Products must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when invalid filters parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        filters: 'abc',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Failed to parse the provided filters. Please check the syntax and try again');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when more than one filters are supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getAutocompleteResults({
+        query: 'drill',
+        filters: ['abc', 'def'],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Only single filters are supported in autocomplete, but you seem to have provided more than one.');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when removing groups with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.getAutocompleteResults({}, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/We have no record of this key./);
+        expect(response).to.be.undefined;
         done();
       });
     });
