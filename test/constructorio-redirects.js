@@ -469,7 +469,81 @@ describe('ConstructorIO - Redirect Rules', () => {
     });
   });
 
-  describe('getRedirectRule', () => {});
+  describe('getRedirectRule', () => {
+    let addedRedirectRuleId = null;
+
+    before((done) => {
+      // Introduce latency to avoid throttling issues
+      setTimeout(() => {
+        // Create test redirect rule for use in tests
+        addTestRedirectRule().then((response) => {
+          addedRedirectRuleId = response.id;
+          done();
+        }).catch((err) => {
+          console.warn('Test synonym group within `getRedirectRule` could not be created');
+          console.warn(err);
+          done();
+        });
+      }, 3000);
+    });
+
+    after((done) => {
+      // Clean up - remove redirct rule created for tests
+      removeTestRedirectRule(addedRedirectRuleId).then(() => {
+        done();
+      }).catch((err) => {
+        console.warn('Created test synonym group within `getRedirectRule` could not be removed');
+        console.warn(err);
+        done();
+      });
+    });
+
+    it('should retrieve a redirect rule for supplied valid redirect rule id', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('start_time');
+        expect(response).to.have.property('end_time');
+        expect(response).to.have.property('url');
+        expect(response).to.have.property('matches').that.is.an('array').length(1);
+        expect(response).to.have.property('id').that.is.a('number');
+        done();
+      });
+    });
+
+    it('should return error when retrieving a group with non-existent redirect rule id', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getRedirectRule({
+        redirect_rule_id: 0,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Redirect rule with id 0 not found.');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when getting group listing with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.getRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
 
   describe('setRedirectRule', () => {});
 
