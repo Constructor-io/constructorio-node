@@ -19,6 +19,9 @@
     "type": "git",
     "url": "git@github.com:Constructor-io/constructorio-javascript.git"
   },
+  "pre-push": [
+    "lint" 
+  ],
   "eslintConfig": {
     "env": {
       "node": true,
@@ -87,6 +90,7 @@
     "mocha": "^6.1.4",
     "npm-check": "^5.9.0",
     "nyc": "^14.1.1",
+    "pre-push": "^0.1.1",
     "uuid": "^3.3.2"
   }
 }
