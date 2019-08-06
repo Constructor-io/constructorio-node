@@ -14,7 +14,7 @@ function addTestRedirectRule() {
 
   return new Promise((resolve, reject) => {
     constructorio.addRedirectRule({
-      url: `https://constructor.io`,
+      url: 'https://constructor.io',
       matches: [
         {
           match_type: 'EXACT',
@@ -57,7 +57,7 @@ describe('ConstructorIO - Redirect Rules', () => {
   });
 
   describe('addRedirectRule', () => {
-    let addedRedirectRuleIds = [];
+    const addedRedirectRuleIds = [];
 
     after((done) => {
       const removePromiseList = [];
@@ -180,7 +180,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         url: 'https://constructor.io',
         matches: [
           {
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -218,7 +218,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -238,7 +238,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -258,7 +258,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -278,7 +278,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -345,7 +345,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        num_results_per_page: 1
+        num_results_per_page: 1,
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -358,7 +358,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        num_results_per_page: 'abc'
+        num_results_per_page: 'abc',
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'num_results_per_page must be an integer');
@@ -371,7 +371,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        page: 1
+        page: 1,
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -384,7 +384,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        page: 'abc'
+        page: 'abc',
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'page must be an integer');
@@ -398,7 +398,7 @@ describe('ConstructorIO - Redirect Rules', () => {
 
       constructorio.getRedirectRules({
         page: 99,
-        num_results_per_page: 1
+        num_results_per_page: 1,
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -411,7 +411,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        query: 'constructor'
+        query: 'constructor',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -424,7 +424,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        query: 'not-a-valid-query'
+        query: 'not-a-valid-query',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -437,7 +437,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        status: 'current'
+        status: 'current',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -450,7 +450,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
-        status: 'not-a-valid-status'
+        status: 'not-a-valid-status',
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Invalid value for parameter: "status"');
@@ -571,7 +571,7 @@ describe('ConstructorIO - Redirect Rules', () => {
           },
           {
             match_type: 'EXACT',
-            pattern: 'spain'
+            pattern: 'spain',
           },
         ],
       }, (err, response) => {
@@ -633,7 +633,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         url: 'https://constructor.io',
         matches: [
           {
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -673,7 +673,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -694,7 +694,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -715,7 +715,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -736,7 +736,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         matches: [
           {
             match_type: 'EXACT',
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
@@ -817,7 +817,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         },
         {
           match_type: 'EXACT',
-          pattern: 'spain'
+          pattern: 'spain',
         },
       ];
 
@@ -911,7 +911,7 @@ describe('ConstructorIO - Redirect Rules', () => {
         redirect_rule_id: addedRedirectRuleId,
         matches: [
           {
-            pattern: 'constructor'
+            pattern: 'constructor',
           },
         ],
       }, (err, response) => {
