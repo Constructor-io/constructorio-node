@@ -120,7 +120,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when adding a redirect rule with an invalid match type', (done) => {
+    it('should return error when adding a redirect rule with an invalid matches type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.addRedirectRule({
@@ -152,6 +152,19 @@ describe('ConstructorIO - Redirect Rules', () => {
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'url is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when adding a redirect rule without a matches parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.addRedirectRule({
+        url: 'https://constructor.io',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'matches is a required field of type list');
         expect(response).to.be.undefined;
         done();
       });
@@ -273,7 +286,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when getting group listing with an invalid key/token', (done) => {
+    it('should return error when getting a redirect rule with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
@@ -454,7 +467,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when getting group listing with an invalid key/token', (done) => {
+    it('should return error when getting a listing of redirect rules with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
@@ -480,7 +493,7 @@ describe('ConstructorIO - Redirect Rules', () => {
           addedRedirectRuleId = response.id;
           done();
         }).catch((err) => {
-          console.warn('Test synonym group within `getRedirectRule` could not be created');
+          console.warn('Test redirect rule within `getRedirectRule` could not be created');
           console.warn(err);
           done();
         });
@@ -492,7 +505,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       removeTestRedirectRule(addedRedirectRuleId).then(() => {
         done();
       }).catch((err) => {
-        console.warn('Created test synonym group within `getRedirectRule` could not be removed');
+        console.warn('Created test redirect rule within `getRedirectRule` could not be removed');
         console.warn(err);
         done();
       });
@@ -515,7 +528,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when retrieving a group with non-existent redirect rule id', (done) => {
+    it('should return error when retrieving a redircet rule with non-existent redirect rule id', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRule({
@@ -528,7 +541,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when getting group listing with an invalid key/token', (done) => {
+    it('should return error when getting redirect rule listing with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
@@ -556,7 +569,7 @@ describe('ConstructorIO - Redirect Rules', () => {
           addedRedirectRuleId = response.id;
           done();
         }).catch((err) => {
-          console.warn('Test synonym group within `setRedirectRule` could not be created');
+          console.warn('Test redirect rule within `setRedirectRule` could not be created');
           console.warn(err);
           done();
         });
@@ -568,13 +581,13 @@ describe('ConstructorIO - Redirect Rules', () => {
       removeTestRedirectRule(addedRedirectRuleId).then(() => {
         done();
       }).catch((err) => {
-        console.warn('Created test synonym group within `setRedirectRule` could not be removed');
+        console.warn('Created test redirect rule within `setRedirectRule` could not be removed');
         console.warn(err);
         done();
       });
     });
 
-    it('should return a redirect rule id when completely updating a redirect rule with valid properties', (done) => {
+    it('should return a redirect rule when completely updating a redirect rule with valid properties', (done) => {
       const constructorio = new Constructorio(testConfig);
       const updatedUrl = 'https://construct.or';
 
@@ -764,7 +777,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should return error when getting group listing with an invalid key/token', (done) => {
+    it('should return error when getting redirect rule listing with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
@@ -788,7 +801,305 @@ describe('ConstructorIO - Redirect Rules', () => {
     });
   });
 
-  describe('modifyRedirectRule', () => {});
+  describe('modifyRedirectRule', () => {
+    let addedRedirectRuleId = null;
 
-  describe('removeRedirectRule', () => {});
+    before((done) => {
+      // Introduce latency to avoid throttling issues
+      setTimeout(() => {
+        // Create test redirect rule for use in tests
+        addTestRedirectRule().then((response) => {
+          addedRedirectRuleId = response.id;
+          done();
+        }).catch((err) => {
+          console.warn('Test redirect rule within `modifyRedirectRule` could not be created');
+          console.warn(err);
+          done();
+        });
+      }, 3000);
+    });
+
+    after((done) => {
+      // Clean up - remove redirct rule created for tests
+      removeTestRedirectRule(addedRedirectRuleId).then(() => {
+        done();
+      }).catch((err) => {
+        console.warn('Created test redirect rule within `modifyRedirectRule` could not be removed');
+        console.warn(err);
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the url of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedUrl = 'https://construct.or';
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        url: updatedUrl,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('start_time');
+        expect(response).to.have.property('end_time');
+        expect(response).to.have.property('url', updatedUrl);
+        expect(response).to.have.property('matches').that.is.an('array').length(1);
+        expect(response).to.have.property('id').that.is.a('number', addedRedirectRuleId);
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the matches of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedMatches = [
+        {
+          match_type: 'EXACT',
+          pattern: 'mallorca',
+        },
+        {
+          match_type: 'EXACT',
+          pattern: 'spain'
+        },
+      ];
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        matches: updatedMatches,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.have.property('matches').that.is.an('array', updatedMatches).length(2);
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the start time of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedStartTime = (new Date()).toISOString();
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        start_time: updatedStartTime,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.have.property('start_time');
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the end time of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedEndTime = (new Date()).toISOString();
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        end_time: updatedEndTime,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.have.property('end_time');
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the user segments of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedUserSegments = ['foo', 'bar'];
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        user_segments: updatedUserSegments,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.have.property('user_segments');
+        done();
+      });
+    });
+
+    it('should return a redirect rule when setting the metadata of a redirect rule (partial update) with valid properties', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedMetadata = { foo: 'bar' };
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        metadata: updatedMetadata,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.have.property('metadata');
+        done();
+      });
+    });
+
+    it('should return error when partially updating a redirect rule with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        url: 'https://constructor.io',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting the matches of a redirect rule without a matches type', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        matches: [
+          {
+            pattern: 'constructor'
+          },
+        ],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'matches[0].match_type is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting the matches of a redirect rule without a pattern', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        matches: [
+          {
+            match_type: 'EXACT',
+          },
+        ],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'matches[0].pattern is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting an invalid start time of a redirect rule', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        start_time: 10,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'start_time must be a datetime string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting a redirect rule with an an invalid start time', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        end_time: 10,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'end_time must be a datetime string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting a redirect rule with an an invalid user settings parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        user_segments: 'abc',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'user_segments must be a list');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when setting a redirect rule with an an invalid metadata', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+        metadata: 'abc',
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'metadata must be a dictionary');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
+
+  describe('removeRedirectRule', () => {
+    let addedRedirectRuleId = null;
+
+    before((done) => {
+      // Introduce latency to avoid throttling issues
+      setTimeout(() => {
+        // Create test redirect rule for use in tests
+        addTestRedirectRule().then((response) => {
+          addedRedirectRuleId = response.id;
+          done();
+        }).catch((err) => {
+          console.warn('Test redirect rule within `removeRedirectRule` could not be created');
+          console.warn(err);
+          done();
+        });
+      }, 3000);
+    });
+
+    it('should remove a redirect rule for supplied valid redirect rule id', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.removeRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response).to.have.property('start_time');
+        expect(response).to.have.property('end_time');
+        expect(response).to.have.property('url');
+        expect(response).to.have.property('matches').that.is.an('array').length(1);
+        expect(response).to.have.property('id').that.is.a('number');
+        done();
+      });
+    });
+
+    it('should return error when removing a redirect rule with non-existent redirect rule id', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.removeRedirectRule({
+        redirect_rule_id: 0,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Redirect rule with id 0 not found.');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when removing a redirect rule listing with an invalid key/token', (done) => {
+      const constructorio = new Constructorio({
+        apiToken: 'bad-token',
+        apiKey: 'bad-key',
+      });
+
+      constructorio.getRedirectRule({
+        redirect_rule_id: addedRedirectRuleId,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message').to.match(/You have supplied an invalid/);
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+  });
 });
