@@ -1,6 +1,6 @@
 {
   "name": "constructorio",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Constructor.io API client",
   "homepage": "https://github.com/Constructor-io/constructorio-javascript",
   "main": "lib/constructorio.js",
