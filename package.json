@@ -20,7 +20,7 @@
     "url": "git@github.com:Constructor-io/constructorio-javascript.git"
   },
   "pre-push": [
-    "lint" 
+    "lint"
   ],
   "eslintConfig": {
     "env": {
