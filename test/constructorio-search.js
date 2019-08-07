@@ -366,6 +366,22 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('should return error when retrieving search results when non-existent collection id is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        collection_id: 1,
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Collection with id "1" not found.');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
     it('should return error when invalid personalization parameters are supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
