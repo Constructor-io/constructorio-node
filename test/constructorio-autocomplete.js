@@ -27,8 +27,8 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(response).to.be.an('object');
         expect(response).to.have.property('result_id').that.is.a('string');
         expect(response).to.have.property('sections').that.is.an('object');
-        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array');
-        expect(response.sections).to.have.property('Products').that.is.an('array');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array').length.to.be.above(0);
+        expect(response.sections).to.have.property('Products').that.is.an('array').length.to.be.above(0);
         expect(response).to.have.property('request').that.is.an('object');
         expect(response.request).to.have.property('term').that.is.a('string', query);
         expect(response.request).to.have.property('features').that.is.an('object');
