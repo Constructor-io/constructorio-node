@@ -169,6 +169,138 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('should return search result set with filters applied when specifying a valid filters parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'filters[keywords]': 'battery-powered',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.request.filters).to.have.property('keywords').an('array').length(1);
+        expect(response.response.facets).to.be.an('array').length(1);
+        done();
+      });
+    });
+
+    it('should return search result set with filters applied when specifying multiple valid filters parameters', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'filters[keywords]': 'battery-powered',
+        'filters[Price]': '10-20',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.request.filters).to.have.property('keywords').an('array').length(1);
+        expect(response.request.filters).to.have.property('Price').an('array').length(1);
+        expect(response.response.facets).to.be.an('array').length(2);
+        done();
+      });
+    });
+
+    it('should return error when retrieving search results with invalid filters parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'filters[keywords]': '',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'filters.keywords must contain at least 1 element(s)');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return search result set when valid fmt options start parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'fmt_options[groups_start]': 'current',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    it('should return search result set when invalid fmt options parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'fmt_options[invalid]': 'current',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Unknown format option: invalid. Keys of fmt_options must be one of (groups_max_depth, groups_start)');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return search result set when invalid fmt options start parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'fmt_options[groups_start]': 'invalid',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Invalid value for parameter: "fmt_options.groups_start"');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return search result set when valid fmt options max depth parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'fmt_options[groups_max_depth]': 1,
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    it('should return search result set when invalid fmt options start parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        'fmt_options[groups_max_depth]': 'invalid',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'fmt_options.groups_max_depth must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
     it('should return error when invalid personalization parameters are supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
