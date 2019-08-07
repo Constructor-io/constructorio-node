@@ -237,7 +237,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set when invalid fmt options parameter is supplied', (done) => {
+    it('should return error when retrieving search results when invalid fmt options parameter is supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -253,7 +253,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set when invalid fmt options start parameter is supplied', (done) => {
+    it('should return search results when invalid fmt options start parameter is supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -269,7 +269,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set when valid fmt options max depth parameter is supplied', (done) => {
+    it('should return search results when valid fmt options max depth parameter is supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -285,7 +285,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set when invalid fmt options start parameter is supplied', (done) => {
+    it('should return error when retrieving search results when invalid fmt options start parameter is supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -296,6 +296,71 @@ describe('ConstructorIO - Search', () => {
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'fmt_options.groups_max_depth must be an integer');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return search results when valid sort by parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        sort_by: 'relevance',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    it('should return search results when valid sort order parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        sort_order: 'ascending',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    it('should return search results when valid sort order and sort by parameters are supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        sort_by: 'relevance',
+        sort_order: 'ascending',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    it('should return error when retrieving search results when invalid sort order parameter is supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+        sort_order: 'invalid',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Invalid value for parameter: "sort_order"');
         expect(response).to.be.undefined;
         done();
       });
