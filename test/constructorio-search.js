@@ -119,10 +119,10 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving a listing of groups with invalid page parameter', (done) => {
+    it('should return error when retrieving search results with invalid page parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.getSynonymGroups({
+      constructorio.getSearchResults({
         query: 'drill',
         section: 'Products',
         page: 'abc',
@@ -180,7 +180,7 @@ describe('ConstructorIO - Search', () => {
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
-        expect(response.request.filters).to.have.property('keywords').an('array').length(1);
+        expect(response.request.filters).to.have.property('keywords').that.is.an('array').length(1);
         expect(response.response.facets).to.be.an('array').length(1);
         done();
       });
@@ -198,8 +198,8 @@ describe('ConstructorIO - Search', () => {
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
-        expect(response.request.filters).to.have.property('keywords').an('array').length(1);
-        expect(response.request.filters).to.have.property('Price').an('array').length(1);
+        expect(response.request.filters).to.have.property('keywords').that.is.an('array').length(1);
+        expect(response.request.filters).to.have.property('Price').that.is.an('array').length(1);
         expect(response.response.facets).to.be.an('array').length(2);
         done();
       });
@@ -397,7 +397,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when removing groups with an invalid key/token', (done) => {
+    it('should return error when retrieving search results with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',

@@ -257,7 +257,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when removing groups with an invalid key/token', (done) => {
+    it('should return error when retrieving autocomplete results with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
