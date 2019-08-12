@@ -172,6 +172,25 @@ describe('ConstructorIO - Items', () => {
     });
   });
 
+  describe('updateItem', () => {
+    it('should return nothing when updating an item in an autocomplete section', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = createProductItem();
+      data.autocomplete_section = 'Products';
+      constructorio.addItem(data, () => {
+        data.suggested_score = 12;
+        data.url = 'http://url.com';
+        data.new_item_name = `${data.item_name}-new`;
+
+        constructorio.updateItem(deepfreeze(data), (err, response) => {
+          expect(err).to.be.undefined;
+          expect(response).to.be.undefined;
+          done();
+        });
+      });
+    });
+  });
+
   describe('getItem', () => {
     it('should return 20 items given only an autocomplete section', (done) => {
       const constructorio = new Constructorio(testConfig);
