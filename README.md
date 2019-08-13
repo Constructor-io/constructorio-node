@@ -29,7 +29,7 @@ To add an item to your index:
 ```javascript
 constructorio.addItem({
   item_name: "power_drill",
-  autocomplete_section: "Products"
+  section: "Products"
 }, function(error, response) {
     console.log(response);
 });
@@ -40,7 +40,7 @@ To remove an item from your index:
 ```javascript
 constructorio.removeItem({
   item_name: "power_drill",
-  autocomplete_section: "Products"
+  section: "Products"
 }, function(error, response) {
     console.log(response);  
 });
@@ -51,9 +51,42 @@ To modify an item in your index:
 ```javascript
 constructorio.modifyItem({
   item_name: "power_drill",
-  autocomplete_section: "Products",
+  section: "Products",
   url: "http://www.mysite.com/power_drill",
 }, function(error, response) {
   console.log(response);
+});
+```
+
+To get autocomplete results:
+
+```javascript
+const userParams = {
+  i: 'user device identifier',
+  s: 1
+};
+
+constructorio.getAutocompleteResults({
+  query: 'powe',
+  num_results: 4,
+}, userParams, function(error, response) {
+  console.log(response);  
+});
+```
+
+To get search results:
+
+```javascript
+const userParams = {
+  i: 'user device identifier',
+  s: 1
+};
+
+constructorio.getSearchResults({
+  query: 'power drill',
+  section: 'Products',
+  sort_by: 'relevance',
+}, userParams, function(error, response) {
+  console.log(response);  
 });
 ```

@@ -1,6 +1,6 @@
 {
   "name": "constructorio",
-  "version": "2.5.0",
+  "version": "2.6.1",
   "description": "Constructor.io API client",
   "homepage": "https://github.com/Constructor-io/constructorio-javascript",
   "main": "lib/constructorio.js",
@@ -84,13 +84,13 @@
     "chai": "^4.2.0",
     "deepfreeze": "^2.0.0",
     "eslint": "^5.12.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.15.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
     "http-server": "^0.11.1",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "npm-check": "^5.9.0",
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.3"
   }
 }
