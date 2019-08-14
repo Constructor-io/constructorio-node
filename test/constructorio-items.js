@@ -202,7 +202,7 @@ describe('ConstructorIO - Items', () => {
 
         constructorio.updateItemBatch({
           items: [deepfreeze(data)],
-          section: 'Products',
+          autocomplete_section: 'Products',
         }, (err, response) => {
           expect(err).to.be.undefined;
           expect(response).to.be.undefined;
