@@ -22,8 +22,7 @@ describe('ConstructorIO - Search', () => {
       constructorio.getSearchResults({
         query,
         section: 'Products',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response).to.have.property('request').that.is.an('object');
@@ -46,8 +45,7 @@ describe('ConstructorIO - Search', () => {
       constructorio.getSearchResults({
         query,
         section: 'Products',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length(0);
@@ -62,8 +60,7 @@ describe('ConstructorIO - Search', () => {
       constructorio.getSearchResults({
         query,
         section: 'invalid',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Unknown section: invalid');
         expect(response).to.be.undefined;
@@ -78,8 +75,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         num_results_per_page: 1,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length(1);
@@ -94,8 +90,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         num_results_per_page: 'abc',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'num_results_per_page must be an integer');
         expect(response).to.be.undefined;
@@ -110,8 +105,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         page: 1,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -126,8 +120,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         page: 'abc',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'page must be an integer');
         expect(response).to.be.undefined;
@@ -143,8 +136,7 @@ describe('ConstructorIO - Search', () => {
         section: 'Products',
         num_results_per_page: 5,
         page: 1,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length(5);
@@ -160,8 +152,7 @@ describe('ConstructorIO - Search', () => {
         section: 'Products',
         num_results_per_page: 99,
         page: 99,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length(0);
@@ -176,8 +167,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'filters[keywords]': 'battery-powered',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.request.filters).to.have.property('keywords').that.is.an('array').length(1);
@@ -194,8 +184,7 @@ describe('ConstructorIO - Search', () => {
         section: 'Products',
         'filters[keywords]': 'battery-powered',
         'filters[Price]': '10-20',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.request.filters).to.have.property('keywords').that.is.an('array').length(1);
@@ -212,8 +201,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'filters[keywords]': '',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'filters.keywords must contain at least 1 element(s)');
         expect(response).to.be.undefined;
@@ -228,8 +216,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'fmt_options[groups_start]': 'current',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -244,8 +231,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'fmt_options[invalid]': 'current',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Unknown format option: invalid. Keys of fmt_options must be one of (groups_max_depth, groups_start)');
         expect(response).to.be.undefined;
@@ -260,8 +246,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'fmt_options[groups_start]': 'invalid',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Invalid value for parameter: "fmt_options.groups_start"');
         expect(response).to.be.undefined;
@@ -276,8 +261,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'fmt_options[groups_max_depth]': 1,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -292,8 +276,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         'fmt_options[groups_max_depth]': 'invalid',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'fmt_options.groups_max_depth must be an integer');
         expect(response).to.be.undefined;
@@ -308,8 +291,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         sort_by: 'relevance',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -324,8 +306,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         sort_order: 'ascending',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -341,8 +322,7 @@ describe('ConstructorIO - Search', () => {
         section: 'Products',
         sort_by: 'relevance',
         sort_order: 'ascending',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
         expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
@@ -357,8 +337,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         sort_order: 'invalid',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Invalid value for parameter: "sort_order"');
         expect(response).to.be.undefined;
@@ -373,8 +352,7 @@ describe('ConstructorIO - Search', () => {
         query: 'drill',
         section: 'Products',
         collection_id: 1,
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Collection with id "1" not found.');
         expect(response).to.be.undefined;
@@ -387,6 +365,7 @@ describe('ConstructorIO - Search', () => {
 
       constructorio.getSearchResults({
         query: 'drill',
+      }, {
         s: 'abc',
         i: 0,
       }, (err, response) => {
@@ -405,8 +384,7 @@ describe('ConstructorIO - Search', () => {
 
       constructorio.getSearchResults({
         query: 'drill',
-        ...personalizationParameters,
-      }, (err, response) => {
+      }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message').to.match(/We have no record of this key./);
         expect(response).to.be.undefined;
