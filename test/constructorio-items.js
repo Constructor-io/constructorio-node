@@ -85,13 +85,13 @@ describe('ConstructorIO - Items', () => {
     });
   });
 
-  describe('addOrUpdateItem', () => {
+  describe('addOrModifyItem', () => {
     it('should return nothing when upserting an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.autocomplete_section = 'Products';
 
-      constructorio.addOrUpdateItem(deepfreeze(data), (err, response) => {
+      constructorio.addOrModifyItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -99,7 +99,7 @@ describe('ConstructorIO - Items', () => {
     });
   });
 
-  describe('addOrUpdateItemBatch', () => {
+  describe('addOrModifyItemBatch', () => {
     it('should return nothing when upserting multiple items', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
@@ -111,7 +111,7 @@ describe('ConstructorIO - Items', () => {
         autocomplete_section: 'Products',
       };
 
-      constructorio.addOrUpdateItemBatch(deepfreeze(data), (err, response) => {
+      constructorio.addOrModifyItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -183,6 +183,27 @@ describe('ConstructorIO - Items', () => {
         data.new_item_name = `${data.item_name}-new`;
 
         constructorio.updateItem(deepfreeze(data), (err, response) => {
+          expect(err).to.be.undefined;
+          expect(response).to.be.undefined;
+          done();
+        });
+      });
+    });
+  });
+
+  describe('updateItemBatch', () => {
+    it('should return nothing when modifying items in an autocomplete section', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const data = createProductItem();
+      constructorio.addItem(data, () => {
+        data.suggested_score = 12;
+        data.url = 'http://url.com';
+        data.new_item_name = `${data.item_name}-new`;
+
+        constructorio.updateItemBatch({
+          items: [deepfreeze(data)],
+          section: 'Products',
+        }, (err, response) => {
           expect(err).to.be.undefined;
           expect(response).to.be.undefined;
           done();
