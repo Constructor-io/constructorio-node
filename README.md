@@ -29,7 +29,7 @@ To add an item to your index:
 ```javascript
 constructorio.addItem({
   item_name: "power_drill",
-  autocomplete_section: "Products"
+  section: "Products"
 }, function(error, response) {
     console.log(response);
 });
@@ -40,7 +40,7 @@ To remove an item from your index:
 ```javascript
 constructorio.removeItem({
   item_name: "power_drill",
-  autocomplete_section: "Products"
+  section: "Products"
 }, function(error, response) {
     console.log(response);  
 });
@@ -51,7 +51,7 @@ To modify an item in your index:
 ```javascript
 constructorio.modifyItem({
   item_name: "power_drill",
-  autocomplete_section: "Products",
+  section: "Products",
   url: "http://www.mysite.com/power_drill",
 }, function(error, response) {
   console.log(response);
