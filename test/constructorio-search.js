@@ -360,6 +360,97 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('should return search results when supplying a valid optional ui parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const query = 'Stanley';
+
+      constructorio.getSearchResults({
+        query,
+        section: 'Products',
+      }, {
+        ui: 'testing',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+
+    /*
+    // This test is valid, however the API doesn't respond as intended
+    // - Feeding it a list for the `us` parameter: it claims it wants a string
+    // - Feeding it a string for the `us` parameter: it cliams it wants a list
+    it('should return search results when supplying a valid optional us parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const query = 'Stanley';
+
+      constructorio.getSearchResults({
+        query,
+        section: 'Products'
+      }, {
+        us: ['foo', 'bar'],
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.response).to.have.property('results').that.is.an('array').length.to.be.above(0);
+        done();
+      });
+    });
+    */
+
+    it('should return autocomplete results when supplying invalid optional ui parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const query = 'Stanley';
+
+      constructorio.getSearchResults({
+        query,
+        section: 'Products',
+      }, {
+        ui: {},
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Request could not be completed - `ui` parameter must be a string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return autocomplete results when supplying invalid optional us parameter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const query = 'Stanley';
+
+      constructorio.getSearchResults({
+        query,
+        section: 'Products',
+      }, {
+        us: 'failure',
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Request could not be completed - `us` parameter must be a list');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return error when no personalization parameters are supplied', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getSearchResults({
+        query: 'drill',
+        section: 'Products',
+      }, {}, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'Request could not be completed - `s` and `i` are required parameters and must be a number and string, respectively');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
     it('should return error when invalid personalization parameters are supplied', (done) => {
       const constructorio = new Constructorio(testConfig);
 
