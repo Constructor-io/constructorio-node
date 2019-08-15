@@ -378,17 +378,13 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    /*
-    // This test is valid, however the API doesn't respond as intended
-    // - Feeding it a list for the `us` parameter: it claims it wants a string
-    // - Feeding it a string for the `us` parameter: it cliams it wants a list
     it('should return search results when supplying a valid optional us parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
       constructorio.getSearchResults({
         query,
-        section: 'Products'
+        section: 'Products',
       }, {
         us: ['foo', 'bar'],
         ...personalizationParameters,
@@ -399,7 +395,6 @@ describe('ConstructorIO - Search', () => {
         done();
       });
     });
-    */
 
     it('should return autocomplete results when supplying invalid optional ui parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
