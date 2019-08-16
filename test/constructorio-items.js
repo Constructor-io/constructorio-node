@@ -85,13 +85,13 @@ describe('ConstructorIO - Items', () => {
     });
   });
 
-  describe('addOrModifyItem', () => {
+  describe('addOrUpdateItem', () => {
     it('should return nothing when upserting an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
       data.section = 'Products';
 
-      constructorio.addOrModifyItem(deepfreeze(data), (err, response) => {
+      constructorio.addOrUpdateItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
@@ -99,7 +99,7 @@ describe('ConstructorIO - Items', () => {
     });
   });
 
-  describe('addOrModifyItemBatch', () => {
+  describe('addOrUpdateItemBatch', () => {
     it('should return nothing when upserting multiple items', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
@@ -111,7 +111,7 @@ describe('ConstructorIO - Items', () => {
         section: 'Products',
       };
 
-      constructorio.addOrModifyItemBatch(deepfreeze(data), (err, response) => {
+      constructorio.addOrUpdateItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.undefined;
         done();
