@@ -57,3 +57,36 @@ constructorio.modifyItem({
   console.log(response);
 });
 ```
+
+To get autocomplete results:
+
+```javascript
+const userParams = {
+  i: 'user device identifier',
+  s: 1
+};
+
+constructorio.getAutocompleteResults({
+  query: 'powe',
+  num_results: 4,
+}, userParams, function(error, response) {
+  console.log(response);  
+});
+```
+
+To get search results:
+
+```javascript
+const userParams = {
+  i: 'user device identifier',
+  s: 1
+};
+
+constructorio.getSearchResults({
+  query: 'power drill',
+  section: 'Products',
+  sort_by: 'relevance',
+}, userParams, function(error, response) {
+  console.log(response);  
+});
+```
