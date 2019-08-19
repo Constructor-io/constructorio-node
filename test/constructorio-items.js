@@ -23,7 +23,7 @@ describe('ConstructorIO - Items', () => {
     it('should return nothing when adding an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
 
       constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
@@ -35,7 +35,7 @@ describe('ConstructorIO - Items', () => {
     it('should return nothing when adding an item with metadata', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
       data.url = 'http://url.com';
       data.metadata = {
         key1: 'value1',
@@ -55,7 +55,7 @@ describe('ConstructorIO - Items', () => {
         apiKey: 'bad-key',
       });
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
 
       constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err.message).to.match(/You have supplied an invalid/);
@@ -74,7 +74,7 @@ describe('ConstructorIO - Items', () => {
           createProductItem(),
           createProductItem(),
         ],
-        autocomplete_section: 'Products',
+        section: 'Products',
       };
 
       constructorio.addItemBatch(deepfreeze(data), (err, response) => {
@@ -89,7 +89,7 @@ describe('ConstructorIO - Items', () => {
     it('should return nothing when upserting an item', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
 
       constructorio.addOrUpdateItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
@@ -108,7 +108,7 @@ describe('ConstructorIO - Items', () => {
           createProductItem(),
           createProductItem(),
         ],
-        autocomplete_section: 'Products',
+        section: 'Products',
       };
 
       constructorio.addOrUpdateItemBatch(deepfreeze(data), (err, response) => {
@@ -123,7 +123,7 @@ describe('ConstructorIO - Items', () => {
     it('should return nothing when removing an item from an autocomplete section', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
 
       constructorio.removeItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
@@ -142,7 +142,7 @@ describe('ConstructorIO - Items', () => {
           createProductItem(),
           createProductItem(),
         ],
-        autocomplete_section: 'Products',
+        section: 'Products',
       };
 
       constructorio.removeItemBatch(deepfreeze(data), (err, response) => {
@@ -157,7 +157,7 @@ describe('ConstructorIO - Items', () => {
     it('should return nothing when modifying an item in an autocomplete section', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = createProductItem();
-      data.autocomplete_section = 'Products';
+      data.section = 'Products';
       constructorio.addItem(data, () => {
         data.suggested_score = 12;
         data.url = 'http://url.com';
