@@ -15,7 +15,7 @@ describe('ConstructorIO - Search', () => {
   };
 
   describe('getSearchResults', () => {
-    it('should return search results when supplying a valid query and section', (done) => {
+    it('should return results when supplying a valid query and section', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'drill';
 
@@ -38,7 +38,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return no search results when supplying a non-matching query', (done) => {
+    it('should return no results when supplying a non-matching query', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'xylophone';
 
@@ -53,7 +53,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results with invalid section', (done) => {
+    it('should return an error with invalid section', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'xylophone';
 
@@ -68,7 +68,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return one search result when specifying a num results per page parameter', (done) => {
+    it('should return one result when supplying a num results per page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -83,7 +83,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results with invalid num results per page parameter', (done) => {
+    it('should return an error with invalid results per page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -98,7 +98,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when specifying a valid page parameter', (done) => {
+    it('should return results when supplying a valid page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -113,7 +113,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results with invalid page parameter', (done) => {
+    it('should return an error with invalid page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -128,7 +128,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when supplying valid num results per page and page combination', (done) => {
+    it('should return results when supplying valid num results per page and page combination', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -144,7 +144,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return no results when supplying invalid num results per page and page combination', (done) => {
+    it('should return no results when supplying invalid results per page and page combination', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -160,7 +160,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set with filters applied when specifying a valid filters parameter', (done) => {
+    it('should return results with filters applied when supplying valid filters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -176,7 +176,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set with filters applied when specifying multiple valid filters parameters', (done) => {
+    it('should return results with filters applied when supplying multiple valid filters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -194,7 +194,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results with invalid filters parameter', (done) => {
+    it('should return an error with invalid filters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -209,7 +209,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search result set when valid fmt options start parameter is supplied', (done) => {
+    it('should return results when supplying valid fmt options start', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -224,7 +224,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results when invalid fmt options parameter is supplied', (done) => {
+    it('should return an error when supplying invalid fmt options', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -239,7 +239,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when invalid fmt options start parameter is supplied', (done) => {
+    it('should return an error when supplying invalid fmt options start', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -254,7 +254,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when valid fmt options max depth parameter is supplied', (done) => {
+    it('should return results when supplying valid fmt options max depth', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -269,7 +269,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results when invalid fmt options start parameter is supplied', (done) => {
+    it('should return an error when supplying invalid fmt options start', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -284,7 +284,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when valid sort by parameter is supplied', (done) => {
+    it('should return results when supplying valid sort by', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -299,7 +299,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when valid sort order parameter is supplied', (done) => {
+    it('should return results when supplying valid sort order parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -314,7 +314,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when valid sort order and sort by parameters are supplied', (done) => {
+    it('should return results when supplying valid sort order and sort by', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -330,7 +330,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results when invalid sort order parameter is supplied', (done) => {
+    it('should return an error when supplying invalid sort order', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -345,7 +345,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results when non-existent collection id is supplied', (done) => {
+    it('should return an error when supplying non-existent collection id', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -360,7 +360,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when supplying a valid optional ui parameter', (done) => {
+    it('should return results when supplying a valid optional ui', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -378,7 +378,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return search results when supplying a valid optional us parameter', (done) => {
+    it('should return results when supplying a valid optional us', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -396,7 +396,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return autocomplete results when supplying invalid optional ui parameter', (done) => {
+    it('should return an error when supplying invalid optional ui', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -414,7 +414,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return autocomplete results when supplying invalid optional us parameter', (done) => {
+    it('should return an error when supplying invalid optional us', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -432,7 +432,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when no personalization parameters are supplied', (done) => {
+    it('should return an error when supplying no personalization parameters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -446,7 +446,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when invalid personalization parameters are supplied', (done) => {
+    it('should return an error when supplying invalid personalization parameters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
@@ -462,7 +462,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return error when retrieving search results with an invalid key/token', (done) => {
+    it('should return an error with an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',
