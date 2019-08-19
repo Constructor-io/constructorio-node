@@ -51,7 +51,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return limited number of autocomplete results when specifying a num results parameter', (done) => {
+    it('should return limited number of autocomplete results when supplying num results', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -66,7 +66,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return limited number of autocomplete results for sections when specifying num results parameter', (done) => {
+    it('should return limited number of autocomplete results for sections when supplying num results', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -82,7 +82,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return no autocomplete results when non-matching filter is supplied', (done) => {
+    it('should return no autocomplete results when supplying non-matching filter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -98,7 +98,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return autocomplete results when supplying a valid optional ui parameter', (done) => {
+    it('should return autocomplete results when supplying a valid optional ui', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -116,7 +116,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return autocomplete results when supplying a valid optional us parameter', (done) => {
+    it('should return autocomplete results when supplying a valid optional us', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -134,7 +134,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return autocomplete results when supplying invalid optional ui parameter', (done) => {
+    it('should return an error when supplying invalid optional ui', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -151,7 +151,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return autocomplete results when supplying invalid optional us parameter', (done) => {
+    it('should return an error when supplying invalid optional us', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -168,7 +168,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when invalid num results parameter is supplied', (done) => {
+    it('should return an error when supplying invalid num results', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -182,7 +182,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when invalid num results section parameter is supplied', (done) => {
+    it('should return an error when supplying invalid num results section', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -196,7 +196,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when invalid filters parameter is supplied', (done) => {
+    it('should return an error when supplying invalid filters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -210,7 +210,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when more than one filters are supplied', (done) => {
+    it('should return an error when supplying more than one filters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -224,7 +224,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when no personalization parameters are supplied', (done) => {
+    it('should return an error when supplying no personalization parameters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -237,7 +237,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when invalid personalization parameters are supplied', (done) => {
+    it('should return an error when supplying invalid personalization parameters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getAutocompleteResults({
@@ -253,7 +253,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('should return error when retrieving autocomplete results with an invalid key/token', (done) => {
+    it('should return an error when supplying an invalid key/token', (done) => {
       const constructorio = new Constructorio({
         apiToken: 'bad-token',
         apiKey: 'bad-key',

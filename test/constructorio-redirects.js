@@ -341,7 +341,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve a listing of one redirect rules when specifying num results per page parameter', (done) => {
+    it('should retrieve a listing of one redirect rules when supplying num results per page parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -367,7 +367,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve a listing of one redirect rules when specifying page parameter', (done) => {
+    it('should retrieve a listing of one redirect rules when supplying page parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -393,7 +393,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve an empty listing of redirect rules when specifying invalid num results per page and page parameters', (done) => {
+    it('should retrieve an empty listing of redirect rules when supplying invalid num results per page and page parameters', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -407,7 +407,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve listing of redirect rules when specifying a valid query parameter', (done) => {
+    it('should retrieve listing of redirect rules when supplying a valid query parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -420,7 +420,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve an empty listing of redirect rules when specifying a non-existent query parameter', (done) => {
+    it('should retrieve an empty listing of redirect rules when supplying a non-existent query parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -433,7 +433,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve listing of redirect rules when specifying a status', (done) => {
+    it('should retrieve listing of redirect rules when supplying a status', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
@@ -446,7 +446,7 @@ describe('ConstructorIO - Redirect Rules', () => {
       });
     });
 
-    it('should retrieve an empty listing of redirect rules when specifying an invalid status', (done) => {
+    it('should retrieve an empty listing of redirect rules when supplying an invalid status', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getRedirectRules({
