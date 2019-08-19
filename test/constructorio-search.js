@@ -299,7 +299,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('should return results when supplying valid sort order parameter', (done) => {
+    it('should return results when supplying valid sort order', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSearchResults({
