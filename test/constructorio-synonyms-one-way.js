@@ -44,7 +44,7 @@ function removeTestOneWaySynonym(phrase) {
   });
 }
 
-describe.only('ConstructorIO - One Way Synonyms', () => {
+describe('ConstructorIO - One Way Synonyms', () => {
   // Introduce latency to avoid throttling issues
   beforeEach((done) => {
     setTimeout(() => {
