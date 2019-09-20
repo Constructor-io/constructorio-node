@@ -77,6 +77,24 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
+    it('should return an error when supplying an invalid phrase', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.addOneWaySynonym({
+        phrase: 1,
+        child_phrases: [
+          { phrase: 'loaf' },
+          { phrase: 'buns' },
+          { phrase: 'toast' },
+        ],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
     it('should return an error when supplying a phrase that already exists', (done) => {
       const constructorio = new Constructorio(testConfig);
 
@@ -95,7 +113,24 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when supplying child phrases of incorrect type', (done) => {
+    it('should return an error when not supplying a phrase', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.addOneWaySynonym({
+        child_phrases: [
+          { phrase: 'parmesan' },
+          { phrase: 'gouda' },
+          { phrase: 'mozzarella' },
+        ],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error when supplying a child phrases of incorrect type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.addOneWaySynonym({
@@ -109,10 +144,12 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when not supplying a child phrases property', (done) => {
+    it('should return an error when not supplying a child phrases', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      constructorio.addOneWaySynonym({}, (err, response) => {
+      constructorio.addOneWaySynonym({
+        phrase: oneWaySynonymPhrase,
+      }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'child_phrases is a required field of type list');
         expect(response).to.be.undefined;
@@ -147,9 +184,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
 
     before((done) => {
       // Create test one way synonyms for use in tests
-      setTimeout(() => {
-        addTestOneWaySynonym(oneWaySynonymPhrase).then(done).catch(done);
-      }, 100);
+      addTestOneWaySynonym(oneWaySynonymPhrase).then(done).catch(done);
     });
 
     after((done) => {
@@ -186,13 +221,30 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
         ],
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'There is no one way synonym with "1" as a parent phrase');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
         expect(response).to.be.undefined;
         done();
       });
     });
 
-    it('should return an error when supplying child phrases of incorrect type', (done) => {
+    it('should return an error when not supplying a phrase', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.modifyOneWaySynonym({
+        child_phrases: [
+          { phrase: 'loaf' },
+          { phrase: 'buns' },
+          { phrase: 'toast' },
+        ],
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error when supplying a child phrases of incorrect type', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.modifyOneWaySynonym({
@@ -206,7 +258,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when not supplying a child phrases property', (done) => {
+    it('should return an error when not supplying a child phrases', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.modifyOneWaySynonym({
@@ -214,23 +266,6 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       }, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'child_phrases is a required field of type list');
-        expect(response).to.be.undefined;
-        done();
-      });
-    });
-
-    it('should return an error when not supplying a phrase parameter', (done) => {
-      const constructorio = new Constructorio(testConfig);
-
-      constructorio.modifyOneWaySynonym({
-        child_phrases: [
-          { phrase: 'loaf' },
-          { phrase: 'buns' },
-          { phrase: 'toast' },
-        ],
-      }, (err, response) => {
-        expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'There is no one way synonym with "undefined" as a parent phrase');
         expect(response).to.be.undefined;
         done();
       });
@@ -286,10 +321,10 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should retrieve a listing of one way synonyms when supplying a phrase property', (done) => {
+    it('should retrieve a listing of one way synonyms when supplying a phrase', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as groups can take many seconds to be indexed / returned
+      // Note: Result set is not being checked for match as one way synonyms can take many seconds to be indexed / returned
       constructorio.getOneWaySynonyms({
         phrase: 'spices',
       }, (err, response) => {
@@ -300,7 +335,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return no results when supplying a non-existent phrase property', (done) => {
+    it('should return no results when supplying a non-existent phrase', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonyms({
@@ -313,10 +348,10 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should retrieve a listing of one way synonyms when supplying num results per page property', (done) => {
+    it('should retrieve a listing of one way synonyms when supplying a num results per page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as groups can take many seconds to be indexed / returned
+      // Note: Result set is not being checked for match as one way synonyms can take many seconds to be indexed / returned
       constructorio.getOneWaySynonyms({
         num_results_per_page: 1,
       }, (err, response) => {
@@ -327,7 +362,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when supplying an invalid num results per page property', (done) => {
+    it('should return an error when supplying an invalid num results per page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonyms({
@@ -354,7 +389,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when supplying an invalid page parameter', (done) => {
+    it('should return an error when supplying an invalid page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonyms({
@@ -395,7 +430,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       removeTestOneWaySynonym(oneWaySynonymPhrase).then(done).catch(done);
     });
 
-    it('should retrieve a list of one way synonyms when supplying a valid phrase', (done) => {
+    it('should retrieve a list of one way synonyms', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonym({
@@ -412,7 +447,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonym({
-        phrase: 1,
+        phrase: 'shoes',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -421,13 +456,26 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return no results when not supplying a phrase', (done) => {
+    it('should return an error when supplying an invalid phrase', (done) => {
+      const constructorio = new Constructorio(testConfig);
+
+      constructorio.getOneWaySynonym({
+        phrase: 1,
+      }, (err, response) => {
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
+        expect(response).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error when not supplying a phrase', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getOneWaySynonym({}, (err, response) => {
-        expect(err).to.be.undefined;
-        expect(response).to.be.an('object');
-        expect(response).to.have.property('one_way_synonym_relations').an('array').length(0);
+        expect(err).to.be.an('object');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
+        expect(response).to.be.undefined;
         done();
       });
     });
@@ -519,7 +567,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       removeTestOneWaySynonym(oneWaySynonymPhrase).then(() => done()).catch(() => done());
     });
 
-    it('should remove a one way synonym when supplying a valid phrase', (done) => {
+    it('should remove a one way synonym', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.removeOneWaySynonym({
@@ -531,7 +579,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when supplying a valid one way synonym that has already been removed', (done) => {
+    it('should return an error when supplying a valid phrase that has already been removed', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.removeOneWaySynonym({
@@ -544,14 +592,14 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
       });
     });
 
-    it('should return an error when supplying a phrase of invalid type', (done) => {
+    it('should return an error when supplying an invalid phrase', (done) => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.removeOneWaySynonym({
         phrase: 1,
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'There is no one way synonym with "1" as a parent phrase');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
         expect(response).to.be.undefined;
         done();
       });
@@ -562,7 +610,7 @@ describe.only('ConstructorIO - One Way Synonyms', () => {
 
       constructorio.removeOneWaySynonym({}, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'There is no one way synonym with "undefined" as a parent phrase');
+        expect(err).to.have.property('message', 'phrase is a required field of type string');
         expect(response).to.be.undefined;
         done();
       });
