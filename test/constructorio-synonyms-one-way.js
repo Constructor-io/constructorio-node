@@ -324,7 +324,10 @@ describe('ConstructorIO - One Way Synonyms', () => {
     it('should retrieve a listing of one way synonyms when supplying a phrase', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as one way synonyms can take many seconds to be indexed / returned
+      /**
+       * Note: Result set is not being checked for match as one way synonyms
+       * can take many seconds to be indexed / returned
+       */
       constructorio.getOneWaySynonyms({
         phrase: 'spices',
       }, (err, response) => {
@@ -351,7 +354,10 @@ describe('ConstructorIO - One Way Synonyms', () => {
     it('should retrieve a listing of one way synonyms when supplying a num results per page', (done) => {
       const constructorio = new Constructorio(testConfig);
 
-      // Note: Result set is not being checked for match as one way synonyms can take many seconds to be indexed / returned
+      /**
+       * Note: Result set is not being checked for match as one way synonyms
+       * can take many seconds to be indexed / returned
+       */
       constructorio.getOneWaySynonyms({
         num_results_per_page: 1,
       }, (err, response) => {
