@@ -312,7 +312,7 @@ describe('ConstructorIO - Redirect Rules', () => {
 
       // Create test redirect rules for use in tests
       Promise.all(addPromiseList).then((results) => {
-        results.forEach(result => addedRedirectRuleIds.push(result.id));
+        results.forEach((result) => addedRedirectRuleIds.push(result.id));
         done();
       }).catch(done);
     });
