@@ -44,7 +44,7 @@ describe('ConstructorIO - Item Groups', () => {
       constructorio.addItemGroups(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
-          item_groups: { inserted: 1, processed: 1, updated: 0 },
+          item_groups: { deleted: 0, inserted: 1, processed: 1, updated: 0 },
         });
         done();
       });
@@ -64,7 +64,7 @@ describe('ConstructorIO - Item Groups', () => {
       constructorio.addOrUpdateItemGroups(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
-          item_groups: { inserted: 2, processed: 2, updated: 0 },
+          item_groups: { deleted: 0, inserted: 2, processed: 2, updated: 0 },
         });
         done();
       });
@@ -109,6 +109,7 @@ describe('ConstructorIO - Item Groups', () => {
           name: 'No Soup Group For You',
           parent_id: null,
           path: '/',
+          path_list: [],
         });
         done();
       });
