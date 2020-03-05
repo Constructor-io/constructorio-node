@@ -255,7 +255,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
       // Create test synonym groups for use in tests
       Promise.all(addPromiseList).then((results) => {
-        results.forEach((result) => addedSynonymGroupIds.push(result.group_id));
+        results.forEach(result => addedSynonymGroupIds.push(result.group_id));
         done();
       }).catch(done);
     });
@@ -463,7 +463,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
       // Create test synonym groups for use in tests
       Promise.all(addPromiseList).then((results) => {
-        results.forEach((result) => addedSynonymGroupIds.push(result.group_id));
+        results.forEach(result => addedSynonymGroupIds.push(result.group_id));
         done();
       }).catch(done);
     });
