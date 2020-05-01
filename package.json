@@ -35,9 +35,9 @@
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
-    "http-server": "^0.12.1",
-    "mocha": "^7.0.0",
-    "npm-check": "^5.9.0",
+    "http-server": "^0.12.3",
+    "mocha": "^7.1.2",
+    "npm-check": "^5.9.2",
     "nyc": "^15.0.0",
     "pre-push": "^0.1.1",
     "uuid": "^3.4.0"
