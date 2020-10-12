@@ -1,4 +1,5 @@
-# Constructor-IO JavaScript Client
+# Constructor-IO NodeJS Client
+
 [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
 # Documentation
