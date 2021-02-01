@@ -81,6 +81,7 @@ describe('ConstructorIO - Item Groups', () => {
         expect(response).to.deep.eq({
           item_groups: [
             {
+              data: null,
               children: [],
               id: 'SoupGroup',
               name: 'Soup Group',
@@ -105,6 +106,7 @@ describe('ConstructorIO - Item Groups', () => {
       constructorio.modifyItemGroup(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.deep.eq({
+          data: null,
           id: 'SoupGroup',
           name: 'No Soup Group For You',
           parent_id: null,

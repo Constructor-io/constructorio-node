@@ -15,7 +15,7 @@ describe('ConstructorIO - Autocomplete', () => {
   };
 
   describe('getAutocompleteResults', () => {
-    it('should return autocomplete results when supplying a valid query', (done) => {
+    it.only('should return autocomplete results when supplying a valid query', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 
@@ -87,7 +87,7 @@ describe('ConstructorIO - Autocomplete', () => {
 
       constructorio.getAutocompleteResults({
         query: 'drill',
-        filters: ['xylophone'],
+        filters: { instrument: 'xylophone' },
       }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -130,6 +130,27 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(response).to.be.an('object');
         expect(response.sections).to.have.property('Search Suggestions').that.is.an('array');
         expect(response.sections).to.have.property('Products').that.is.an('array');
+        done();
+      });
+    });
+
+    it('should return autocomplete results when supplying a valid filter', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const query = 'Collection';
+
+      constructorio.getAutocompleteResults({
+        query,
+        filters: {
+          collection: 'test',
+        },
+      }, {
+        ...personalizationParameters,
+      }, (err, response) => {
+        expect(err).to.be.undefined;
+        expect(response).to.be.an('object');
+        expect(response.sections).to.have.property('Search Suggestions').that.is.an('array');
+        expect(response.sections).to.have.property('Products').that.is.an('array');
+        expect(response.sections).to.have.property('Products').that.is.an('array').length.to.be.above(0);
         done();
       });
     });
@@ -215,7 +236,10 @@ describe('ConstructorIO - Autocomplete', () => {
 
       constructorio.getAutocompleteResults({
         query: 'drill',
-        filters: ['abc', 'def'],
+        filters: {
+          abc: 'def',
+          uvw: 'xyz',
+        },
       }, personalizationParameters, (err, response) => {
         expect(err).to.be.an('object');
         expect(err).to.have.property('message', 'Only single filters are supported in autocomplete, but you seem to have provided more than one.');

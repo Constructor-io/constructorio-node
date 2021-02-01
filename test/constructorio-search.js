@@ -166,7 +166,7 @@ describe('ConstructorIO - Search', () => {
       constructorio.getSearchResults({
         query: 'drill',
         section: 'Products',
-        'filters[keywords]': 'battery-powered',
+        filters: { keywords: 'battery-powered' },
       }, personalizationParameters, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
@@ -189,7 +189,7 @@ describe('ConstructorIO - Search', () => {
         expect(response).to.be.an('object');
         expect(response.request.filters).to.have.property('keywords').that.is.an('array').length(1);
         expect(response.request.filters).to.have.property('Price').that.is.an('array').length(1);
-        expect(response.response.facets).to.be.an('array').length(1);
+        expect(response.response.facets).to.be.an('array').length(2);
         done();
       });
     });

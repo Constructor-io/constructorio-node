@@ -109,7 +109,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         synonyms: 'abc',
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms must be a list');
         expect(response).to.be.undefined;
         done();
       });
@@ -120,7 +120,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
       constructorio.addSynonymGroup({}, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms is a required field of type list');
         expect(response).to.be.undefined;
         done();
       });
@@ -196,7 +196,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         synonyms: 'foo',
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms must be a list');
         expect(response).to.be.undefined;
         done();
       });
@@ -209,7 +209,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         group_id: addedSynonymGroupId,
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms is a required field of type list');
         expect(response).to.be.undefined;
         done();
       });
@@ -307,7 +307,7 @@ describe('ConstructorIO - Synonym Groups', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSynonymGroups({
-        phrase: 'mallorca',
+        phrase: 'nullasdfaf',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
