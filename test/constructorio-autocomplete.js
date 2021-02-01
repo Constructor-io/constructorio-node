@@ -15,7 +15,7 @@ describe('ConstructorIO - Autocomplete', () => {
   };
 
   describe('getAutocompleteResults', () => {
-    it.only('should return autocomplete results when supplying a valid query', (done) => {
+    it('should return autocomplete results when supplying a valid query', (done) => {
       const constructorio = new Constructorio(testConfig);
       const query = 'Stanley';
 

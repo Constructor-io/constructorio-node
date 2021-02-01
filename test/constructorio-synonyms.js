@@ -50,7 +50,7 @@ describe('ConstructorIO - Synonym Groups', () => {
   beforeEach((done) => {
     setTimeout(() => {
       done();
-    }, 100);
+    }, 300);
   });
 
   describe('addSynonymGroup', () => {
@@ -307,7 +307,7 @@ describe('ConstructorIO - Synonym Groups', () => {
       const constructorio = new Constructorio(testConfig);
 
       constructorio.getSynonymGroups({
-        phrase: 'nullasdfaf',
+        phrase: 'mallorca',
       }, (err, response) => {
         expect(err).to.be.undefined;
         expect(response).to.be.an('object');
