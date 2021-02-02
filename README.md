@@ -59,6 +59,32 @@ constructorio.modifyItem({
 });
 ```
 
+To replace the catalog in your index:
+
+```javascript
+constructorio.replaceCatalog({
+  items: fs.createReadStream('./items.csv'),
+  variations: fs.createReadStream('./variations.csv'),
+  item_groups: fs.createReadStream('./item_groups.csv'),
+  section: "Products",
+}, function(error, response) {
+  console.log(response);
+});
+```
+
+To update the catalog in your index:
+
+```javascript
+constructorio.updateCatalog({
+  items: fs.createReadStream('./items.csv'),
+  variations: fs.createReadStream('./variations.csv'),
+  item_groups: fs.createReadStream('./item_groups.csv'),
+  section: "Products",
+}, function(error, response) {
+  console.log(response);
+});
+```
+
 To get autocomplete results:
 
 ```javascript
