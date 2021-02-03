@@ -6,7 +6,7 @@ const path = require('path');
 const Constructorio = require('../lib/constructorio');
 
 const testConfig = {
-  apiToken: 'YSOxV00F0Kk2R0KnPQN8',
+  apiToken: process.env.TOKEN,
   apiKey: 'key_dsE9a33xJ0tt0tCS',
 };
 
