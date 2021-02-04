@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const Constructorio = require('../lib/constructorio');
 
 const testConfig = {
-  apiToken: 'YSOxV00F0Kk2R0KnPQN8',
+  apiToken: process.env.TOKEN,
   apiKey: 'ZqXaOfXuBWD4s3XzCI1q',
 };
 
@@ -50,7 +50,7 @@ describe('ConstructorIO - Synonym Groups', () => {
   beforeEach((done) => {
     setTimeout(() => {
       done();
-    }, 100);
+    }, 300);
   });
 
   describe('addSynonymGroup', () => {
@@ -109,7 +109,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         synonyms: 'abc',
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms must be a list');
         expect(response).to.be.undefined;
         done();
       });
@@ -120,7 +120,7 @@ describe('ConstructorIO - Synonym Groups', () => {
 
       constructorio.addSynonymGroup({}, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms is a required field of type list');
         expect(response).to.be.undefined;
         done();
       });
@@ -196,7 +196,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         synonyms: 'foo',
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms must be a list');
         expect(response).to.be.undefined;
         done();
       });
@@ -209,7 +209,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         group_id: addedSynonymGroupId,
       }, (err, response) => {
         expect(err).to.be.an('object');
-        expect(err).to.have.property('message', 'You must supply the "synonyms" parameter, and it must be of type "array".');
+        expect(err).to.have.property('message', 'synonyms is a required field of type list');
         expect(response).to.be.undefined;
         done();
       });

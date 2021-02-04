@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const Constructorio = require('../lib/constructorio');
 
 const testConfig = {
-  apiToken: 'YSOxV00F0Kk2R0KnPQN8',
+  apiToken: process.env.TOKEN,
   apiKey: 'ZqXaOfXuBWD4s3XzCI1q',
 };
 

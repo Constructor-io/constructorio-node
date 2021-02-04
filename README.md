@@ -20,8 +20,8 @@ Create a new instance with your API token and API key (available from the [Custo
 ```javascript
 var ConstructorIO = require('constructorio');
 var constructorio = new ConstructorIO({
-  apiToken: "your API token", 
-  apiKey: "your API key",
+  apiToken: 'your API token', 
+  apiKey: 'your API key',
 });
 ```
 
@@ -29,8 +29,8 @@ To add an item to your index:
 
 ```javascript
 constructorio.addItem({
-  item_name: "power_drill",
-  section: "Products"
+  item_name: 'power_drill',
+  section: 'Products'
 }, function(error, response) {
     console.log(response);
 });
@@ -40,8 +40,8 @@ To remove an item from your index:
 
 ```javascript
 constructorio.removeItem({
-  item_name: "power_drill",
-  section: "Products"
+  item_name: 'power_drill',
+  section: 'Products'
 }, function(error, response) {
     console.log(response);  
 });
@@ -51,9 +51,35 @@ To modify an item in your index:
 
 ```javascript
 constructorio.modifyItem({
-  item_name: "power_drill",
-  section: "Products",
-  url: "http://www.mysite.com/power_drill",
+  item_name: 'power_drill',
+  section: 'Products',
+  url: 'http://www.mysite.com/power_drill',
+}, function(error, response) {
+  console.log(response);
+});
+```
+
+To replace the catalog in your index:
+
+```javascript
+constructorio.replaceCatalog({
+  items: fs.createReadStream('./items.csv'),
+  variations: fs.createReadStream('./variations.csv'),
+  item_groups: fs.createReadStream('./item_groups.csv'),
+  section: 'Products',
+}, function(error, response) {
+  console.log(response);
+});
+```
+
+To update the catalog in your index:
+
+```javascript
+constructorio.updateCatalog({
+  items: fs.createReadStream('./items.csv'),
+  variations: fs.createReadStream('./variations.csv'),
+  item_groups: fs.createReadStream('./item_groups.csv'),
+  section: 'Products',
 }, function(error, response) {
   console.log(response);
 });
