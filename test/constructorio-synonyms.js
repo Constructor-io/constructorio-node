@@ -303,19 +303,6 @@ describe('ConstructorIO - Synonym Groups', () => {
       });
     });
 
-    it('should return error when retrieving a listing of groups with non-existent phrase parameter', (done) => {
-      const constructorio = new Constructorio(testConfig);
-
-      constructorio.getSynonymGroups({
-        phrase: 'mallorca',
-      }, (err, response) => {
-        expect(err).to.be.undefined;
-        expect(response).to.be.an('object');
-        expect(response).to.have.property('synonym_groups').an('array').length(0);
-        done();
-      });
-    });
-
     it('should retrieve a listing of one group when supplying num results per page parameter', (done) => {
       const constructorio = new Constructorio(testConfig);
 
