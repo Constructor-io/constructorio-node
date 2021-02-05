@@ -1,8 +1,8 @@
 {
-  "name": "constructorio",
+  "name": "@constructor-io/constructorio-node",
   "version": "2.9.0",
   "description": "Constructor.io API client",
-  "homepage": "https://github.com/Constructor-io/constructorio-javascript",
+  "homepage": "https://github.com/Constructor-io/constructorio-node",
   "main": "lib/constructorio.js",
   "scripts": {
     "clean": "rm -rf node_modules",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Constructor-io/constructorio-javascript.git"
+    "url": "git@github.com:Constructor-io/constructorio-node.git"
   },
   "pre-push": [
     "lint"
