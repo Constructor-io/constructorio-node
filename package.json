@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
+    "needle": "^2.6.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
