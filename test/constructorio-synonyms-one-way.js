@@ -19,7 +19,7 @@ function addTestOneWaySynonym(phrase) {
         { phrase: `${Math.random().toString(36).substring(2, 15)}` },
         { phrase: `${Math.random().toString(36).substring(2, 15)}` },
       ],
-    }, (err, response) => {
+    }, (err) => {
       if (err) {
         return reject(err);
       }
@@ -35,7 +35,7 @@ function removeTestOneWaySynonym(phrase) {
   return new Promise((resolve, reject) => {
     constructorio.removeOneWaySynonym({
       phrase,
-    }, (err, response) => {
+    }, (err) => {
       if (err) {
         return reject(err);
       }
@@ -71,7 +71,6 @@ describe('ConstructorIO - One Way Synonyms', () => {
           { phrase: 'mozzarella' },
         ],
       }, (err, response) => {
-        console.log(err);
         expect(err).to.be.undefined;
         expect(response).to.deep.equal({ message: '' });
         done();
