@@ -23,7 +23,7 @@ function addTestOneWaySynonym(phrase) {
       if (err) {
         return reject(err);
       }
-      return resolve(response);
+      return resolve();
     });
   });
 }
@@ -39,7 +39,7 @@ function removeTestOneWaySynonym(phrase) {
       if (err) {
         return reject(err);
       }
-      return resolve(response);
+      return resolve();
     });
   });
 }
@@ -71,8 +71,9 @@ describe('ConstructorIO - One Way Synonyms', () => {
           { phrase: 'mozzarella' },
         ],
       }, (err, response) => {
+        console.log(err);
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -204,7 +205,7 @@ describe('ConstructorIO - One Way Synonyms', () => {
         ],
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -580,7 +581,7 @@ describe('ConstructorIO - One Way Synonyms', () => {
         phrase: oneWaySynonymPhrase,
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
