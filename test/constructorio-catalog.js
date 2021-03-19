@@ -12,6 +12,11 @@ const testConfig = {
 
 describe('ConstructorIO - Catalog', () => {
   describe('updateCatalog', () => {
+    beforeEach((done) => {
+      // Wait between each test to prevent throttle error from server
+      setTimeout(done, 1000)
+    });
+
     it('should error if no files were submitted', (done) => {
       const constructorio = new Constructorio(testConfig);
       const data = {
