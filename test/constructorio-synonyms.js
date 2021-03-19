@@ -45,7 +45,7 @@ function removeTestSynonymGroup(id) {
   });
 }
 
-describe.only('ConstructorIO - Synonym Groups', () => {
+describe('ConstructorIO - Synonym Groups', () => {
   // Introduce latency to avoid throttling issues
   beforeEach((done) => {
     setTimeout(() => {
