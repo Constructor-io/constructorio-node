@@ -35,17 +35,17 @@ function removeTestSynonymGroup(id) {
   return new Promise((resolve, reject) => {
     constructorio.removeSynonymGroup({
       group_id: id,
-    }, (err, response) => {
+    }, (err) => {
       if (err) {
         return reject(err);
       }
 
-      return resolve(response);
+      return resolve();
     });
   });
 }
 
-describe('ConstructorIO - Synonym Groups', () => {
+describe.only('ConstructorIO - Synonym Groups', () => {
   // Introduce latency to avoid throttling issues
   beforeEach((done) => {
     setTimeout(() => {
@@ -169,7 +169,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         synonyms: ['foo', 'bar', 'baz'],
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -513,7 +513,7 @@ describe('ConstructorIO - Synonym Groups', () => {
         group_id: addedSynonymGroupId,
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
