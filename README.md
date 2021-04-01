@@ -10,7 +10,7 @@ For the most up-to-date documentation for this library, please visit our [API Do
 With npm:
 
 ```bash
-npm install constructorio
+npm install constructorio-node
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ npm install constructorio
 Create a new instance with your API token and API key (available from the [Customer Dashboard](https://constructor.io/dashboard)):
 
 ```javascript
-var ConstructorIO = require('constructorio');
+var ConstructorIO = require('constructorio-node');
 var constructorio = new ConstructorIO({
   apiToken: 'your API token', 
   apiKey: 'your API key',
