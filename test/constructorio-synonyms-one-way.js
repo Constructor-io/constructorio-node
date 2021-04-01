@@ -19,11 +19,11 @@ function addTestOneWaySynonym(phrase) {
         { phrase: `${Math.random().toString(36).substring(2, 15)}` },
         { phrase: `${Math.random().toString(36).substring(2, 15)}` },
       ],
-    }, (err, response) => {
+    }, (err) => {
       if (err) {
         return reject(err);
       }
-      return resolve(response);
+      return resolve();
     });
   });
 }
@@ -35,11 +35,11 @@ function removeTestOneWaySynonym(phrase) {
   return new Promise((resolve, reject) => {
     constructorio.removeOneWaySynonym({
       phrase,
-    }, (err, response) => {
+    }, (err) => {
       if (err) {
         return reject(err);
       }
-      return resolve(response);
+      return resolve();
     });
   });
 }
@@ -72,7 +72,7 @@ describe('ConstructorIO - One Way Synonyms', () => {
         ],
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -204,7 +204,7 @@ describe('ConstructorIO - One Way Synonyms', () => {
         ],
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -580,7 +580,7 @@ describe('ConstructorIO - One Way Synonyms', () => {
         phrase: oneWaySynonymPhrase,
       }, (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });

@@ -27,7 +27,7 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -44,7 +44,7 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.addItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -79,23 +79,40 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.addItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
   });
 
   describe('addOrUpdateItem', () => {
-    it('should return nothing when upserting an item', (done) => {
+    const data = createProductItem();
+    data.section = 'Products';
+
+    it('should return nothing when upserting an item that does not exist', (done) => {
       const constructorio = new Constructorio(testConfig);
-      const data = createProductItem();
-      data.section = 'Products';
 
       constructorio.addOrUpdateItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
+    });
+
+    it('should return nothing when upserting an item that already exists', (done) => {
+      const constructorio = new Constructorio(testConfig);
+      const updatedData = {
+        ...data,
+        image_url: `https://constructor.io/product_images/${data.item_name}`,
+      };
+
+      setTimeout(() => {
+        constructorio.addOrUpdateItem(deepfreeze(updatedData), (err, response) => {
+          expect(err).to.be.undefined;
+          expect(response).to.deep.equal({ message: '' });
+          done();
+        });
+      }, 500);
     });
   });
 
@@ -113,7 +130,7 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.addOrUpdateItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -127,7 +144,7 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.removeItem(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -147,7 +164,7 @@ describe('ConstructorIO - Items', () => {
 
       constructorio.removeItemBatch(deepfreeze(data), (err, response) => {
         expect(err).to.be.undefined;
-        expect(response).to.be.undefined;
+        expect(response).to.deep.equal({ message: '' });
         done();
       });
     });
@@ -165,7 +182,7 @@ describe('ConstructorIO - Items', () => {
 
         constructorio.modifyItem(deepfreeze(data), (err, response) => {
           expect(err).to.be.undefined;
-          expect(response).to.be.undefined;
+          expect(response).to.deep.equal({ message: '' });
           done();
         });
       });
