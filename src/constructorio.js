@@ -43,6 +43,14 @@ class ConstructorIO {
       throw new Error('API key is a required parameter of type string');
     }
 
+    if (!clientId || typeof clientId !== 'string') {
+      throw new Error('Client ID is a required parameter of type string');
+    }
+
+    if (!sessionId || typeof sessionId !== 'string') {
+      throw new Error('Session ID is a required parameter of type string');
+    }
+
     let session_id;
     let client_id;
 

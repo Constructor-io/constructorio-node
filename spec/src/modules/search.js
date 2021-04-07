@@ -15,6 +15,9 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
+const validSessionId = '2';
+const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
 const { fetch } = fetchPonyfill({ Promise });
 
 describe('ConstructorIO - Search', () => {
@@ -41,7 +44,7 @@ describe('ConstructorIO - Search', () => {
 
     it('Should return a response with a valid query, and section', (done) => {
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -68,7 +71,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         testCells,
         fetch: fetchSpy,
       });
@@ -88,7 +91,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -108,7 +111,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section and user id', (done) => {
       const userId = 'user-id';
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -127,7 +130,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and page', (done) => {
       const page = 1;
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -149,7 +152,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -173,7 +176,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -196,7 +199,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -220,7 +223,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and sortBy', (done) => {
       const sortBy = 'relevance';
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -242,7 +245,7 @@ describe('ConstructorIO - Search', () => {
     it('Should return a response with a valid query, section, and sortOrder', (done) => {
       const sortOrder = 'ascending';
       const { search } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -262,7 +265,7 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should return a response with a valid query, section with a result_id appended to each result', (done) => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
 
       search.getSearchResults(query, { section }).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -278,7 +281,7 @@ describe('ConstructorIO - Search', () => {
 
     it('Should return a redirect rule response with a valid query and section', (done) => {
       const redirectQuery = 'rolling';
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
 
       search.getSearchResults(redirectQuery, { section }).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -292,64 +295,20 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it('Should return a response from collection with a valid query and collection id', (done) => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
-
-      search.getSearchResults(query, {
-        section,
-        collectionId,
-      }).then((res) => {
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.response).to.have.property('results').to.be.an('array');
-        res.response.results.forEach((result) => {
-          expect(result).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
-        });
-        done();
-      });
-    });
-
-    it('Should emit an event with response data', (done) => {
-      const { search } = new ConstructorIO({
-        apiKey: testApiKey,
-        eventDispatcher: {
-          waitForBeacon: false,
-        },
-      });
-      const customEventSpy = sinon.spy(window, 'CustomEvent');
-      const eventName = 'cio.client.search.getSearchResults.completed';
-
-      // Note: `CustomEvent` in Node context not containing `detail`, so checking arguments instead
-      window.addEventListener(eventName, () => {
-        const customEventSpyArgs = customEventSpy.getCall(0).args;
-        const { detail: customEventDetails } = customEventSpyArgs[1];
-
-        expect(customEventSpy).to.have.been.called;
-        expect(customEventSpyArgs[0]).to.equal(eventName);
-        expect(customEventDetails).to.have.property('request').to.be.an('object');
-        expect(customEventDetails).to.have.property('response').to.be.an('object');
-        expect(customEventDetails).to.have.property('result_id').to.be.an('string');
-        done();
-      }, false);
-
-      search.getSearchResults(query);
-    });
-
     it('Should be rejected when invalid query is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
 
       return expect(search.getSearchResults([], { section })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no query is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
 
       return expect(search.getSearchResults(null, { section })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
       const searchParams = {
         section,
         page: 'abc',
@@ -359,7 +318,7 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
       const searchParams = {
         section,
         resultsPerPage: 'abc',
@@ -369,7 +328,7 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
       const searchParams = {
         section,
         filters: 'abc',
@@ -379,7 +338,7 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should be rejected when invalid sortBy parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
       const searchParams = {
         section,
         sortBy: ['foo', 'bar'],
@@ -389,7 +348,7 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should be rejected when invalid sortOrder parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
       const searchParams = {
         section,
         sortOrder: 123,
@@ -399,23 +358,13 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should be rejected when invalid section parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
+      const { search } = new ConstructorIO(validOptions);
 
       return expect(search.getSearchResults(query, { section: 123 })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when invalid collection id parameter is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: testApiKey });
-      const searchParams = {
-        section,
-        collectionId: 123,
-      };
-
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
-    });
-
     it('Should be rejected when invalid apiKey is provided', () => {
-      const { search } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+      const { search } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
       return expect(search.getSearchResults(query, { section })).to.eventually.be.rejected;
     });

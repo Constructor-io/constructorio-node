@@ -15,6 +15,9 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
+const validSessionId = '2';
+const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
 const { fetch } = fetchPonyfill({ Promise });
 
 describe('ConstructorIO - Recommendations', () => {
@@ -43,7 +46,7 @@ describe('ConstructorIO - Recommendations', () => {
 
     it('Should return a response with valid itemIds (singular)', (done) => {
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -70,7 +73,7 @@ describe('ConstructorIO - Recommendations', () => {
 
     it('Should return a response with valid itemIds (multiple)', (done) => {
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -93,7 +96,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid term for query recommendations strategy pod', (done) => {
       const term = 'apple';
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -116,7 +119,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid filters for filtered items strategy pod', (done) => {
       const filters = { keywords: 'battery-powered' };
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -139,7 +142,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid filters and item id for filtered items strategy pod', (done) => {
       const filters = { keywords: 'battery-powered' };
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -167,7 +170,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid itemIds, and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -186,7 +189,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid itemIds, and user id', (done) => {
       const userId = 'user-id';
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -205,7 +208,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid itemIds, and numResults', (done) => {
       const numResults = 2;
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -227,7 +230,7 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should return a response with valid itemIds, and section', (done) => {
       const section = 'Products';
       const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -247,7 +250,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should return a response with valid itemIds, with a result_id appended to each result', (done) => {
-      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+      const { recommendations } = new ConstructorIO(validOptions);
 
       recommendations.getRecommendations(podId, { itemIds }).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -261,34 +264,8 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
-    it('Should emit an event with response data', (done) => {
-      const { recommendations } = new ConstructorIO({
-        apiKey: testApiKey,
-        eventDispatcher: {
-          waitForBeacon: false,
-        },
-      });
-      const customEventSpy = sinon.spy(window, 'CustomEvent');
-      const eventName = 'cio.client.recommendations.getRecommendations.completed';
-
-      // Note: `CustomEvent` in Node context not containing `detail`, so checking arguments instead
-      window.addEventListener(eventName, () => {
-        const customEventSpyArgs = customEventSpy.getCall(0).args;
-        const { detail: customEventDetails } = customEventSpyArgs[1];
-
-        expect(customEventSpy).to.have.been.called;
-        expect(customEventSpyArgs[0]).to.equal(eventName);
-        expect(customEventDetails).to.have.property('request').to.be.an('object');
-        expect(customEventDetails).to.have.property('response').to.be.an('object');
-        expect(customEventDetails).to.have.property('result_id').to.be.an('string');
-        done();
-      }, false);
-
-      recommendations.getRecommendations(podId, { itemIds });
-    });
-
     it('Should be rejected when invalid pod id parameter is provided', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+      const { recommendations } = new ConstructorIO(validOptions);
 
       return expect(recommendations.getRecommendations([], {
         itemIds,
@@ -296,7 +273,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should be rejected when no pod id parameter is provided', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+      const { recommendations } = new ConstructorIO(validOptions);
 
       return expect(recommendations.getRecommendations(null, {
         itemIds,
@@ -304,7 +281,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should be rejected when invalid numResults parameter is provided', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+      const { recommendations } = new ConstructorIO(validOptions);
 
       return expect(recommendations.getRecommendations(podId, {
         itemIds,
@@ -313,7 +290,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should be rejected when invalid section parameter is provided', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+      const { recommendations } = new ConstructorIO(validOptions);
 
       return expect(recommendations.getRecommendations(podId, {
         itemIds,
@@ -322,7 +299,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should be rejected when invalid apiKey is provided', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+      const { recommendations } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
       return expect(recommendations.getRecommendations(podId, {
         itemIds,

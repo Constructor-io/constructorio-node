@@ -15,6 +15,9 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
+const validSessionId = '2';
+const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
 const { fetch } = fetchPonyfill({ Promise });
 
 describe('ConstructorIO - Browse', () => {
@@ -42,7 +45,7 @@ describe('ConstructorIO - Browse', () => {
 
     it('Should return a response with a valid filterName and filterValue', (done) => {
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -70,7 +73,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         testCells,
         fetch: fetchSpy,
       });
@@ -90,7 +93,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -109,7 +112,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -128,7 +131,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and page', (done) => {
       const page = 1;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -147,7 +150,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -167,7 +170,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and additional filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -187,7 +190,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and additional fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -209,7 +212,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and sortBy', (done) => {
       const sortBy = 'relevance';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -228,7 +231,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and sortOrder', (done) => {
       const sortOrder = 'ascending';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -247,7 +250,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid filterName, filterValue and section', (done) => {
       const section = 'Products';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -266,7 +269,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with a valid collection filterName and collection filterValue', (done) => {
       const section = 'Products';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -283,7 +286,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should return a response with a valid filterName and filterValue with a result_id appended to each result', (done) => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       browse.getBrowseResults(filterName, filterValue).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -297,58 +300,32 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
-    it('Should emit an event with response data', (done) => {
-      const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
-        eventDispatcher: {
-          waitForBeacon: false,
-        },
-      });
-      const customEventSpy = sinon.spy(window, 'CustomEvent');
-      const eventName = 'cio.client.browse.getBrowseResults.completed';
-
-      // Note: `CustomEvent` in Node context not containing `detail`, so checking arguments instead
-      window.addEventListener(eventName, () => {
-        const customEventSpyArgs = customEventSpy.getCall(0).args;
-        const { detail: customEventDetails } = customEventSpyArgs[1];
-
-        expect(customEventSpy).to.have.been.called;
-        expect(customEventSpyArgs[0]).to.equal(eventName);
-        expect(customEventDetails).to.have.property('request').to.be.an('object');
-        expect(customEventDetails).to.have.property('response').to.be.an('object');
-        expect(customEventDetails).to.have.property('result_id').to.be.an('string');
-        done();
-      }, false);
-
-      browse.getBrowseResults(filterName, filterValue);
-    });
-
     it('Should be rejected when invalid filterName is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults([], filterValue)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no filterName is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(null, filterValue)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid filterValue is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, [])).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no filterValue is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, null)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         page: 'abc',
@@ -356,7 +333,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         resultsPerPage: 'abc',
@@ -364,7 +341,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         filters: 123,
@@ -372,7 +349,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortBy parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         sortBy: { foo: 'bar' },
@@ -380,7 +357,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortOrder parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         sortOrder: 'abc',
@@ -388,7 +365,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid section parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         section: 123,
@@ -396,13 +373,13 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid collection filterValue parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO(validOptions);
 
       return expect(browse.getBrowseResults(filterNameCollection, 123, {})).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid apiKey is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+      const { browse } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
       return expect(browse.getBrowseResults(filterName, filterValue)).to.eventually.be.rejected;
     });

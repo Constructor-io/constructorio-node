@@ -15,6 +15,9 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
+const validSessionId = '2';
+const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
 const { fetch } = fetchPonyfill({ Promise });
 
 describe('ConstructorIO - Autocomplete', () => {
@@ -39,7 +42,7 @@ describe('ConstructorIO - Autocomplete', () => {
 
     it('Should return a response with a valid query', (done) => {
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -57,13 +60,13 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         expect(requestedUrlParams).to.have.property('_dt');
         done();
-      }).catch(console.error);
+      });
     });
 
     it('Should return a response with a valid query, and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         testCells,
         fetch: fetchSpy,
       });
@@ -83,7 +86,7 @@ describe('ConstructorIO - Autocomplete', () => {
     it('Should return a response with a valid query, and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -103,7 +106,7 @@ describe('ConstructorIO - Autocomplete', () => {
     it('Should return a response with a valid query, and user id', (done) => {
       const userId = 'user-id';
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -122,7 +125,7 @@ describe('ConstructorIO - Autocomplete', () => {
     it('Should return a response with a valid query, and numResults', (done) => {
       const numResults = 2;
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -153,7 +156,7 @@ describe('ConstructorIO - Autocomplete', () => {
         'Search Suggestions': 2,
       };
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -174,7 +177,7 @@ describe('ConstructorIO - Autocomplete', () => {
     it('Should return a response with a valid query, and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -192,7 +195,7 @@ describe('ConstructorIO - Autocomplete', () => {
     });
 
     it('Should return a response with a valid query, with a result_id appended to each result', (done) => {
-      const { autocomplete } = new ConstructorIO({ apiKey: testApiKey });
+      const { autocomplete } = new ConstructorIO(validOptions);
 
       autocomplete.getAutocompleteResults(query).then((res) => {
         const sectionKeys = Object.keys(res.sections);
@@ -212,60 +215,32 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should emit an event with response data', (done) => {
-      const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
-        eventDispatcher: {
-          waitForBeacon: false,
-        },
-      });
-      const customEventSpy = sinon.spy(window, 'CustomEvent');
-      const eventName = 'cio.client.autocomplete.getAutocompleteResults.completed';
-
-      // Note: `CustomEvent` in Node context not containing `detail`, so checking arguments instead
-      window.addEventListener(eventName, () => {
-        const customEventSpyArgs = customEventSpy.getCall(0).args;
-        const { detail: customEventDetails } = customEventSpyArgs[1];
-
-        expect(customEventSpy).to.have.been.called;
-        expect(customEventSpyArgs[0]).to.equal(eventName);
-        expect(customEventDetails).to.have.property('request').to.be.an('object');
-        expect(customEventDetails).to.have.property('sections').to.be.an('object');
-        expect(customEventDetails).to.have.property('result_id').to.be.an('string');
-        done();
-      }, false);
-
-      autocomplete.getAutocompleteResults(query);
-    });
-
     it('Should be rejected when invalid query is provided', () => {
-      const { autocomplete } = new ConstructorIO({ apiKey: testApiKey });
+      const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults([])).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no query is provided', () => {
-      const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
-      });
+      const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(null)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid numResults parameter is provided', () => {
-      const { autocomplete } = new ConstructorIO({ apiKey: testApiKey });
+      const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(query, { numResults: 'abc' })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { autocomplete } = new ConstructorIO({ apiKey: testApiKey });
+      const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(query, { filters: 'abc' })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid apiKey is provided', () => {
-      const { autocomplete } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+      const { autocomplete } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
       return expect(autocomplete.getAutocompleteResults(query)).to.eventually.be.rejected;
     });

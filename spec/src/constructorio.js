@@ -5,6 +5,9 @@ const sinon = require('sinon');
 const ConstructorIO = require('../../test/constructorio');
 
 const validApiKey = 'testing';
+const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
+const validSessionId = '2';
+const validOptions = { apiKey: validApiKey, clientId: validClientId, sessionId: validSessionId };
 
 describe('ConstructorIO', () => {
   jsdom({
@@ -20,7 +23,7 @@ describe('ConstructorIO', () => {
   });
 
   it('Should return an instance when valid API key is provided', () => {
-    const instance = new ConstructorIO({ apiKey: validApiKey });
+    const instance = new ConstructorIO(validOptions);
 
     expect(instance).to.be.an('object');
     expect(instance).to.have.property('options').to.be.an('object');
@@ -36,41 +39,53 @@ describe('ConstructorIO', () => {
   });
 
   it('Should return an instance with custom options when valid API key is provided', () => {
-    const clientId = 'client-id';
-    const sessionId = 'session-id';
     const serviceUrl = 'http://constructor.io';
     const version = 'custom-version';
     const instance = new ConstructorIO({
-      apiKey: validApiKey,
-      clientId,
-      sessionId,
+      ...validOptions,
       serviceUrl,
       version,
     });
 
     expect(instance).to.be.an('object');
-    expect(instance.options).to.have.property('clientId').to.equal(clientId);
-    expect(instance.options).to.have.property('sessionId').to.equal(sessionId);
+    expect(instance.options).to.have.property('clientId').to.equal(validClientId);
+    expect(instance.options).to.have.property('sessionId').to.equal(validSessionId);
     expect(instance.options).to.have.property('serviceUrl').to.equal(serviceUrl);
     expect(instance.options).to.have.property('version').to.equal(version);
   });
 
   it('Should throw an error when invalid API key is provided', () => {
-    expect(() => new ConstructorIO({ apiKey: 123456789 })).to.throw('API key is a required parameter of type string');
+    expect(() => new ConstructorIO({ ...validOptions, apiKey: 123456789 })).to.throw('API key is a required parameter of type string');
   });
 
   it('Should throw an error when no API key is provided', () => {
-    expect(() => new ConstructorIO({ apiKey: null })).to.throw('API key is a required parameter of type string');
+    expect(() => new ConstructorIO({ ...validOptions, apiKey: null })).to.throw('API key is a required parameter of type string');
   });
 
   it('Should throw an error when no options are provided', () => {
     expect(() => new ConstructorIO()).to.throw('API key is a required parameter of type string');
   });
 
+  it('Should throw an error when invalid Client ID is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, clientId: 123456789 })).to.throw('Client ID is a required parameter of type string');
+  });
+
+  it('Should throw an error when no Client ID is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, clientId: null })).to.throw('Client ID is a required parameter of type string');
+  });
+
+  it('Should throw an error when invalid Session ID is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, sessionId: 123456789 })).to.throw('Session ID is a required parameter of type string');
+  });
+
+  it('Should throw an error when no Session ID is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, sessionId: null })).to.throw('Session ID is a required parameter of type string');
+  });
+
   describe('setClientOptions', () => {
     it('Should update the client options with new API key', () => {
       const newAPIKey = 'newAPIKey';
-      const instance = new ConstructorIO({ apiKey: validApiKey });
+      const instance = new ConstructorIO(validOptions);
 
       expect(instance.options).to.have.property('apiKey').to.equal(validApiKey);
 
@@ -83,7 +98,7 @@ describe('ConstructorIO', () => {
 
     it('Should update the options for modules with new API key', () => {
       const newAPIKey = 'newAPIKey';
-      const instance = new ConstructorIO({ apiKey: validApiKey });
+      const instance = new ConstructorIO(validOptions);
 
       expect(instance.options).to.have.property('apiKey').to.equal(validApiKey);
       expect(instance.search.options).to.have.property('apiKey').to.equal(validApiKey);
@@ -106,7 +121,7 @@ describe('ConstructorIO', () => {
       const oldSegments = ['old_segment_1', 'old_segment_2'];
       const newSegments = ['new_segment_1'];
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         segments: oldSegments,
       });
 
@@ -123,7 +138,7 @@ describe('ConstructorIO', () => {
       const oldSegments = ['old_segment_1', 'old_segment_2'];
       const newSegments = ['new_segment_1'];
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         segments: oldSegments,
       });
 
@@ -153,7 +168,7 @@ describe('ConstructorIO', () => {
         'new-cell-name-1': 'new-cell-value-1',
       };
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         testCells: oldTestCells,
       });
 
@@ -175,7 +190,7 @@ describe('ConstructorIO', () => {
         'new-cell-name-1': 'new-cell-value-1',
       };
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         testCells: oldTestCells,
       });
 
@@ -200,7 +215,7 @@ describe('ConstructorIO', () => {
       const oldUserId = 'old_user_id';
       const newUserId = 'new_user_id';
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         userId: oldUserId,
       });
 
@@ -217,7 +232,7 @@ describe('ConstructorIO', () => {
       const oldUserId = 'old_user_id';
       const newUserId = 'new_user_id';
       const instance = new ConstructorIO({
-        apiKey: validApiKey,
+        ...validOptions,
         userId: oldUserId,
       });
 
