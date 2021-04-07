@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved, no-new */
 const { expect } = require('chai');
 const jsdom = require('mocha-jsdom');
-const sinon = require('sinon');
 const ConstructorIO = require('../../test/constructorio');
 
 const validApiKey = 'testing';

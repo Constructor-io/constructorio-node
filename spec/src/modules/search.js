@@ -40,7 +40,6 @@ describe('ConstructorIO - Search', () => {
   describe('getSearchResults', () => {
     const query = 'drill';
     const section = 'Products';
-    const collectionId = 'test';
 
     it('Should return a response with a valid query, and section', (done) => {
       const { search } = new ConstructorIO({
