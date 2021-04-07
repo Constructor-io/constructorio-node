@@ -32,7 +32,7 @@ describe('ConstructorIO', () => {
     expect(instance).to.have.property('search');
     expect(instance).to.have.property('autocomplete');
     expect(instance).to.have.property('recommendations');
-    expect(instance).to.have.property('tracker');
+    expect(instance).to.have.property('browse');
   });
 
   it('Should return an instance with custom options when valid API key is provided', () => {
@@ -53,32 +53,6 @@ describe('ConstructorIO', () => {
     expect(instance.options).to.have.property('sessionId').to.equal(sessionId);
     expect(instance.options).to.have.property('serviceUrl').to.equal(serviceUrl);
     expect(instance.options).to.have.property('version').to.equal(version);
-  });
-
-  it('Should emit an event with options data', (done) => {
-    const options = {
-      apiKey: validApiKey,
-      eventDispatcher: {
-        waitForBeacon: false,
-      },
-    };
-    const customEventSpy = sinon.spy(window, 'CustomEvent');
-    const eventName = 'cio.client.instantiated';
-
-    // Note: `CustomEvent` in Node context not containing `detail`, so checking arguments instead
-    window.addEventListener(eventName, () => {
-      const customEventSpyArgs = customEventSpy.getCall(0).args;
-      const { detail: customEventDetails } = customEventSpyArgs[1];
-
-      expect(customEventSpy).to.have.been.called;
-      expect(customEventSpyArgs[0]).to.equal(eventName);
-      expect(customEventDetails).to.be.an('object');
-      expect(customEventDetails).to.have.property('apiKey').to.equal(options.apiKey);
-      expect(customEventDetails).to.have.property('eventDispatcher').to.deep.equal(options.eventDispatcher);
-      done();
-    }, false);
-
-    new ConstructorIO(options);
   });
 
   it('Should throw an error when invalid API key is provided', () => {
@@ -116,7 +90,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('apiKey').to.equal(validApiKey);
       expect(instance.browse.options).to.have.property('apiKey').to.equal(validApiKey);
       expect(instance.recommendations.options).to.have.property('apiKey').to.equal(validApiKey);
-      expect(instance.tracker.options).to.have.property('apiKey').to.equal(validApiKey);
 
       instance.setClientOptions({
         apiKey: newAPIKey,
@@ -127,7 +100,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('apiKey').to.equal(newAPIKey);
       expect(instance.browse.options).to.have.property('apiKey').to.equal(newAPIKey);
       expect(instance.recommendations.options).to.have.property('apiKey').to.equal(newAPIKey);
-      expect(instance.tracker.options).to.have.property('apiKey').to.equal(newAPIKey);
     });
 
     it('Should update the client options with new segments', () => {
@@ -160,7 +132,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('segments').to.equal(oldSegments);
       expect(instance.browse.options).to.have.property('segments').to.equal(oldSegments);
       expect(instance.recommendations.options).to.have.property('segments').to.equal(oldSegments);
-      expect(instance.tracker.options).to.have.property('segments').to.equal(oldSegments);
 
       instance.setClientOptions({
         segments: newSegments,
@@ -171,7 +142,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('segments').to.equal(newSegments);
       expect(instance.browse.options).to.have.property('segments').to.equal(newSegments);
       expect(instance.recommendations.options).to.have.property('segments').to.equal(newSegments);
-      expect(instance.tracker.options).to.have.property('segments').to.equal(newSegments);
     });
 
     it('Should update the client options with new test cells', () => {
@@ -214,7 +184,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('testCells').to.equal(oldTestCells);
       expect(instance.browse.options).to.have.property('testCells').to.equal(oldTestCells);
       expect(instance.recommendations.options).to.have.property('testCells').to.equal(oldTestCells);
-      expect(instance.tracker.options).to.have.property('testCells').to.equal(oldTestCells);
 
       instance.setClientOptions({
         testCells: newTestCells,
@@ -225,7 +194,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('testCells').to.equal(newTestCells);
       expect(instance.browse.options).to.have.property('testCells').to.equal(newTestCells);
       expect(instance.recommendations.options).to.have.property('testCells').to.equal(newTestCells);
-      expect(instance.tracker.options).to.have.property('testCells').to.equal(newTestCells);
     });
 
     it('Should update the client options with a new user id', () => {
@@ -258,7 +226,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('userId').to.equal(oldUserId);
       expect(instance.browse.options).to.have.property('userId').to.equal(oldUserId);
       expect(instance.recommendations.options).to.have.property('userId').to.equal(oldUserId);
-      expect(instance.tracker.options).to.have.property('userId').to.equal(oldUserId);
 
       instance.setClientOptions({
         userId: newUserId,
@@ -269,50 +236,6 @@ describe('ConstructorIO', () => {
       expect(instance.autocomplete.options).to.have.property('userId').to.equal(newUserId);
       expect(instance.browse.options).to.have.property('userId').to.equal(newUserId);
       expect(instance.recommendations.options).to.have.property('userId').to.equal(newUserId);
-      expect(instance.tracker.options).to.have.property('userId').to.equal(newUserId);
     });
-  });
-});
-
-describe('ConstructorIO - without `window`', () => {
-  beforeEach(() => {
-    global.CLIENT_VERSION = 'cio-mocha';
-  });
-
-  afterEach(() => {
-    delete global.CLIENT_VERSION;
-  });
-
-  it('Should return an instance', () => {
-    const instance = new ConstructorIO({ apiKey: validApiKey });
-
-    expect(instance).to.be.an('object');
-    expect(instance).to.have.property('options').to.be.an('object');
-    expect(instance.options).to.have.property('apiKey').to.equal(validApiKey);
-    expect(instance.options).to.have.property('version').to.equal(global.CLIENT_VERSION);
-    expect(instance.options).to.have.property('serviceUrl');
-    expect(instance).to.have.property('search');
-    expect(instance).to.have.property('autocomplete');
-    expect(instance).to.have.property('recommendations');
-    expect(instance).to.have.property('tracker');
-  });
-
-  it('Should have client and session identifiers not defined by default', () => {
-    const instance = new ConstructorIO({ apiKey: validApiKey });
-
-    expect(instance).to.be.an('object');
-    expect(instance).to.have.property('options').to.be.an('object');
-    expect(instance.options).to.have.property('clientId').to.be.undefined;
-    expect(instance.options).to.have.property('sessionId').to.be.undefined;
-  });
-
-  it('Should have event dispatching and tracking events disabled', () => {
-    const instance = new ConstructorIO({ apiKey: validApiKey });
-
-    expect(instance).to.be.an('object');
-    expect(instance).to.have.property('options').to.be.an('object');
-    expect(instance.options).to.have.property('eventDispatcher').to.be.an('object');
-    expect(instance.options.eventDispatcher).to.have.property('enabled').to.be.false;
-    expect(instance.options.sendTrackingEvents).to.be.false;
   });
 });

@@ -1,8 +1,6 @@
-"use strict";
+const store = require('store2');
 
-var store = require('store2');
-
-var overflow = require('./store.overflow'); // Inject overflow into store
+const overflow = require('./store.overflow'); // Inject overflow into store
 // https://raw.githubusercontent.com/nbubna/store/master/src/store.overflow.js
 
 

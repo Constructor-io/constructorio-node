@@ -1,90 +1,69 @@
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 /* eslint-disable object-curly-newline, no-param-reassign */
-var qs = require('qs');
+const qs = require('qs');
+const fetchPonyfill = require('fetch-ponyfill');
+const Promise = require('es6-promise');
+const helpers = require('../utils/helpers');
 
-var fetchPonyfill = require('fetch-ponyfill');
-
-var Promise = require('es6-promise');
-
-var EventDispatcher = require('../utils/event-dispatcher');
-
-var helpers = require('../utils/helpers'); // Create URL from supplied parameters
-
-
+// Create URL from supplied parameters
 function createRecommendationsUrl(podId, parameters, options) {
-  var apiKey = options.apiKey,
-      version = options.version,
-      serviceUrl = options.serviceUrl,
-      sessionId = options.sessionId,
-      userId = options.userId,
-      clientId = options.clientId,
-      segments = options.segments;
-  var queryParams = {
-    c: version
-  };
+  const { apiKey, version, serviceUrl, sessionId, userId, clientId, segments } = options;
+  let queryParams = { c: version };
+
   queryParams.key = apiKey;
   queryParams.i = clientId;
-  queryParams.s = sessionId; // Validate pod identifier is provided
+  queryParams.s = sessionId;
 
+  // Validate pod identifier is provided
   if (!podId || typeof podId !== 'string') {
     throw new Error('podId is a required parameter of type string');
-  } // Pull user segments from options
+  }
 
-
+  // Pull user segments from options
   if (segments && segments.length) {
     queryParams.us = segments;
-  } // Pull user id from options
+  }
 
-
+  // Pull user id from options
   if (userId) {
     queryParams.ui = userId;
   }
 
   if (parameters) {
-    var numResults = parameters.numResults,
-        itemIds = parameters.itemIds,
-        section = parameters.section,
-        term = parameters.term,
-        filters = parameters.filters; // Pull num results number from parameters
+    const { numResults, itemIds, section, term, filters } = parameters;
 
+    // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
       queryParams.num_results = numResults;
-    } // Pull item ids from parameters
+    }
 
-
+    // Pull item ids from parameters
     if (itemIds) {
       queryParams.item_id = itemIds;
-    } // Pull section from parameters
+    }
 
-
+    // Pull section from parameters
     if (section) {
       queryParams.section = section;
-    } // Pull term from parameters
+    }
 
-
+    // Pull term from parameters
     if (term) {
       queryParams.term = term;
-    } // Pull filters from parameters
+    }
 
-
+    // Pull filters from parameters
     if (filters) {
       queryParams.filters = filters;
     }
   }
 
   queryParams = helpers.cleanParams(queryParams);
-  var queryString = qs.stringify(queryParams, {
-    indices: false
-  });
-  return "".concat(serviceUrl, "/recommendations/v1/pods/").concat(podId, "?").concat(queryString);
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/recommendations/v1/pods/${podId}?${queryString}`;
 }
+
 /**
  * Interface to recommendations related API calls
  *
@@ -92,15 +71,11 @@ function createRecommendationsUrl(podId, parameters, options) {
  * @inner
  * @returns {object}
  */
-
-
-var Recommendations = /*#__PURE__*/function () {
-  function Recommendations(options) {
-    _classCallCheck(this, Recommendations);
-
+class Recommendations {
+  constructor(options) {
     this.options = options || {};
-    this.eventDispatcher = new EventDispatcher(options.eventDispatcher);
   }
+
   /**
    * Get recommendations for supplied pod identifier
    *
@@ -115,51 +90,41 @@ var Recommendations = /*#__PURE__*/function () {
    * @returns {Promise}
    * @see https://docs.constructor.io
    */
+  getRecommendations(podId, parameters) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || fetchPonyfill({ Promise }).fetch;
 
+    parameters = parameters || {};
 
-  _createClass(Recommendations, [{
-    key: "getRecommendations",
-    value: function getRecommendations(podId, parameters) {
-      var _this = this;
+    try {
+      requestUrl = createRecommendationsUrl(podId, parameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
-      var requestUrl;
-      var fetch = this.options && this.options.fetch || fetchPonyfill({
-        Promise: Promise
-      }).fetch;
-      parameters = parameters || {};
-
-      try {
-        requestUrl = createRecommendationsUrl(podId, parameters, this.options);
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      return fetch(requestUrl).then(function (response) {
+    return fetch(requestUrl)
+      .then((response) => {
         if (response.ok) {
           return response.json();
         }
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
-      }).then(function (json) {
+      })
+      .then((json) => {
         if (json.response && json.response.results) {
           if (json.result_id) {
             // Append `result_id` to each result item
-            json.response.results.forEach(function (result) {
+            json.response.results.forEach((result) => {
               result.result_id = json.result_id;
             });
           }
-
-          _this.eventDispatcher.queue('recommendations.getRecommendations.completed', json);
 
           return json;
         }
 
         throw new Error('getRecommendations response data is malformed');
       });
-    }
-  }]);
-
-  return Recommendations;
-}();
+  }
+}
 
 module.exports = Recommendations;

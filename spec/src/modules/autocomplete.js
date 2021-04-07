@@ -57,7 +57,7 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         expect(requestedUrlParams).to.have.property('_dt');
         done();
-      });
+      }).catch(console.error);
     });
 
     it('Should return a response with a valid query, and testCells', (done) => {
