@@ -1,11 +1,11 @@
 {
   "env": {
-    "node": true,
-    "mocha": true,
-    "es6": true
+    "browser": true,
+    "mocha": true
   },
   "extends": "airbnb-base",
   "globals": {
+    "CLIENT_VERSION": true,
     "expect": true
   },
   "rules": {

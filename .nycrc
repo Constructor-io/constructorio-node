@@ -1,0 +1,11 @@
+{
+  "exclude": [
+    "test/utils/store*"
+  ],
+  "include": [
+    "test/*"
+  ],
+  "extension": [
+    ".js"
+  ]
+}
