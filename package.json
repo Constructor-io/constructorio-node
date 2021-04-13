@@ -60,7 +60,6 @@
     "sinon-chai": "^3.3.0"
   },
   "dependencies": {
-    "es6-promise": "^4.2.8",
     "node-fetch": "^2.6.1",
     "qs": "6.7.2"
   }

@@ -1,7 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
-const Promise = require('es6-promise');
 const { throwHttpErrorFromResponse, cleanParams } = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters

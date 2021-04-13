@@ -6,7 +6,6 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch');
-const Promise = require('es6-promise');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
