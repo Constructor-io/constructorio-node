@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const fetchPonyfill = require('fetch-ponyfill');
+const nodeFetch = require('node-fetch');
 const Promise = require('es6-promise');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
@@ -18,7 +18,6 @@ const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
-const { fetch } = fetchPonyfill({ Promise });
 
 describe('ConstructorIO - Browse', () => {
   const clientVersion = 'cio-mocha';
@@ -28,7 +27,7 @@ describe('ConstructorIO - Browse', () => {
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
-    fetchSpy = sinon.spy(fetch);
+    fetchSpy = sinon.spy(nodeFetch);
   });
 
   afterEach(() => {

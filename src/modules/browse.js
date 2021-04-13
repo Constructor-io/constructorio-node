@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const fetchPonyfill = require('fetch-ponyfill');
+const nodeFetch = require('node-fetch');
 const Promise = require('es6-promise');
 const helpers = require('../utils/helpers');
 
@@ -125,7 +125,7 @@ class Browse {
    */
   getBrowseResults(filterName, filterValue, parameters) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || fetchPonyfill({ Promise }).fetch;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createBrowseUrl(filterName, filterValue, parameters, this.options);

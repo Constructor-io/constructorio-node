@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-param-reassign */
 const qs = require('qs');
-const fetchPonyfill = require('fetch-ponyfill');
+const nodeFetch = require('node-fetch');
 const Promise = require('es6-promise');
 const helpers = require('../utils/helpers');
 
@@ -92,7 +92,7 @@ class Recommendations {
    */
   getRecommendations(podId, parameters) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || fetchPonyfill({ Promise }).fetch;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     parameters = parameters || {};
 
