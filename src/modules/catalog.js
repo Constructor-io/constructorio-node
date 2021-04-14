@@ -66,7 +66,7 @@ class Catalog {
    * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
    * @param {object[]} [params.variations] - List of this item's variations
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest-api.html#add-an-item
    */
   addItem(params, callback) {
     let requestUrl;
@@ -89,8 +89,6 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then((json) => {
-      return json;
     });
   }
 
