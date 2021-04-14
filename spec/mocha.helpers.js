@@ -27,7 +27,21 @@ const extractBodyParamsFromFetch = (fetch) => {
   return null;
 };
 
+// Extract headers as object from request
+const extractHeadersFromFetch = (fetch) => {
+  const lastCallArguments = fetch && fetch.args && fetch.args[fetch.args.length - 1];
+  const requestData = lastCallArguments[1];
+  const { headers } = requestData;
+
+  if (headers) {
+    return headers;
+  }
+
+  return null;
+};
+
 module.exports = {
   extractUrlParamsFromFetch,
   extractBodyParamsFromFetch,
+  extractHeadersFromFetch,
 };

@@ -98,18 +98,17 @@ class Catalog {
    * @function addOrUpdateItem
    * @param {object} params - Additional parameters for item details
    * @param {string} params.item_name - The name of the item, as it will appear in the results
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {number} [params.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself.
+   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself
    * @param {string} [params.url] - A URL to directly send the user after selecting the item
    * @param {string} [params.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when url is supplied)
    * @param {string} [params.description] - A description for some item (only applicable when url is supplied)
-   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls.
+   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
    * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests.
    * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io.
    * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests.
    * @param {object[]} [params.variations] - List of this item's variations.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */

@@ -16,7 +16,7 @@ dotenv.config();
 const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
+const validOptions = { apiKey: testApiKey };
 
 describe('ConstructorIO - Search', () => {
   const clientVersion = 'cio-mocha';
@@ -35,17 +35,21 @@ describe('ConstructorIO - Search', () => {
     fetchSpy = null;
   });
 
-  describe('getSearchResults', () => {
+  describe.only('getSearchResults', () => {
     const query = 'drill';
     const section = 'Products';
 
-    it('Should return a response with a valid query, and section', (done) => {
+    it('Should return a response with a valid query, section, and client + session identifiers', (done) => {
+      const clientSessionIdentifiers = {
+        clientId: validClientId,
+        sessionId: validSessionId,
+      };
       const { search } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      search.getSearchResults(query, { section }).then((res) => {
+      search.getSearchResults(query, { section }, { ...clientSessionIdentifiers }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -69,11 +73,10 @@ describe('ConstructorIO - Search', () => {
       const testCells = { foo: 'bar' };
       const { search } = new ConstructorIO({
         ...validOptions,
-        testCells,
         fetch: fetchSpy,
       });
 
-      search.getSearchResults(query, { section }).then((res) => {
+      search.getSearchResults(query, { section }, { testCells }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -89,11 +92,10 @@ describe('ConstructorIO - Search', () => {
       const segments = ['foo', 'bar'];
       const { search } = new ConstructorIO({
         ...validOptions,
-        segments,
         fetch: fetchSpy,
       });
 
-      search.getSearchResults(query, { section }).then((res) => {
+      search.getSearchResults(query, { section }, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -109,11 +111,10 @@ describe('ConstructorIO - Search', () => {
       const userId = 'user-id';
       const { search } = new ConstructorIO({
         ...validOptions,
-        userId,
         fetch: fetchSpy,
       });
 
-      search.getSearchResults(query, { section }).then((res) => {
+      search.getSearchResults(query, { section }, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -257,6 +258,42 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.sort_order).to.equal(sortOrder);
         expect(requestedUrlParams).to.have.property('sort_order').to.equal(sortOrder);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { section }, { userIp }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { section }, { userAgent }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
         done();
       });
     });
