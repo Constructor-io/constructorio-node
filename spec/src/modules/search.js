@@ -35,7 +35,7 @@ describe('ConstructorIO - Search', () => {
     fetchSpy = null;
   });
 
-  describe.only('getSearchResults', () => {
+  describe('getSearchResults', () => {
     const query = 'drill';
     const section = 'Products';
 
@@ -276,6 +276,25 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { section }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
         done();
       });
     });

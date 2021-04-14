@@ -144,6 +144,11 @@ class Search {
       return Promise.reject(e);
     }
 
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
     // Append user IP as 'X-Forwarded-For' if available
     if (userParameters.userIp && typeof userParameters.userIp === 'string') {
       headers['X-Forwarded-For'] = userParameters.userIp;

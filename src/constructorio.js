@@ -15,6 +15,7 @@ class ConstructorIO {
   /**
    * @param {string} apiKey - Constructor.io API key
    * @param {string} [apiToken] - Constructor.io API token (required for catalog methods)
+   * @param {string} [securityToken] - Constructor security token
    * @param {string} [serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
    * @param {function} [fetch] - If supplied, will be utilized for requests rather than default Fetch API
    * @property {object} [search] - Interface to {@link module:search}
@@ -30,6 +31,7 @@ class ConstructorIO {
       apiToken,
       version,
       serviceUrl,
+      securityToken,
       fetch,
     } = options;
 
@@ -40,6 +42,7 @@ class ConstructorIO {
     this.options = {
       apiKey,
       apiToken: apiToken || '',
+      securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: serviceUrl || 'https://ac.cnstrc.com',
       fetch,
