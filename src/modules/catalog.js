@@ -1,38 +1,38 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const fetchPonyfill = require('fetch-ponyfill');
-const Promise = require('es6-promise');
+const nodeFetch = require('node-fetch');
+const base64 = require('base-64');
 const helpers = require('../utils/helpers');
 
+// Create URL from supplied path and options
+function createCatalogUrl(path, options) {
+  const {
+    apiKey,
+    version,
+    serviceUrl,
+  } = options;
+  let queryParams = { c: version };
 
-/**
- * @description Handle responses to requests
- */
-function handleServerResponse(error, response, callback) {
-  const statusCode = response && response.statusCode.toString();
-  let body = response && response.body;
-
-  if (typeof body === 'string') {
-    try {
-      body = JSON.parse(body);
-    } catch (e) {
-      body = {
-        message: body,
-      };
-    }
+  // Validate path is provided
+  if (!path || typeof path !== 'string') {
+    throw new Error('path is a required parameter of type string');
   }
 
-  if (error) {
-    callback(error);
-  } else if (!statusCode.match(/2[\d]{2}/)) {
-    callback(body);
-  } else if (body) {
-    callback(undefined, body);
-  } else {
-    callback();
-  }
+  queryParams.key = apiKey;
+  queryParams._dt = Date.now();
+  queryParams = helpers.cleanParams(queryParams);
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/v1/${path}?${queryString}`;
 }
 
+// Create authorization header to be transmitted with requests
+function createAuthHeader(options) {
+  const { apiToken } = options;
+
+  return { Authorization: `Basic ${Buffer.from(apiToken + ':').toString('base64')}` };
+}
 
 /**
  * Interface to catalog related API calls
@@ -44,62 +44,7 @@ function handleServerResponse(error, response, callback) {
 class Catalog {
   constructor(options) {
     this.options = options || {};
-    // TODO: Copy the constructor?
-    //const { protocol, host, apiToken, apiKey } = config;
-
-    //if (!apiToken || !apiKey) {
-      //console.error('Could not instantiate ConstructorIO client - `apiToken` and `apiKey` are required parameters');
-      //return;
-    //}
-
-    //// Read package version from JSON configuration file
-    //const { version } = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json')));
-
-    //this.config = {
-      //protocol: protocol || 'https',
-      //host: host || 'ac.cnstrc.com',
-      //basePath: 'v1',
-      //apiToken,
-      //apiKey,
-      //version: `ciojs-node-${version}`,
-    //};
   }
-
-  /**
-   * @description Makes a URL to issue the requests to. Note that the URL will automagically have the apiKey embedded
-   */
-  makeUrl(urlPath, options) {
-    const configOptions = Object.assign({}, this.config, options);
-    // Note: getSynonymGroups and getRedirectRules cannot accept the `c` parameter currently
-    const { protocol, host, basePath, apiKey, appendVersionParameter } = configOptions;
-    const versionParameter = appendVersionParameter ? `&c=${this.config.version}` : '';
-
-    return `${protocol}://${host}/${basePath}/${urlPath}?key=${apiKey}${versionParameter}`;
-  }
-
-  /**
-   * @description Makes an auth token
-   */
-  makeAuthToken() {
-    const { apiToken } = this.config;
-    return {
-      username: `${apiToken}`,
-      password: '',
-    };
-  }
-
-  /**
-   * @description Verifies that an autocomplete service is working
-   */
-  verify(callback) {
-    const options = this.makeAuthToken();
-    const url = this.makeUrl('verify');
-
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
-    });
-  }
-
 
   /**
    * Add item to your index
@@ -107,28 +52,42 @@ class Catalog {
    * @function addItem
    * @param {object} params - Additional parameters for item details
    * @param {string} params.item_name - The name of the item, as it will appear in the results
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {number} [params.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself.
+   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself
    * @param {string} [params.url] - A URL to directly send the user after selecting the item
    * @param {string} [params.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when url is supplied)
    * @param {string} [params.description] - A description for some item (only applicable when url is supplied)
-   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls.
-   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests.
+   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
+   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
    * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io.
-   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests.
-   * @param {object[]} [params.variations] - List of this item's variations.
-   * @param {function} callback - TODO: ???
+   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
+   * @param {object[]} [params.variations] - List of this item's variations
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
   addItem(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('item');
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    // TODO: Change with fetch?
-    needle.post(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('item', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(createCatalogUrl('item', this.options), {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => {
+      return json;
     });
   }
 

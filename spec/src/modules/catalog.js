@@ -5,20 +5,35 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const fetchPonyfill = require('fetch-ponyfill');
-const Promise = require('es6-promise');
+const nodeFetch = require('node-fetch');
+const cloneDeep = require('lodash.clonedeep');
+const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../test/constructorio');
-const helpers = require('../../mocha.helpers');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const testApiToken = process.env.TEST_API_TOKEN;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
-const { fetch } = fetchPonyfill({ Promise });
+const validOptions = {
+  apiKey: testApiKey,
+  apiToken: testApiToken,
+  clientId: validClientId,
+  sessionId: validSessionId,
+};
+
+function createMockItem() {
+  const uuid = uuidv4();
+
+  return {
+    item_name: `product-${uuid}`,
+    url: `https://constructor.io/products/${uuid}`,
+    section: 'Products',
+  };
+}
 
 describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
@@ -28,7 +43,7 @@ describe('ConstructorIO - Catalog', () => {
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
-    fetchSpy = sinon.spy(fetch);
+    fetchSpy = sinon.spy(nodeFetch);
   });
 
   afterEach(() => {
@@ -37,335 +52,66 @@ describe('ConstructorIO - Catalog', () => {
     fetchSpy = null;
   });
 
-  describe('getSearchResults', () => {
-    const query = 'drill';
-    const section = 'Products';
+  it('Should throw an error when invalid API token is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, apiToken: 123456789 })).to.throw('API token is a required parameter of type string');
+  });
 
-    it('Should return a response with a valid query, and section', (done) => {
-      const { search } = new ConstructorIO({
+  it('Should throw an error when no API token is provided', () => {
+    expect(() => new ConstructorIO({ ...validOptions, apiToken: null })).to.throw('API token is a required parameter of type string');
+  });
+
+  describe('addItem', () => {
+    it('Should resolve when adding an item', (done) => {
+      const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
+      const mockItem = createMockItem();
 
-      search.getSearchResults(query, { section }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.term).to.equal(query);
-        expect(res.request.section).to.equal(section);
-        expect(res.response).to.have.property('results').to.be.an('array');
-        expect(fetchSpy).to.have.been.called;
-        expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('i');
-        expect(requestedUrlParams).to.have.property('s');
-        expect(requestedUrlParams).to.have.property('section').to.equal(section);
-        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
-        expect(requestedUrlParams).to.have.property('_dt');
-        done();
-      });
+      catalog.addItem(mockItem).then(done);
     });
 
-    it('Should return a response with a valid query, section and testCells', (done) => {
-      const testCells = { foo: 'bar' };
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        testCells,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, { section }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
-        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section and segments', (done) => {
-      const segments = ['foo', 'bar'];
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        segments,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, { section }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.us).to.deep.equal(segments);
-        expect(requestedUrlParams).to.have.property('us').to.deep.equal(segments);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section and user id', (done) => {
-      const userId = 'user-id';
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        userId,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, { section }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(requestedUrlParams).to.have.property('ui').to.equal(userId);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and page', (done) => {
-      const page = 1;
-      const { search } = new ConstructorIO({
+    it('should resolve when adding an item with metadata', (done) => {
+      const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
+      const mockItem = createMockItem();
 
-      search.getSearchResults(query, {
-        section,
-        page,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.page).to.equal(page);
-        expect(requestedUrlParams).to.have.property('page').to.equal(page.toString());
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and resultsPerPage', (done) => {
-      const resultsPerPage = 2;
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, {
-        section,
-        resultsPerPage,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.num_results_per_page).to.equal(resultsPerPage);
-        expect(res.response).to.have.property('results').to.be.an('array');
-        expect(res.response.results.length).to.equal(resultsPerPage);
-        expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal(resultsPerPage.toString());
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and filters', (done) => {
-      const filters = { keywords: ['battery-powered'] };
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, {
-        section,
-        filters,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.filters).to.deep.equal(filters);
-        expect(requestedUrlParams).to.have.property('filters');
-        expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and fmtOptions', (done) => {
-      const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, {
-        section,
-        fmtOptions,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
-        expect(requestedUrlParams).to.have.property('fmt_options');
-        expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
-        expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and sortBy', (done) => {
-      const sortBy = 'relevance';
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, {
-        section,
-        sortBy,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.sort_by).to.equal(sortBy);
-        expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortBy);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section, and sortOrder', (done) => {
-      const sortOrder = 'ascending';
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(query, {
-        section,
-        sortOrder,
-      }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.sort_order).to.equal(sortOrder);
-        expect(requestedUrlParams).to.have.property('sort_order').to.equal(sortOrder);
-        done();
-      });
-    });
-
-    it('Should return a response with a valid query, section with a result_id appended to each result', (done) => {
-      const { search } = new ConstructorIO(validOptions);
-
-      search.getSearchResults(query, { section }).then((res) => {
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.response).to.have.property('results').to.be.an('array');
-        res.response.results.forEach((result) => {
-          expect(result).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
-        });
-        done();
-      });
-    });
-
-    it('Should return a redirect rule response with a valid query and section', (done) => {
-      const redirectQuery = 'rolling';
-      const { search } = new ConstructorIO(validOptions);
-
-      search.getSearchResults(redirectQuery, { section }).then((res) => {
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.response).to.have.property('redirect');
-        expect(res.response.redirect).to.have.property('matched_terms').includes(redirectQuery);
-        expect(res.response.redirect).to.have.property('data');
-        expect(res.response.redirect.data).to.have.property('url');
-        done();
-      });
-    });
-
-    it('Should be rejected when invalid query is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-
-      return expect(search.getSearchResults([], { section })).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when no query is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-
-      return expect(search.getSearchResults(null, { section })).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when invalid page parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-      const searchParams = {
-        section,
-        page: 'abc',
+      mockItem.metadata = {
+        key1: 'value1',
+        key2: 'value2',
       };
 
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+      catalog.addItem(mockItem).then(done);
     });
 
-    it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-      const searchParams = {
-        section,
-        resultsPerPage: 'abc',
-      };
+    it('should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
 
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+      const mockItem = createMockItem();
+
+      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when invalid filters parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-      const searchParams = {
-        section,
-        filters: 'abc',
-      };
+    it('should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
 
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
-    });
+      invalidOptions.apiToken = 'foo987';
 
-    it('Should be rejected when invalid sortBy parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-      const searchParams = {
-        section,
-        sortBy: ['foo', 'bar'],
-      };
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+      const mockItem = createMockItem();
 
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when invalid sortOrder parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-      const searchParams = {
-        section,
-        sortOrder: 123,
-      };
-
-      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when invalid section parameter is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-
-      return expect(search.getSearchResults(query, { section: 123 })).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when invalid apiKey is provided', () => {
-      const { search } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
-
-      return expect(search.getSearchResults(query, { section })).to.eventually.be.rejected;
+      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
     });
   });
 });

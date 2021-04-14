@@ -14,6 +14,7 @@ const { version: packageVersion } = require('../package.json');
 class ConstructorIO {
   /**
    * @param {string} apiKey - Constructor.io API key
+   * @param {string} [apiToken] - Constructor.io API token (required for catalog methods)
    * @param {string} [serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
    * @param {array} [segments] - User segments
    * @param {object} [testCells] - User test cells
@@ -31,6 +32,7 @@ class ConstructorIO {
   constructor(options = {}) {
     const {
       apiKey,
+      apiToken,
       version,
       serviceUrl,
       segments,
@@ -58,7 +60,8 @@ class ConstructorIO {
 
     this.options = {
       apiKey,
-      version: version || global.CLIENT_VERSION || `ciojs-client-${packageVersion}`,
+      apiToken,
+      version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: serviceUrl || 'https://ac.cnstrc.com',
       sessionId: sessionId || session_id,
       clientId: clientId || client_id,
@@ -74,23 +77,27 @@ class ConstructorIO {
     this.autocomplete = new Autocomplete(this.options);
     this.recommendations = new Recommendations(this.options);
     this.catalog = new Catalog(this.options);
-
   }
 
   /**
    * Sets the client options
    *
    * @param {string} apiKey - Constructor.io API key
+   * @param {string} [apiToken] - Constructor.io API token (required for catalog methods)
    * @param {array} [segments] - User segments
    * @param {object} [testCells] - User test cells
    * @param {string} [userId] - User ID
    */
   setClientOptions(options) {
     if (Object.keys(options).length) {
-      const { apiKey, segments, testCells, userId } = options;
+      const { apiKey, apiToken, segments, testCells, userId } = options;
 
       if (apiKey) {
         this.options.apiKey = apiKey;
+      }
+
+      if (apiToken) {
+        this.options.apiToken = apiToken;
       }
 
       if (segments) {
