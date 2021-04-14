@@ -1,7 +1,7 @@
 {
   "name": "@constructor-io/constructorio-node",
   "version": "2.9.1",
-  "description": "Constructor.io Node client",
+  "description": "Constructor.io Node.js client",
   "main": "lib/constructorio.js",
   "scripts": {
     "clean": "sudo rm -rf node_modules package-lock.json",
