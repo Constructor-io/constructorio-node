@@ -44,6 +44,8 @@ function createAuthHeader(options) {
 class Catalog {
   constructor(options) {
     this.options = options || {};
+
+    const { apiToken } = this.options;
   }
 
   /**
@@ -69,6 +71,7 @@ class Catalog {
   addItem(params, callback) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { apiToken } = this.options;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);

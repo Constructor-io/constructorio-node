@@ -60,7 +60,7 @@ class ConstructorIO {
 
     this.options = {
       apiKey,
-      apiToken,
+      apiToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: serviceUrl || 'https://ac.cnstrc.com',
       sessionId: sessionId || session_id,

@@ -52,31 +52,23 @@ describe('ConstructorIO - Catalog', () => {
     fetchSpy = null;
   });
 
-  it('Should throw an error when invalid API token is provided', () => {
-    expect(() => new ConstructorIO({ ...validOptions, apiToken: 123456789 })).to.throw('API token is a required parameter of type string');
-  });
-
-  it('Should throw an error when no API token is provided', () => {
-    expect(() => new ConstructorIO({ ...validOptions, apiToken: null })).to.throw('API token is a required parameter of type string');
-  });
-
   describe('addItem', () => {
     it('Should resolve when adding an item', (done) => {
+      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
-      const mockItem = createMockItem();
 
       catalog.addItem(mockItem).then(done);
     });
 
     it('should resolve when adding an item with metadata', (done) => {
+      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
-      const mockItem = createMockItem();
 
       mockItem.metadata = {
         key1: 'value1',
@@ -91,11 +83,11 @@ describe('ConstructorIO - Catalog', () => {
 
       invalidOptions.apiKey = 'abc123';
 
+      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...invalidOptions,
         fetch: fetchSpy,
       });
-      const mockItem = createMockItem();
 
       return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
     });
@@ -105,11 +97,11 @@ describe('ConstructorIO - Catalog', () => {
 
       invalidOptions.apiToken = 'foo987';
 
+      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...invalidOptions,
         fetch: fetchSpy,
       });
-      const mockItem = createMockItem();
 
       return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
     });
