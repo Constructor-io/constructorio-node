@@ -136,7 +136,7 @@ class Autocomplete {
         return response.json();
       }
 
-      return throwHttpErrorFromResponse(new Error(), response);
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
       if (json.sections) {
         if (json.result_id) {

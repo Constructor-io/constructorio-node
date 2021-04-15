@@ -4,6 +4,7 @@ const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied filter name, value and parameters
+// eslint-disable-next-line max-params
 function createBrowseUrl(filterName, filterValue, parameters, userParameters, options) {
   const {
     apiKey,

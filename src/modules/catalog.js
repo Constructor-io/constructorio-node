@@ -1,7 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
-const base64 = require('base-64');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied path and options
@@ -337,9 +336,11 @@ class Catalog {
     if (numResultsPerPage) {
       qsParams.append('num_results_per_page', numResultsPerPage);
     }
+
     if (page) {
       qsParams.append('page', page);
     }
+
     if (section) {
       qsParams.append('section', section);
     }
@@ -349,7 +350,6 @@ class Catalog {
     } catch (e) {
       return Promise.reject(e);
     }
-
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -477,19 +477,13 @@ class Catalog {
   modifyItemGroup(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { id, ...rest } = params;
 
     try {
       requestUrl = createCatalogUrl(`item_groups/${id}`);
     } catch (e) {
       return Promise.reject(e);
     }
-
-    // TODO: Try enes style
-    // Old way
-    // const json = clonedeep(params);
-    // const { id } = json;
-    // delete json.id;
-    const { id, ...rest } = params;
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -523,7 +517,6 @@ class Catalog {
       return Promise.reject(e);
     }
 
-
     return fetch(requestUrl, {
       method: 'DELETE',
       body: JSON.stringify(params),
@@ -547,41 +540,28 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOneWaySynonym(params, callback) {
+  addOneWaySynonym(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
-
-    // TODO: Try enes style
-    // Old way
-    // const json = clonedeep(params);
-    // const { id } = json;
-    // delete json.id;
     const { phrase, ...rest } = params;
 
-
-    if (phrase && typeof phrase === 'string') {
-      try {
-        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      return fetch(requestUrl, {
-        method: 'PUT',
-        body: JSON.stringify(rest),
-        headers: createAuthHeader(this.options),
-      }).then((response) => {
-        if (response.ok) {
-          return Promise.resolve();
-        }
-
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      });
+    try {
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+    } catch (e) {
+      return Promise.reject(e);
     }
 
-    // TODO: What to do with this part?
-    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
   }
 
   /**
@@ -596,38 +576,25 @@ class Catalog {
   modifyOneWaySynonym(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
-
-    // TODO: Try enes style
-    // Old way
-    // const json = clonedeep(params);
-    // const { phrase } = json;
-    // delete json.phrase;
     const { phrase, ...rest } = params;
 
-
-    if (phrase && typeof phrase === 'string') {
-      try {
-        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      return fetch(requestUrl, {
-        method: 'PUT',
-        body: JSON.stringify(rest),
-        headers: createAuthHeader(this.options),
-      }).then((response) => {
-        if (response.ok) {
-          return Promise.resolve();
-        }
-
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      });
+    try {
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+    } catch (e) {
+      return Promise.reject(e);
     }
 
-    // TODO: What to do with this part?
-    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
   }
 
   /**
@@ -651,9 +618,11 @@ class Catalog {
     if (numResultsPerPage) {
       qsParams.append('num_results_per_page', numResultsPerPage);
     }
+
     if (phrase) {
       qsParams.append('phrase', phrase);
     }
+
     if (page) {
       qsParams.append('page', page);
     }
@@ -694,38 +663,25 @@ class Catalog {
   getOneWaySynonym(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
-
-    // TODO: Try enes style
-    // Old way
-    // const json = clonedeep(params);
-    // const { phrase } = json;
-    // delete json.phrase;
     const { phrase, ...rest } = params;
 
-
-    if (phrase && typeof phrase === 'string') {
-      try {
-        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      return fetch(requestUrl, {
-        method: 'GET',
-        body: JSON.stringify(rest),
-        headers: createAuthHeader(this.options),
-      }).then((response) => {
-        if (response.ok) {
-          return Promise.resolve();
-        }
-
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      });
+    try {
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+    } catch (e) {
+      return Promise.reject(e);
     }
 
-    // TODO: What to do with this part?
-    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
   }
 
   /**
@@ -807,7 +763,6 @@ class Catalog {
   modifySynonymGroup(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -890,7 +845,6 @@ class Catalog {
   getSynonymGroup(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -958,7 +912,6 @@ class Catalog {
   removeSynonymGroup(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -1080,7 +1033,6 @@ class Catalog {
   getRedirectRule(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1115,7 +1067,6 @@ class Catalog {
   modifyRedirectRule(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1150,7 +1101,6 @@ class Catalog {
   updateRedirectRule(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1185,7 +1135,6 @@ class Catalog {
   removeRedirectRule(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1232,6 +1181,7 @@ class Catalog {
     if (section) {
       qsParams.append('section', section);
     }
+
     if (items) {
       formData.items = {
         buffer: items,
@@ -1239,6 +1189,7 @@ class Catalog {
         filename: 'items.csv',
       };
     }
+
     if (variations) {
       formData.variations = {
         buffer: variations,
@@ -1246,6 +1197,7 @@ class Catalog {
         filename: 'variations.csv',
       };
     }
+
     if (itemGroups) {
       formData.item_groups = {
         buffer: itemGroups,
@@ -1263,9 +1215,7 @@ class Catalog {
       return Promise.reject(e);
     }
 
-
     try {
-
       return fetch(requestUrl, {
         method: 'PUT',
         body: JSON.stringify(params),
@@ -1277,15 +1227,8 @@ class Catalog {
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
-
-
     } catch (error) {
-    // TODO: What to do with this part?
-      // if (error.message === 'Empty multipart body. Invalid data.') {
-      // handleServerResponse({
-      // message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
-      // }, null, callback);
-      // }
+      return Promise.reject(error);
     }
   }
 
@@ -1314,6 +1257,7 @@ class Catalog {
     if (section) {
       qsParams.append('section', section);
     }
+
     if (items) {
       formData.items = {
         buffer: items,
@@ -1321,6 +1265,7 @@ class Catalog {
         filename: 'items.csv',
       };
     }
+
     if (variations) {
       formData.variations = {
         buffer: variations,
@@ -1328,6 +1273,7 @@ class Catalog {
         filename: 'variations.csv',
       };
     }
+
     if (itemGroups) {
       formData.item_groups = {
         buffer: itemGroups,
@@ -1345,9 +1291,7 @@ class Catalog {
       return Promise.reject(e);
     }
 
-
     try {
-
       return fetch(requestUrl, {
         method: 'PUT',
         body: JSON.stringify(params),
@@ -1359,15 +1303,8 @@ class Catalog {
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
-
-
     } catch (error) {
-    // TODO: What to do with this part?
-      // if (error.message === 'Empty multipart body. Invalid data.') {
-      // handleServerResponse({
-      // message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
-      // }, null, callback);
-      // }
+      return Promise.reject(error);
     }
   }
 }

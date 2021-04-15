@@ -35,7 +35,6 @@
     "src/**/*"
   ],
   "devDependencies": {
-    "base-64": "^1.0.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^8.1.0",
