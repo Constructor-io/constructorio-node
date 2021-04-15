@@ -1,20 +1,22 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
-const { throwHttpErrorFromResponse, cleanParams } = require('../utils/helpers');
+const helpers = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters
-function createAutocompleteUrl(query, parameters, options) {
+function createAutocompleteUrl(query, parameters, userParameters, options) {
   const {
     apiKey,
     version,
     serviceUrl,
+  } = options;
+  const {
     sessionId,
     clientId,
     userId,
     segments,
     testCells,
-  } = options;
+  } = userParameters;
   let queryParams = { c: version };
 
   queryParams.key = apiKey;
@@ -65,7 +67,7 @@ function createAutocompleteUrl(query, parameters, options) {
   }
 
   queryParams._dt = Date.now();
-  queryParams = cleanParams(queryParams);
+  queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
@@ -92,50 +94,69 @@ class Autocomplete {
    * @param {number} [parameters.numResults] - The total number of results to return
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {object} [parameters.resultsPerSection] - Number of results to return (value) per section (key)
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#autocomplete
    */
-  getAutocompleteResults(query, parameters) {
+  getAutocompleteResults(query, parameters = {}, userParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const headers = {};
 
     try {
-      requestUrl = createAutocompleteUrl(query, parameters, this.options);
+      requestUrl = createAutocompleteUrl(query, parameters, userParameters, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
-    return fetch(requestUrl)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
+    // Append user IP as 'X-Forwarded-For' if available
+    if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+      headers['X-Forwarded-For'] = userParameters.userIp;
+    }
+
+    // Append user agent as 'User-Agent' if available
+    if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+      headers['User-Agent'] = userParameters.userAgent;
+    }
+
+    return fetch(requestUrl, { headers }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => {
+      // Search results
+      if (json.response && json.response.results) {
+        if (json.result_id) {
+          json.response.results.forEach((result) => {
+            // eslint-disable-next-line no-param-reassign
+            result.result_id = json.result_id;
+          });
         }
 
-        return throwHttpErrorFromResponse(new Error(), response);
-      })
-      .then((json) => {
-        if (json.sections) {
-          if (json.result_id) {
-            const sectionKeys = Object.keys(json.sections);
+        return json;
+      }
 
-            sectionKeys.forEach((section) => {
-              const sectionItems = json.sections[section];
+      // Redirect rules
+      if (json.response && json.response.redirect) {
+        return json;
+      }
 
-              if (sectionItems.length) {
-                // Append `result_id` to each section item
-                sectionItems.forEach((item) => {
-                  // eslint-disable-next-line no-param-reassign
-                  item.result_id = json.result_id;
-                });
-              }
-            });
-          }
-
-          return json;
-        }
-
-        throw new Error('getAutocompleteResults response data is malformed');
-      });
+      throw new Error('getSearchResults response data is malformed');
+    });
   }
 }
 
