@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-underscore-dangle */
+/* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
 const base64 = require('base-64');
@@ -31,7 +31,7 @@ function createCatalogUrl(path, options) {
 function createAuthHeader(options) {
   const { apiToken } = options;
 
-  return { Authorization: `Basic ${Buffer.from(apiToken + ':').toString('base64')}` };
+  return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
 }
 
 /**
@@ -44,8 +44,6 @@ function createAuthHeader(options) {
 class Catalog {
   constructor(options) {
     this.options = options || {};
-
-    const { apiToken } = this.options;
   }
 
   /**
@@ -68,10 +66,9 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#add-an-item
    */
-  addItem(params, callback) {
+  addItem(params) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { apiToken } = this.options;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
@@ -79,7 +76,7 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    return fetch(createCatalogUrl('item', this.options), {
+    return fetch(requestUrl, {
       method: 'POST',
       body: JSON.stringify(params),
       headers: createAuthHeader(this.options),
@@ -105,41 +102,67 @@ class Catalog {
    * @param {string} [params.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when url is supplied)
    * @param {string} [params.description] - A description for some item (only applicable when url is supplied)
    * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
-   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests.
-   * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io.
-   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests.
-   * @param {object[]} [params.variations] - List of this item's variations.
+   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
+   * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
+   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
+   * @param {object[]} [params.variations] - List of this item's variations
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOrUpdateItem(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = `${this.makeUrl('item')}&force=1`;
+  addOrUpdateItem(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.put(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = `${createCatalogUrl('item', this.options)}&force=1`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
   /**
-    // TODO: Change
    * Add item to your index or update it if it already exists
    *
    * @function addOrUpdateItem
    * @param {object} params - Additional parameters for item details
    * @param {string} params.item_name - The name of the item, as it will appear in the results
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
-   * @param {string} params.id - An arbitrary ID you optionally specified when adding the item. If supplied, you don't need to pass in item_name.
-   * @param {function} callback - TODO: ???
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {string} params.id - An arbitrary ID you optionally specified when adding the item. If supplied, you don't need to pass in item_name
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeItem(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('item');
+  removeItem(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.delete(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('item', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -150,27 +173,40 @@ class Catalog {
    * @param {object} params - Additional parameters for item details
    * @param {string} params.item_name - The name of the item, as it will appear in the results
    * @param {string} params.new_item_name - The name of the item, as it you'd like it to appear in the results
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {number} [params.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself.
+   * @param {string[]} [params.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself
    * @param {string} [params.url] - A URL to directly send the user after selecting the item
    * @param {string} [params.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when url is supplied)
    * @param {string} [params.description] - A description for some item (only applicable when url is supplied)
-   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls.
-   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests.
-   * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io.
-   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests.
-   * @param {object[]} [params.variations] - List of this item's variations.
-   * @param {function} callback - TODO: ???
+   * @param {string} [params.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
+   * @param {object} [params.facets] - key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
+   * @param {object} [params.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
+   * @param {string[]} [params.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
+   * @param {object[]} [params.variations] - List of this item's variations
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifyItem(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('item');
+  modifyItem(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.put(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('item', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -181,17 +217,30 @@ class Catalog {
    * @param {object} params - Additional parameters for item details
    TODO: Link doesn't work
    * @param {object[]} params.items - A list of items with the same attributes as defined in the [Add an Item]{@link addItem} resource
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
-   * @param {function} callback - TODO: ???
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addItemBatch(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('batch_items');
+  addItemBatch(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.post(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('batch_items', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -202,17 +251,30 @@ class Catalog {
    * @param {object} params - Additional parameters for item details
    TODO: Link doesn't work
    * @param {object[]} params.items - A list of items with the same attributes as defined in the [Add an Item]{@link addItem} resource
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
-   * @param {function} callback - TODO: ???
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOrUpdateItemBatch(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = `${this.makeUrl('batch_items')}&force=1`;
+  addOrUpdateItemBatch(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.put(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = `${createCatalogUrl('batch_items', this.options)}&force=1`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -223,17 +285,30 @@ class Catalog {
    * @param {object} params - Additional parameters for item details
    TODO: Link doesn't work
    * @param {object[]} params.items - A list of items with the same attributes as defined in the [Add an Item]{@link addItem} resource
-   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for.
-   * @param {function} callback - TODO: ???
+   * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeItemBatch(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('batch_items');
+  removeItemBatch(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.delete(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('batch_items', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -249,17 +324,18 @@ class Catalog {
    * @param {string[]} [params.id] - Id(s) of items to return
    * @param {number} [params.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
    * @param {number} [params.page] - The page of results to return. Defaults to 1.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getItem(params, callback) {
-    const { num_results_per_page, page, section, item_id } = params;
-    const urlPath = item_id ? `item/${item_id}` : 'item';
+  getItem(params) {
+    const { num_results_per_page: numResultsPerPage, page, section, item_id: itemId } = params;
+    const urlPath = itemId ? `item/${itemId}` : 'item';
     const qsParams = new URLSearchParams();
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (num_results_per_page) {
-      qsParams.append('num_results_per_page', num_results_per_page);
+    if (numResultsPerPage) {
+      qsParams.append('num_results_per_page', numResultsPerPage);
     }
     if (page) {
       qsParams.append('page', page);
@@ -268,11 +344,23 @@ class Catalog {
       qsParams.append('section', section);
     }
 
-    const options = this.makeAuthToken();
-    const url = `${this.makeUrl(urlPath)}&${qsParams.toString()}`;
+    try {
+      requestUrl = `${createCatalogUrl(urlPath)}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -282,16 +370,29 @@ class Catalog {
    * @function addItemGroups
    * @param {object} params - Additional parameters for item group details
    * @param {object[]} params.item_groups - A list of item groups
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addItemGroups(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('item_groups');
+  addItemGroups(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.post(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -302,16 +403,29 @@ class Catalog {
    * @param {object} params - Additional parameters for item group details
    * @param {string} params.group_id - The group id you'd like to retrieve results for.
    * @param {string} params.key - The index you'd like to to retrieve results from.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getItemGroup(params, callback) {
-    const options = this.makeAuthToken();
-    const url = this.makeUrl(`item_groups/${params.group_id}`);
+  getItemGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`item_groups/${params.group_id}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -323,16 +437,29 @@ class Catalog {
    * @param {object} params - Additional parameters for item group details
    * @param {string} params.group_id - The group id you'd like to retrieve results for.
    * @param {string} params.key - The index you'd like to to retrieve results from.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOrUpdateItemGroups(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = `${this.makeUrl('item_groups')}&force=1`;
+  addOrUpdateItemGroups(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.patch(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = `${createCatalogUrl('item_groups')}&force=1`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -344,21 +471,36 @@ class Catalog {
    * @param {string} [params.name] - Item group display name.
    * @param {string} [params.parent_id] - Parent item group customer ID or null for root item groups.
    * @param {object} [params.data] - JSON object with custom metadata attached with the item group.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifyItemGroup(params, callback) {
+  modifyItemGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createCatalogUrl(`item_groups/${id}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
     // TODO: Try enes style
-    const json = clonedeep(params);
-    const { id } = json;
-    delete json.id;
+    // Old way
+    // const json = clonedeep(params);
+    // const { id } = json;
+    // delete json.id;
+    const { id, ...rest } = params;
 
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl(`item_groups/${id}`);
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
 
-    needle.put(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -368,16 +510,30 @@ class Catalog {
    *
    * @function removeItemGroups
    * @param {object} params - Additional parameters for item group details
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeItemGroups(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('item_groups');
+  removeItemGroups(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.delete(url, null, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('item_groups');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -388,25 +544,44 @@ class Catalog {
    * @function addOneWaySynonym
    * @param {object} params - Additional parameters for synonym details
    * @param {string} [params.synonyms] -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
   addOneWaySynonym(params, callback) {
-    const json = clonedeep(params);
-    const { phrase } = json;
-    delete json.phrase;
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+
+    // TODO: Try enes style
+    // Old way
+    // const json = clonedeep(params);
+    // const { id } = json;
+    // delete json.id;
+    const { phrase, ...rest } = params;
+
 
     if (phrase && typeof phrase === 'string') {
-      const options = { ...this.makeAuthToken(), json: true };
-      const url = this.makeUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      try {
+        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      } catch (e) {
+        return Promise.reject(e);
+      }
 
-      needle.post(url, json, options, (error, response) => {
-        handleServerResponse(error, response, callback);
+      return fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify(rest),
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
-    } else {
-      handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
     }
+
+    // TODO: What to do with this part?
+    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
   }
 
   /**
@@ -415,25 +590,44 @@ class Catalog {
    * @function addOneWaySynonym
    * @param {object} params - Additional parameters for synonym details
    * @param {string} [params.synonyms] -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifyOneWaySynonym(params, callback) {
-    const json = clonedeep(params);
-    const { phrase } = json;
-    delete json.phrase;
+  modifyOneWaySynonym(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+
+    // TODO: Try enes style
+    // Old way
+    // const json = clonedeep(params);
+    // const { phrase } = json;
+    // delete json.phrase;
+    const { phrase, ...rest } = params;
+
 
     if (phrase && typeof phrase === 'string') {
-      const options = { ...this.makeAuthToken(), json: true };
-      const url = this.makeUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      try {
+        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      } catch (e) {
+        return Promise.reject(e);
+      }
 
-      needle.put(url, json, options, (error, response) => {
-        handleServerResponse(error, response, callback);
+      return fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify(rest),
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
-    } else {
-      handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
     }
+
+    // TODO: What to do with this part?
+    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
   }
 
   /**
@@ -445,16 +639,17 @@ class Catalog {
    * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
    * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [params.page] - The page of results to return. Defaults to 1
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getOneWaySynonyms(params, callback) {
-    const { num_results_per_page, phrase, page } = params;
+  getOneWaySynonyms(params) {
+    const { num_results_per_page: numResultsPerPage, phrase, page } = params;
     const qsParams = new URLSearchParams();
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (num_results_per_page) {
-      qsParams.append('num_results_per_page', num_results_per_page);
+    if (numResultsPerPage) {
+      qsParams.append('num_results_per_page', numResultsPerPage);
     }
     if (phrase) {
       qsParams.append('phrase', phrase);
@@ -463,11 +658,23 @@ class Catalog {
       qsParams.append('page', page);
     }
 
-    const options = this.makeAuthToken();
-    const url = `${this.makeUrl('one_way_synonyms', { basePath: 'v2' })}&${qsParams.toString()}`;
+    try {
+      requestUrl = createCatalogUrl('item', this.options);
+      requestUrl = `${createCatalogUrl('one_way_synonyms', { basePath: 'v2' })}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -481,25 +688,44 @@ class Catalog {
    * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
    * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [params.page] - The page of results to return. Defaults to 1
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getOneWaySynonym(params, callback) {
-    const json = clonedeep(params);
-    const { phrase } = json;
-    delete json.phrase;
+  getOneWaySynonym(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+
+    // TODO: Try enes style
+    // Old way
+    // const json = clonedeep(params);
+    // const { phrase } = json;
+    // delete json.phrase;
+    const { phrase, ...rest } = params;
+
 
     if (phrase && typeof phrase === 'string') {
-      const options = this.makeAuthToken();
-      const url = this.makeUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      try {
+        requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      } catch (e) {
+        return Promise.reject(e);
+      }
 
-      needle.get(url, options, (error, response) => {
-        handleServerResponse(error, response, callback);
+      return fetch(requestUrl, {
+        method: 'GET',
+        body: JSON.stringify(rest),
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
-    } else {
-      handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
     }
+
+    // TODO: What to do with this part?
+    // handleServerResponse({ message: 'phrase is a required field of type string' }, null, callback);
   }
 
   /**
@@ -509,16 +735,29 @@ class Catalog {
   // TODO: Not sure what goes into the params
    * @param {object} params - Additional parameters for synonym details
    * @param {string} [params.synonyms] -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeOneWaySynonyms(params, callback) {
-    const options = this.makeAuthToken();
-    const url = this.makeUrl('one_way_synonyms', { basePath: 'v2' });
+  removeOneWaySynonyms(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.delete(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('one_way_synonyms', { basePath: 'v2' });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -529,16 +768,29 @@ class Catalog {
   // TODO: Not sure what goes into the params
    * @param {object} params - Additional parameters for synonym group details
    * @param {object[]} params.synonyms - Allows you to add synonyms to the newly created group.
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addSynonymGroup(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('synonym_groups');
+  addSynonymGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.post(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('synonym_groups');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -549,20 +801,31 @@ class Catalog {
   // TODO: Not sure what goes into the params
    * @param {object} params - Additional parameters for synonym group details
    * @param {object[]} params.synonyms - Determines what phrases will be included in the final synonym group
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifySynonymGroup(params, callback) {
-    const json = clonedeep(params);
-    const { group_id } = json;
-    delete json.group_id;
+  modifySynonymGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl(`synonym_groups/${group_id}`);
+    const { group_id: groupId, ...rest } = params;
 
-    needle.put(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -575,16 +838,17 @@ class Catalog {
    * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
    * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [params.page] - The page of results to return. Defaults to 1
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroups(params, callback) {
-    const { num_results_per_page, phrase, page } = params;
+  getSynonymGroups(params) {
+    const { num_results_per_page: numResultsPerPage, phrase, page } = params;
     const qsParams = new URLSearchParams();
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (num_results_per_page) {
-      qsParams.append('num_results_per_page', num_results_per_page);
+    if (numResultsPerPage) {
+      qsParams.append('num_results_per_page', numResultsPerPage);
     }
 
     if (phrase) {
@@ -595,11 +859,22 @@ class Catalog {
       qsParams.append('page', page);
     }
 
-    const options = this.makeAuthToken();
-    const url = `${this.makeUrl('synonym_groups', { appendVersionParameter: false })}&${qsParams.toString()}`;
+    try {
+      requestUrl = `${createCatalogUrl('synonym_groups', { appendVersionParameter: false })}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -609,20 +884,31 @@ class Catalog {
    * @function getSynonymGroup
    * @param {object} params - Additional parameters for synonym group details
    * @param {string} params.group_id - The synonym group you would like returned
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroup(params, callback) {
-    const json = clonedeep(params);
-    const { group_id } = json;
-    delete json.group_id;
+  getSynonymGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = this.makeAuthToken();
-    const url = this.makeUrl(`synonym_groups/${group_id}`, { appendVersionParameter: false });
+    const { group_id: groupId, ...rest } = params;
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`, { appendVersionParameter: false });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -634,16 +920,29 @@ class Catalog {
    * @function removeSynonymGroups
    * @param {object} params - Additional parameters for synonym group details
    * @param {string} [params.group_id] - The synonym group you would like deleted
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeSynonymGroups(params, callback) {
-    const options = this.makeAuthToken();
-    const url = this.makeUrl('synonym_groups');
+  removeSynonymGroups(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.delete(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('synonym_groups');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -653,20 +952,31 @@ class Catalog {
    * @function removeSynonymGroup
    * @param {object} params - Additional parameters for synonym group details
    * @param {string} params.group_id - The synonym group you would like deleted
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeSynonymGroup(params, callback) {
-    const json = clonedeep(params);
-    const { group_id } = json;
-    delete json.group_id;
+  removeSynonymGroup(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = this.makeAuthToken();
-    const url = this.makeUrl(`synonym_groups/${group_id}`);
+    const { group_id: groupId, ...rest } = params;
 
-    needle.delete(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -677,16 +987,29 @@ class Catalog {
    TODO: Where to define redirect object
    * @param {object} params - Additional parameters for redirect rule details
    * @param {string} params. -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addRedirectRule(params, callback) {
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl('redirect_rules');
+  addRedirectRule(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    needle.post(url, params, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl('redirect_rules');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -700,16 +1023,17 @@ class Catalog {
    * @param {number} [params.page] - The page of redirect rules to return. Defaults to 1
    * @param {string} [params.query] - Return redirect rules whose url or match pattern match the provided query
    * @param {string} [params.status] - One of "current" (return redirect rules that are currently active), "pending" (return redirect rules that will become active in the future), and "expired" (return redirect rules that are not active anymore)
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getRedirectRules(params, callback) {
-    const { num_results_per_page, page, query, status } = params;
+  getRedirectRules(params) {
+    const { num_results_per_page: numResultsPerPage, page, query, status } = params;
     const qsParams = new URLSearchParams();
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (num_results_per_page) {
-      qsParams.append('num_results_per_page', num_results_per_page);
+    if (numResultsPerPage) {
+      qsParams.append('num_results_per_page', numResultsPerPage);
     }
 
     if (page) {
@@ -724,11 +1048,22 @@ class Catalog {
       qsParams.append('status', status);
     }
 
-    const options = this.makeAuthToken();
-    const url = `${this.makeUrl('redirect_rules', { appendVersionParameter: false })}&${qsParams.toString()}`;
+    try {
+      requestUrl = `${createCatalogUrl('redirect_rules', { appendVersionParameter: false })}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(params),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -739,20 +1074,31 @@ class Catalog {
    * @param {object} params - Additional parameters for redirect rule details
    TODO: Which id?
    * @param {string} params.key - The index you'd like to to retrieve redirect rules from
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getRedirectRule(params, callback) {
-    const json = clonedeep(params);
-    const { redirect_rule_id } = json;
-    delete json.redirect_rule_id;
+  getRedirectRule(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = this.makeAuthToken();
-    const url = this.makeUrl(`redirect_rules/${redirect_rule_id}`, { appendVersionParameter: false });
+    const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
-    needle.get(url, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`, { appendVersionParameter: false });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -763,20 +1109,31 @@ class Catalog {
    TODO: What goes into params?
    * @param {object} params - Additional parameters for redirect rule details
    * @param {string} params.redirect_rule_id -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifyRedirectRule(params, callback) {
-    const json = clonedeep(params);
-    const { redirect_rule_id } = json;
-    delete json.redirect_rule_id;
+  modifyRedirectRule(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl(`redirect_rules/${redirect_rule_id}`);
+    const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
-    needle.put(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -787,20 +1144,31 @@ class Catalog {
    TODO: What goes into params?
    * @param {object} params - Additional parameters for redirect rule details
    * @param {string} params.redirect_rule_id -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  updateRedirectRule(params, callback) {
-    const json = clonedeep(params);
-    const { redirect_rule_id } = json;
-    delete json.redirect_rule_id;
+  updateRedirectRule(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl(`redirect_rules/${redirect_rule_id}`);
+    const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
-    needle.patch(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -811,20 +1179,31 @@ class Catalog {
    TODO: What goes into params?
    * @param {object} params - Additional parameters for redirect rule details
    * @param {string} params.redirect_rule_id -
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeRedirectRule(params, callback) {
-    const json = clonedeep(params);
-    const { redirect_rule_id } = json;
-    delete json.group_id;
+  removeRedirectRule(params) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    const options = { ...this.makeAuthToken(), json: true };
-    const url = this.makeUrl(`redirect_rules/${redirect_rule_id}`);
+    const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
-    needle.delete(url, json, options, (error, response) => {
-      handleServerResponse(error, response, callback);
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
 
@@ -841,13 +1220,12 @@ class Catalog {
    * @param {file} [params.items] - The CSV file with all new items
    * @param {file} [params.variations] - The CSV file with all new variations
    * @param {file} [params.item_groups] - The CSV file with all new item_groups
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  replaceCatalog(params, callback) {
+  replaceCatalog(params) {
     // Read Streams
-    const { items, variations, item_groups, section = 'Products' } = params;
+    const { items, variations, item_groups: itemGroups, section = 'Products' } = params;
     const qsParams = new URLSearchParams();
     const formData = {};
 
@@ -868,27 +1246,46 @@ class Catalog {
         filename: 'variations.csv',
       };
     }
-    if (item_groups) {
+    if (itemGroups) {
       formData.item_groups = {
-        buffer: item_groups,
+        buffer: itemGroups,
         content_type: 'application/octet-stream',
         filename: 'item_groups.csv',
       };
     }
 
-    const options = { ...this.makeAuthToken(), multipart: true };
-    const url = `${this.makeUrl('catalog')}&${qsParams.toString()}`;
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      needle.put(url, formData, options, (error, response) => {
-        handleServerResponse(error, response, callback);
+      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+
+    try {
+
+      return fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify(params),
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
+
+
     } catch (error) {
-      if (error.message === 'Empty multipart body. Invalid data.') {
-        handleServerResponse({
-          message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
-        }, null, callback);
-      }
+    // TODO: What to do with this part?
+      // if (error.message === 'Empty multipart body. Invalid data.') {
+      // handleServerResponse({
+      // message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
+      // }, null, callback);
+      // }
     }
   }
 
@@ -905,13 +1302,12 @@ class Catalog {
    * @param {file} [params.items] - The CSV file with all new items
    * @param {file} [params.variations] - The CSV file with all new variations
    * @param {file} [params.item_groups] - The CSV file with all new item_groups
-   * @param {function} callback - TODO: ???
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  updateCatalog(params, callback) {
+  updateCatalog(params) {
     // Read Streams
-    const { items, variations, item_groups, section = 'Products' } = params;
+    const { items, variations, item_groups: itemGroups, section = 'Products' } = params;
     const qsParams = new URLSearchParams();
     const formData = {};
 
@@ -932,30 +1328,48 @@ class Catalog {
         filename: 'variations.csv',
       };
     }
-    if (item_groups) {
+    if (itemGroups) {
       formData.item_groups = {
-        buffer: item_groups,
+        buffer: itemGroups,
         content_type: 'application/octet-stream',
         filename: 'item_groups.csv',
       };
     }
 
-    const options = { ...this.makeAuthToken(), multipart: true };
-    const url = `${this.makeUrl('catalog')}&${qsParams.toString()}`;
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      needle.patch(url, formData, options, (error, response) => {
-        handleServerResponse(error, response, callback);
+      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+
+    try {
+
+      return fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify(params),
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
+
+
     } catch (error) {
-      if (error.message === 'Empty multipart body. Invalid data.') {
-        handleServerResponse({
-          message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
-        }, null, callback);
-      }
+    // TODO: What to do with this part?
+      // if (error.message === 'Empty multipart body. Invalid data.') {
+      // handleServerResponse({
+      // message: 'At least one file of "items", "variations", "item_groups" is required to be in form-data',
+      // }, null, callback);
+      // }
     }
   }
-
 }
 
 module.exports = Catalog;
