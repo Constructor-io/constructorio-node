@@ -136,22 +136,25 @@ class Autocomplete {
         return response.json();
       }
 
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
+      return throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
-      // Search results
-      if (json.response && json.response.results) {
+      if (json.sections) {
         if (json.result_id) {
-          json.response.results.forEach((result) => {
-            // eslint-disable-next-line no-param-reassign
-            result.result_id = json.result_id;
+          const sectionKeys = Object.keys(json.sections);
+
+          sectionKeys.forEach((section) => {
+            const sectionItems = json.sections[section];
+
+            if (sectionItems.length) {
+              // Append `result_id` to each section item
+              sectionItems.forEach((item) => {
+                // eslint-disable-next-line no-param-reassign
+                item.result_id = json.result_id;
+              });
+            }
           });
         }
 
-        return json;
-      }
-
-      // Redirect rules
-      if (json.response && json.response.redirect) {
         return json;
       }
 

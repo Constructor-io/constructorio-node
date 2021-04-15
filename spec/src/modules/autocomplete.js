@@ -35,7 +35,7 @@ describe('ConstructorIO - Autocomplete', () => {
     fetchSpy = null;
   });
 
-  describe.only('getAutocompleteResults', () => {
+  describe('getAutocompleteResults', () => {
     const query = 'drill';
 
     it('Should return a response with a valid query and client + session identifiers', (done) => {
@@ -204,7 +204,7 @@ describe('ConstructorIO - Autocomplete', () => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
         done();
@@ -223,7 +223,7 @@ describe('ConstructorIO - Autocomplete', () => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
         done();
@@ -241,7 +241,7 @@ describe('ConstructorIO - Autocomplete', () => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
         done();
