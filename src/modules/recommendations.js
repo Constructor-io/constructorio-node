@@ -142,7 +142,7 @@ class Recommendations {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
-      // Search results
+      // Recommendations results
       if (json.response && json.response.results) {
         if (json.result_id) {
           json.response.results.forEach((result) => {

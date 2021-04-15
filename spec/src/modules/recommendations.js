@@ -16,7 +16,7 @@ dotenv.config();
 const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
+const validOptions = { apiKey: testApiKey };
 
 describe('ConstructorIO - Recommendations', () => {
   const clientVersion = 'cio-mocha';
@@ -42,13 +42,17 @@ describe('ConstructorIO - Recommendations', () => {
     const itemId = 'power_drill';
     const itemIds = [itemId, 'drill'];
 
-    it('Should return a response with valid itemIds (singular)', (done) => {
+    it('Should return a response with valid itemIds (singular) and client + session identifiers', (done) => {
+      const clientSessionIdentifiers = {
+        clientId: validClientId,
+        sessionId: validSessionId,
+      };
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      recommendations.getRecommendations(podId, { itemIds: itemId }).then((res) => {
+      recommendations.getRecommendations(podId, { itemIds: itemId }, { ...clientSessionIdentifiers }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -169,11 +173,10 @@ describe('ConstructorIO - Recommendations', () => {
       const segments = ['foo', 'bar'];
       const { recommendations } = new ConstructorIO({
         ...validOptions,
-        segments,
         fetch: fetchSpy,
       });
 
-      recommendations.getRecommendations(podId, { itemIds }).then((res) => {
+      recommendations.getRecommendations(podId, { itemIds }, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -188,11 +191,10 @@ describe('ConstructorIO - Recommendations', () => {
       const userId = 'user-id';
       const { recommendations } = new ConstructorIO({
         ...validOptions,
-        userId,
         fetch: fetchSpy,
       });
 
-      recommendations.getRecommendations(podId, { itemIds }).then((res) => {
+      recommendations.getRecommendations(podId, { itemIds }, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -243,6 +245,61 @@ describe('ConstructorIO - Recommendations', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.section).to.equal(section);
         expect(requestedUrlParams).to.have.property('section').to.equal(section);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, { userIp }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, { userAgent }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
         done();
       });
     });
