@@ -25,6 +25,9 @@
     "url": "https://github.com/Constructor-io/constructorio-node/issues"
   },
   "homepage": "https://github.com/Constructor-io/constructorio-node#readme",
+  "engines": {
+    "node": ">=8.3.0"
+  },
   "pre-push": [
     "lint"
   ],
