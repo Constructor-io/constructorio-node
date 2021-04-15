@@ -16,7 +16,7 @@ dotenv.config();
 const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
+const validOptions = { apiKey: testApiKey };
 
 describe('ConstructorIO - Browse', () => {
   const clientVersion = 'cio-mocha';
@@ -41,13 +41,17 @@ describe('ConstructorIO - Browse', () => {
     const filterNameCollection = 'collection_id';
     const filterValueCollection = 'test';
 
-    it('Should return a response with a valid filterName and filterValue', (done) => {
+    it('Should return a response with a valid filterName, filterValue, and client + session identifiers', (done) => {
+      const clientSessionIdentifiers = {
+        clientId: validClientId,
+        sessionId: validSessionId,
+      };
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResults(filterName, filterValue).then((res) => {
+      browse.getBrowseResults(filterName, filterValue, {}, { ...clientSessionIdentifiers }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -72,11 +76,10 @@ describe('ConstructorIO - Browse', () => {
       const testCells = { foo: 'bar' };
       const { browse } = new ConstructorIO({
         ...validOptions,
-        testCells,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResults(filterName, filterValue).then((res) => {
+      browse.getBrowseResults(filterName, filterValue, {}, { testCells }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -92,11 +95,10 @@ describe('ConstructorIO - Browse', () => {
       const segments = ['foo', 'bar'];
       const { browse } = new ConstructorIO({
         ...validOptions,
-        segments,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResults(filterName, filterValue).then((res) => {
+      browse.getBrowseResults(filterName, filterValue, {}, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -111,11 +113,10 @@ describe('ConstructorIO - Browse', () => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
         ...validOptions,
-        userId,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResults(filterName, filterValue).then((res) => {
+      browse.getBrowseResults(filterName, filterValue, {}, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -241,6 +242,61 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.sort_order).to.equal(sortOrder);
         expect(requestedUrlParams).to.have.property('sort_order').to.equal(sortOrder);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue, and user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, { userIp }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue, and security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue, and user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, { userAgent }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
         done();
       });
     });
