@@ -155,7 +155,7 @@ class Autocomplete {
         return json;
       }
 
-      throw new Error('getSearchResults response data is malformed');
+      throw new Error('getAutocompleteResults response data is malformed');
     });
   }
 }

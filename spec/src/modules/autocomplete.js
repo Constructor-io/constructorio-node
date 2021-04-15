@@ -16,7 +16,7 @@ dotenv.config();
 const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey, clientId: validClientId, sessionId: validSessionId };
+const validOptions = { apiKey: testApiKey };
 
 describe('ConstructorIO - Autocomplete', () => {
   const clientVersion = 'cio-mocha';
@@ -35,16 +35,20 @@ describe('ConstructorIO - Autocomplete', () => {
     fetchSpy = null;
   });
 
-  describe('getAutocompleteResults', () => {
+  describe.only('getAutocompleteResults', () => {
     const query = 'drill';
 
-    it('Should return a response with a valid query', (done) => {
+    it('Should return a response with a valid query and client + session identifiers', (done) => {
+      const clientSessionIdentifiers = {
+        clientId: validClientId,
+        sessionId: validSessionId,
+      };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      autocomplete.getAutocompleteResults(query).then((res) => {
+      autocomplete.getAutocompleteResults(query, {}, { ...clientSessionIdentifiers }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -65,11 +69,10 @@ describe('ConstructorIO - Autocomplete', () => {
       const testCells = { foo: 'bar' };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
-        testCells,
         fetch: fetchSpy,
       });
 
-      autocomplete.getAutocompleteResults(query).then((res) => {
+      autocomplete.getAutocompleteResults(query, {}, { testCells }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -85,11 +88,10 @@ describe('ConstructorIO - Autocomplete', () => {
       const segments = ['foo', 'bar'];
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
-        segments,
         fetch: fetchSpy,
       });
 
-      autocomplete.getAutocompleteResults(query).then((res) => {
+      autocomplete.getAutocompleteResults(query, {}, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -105,11 +107,10 @@ describe('ConstructorIO - Autocomplete', () => {
       const userId = 'user-id';
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
-        userId,
         fetch: fetchSpy,
       });
 
-      autocomplete.getAutocompleteResults(query).then((res) => {
+      autocomplete.getAutocompleteResults(query, {}, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -188,6 +189,61 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res.request.filters).to.deep.equal(filters);
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query and user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, { userIp }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query and security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query and user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, { userAgent }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
         done();
       });
     });
