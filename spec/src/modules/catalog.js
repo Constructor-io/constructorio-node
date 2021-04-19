@@ -203,7 +203,6 @@ describe.only('ConstructorIO - Catalog', () => {
 
       invalidOptions.apiKey = 'abc123';
 
-      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...invalidOptions,
         fetch: fetchSpy,
@@ -217,7 +216,6 @@ describe.only('ConstructorIO - Catalog', () => {
 
       invalidOptions.apiToken = 'foo987';
 
-      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...invalidOptions,
         fetch: fetchSpy,

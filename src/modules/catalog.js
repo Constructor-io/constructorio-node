@@ -80,8 +80,8 @@ class Catalog {
       body: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options)
-      }
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -126,8 +126,8 @@ class Catalog {
       body: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options)
-      }
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -163,8 +163,8 @@ class Catalog {
       body: JSON.stringify(params),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options)
-      }
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
