@@ -16,13 +16,9 @@ dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
-const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
-const validSessionId = '2';
 const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
-  clientId: validClientId,
-  sessionId: validSessionId,
 };
 
 function createMockItem() {
@@ -35,7 +31,7 @@ function createMockItem() {
   };
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -53,8 +49,9 @@ describe('ConstructorIO - Catalog', () => {
   });
 
   describe('addItem', () => {
+    const mockItem = createMockItem();
+
     it('Should resolve when adding an item', (done) => {
-      const mockItem = createMockItem();
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -63,22 +60,145 @@ describe('ConstructorIO - Catalog', () => {
       catalog.addItem(mockItem).then(done);
     });
 
-    it('should resolve when adding an item with metadata', (done) => {
-      const mockItem = createMockItem();
+    it('Should return error when adding an item that already exists', () => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      mockItem.metadata = {
-        key1: 'value1',
-        key2: 'value2',
-      };
+      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+    });
+  });
+
+  describe('addOrUpdateItem', () => {
+    const mockItem = createMockItem();
+    const mockItemWithID = createMockItem();
+
+    mockItemWithID.id = uuidv4();
+
+    it('Should resolve when adding an item', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addOrUpdateItem(mockItem).then(done);
+    });
+
+    it('Should resolve when updating an item', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addOrUpdateItem(mockItem).then(done);
+    });
+
+    it('Should resolve when adding an item with an ID', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addOrUpdateItem(mockItemWithID).then(done);
+    });
+
+    it('Should resolve when updating an item with an ID', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addOrUpdateItem(mockItemWithID).then(done);
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
+    });
+  });
+
+  describe('removeItem', () => {
+    const mockItem = createMockItem();
+    const mockItemWithID = createMockItem();
+
+    mockItemWithID.id = uuidv4();
+
+    before((done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
 
       catalog.addItem(mockItem).then(done);
     });
 
-    it('should return error when adding an item with an invalid API key', () => {
+    it('Should resolve when removing an item', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.removeItem(mockItem).then(done);
+    });
+
+    it('Should resolve when removing an item with an ID', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.removeItem(mockItemWithID).then(done);
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
       const invalidOptions = cloneDeep(validOptions);
 
       invalidOptions.apiKey = 'abc123';
@@ -89,10 +209,10 @@ describe('ConstructorIO - Catalog', () => {
         fetch: fetchSpy,
       });
 
-      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
     });
 
-    it('should return error when adding an item with an invalid API token', () => {
+    it('Should return error when adding an item with an invalid API token', () => {
       const invalidOptions = cloneDeep(validOptions);
 
       invalidOptions.apiToken = 'foo987';
@@ -103,7 +223,7 @@ describe('ConstructorIO - Catalog', () => {
         fetch: fetchSpy,
       });
 
-      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
     });
   });
 });
