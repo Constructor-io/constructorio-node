@@ -222,14 +222,14 @@ class Catalog {
   }
 
   /**
-   * Add multiple items to index (limit of 1,000 items)
+   * Add multiple items to index (limit of 1,000)
    *
    * @function addItemBatch
    * @param {object} params - Additional parameters for item details
    * @param {object[]} params.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/items/batch_add_items
    */
   addItemBatch(params) {
     let requestUrl;
@@ -258,15 +258,14 @@ class Catalog {
   }
 
   /**
-   * Add multiple items to your index whilst updating existing ones (limit of 1000 items)
+   * Add multiple items to index whilst updating existing ones (limit of 1,000)
    *
    * @function addOrUpdateItemBatch
    * @param {object} params - Additional parameters for item details
-   TODO: Link doesn't work
-   * @param {object[]} params.items - A list of items with the same attributes as defined in the [Add an Item]{@link addItem} resource
+   * @param {object[]} params.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
    */
   addOrUpdateItemBatch(params) {
     let requestUrl;
@@ -281,7 +280,10 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -292,15 +294,14 @@ class Catalog {
   }
 
   /**
-   * Remove multiple items from your index (limit of 1000 items)
+   * Remove multiple items from your index (limit of 1,000)
    *
    * @function removeItemBatch
    * @param {object} params - Additional parameters for item details
-   TODO: Link doesn't work
-   * @param {object[]} params.items - A list of items with the same attributes as defined in the [Add an Item]{@link addItem} resource
+   * @param {object[]} params.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} params.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/items/batch_remove_items
    */
   removeItemBatch(params) {
     let requestUrl;
@@ -315,7 +316,10 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'DELETE',
       body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();

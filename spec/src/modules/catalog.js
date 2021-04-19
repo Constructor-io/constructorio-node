@@ -337,4 +337,126 @@ describe('ConstructorIO - Catalog', () => {
       return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
     });
   });
+
+  describe('addOrUpdateItemBatch', () => {
+    const items = [
+      createMockItem(),
+      createMockItem(),
+      createMockItem(),
+    ];
+
+    it('Should resolve when adding multiple items', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+
+      catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+    });
+
+    it('Should resolve when updating multiple items', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+
+      catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+  });
+
+  describe('removeItemBatch', () => {
+    const items = [
+      createMockItem(),
+      createMockItem(),
+      createMockItem(),
+    ];
+    const itemsDoNotExist = [
+      createMockItem(),
+      createMockItem(),
+      createMockItem(),
+    ];
+
+    before((done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addItemBatch({ items, section: 'Products' }).then(done);
+    });
+
+    it('Should resolve when removing multiple items', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.removeItemBatch({ items, section: 'Products' }).then(done);
+    });
+
+    it('Should return error when removing items that do not exist', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.removeItemBatch({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+  });
 });
