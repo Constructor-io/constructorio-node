@@ -244,7 +244,10 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'POST',
       body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();

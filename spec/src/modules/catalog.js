@@ -31,7 +31,7 @@ function createMockItem() {
   };
 }
 
-describe.only('ConstructorIO - Catalog', () => {
+describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -291,6 +291,50 @@ describe.only('ConstructorIO - Catalog', () => {
       });
 
       return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+    });
+  });
+
+  describe('addItemBatch', () => {
+    const items = [
+      createMockItem(),
+      createMockItem(),
+      createMockItem(),
+    ];
+
+    it('Should resolve when adding multiple items', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+
+      catalog.addItemBatch({ items, section: 'Products' }).then(done);
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
     });
   });
 });
