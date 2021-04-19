@@ -224,4 +224,73 @@ describe.only('ConstructorIO - Catalog', () => {
       return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
     });
   });
+
+  describe('modifyItem', () => {
+    const mockItem = createMockItem();
+    const mockItemDoesNotExist = createMockItem();
+
+    before((done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.addItem(mockItem).then(done);
+    });
+
+    it('Should resolve when modifying an item with updated item name', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      mockItem.new_item_name = `product-${uuidv4()}`;
+
+      catalog.modifyItem(mockItem).then(done);
+    });
+
+    it('Should return error when modifying an item that does not exist as item name has changed', () => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when modifying an item that does not exist', () => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.modifyItem(mockItemDoesNotExist)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+    });
+  });
 });
