@@ -392,15 +392,15 @@ class Catalog {
   }
 
   /**
-   * Add item groups to your index
+   * Add item groups to index (limit of 1,000)
    *
    * @function addItemGroups
-   * @param {object} params - Additional parameters for item group details
-   * @param {object[]} params.item_groups - A list of item groups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {object[]} parameters.item_groups - A list of item groups
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/item_groups
    */
-  addItemGroups(params) {
+  addItemGroups(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -412,8 +412,11 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -424,36 +427,37 @@ class Catalog {
   }
 
   /**
-   * Get an item group from your index
+   * Retrieves an item group from index
    *
-   * @function addItemGroups
-   * @param {object} params - Additional parameters for item group details
-   * @param {string} params.group_id - The group id you'd like to retrieve results for.
-   * @param {string} params.key - The index you'd like to to retrieve results from.
+   * @function getItemGroup
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} parameters.group_id - The group ID you'd like to retrieve results for
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/item_groups
    */
-  getItemGroup(params) {
+  getItemGroup(parameters) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${params.group_id}`);
+      requestUrl = createCatalogUrl(`item_groups/${parameters.group_id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**

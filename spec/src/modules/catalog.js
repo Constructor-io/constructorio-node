@@ -32,7 +32,16 @@ function createMockItem() {
   };
 }
 
-describe('ConstructorIO - Catalog', () => {
+function createMockItemGroup() {
+  const uuid = uuidv4();
+
+  return {
+    id: `group-${uuid}`,
+    name: `Group ${uuid}`,
+  };
+}
+
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -49,501 +58,618 @@ describe('ConstructorIO - Catalog', () => {
     fetchSpy = null;
   });
 
-  describe('addItem', () => {
-    const mockItem = createMockItem();
+  describe('Items', () => {
+    describe('addItem', () => {
+      const mockItem = createMockItem();
 
-    it('Should resolve when adding an item', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+      it('Should resolve when adding an item', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItem(mockItem).then(done);
       });
 
-      catalog.addItem(mockItem).then(done);
+      it('Should return error when adding an item that already exists', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      });
     });
 
-    it('Should return error when adding an item that already exists', () => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+    describe('addOrUpdateItem', () => {
+      const mockItem = createMockItem();
+      const mockItemWithID = createMockItem();
+
+      mockItemWithID.id = uuidv4();
+
+      it('Should resolve when adding an item', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItem(mockItem).then(done);
       });
 
-      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      it('Should resolve when updating an item', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItem(mockItem).then(done);
+      });
+
+      it('Should resolve when adding an item with an id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItem(mockItemWithID).then(done);
+      });
+
+      it('Should resolve when updating an item with an id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItem(mockItemWithID).then(done);
+      });
+
+      it('Should return error when updating an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when updating an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
+      });
     });
 
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
+    describe('removeItem', () => {
+      const mockItem = createMockItem();
+      const mockItemWithID = createMockItem();
 
-      invalidOptions.apiKey = 'abc123';
+      mockItemWithID.id = uuidv4();
 
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItem(mockItem).then(done);
       });
 
-      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      it('Should resolve when removing an item', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeItem(mockItem).then(done);
+      });
+
+      it('Should resolve when removing an item with an id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeItem(mockItemWithID).then(done);
+      });
+
+      it('Should return error when removing an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
+      });
     });
 
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
+    describe('modifyItem', () => {
+      const mockItem = createMockItem();
+      const mockItemDoesNotExist = createMockItem();
 
-      invalidOptions.apiToken = 'foo987';
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
+        catalog.addItem(mockItem).then(done);
       });
 
-      return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
+      it('Should resolve when modifying an item with updated item name', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockItem.new_item_name = `product-${uuidv4()}`;
+
+        catalog.modifyItem(mockItem).then(done);
+      });
+
+      it('Should return error when modifying an item that does not exist as item name has changed', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItem(mockItemDoesNotExist)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
+      });
+    });
+
+    describe('addItemBatch', () => {
+      const items = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+
+      it('Should resolve when adding multiple items', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+
+        catalog.addItemBatch({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should return error when adding multiple items with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding multiple items with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('addOrUpdateItemBatch', () => {
+      const items = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+
+      it('Should resolve when adding multiple items', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+
+        catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should resolve when updating multiple items', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+
+        catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should return error when updating items with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when updating items with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('removeItemBatch', () => {
+      const items = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+      const itemsDoNotExist = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemBatch({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should resolve when removing multiple items', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeItemBatch({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should return error when removing items that do not exist', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemBatch({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing items with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing items with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getItem', () => {
+      const mockItem = createMockItem();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockItem.id = uuidv4();
+
+        catalog.addItem(mockItem).then(done);
+      });
+
+      it('Should return a response when getting item by id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItem({ item_id: mockItem.id, section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('name').to.equal(mockItem.item_name);
+          expect(res).to.have.property('id').to.equal(mockItem.id);
+          expect(res).to.have.property('url').to.equal(mockItem.url);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return a response when getting items by section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItem({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('items').to.be.an('array');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when getting item by id that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItem({ item_id: uuidv4(), section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+      });
     });
   });
 
-  describe('addOrUpdateItem', () => {
-    const mockItem = createMockItem();
-    const mockItemWithID = createMockItem();
+  describe.only('Groups', () => {
+    describe('addItemGroups', () => {
+      const groups = [
+        createMockItemGroup(),
+        createMockItemGroup(),
+        createMockItemGroup(),
+      ];
 
-    mockItemWithID.id = uuidv4();
+      it('Should resolve when adding item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-    it('Should resolve when adding an item', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.addItemGroups({ item_groups: groups }).then(done);
       });
 
-      catalog.addOrUpdateItem(mockItem).then(done);
-    });
+      it('Should return error when adding an item group with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
 
-    it('Should resolve when updating an item', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemGroups({ item_groups: groups })).to.eventually.be.rejected;
       });
 
-      catalog.addOrUpdateItem(mockItem).then(done);
-    });
+      it('Should return error when adding an item group with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
 
-    it('Should resolve when adding an item with an id', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
+        invalidOptions.apiToken = 'foo987';
 
-      catalog.addOrUpdateItem(mockItemWithID).then(done);
-    });
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
 
-    it('Should resolve when updating an item with an id', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.addOrUpdateItem(mockItemWithID).then(done);
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
-    });
-  });
-
-  describe('removeItem', () => {
-    const mockItem = createMockItem();
-    const mockItemWithID = createMockItem();
-
-    mockItemWithID.id = uuidv4();
-
-    before((done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.addItem(mockItem).then(done);
-    });
-
-    it('Should resolve when removing an item', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.removeItem(mockItem).then(done);
-    });
-
-    it('Should resolve when removing an item with an id', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.removeItem(mockItemWithID).then(done);
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
-    });
-  });
-
-  describe('modifyItem', () => {
-    const mockItem = createMockItem();
-    const mockItemDoesNotExist = createMockItem();
-
-    before((done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.addItem(mockItem).then(done);
-    });
-
-    it('Should resolve when modifying an item with updated item name', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      mockItem.new_item_name = `product-${uuidv4()}`;
-
-      catalog.modifyItem(mockItem).then(done);
-    });
-
-    it('Should return error when modifying an item that does not exist as item name has changed', () => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
-    });
-
-    it('Should return error when modifying an item that does not exist', () => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.modifyItem(mockItemDoesNotExist)).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
-    });
-  });
-
-  describe('addItemBatch', () => {
-    const items = [
-      createMockItem(),
-      createMockItem(),
-      createMockItem(),
-    ];
-
-    it('Should resolve when adding multiple items', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-
-      catalog.addItemBatch({ items, section: 'Products' }).then(done);
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-  });
-
-  describe('addOrUpdateItemBatch', () => {
-    const items = [
-      createMockItem(),
-      createMockItem(),
-      createMockItem(),
-    ];
-
-    it('Should resolve when adding multiple items', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-
-      catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
-    });
-
-    it('Should resolve when updating multiple items', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-
-      catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-  });
-
-  describe('removeItemBatch', () => {
-    const items = [
-      createMockItem(),
-      createMockItem(),
-      createMockItem(),
-    ];
-    const itemsDoNotExist = [
-      createMockItem(),
-      createMockItem(),
-      createMockItem(),
-    ];
-
-    before((done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.addItemBatch({ items, section: 'Products' }).then(done);
-    });
-
-    it('Should resolve when removing multiple items', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.removeItemBatch({ items, section: 'Products' }).then(done);
-    });
-
-    it('Should return error when removing items that do not exist', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.removeItemBatch({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
-    });
-  });
-
-  describe('getItem', () => {
-    const mockItem = createMockItem();
-
-    before((done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      mockItem.id = uuidv4();
-
-      catalog.addItem(mockItem).then(done);
-    });
-
-    it('Should resolve when getting item by id', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      catalog.getItem({ item_id: mockItem.id, section: 'Products' }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('name').to.equal(mockItem.item_name);
-        expect(res).to.have.property('id').to.equal(mockItem.id);
-        expect(res).to.have.property('url').to.equal(mockItem.url);
-        expect(fetchSpy).to.have.been.called;
-        expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('_dt');
-        done();
+        return expect(catalog.addItemGroups({ item_groups: groups })).to.eventually.be.rejected;
       });
     });
 
-    it('Should resolve when getting items by section', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+    describe('getItemGroup', () => {
+      const mockItemGroup = createMockItemGroup();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
       });
 
-      catalog.getItem({ section: 'Products' }).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+      it('Should return a response when getting item group', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-        expect(res).to.have.property('items').to.be.an('array');
-        expect(fetchSpy).to.have.been.called;
-        expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('_dt');
-        done();
-      });
-    });
+        catalog.getItemGroup({ group_id: mockItemGroup.id }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-    it('Should return error when getting item by id that does not exist', () => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      return expect(catalog.getItem({ item_id: uuidv4(), section: 'Products' })).to.eventually.be.rejected;
-    });
-
-    it('Should return error when adding an item with an invalid API key', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiKey = 'abc123';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
+          expect(res).to.have.property('item_groups').to.be.an('array');
+          expect(res.item_groups[0]).to.have.property('name').to.equal(mockItemGroup.name);
+          expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
       });
 
-      return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
-    });
+      it('Should return a response with no items when getting item group that does not exist', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-    it('Should return error when adding an item with an invalid API token', () => {
-      const invalidOptions = cloneDeep(validOptions);
-
-      invalidOptions.apiToken = 'foo987';
-
-      const { catalog } = new ConstructorIO({
-        ...invalidOptions,
-        fetch: fetchSpy,
+        catalog.getItemGroup({ group_id: uuidv4() }).then((res) => {
+          expect(res).to.have.property('item_groups').to.be.an('array').of.length(0);
+          done();
+        });
       });
 
-      return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+      it('Should return error when getting item group with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting item group with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
+      });
     });
   });
 });
