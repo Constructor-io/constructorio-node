@@ -806,5 +806,65 @@ describe.only('ConstructorIO - Catalog', () => {
         return expect(catalog.modifyItemGroup(mockItemGroup)).to.eventually.be.rejected;
       });
     });
+
+    describe('removeItemGroups', () => {
+      const groups = [
+        createMockItemGroup(),
+        createMockItemGroup(),
+        createMockItemGroup(),
+      ];
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ item_groups: groups }).then(done);
+      });
+
+      it('Should return a response when removing multiple item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeItemGroups().then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('message').to.be.a('string');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when removing item groups with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing item groups with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemGroups()).to.eventually.be.rejected;
+      });
+    });
   });
 });

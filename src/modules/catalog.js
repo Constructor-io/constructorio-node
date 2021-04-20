@@ -535,35 +535,32 @@ class Catalog {
   }
 
   /**
-   * Remove all item groups from your index
-   TODO: Not sure what goes into params
+   * Remove all item groups from index
    *
    * @function removeItemGroups
-   * @param {object} params - Additional parameters for item group details
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeItemGroups(params) {
+  removeItemGroups() {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl('item_groups');
+      requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(params),
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
