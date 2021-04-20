@@ -7,11 +7,11 @@ const helpers = require('../utils/helpers');
 function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
   const {
     apiKey,
-    version,
+    // version, // TODO: Restore?
     serviceUrl,
   } = options;
   let queryParams = {
-    c: version,
+    // c: version, // TODO: Restore?
     ...additionalQueryParams,
   };
 
@@ -21,7 +21,7 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
   }
 
   queryParams.key = apiKey;
-  queryParams._dt = Date.now();
+  // queryParams._dt = Date.now(); // TODO: Restore?
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
@@ -802,22 +802,53 @@ class Catalog {
   }
 
   /**
-   * Remove all one way synonym(s)
+   * Remove all one way synonym
    *
    * @function removeOneWaySynonyms
    * @param {object} parameters - Additional parameters for synonym details
-   * @param {string} [parameters.phrase] - Parent phrase
+   * @param {string} parameters.phrase - Parent phrase
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
    */
-  removeOneWaySynonyms(parameters = {}) {
+  removeOneWaySynonym(parameters = {}) {
     const { phrase } = parameters;
-    const urlPath = phrase ? `one_way_synonyms/${phrase}` : 'one_way_synonyms';
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl(urlPath, this.options, {}, 'v2');
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Remove all one way synonyms
+   *
+   * @function removeOneWaySynonyms
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
+   */
+  removeOneWaySynonyms() {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createCatalogUrl('one_way_synonyms', this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
