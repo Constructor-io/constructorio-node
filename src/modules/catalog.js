@@ -350,17 +350,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page, section } = parameters;
-
-      // Pull number of results per page from parameters
-      if (numResultsPerPage) {
-        queryParams.num_results_per_page = numResultsPerPage;
-      }
-
-      // Pull page from parameters
-      if (page) {
-        queryParams.page = page;
-      }
+      const { section } = parameters;
 
       // Pull section from parameters
       if (section) {
@@ -521,7 +511,7 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  getItemGroups(parameters = {}) {
+  getItemGroups() {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -740,20 +730,6 @@ class Catalog {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page } = parameters;
-
-      // Pull number of results per page from parameters
-      if (numResultsPerPage) {
-        queryParams.num_results_per_page = numResultsPerPage;
-      }
-
-      // Pull page from parameters
-      if (page) {
-        queryParams.page = page;
-      }
-    }
-
     try {
       requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, queryParams, 'v2');
     } catch (e) {
@@ -786,7 +762,6 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
   getOneWaySynonyms(parameters = {}) {
-    const { phrase } = parameters;
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;

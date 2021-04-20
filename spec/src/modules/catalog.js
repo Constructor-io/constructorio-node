@@ -670,7 +670,7 @@ describe.only('ConstructorIO - Catalog', () => {
         catalog.getItemGroup({ group_id: mockItemGroup.id }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('item_groups').to.be.an('array');
+          expect(res).to.have.property('item_groups').to.be.an('array').to.have.length(1);
           expect(res.item_groups[0]).to.have.property('name').to.equal(mockItemGroup.name);
           expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
           expect(fetchSpy).to.have.been.called;
@@ -728,7 +728,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
+        catalog.addItemGroups({ item_groups: [mockItemGroup, mockItemGroup] }).then(done);
       });
 
       it('Should return a response when getting item groups', (done) => {
@@ -740,9 +740,7 @@ describe.only('ConstructorIO - Catalog', () => {
         catalog.getItemGroups().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('item_groups').to.be.an('array');
-          expect(res.item_groups[0]).to.have.property('name').to.equal(mockItemGroup.name);
-          expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
+          expect(res).to.have.property('item_groups').to.be.an('array').to.have.length.gt(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('_dt');
