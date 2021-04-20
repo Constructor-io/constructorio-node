@@ -435,7 +435,7 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  getItemGroup(parameters) {
+  getItemGroup(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -461,57 +461,59 @@ class Catalog {
   }
 
   /**
-   * Add multiple item groups to your index whilst updating existing ones (limit of 1000 items)
+   * Add multiple item groups to index whilst updating existing ones (limit of 1,000)
    *
    * @function addOrUpdateItemGroups
-   TODO: Coudln't find docs for this
-   * @param {object} params - Additional parameters for item group details
-   * @param {string} params.group_id - The group id you'd like to retrieve results for.
-   * @param {string} params.key - The index you'd like to to retrieve results from.
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {object[]} parameters.item_groups - A list of item groups
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOrUpdateItemGroups(params) {
+  addOrUpdateItemGroups(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('item_groups')}&force=1`;
+      requestUrl = `${createCatalogUrl('item_groups', this.options)}`;
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
-   * Modify an item group in your index
+   * Modify an item group in index
    *
    * @function modifyItemGroup
-   * @param {object} params - Additional parameters for item group details
-   * @param {string} [params.name] - Item group display name.
-   * @param {string} [params.parent_id] - Parent item group customer ID or null for root item groups.
-   * @param {object} [params.data] - JSON object with custom metadata attached with the item group.
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} parameters.group_id - The group ID to update
+   * @param {string} [parameters.name] - Item group display name
+   * @param {string} [parameters.parent_id] - Parent item group customer ID or null for root item groups
+   * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/item_groups
    */
-  modifyItemGroup(params) {
+  modifyItemGroup(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { id, ...rest } = params;
+    const { id, ...rest } = parameters;
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`);
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -519,14 +521,17 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**

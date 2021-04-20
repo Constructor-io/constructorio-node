@@ -671,5 +671,140 @@ describe.only('ConstructorIO - Catalog', () => {
         return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
       });
     });
+
+    describe('addOrUpdateItemGroups', () => {
+      const groups = [
+        createMockItemGroup(),
+        createMockItemGroup(),
+        createMockItemGroup(),
+      ];
+
+      it('Should return a response when adding multiple item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ item_groups: groups }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(groups.length);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(groups.length);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return a response when updating multiple item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ item_groups: groups }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(groups.length);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when updating multiple item groups with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when updating multiple item groups with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('modifyItemGroup', () => {
+      const mockItemGroup = createMockItemGroup();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
+      });
+
+      it('Should return a response when modifying an item group with updated item group name', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockItemGroup.name = `group-${uuidv4()}`;
+
+        catalog.modifyItemGroup(mockItemGroup).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('id').to.be.a('string').to.equal(mockItemGroup.id);
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockItemGroup.name);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when modifying an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItemGroup(mockItemGroup)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItemGroup(mockItemGroup)).to.eventually.be.rejected;
+      });
+    });
   });
 });
