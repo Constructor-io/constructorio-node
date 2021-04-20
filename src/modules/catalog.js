@@ -4,7 +4,7 @@ const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied path and options
-function createCatalogUrl(path, options, additionalQueryParams = {}) {
+function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
   const {
     apiKey,
     version,
@@ -26,7 +26,7 @@ function createCatalogUrl(path, options, additionalQueryParams = {}) {
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/v1/${path}?${queryString}`;
+  return `${serviceUrl}/${apiVersion}/${path}?${queryString}`;
 }
 
 // Create authorization header to be transmitted with requests
@@ -335,7 +335,7 @@ class Catalog {
   /**
    * Retrieves item(s) from index for the given section or specific item ID
    *
-   * @function getItem
+   * @function getItems
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.item_id - The ID of the item you'd like to retrieve
    * @param {string} parameters.section - The index section you'd like to retrieve results from
@@ -573,13 +573,13 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/add_synonyms
    */
-  addOneWaySynonym(params) {
+  addOneWaySynonym(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { phrase, ...rest } = params;
+    const { phrase, ...rest } = parameters;
 
     try {
-      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options);
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -603,19 +603,20 @@ class Catalog {
   /**
    * Modify a one way synonym for supplied parent phrase
    *
-   * @function addOneWaySynonym
-   * @param {object} params - Additional parameters for synonym details
-   * @param {string} [params.synonyms] -
+   * @function modifyOneWaySynonym
+   * @param {object} parameters - Additional parameters for synonym details
+   * @param {string} parameters.phrase - Parent phrase
+   * @param {string[]} parameters.child_phrases - Array of synonyms
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/one_way_synonyms/modify_synonyms
    */
-  modifyOneWaySynonym(params) {
+  modifyOneWaySynonym(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { phrase, ...rest } = params;
+    const { phrase, ...rest } = parameters;
 
     try {
-      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -623,7 +624,10 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -634,90 +638,56 @@ class Catalog {
   }
 
   /**
-   * Retrieve all one way synonyms
-   *
-   * @function getOneWaySynonyms
-   * @param {object} params - Additional parameters for synonym details
-   * @param {string} [params.group_id] - The synonym group you would like returned
-   * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
-   * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
-   * @param {number} [params.page] - The page of results to return. Defaults to 1
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
-   */
-  getOneWaySynonyms(params) {
-    const { num_results_per_page: numResultsPerPage, phrase, page } = params;
-    const qsParams = new URLSearchParams();
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-
-    if (numResultsPerPage) {
-      qsParams.append('num_results_per_page', numResultsPerPage);
-    }
-
-    if (phrase) {
-      qsParams.append('phrase', phrase);
-    }
-
-    if (page) {
-      qsParams.append('page', page);
-    }
-
-    try {
-      requestUrl = createCatalogUrl('item', this.options);
-      requestUrl = `${createCatalogUrl('one_way_synonyms', { basePath: 'v2' })}&${qsParams.toString()}`;
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    return fetch(requestUrl, {
-      method: 'GET',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Retrieve a one way synonym for supplied parent phrase
+   * Retrieve one way synonym(s)
    *
    * @function getOneWaySynonym
-  // TODO: No documentation for this onde
-   * @param {object} params - Additional parameters for synonym details
-   * @param {string} [params.group_id] - The synonym group you would like returned
-   * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
-   * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
-   * @param {number} [params.page] - The page of results to return. Defaults to 1
+   * @param {object} parameters - Additional parameters for synonym details
+   * @param {string} [parameters.phrase] - The phrase for which all synonym groups containing it will be returned
+   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
+   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getOneWaySynonym(params) {
+  getOneWaySynonym(parameters = {}) {
+    const { phrase } = parameters;
+    const urlPath = phrase ? `one_way_synonyms/${phrase}` : 'one_way_synonyms';
+    const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { phrase, ...rest } = params;
+
+    if (parameters) {
+      const { num_results_per_page: numResultsPerPage, phrase, page } = parameters;
+
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
+
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
+    }
 
     try {
-      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, { basePath: 'v2' });
+      requestUrl = `${createCatalogUrl(urlPath, this.options, queryParams, 'v2')}`;
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
