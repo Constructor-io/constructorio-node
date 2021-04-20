@@ -1007,7 +1007,7 @@ describe.only('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe.only('getOneWaySynonyms', () => {
+    describe('getOneWaySynonyms', () => {
       const mockOneWaySynonymPhrase = createMockOneWaySynonymPhrase();
 
       before((done) => {
@@ -1028,7 +1028,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getOneWaySynonym().then((res) => {
+        catalog.getOneWaySynonyms().then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(fetchSpy).to.have.been.called;
@@ -1044,7 +1044,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getOneWaySynonym({ phrase: mockOneWaySynonymPhrase }).then((res) => {
+        catalog.getOneWaySynonyms({ phrase: mockOneWaySynonymPhrase }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(fetchSpy).to.have.been.called;
@@ -1060,7 +1060,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getOneWaySynonym({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
+        return expect(catalog.getOneWaySynonyms({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
       });
 
       it('Should return error when getting one way synonym with an invalid API key', () => {
@@ -1073,7 +1073,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getOneWaySynonym()).to.eventually.be.rejected;
+        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
       });
 
       it('Should return error when getting one way synonym with an invalid API token', () => {
@@ -1086,7 +1086,67 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getOneWaySynonym()).to.eventually.be.rejected;
+        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
+      });
+    });
+
+    describe('removeOneWaySynonyms', () => {
+      const mockOneWaySynonymPhrase = createMockOneWaySynonymPhrase();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }).then(done);
+      });
+
+      it('Should resolve when removing one way synonyms', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeOneWaySynonyms().then(done);
+      });
+
+      it('Should resolve when removing one way synonyms with phrase', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeOneWaySynonyms({ phrase: mockOneWaySynonymPhrase }).then(done);
+      });
+
+      it('Should return error when removing one way synonyms with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing one way synonyms with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejected;
       });
     });
   });

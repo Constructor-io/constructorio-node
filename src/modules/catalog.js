@@ -640,15 +640,15 @@ class Catalog {
   /**
    * Retrieve one way synonym(s)
    *
-   * @function getOneWaySynonym
+   * @function getOneWaySynonyms
    * @param {object} parameters - Additional parameters for synonym details
-   * @param {string} [parameters.phrase] - The phrase for which all synonym groups containing it will be returned
+   * @param {string} parameters.phrase - Parent phrase
    * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
-  getOneWaySynonym(parameters = {}) {
+  getOneWaySynonyms(parameters = {}) {
     const { phrase } = parameters;
     const urlPath = phrase ? `one_way_synonyms/${phrase}` : 'one_way_synonyms';
     const queryParams = {};
@@ -656,7 +656,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, phrase, page } = parameters;
+      const { num_results_per_page: numResultsPerPage, page } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPage) {
@@ -691,29 +691,32 @@ class Catalog {
   }
 
   /**
-   * Remove all one way synonyms
+   * Remove all one way synonym(s)
    *
    * @function removeOneWaySynonyms
-  // TODO: Not sure what goes into the params
-   * @param {object} params - Additional parameters for synonym details
-   * @param {string} [params.synonyms] -
+   * @param {object} parameters - Additional parameters for synonym details
+   * @param {string} [parameters.phrase] - Parent phrase
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
    */
-  removeOneWaySynonyms(params) {
+  removeOneWaySynonyms(parameters = {}) {
+    const { phrase } = parameters;
+    const urlPath = phrase ? `one_way_synonyms/${phrase}` : 'one_way_synonyms';
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl('one_way_synonyms', { basePath: 'v2' });
+      requestUrl = createCatalogUrl(urlPath, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
