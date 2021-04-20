@@ -587,7 +587,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItems({ item_id: mockItem.id })).to.eventually.be.rejected;
+        return expect(catalog.getItems({ section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding an item with an invalid API token', () => {
@@ -600,7 +600,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItems({ item_id: mockItem.id })).to.eventually.be.rejected;
+        return expect(catalog.getItems({ section: 'Products' })).to.eventually.be.rejected;
       });
     });
   });
@@ -716,6 +716,64 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getItemGroups', () => {
+      const mockItemGroup = createMockItemGroup();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
+      });
+
+      it('Should return a response when getting item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItemGroups().then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('array');
+          expect(res.item_groups[0]).to.have.property('name').to.equal(mockItemGroup.name);
+          expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when getting item groups with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItemGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting item groups with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItemGroups()).to.eventually.be.rejected;
       });
     });
 
@@ -1048,7 +1106,7 @@ describe.only('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('getOneWaySynonyms', () => {
+    describe('getOneWaySynonym', () => {
       const mockOneWaySynonymPhrase = createMockOneWaySynonymPhrase();
 
       before((done) => {
@@ -1063,29 +1121,13 @@ describe.only('ConstructorIO - Catalog', () => {
         }).then(done);
       });
 
-      it('Should return a response when getting one way synonym', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.getOneWaySynonyms().then(() => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
-          expect(requestedUrlParams).to.have.property('_dt');
-          done();
-        });
-      });
-
       it('Should return a response when getting one way synonyms with phrase', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.getOneWaySynonyms({ phrase: mockOneWaySynonymPhrase }).then(() => {
+        catalog.getOneWaySynonym({ phrase: mockOneWaySynonymPhrase }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(fetchSpy).to.have.been.called;
@@ -1101,7 +1143,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getOneWaySynonyms({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
+        return expect(catalog.getOneWaySynonym({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
       });
 
       it('Should return error when getting one way synonym with an invalid API key', () => {
@@ -1114,10 +1156,68 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
+        return expect(catalog.getOneWaySynonym({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
       });
 
       it('Should return error when getting one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getOneWaySynonym({ phrase: createMockOneWaySynonymPhrase() })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getOneWaySynonyms', () => {
+      const mockOneWaySynonymPhrase = createMockOneWaySynonymPhrase();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }).then(done);
+      });
+
+      it('Should return a response when getting one way synonyms', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getOneWaySynonyms().then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when getting one way synonyms with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting one way synonyms with an invalid API token', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiToken = 'foo987';

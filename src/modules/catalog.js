@@ -62,7 +62,7 @@ class Catalog {
    * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
    * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own ID's of the items to more easily access them in other API calls
    * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
-   * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io.
+   * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
    * @param {object[]} [parameters.variations] - List of this item's variations
    * @returns {Promise}
@@ -515,6 +515,38 @@ class Catalog {
   }
 
   /**
+   * Retrieves item groups from index
+   *
+   * @function getItemGroups
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/item_groups
+   */
+  getItemGroups(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
    * Add multiple item groups to index whilst updating existing ones (limit of 1,000)
    *
    * @function addOrUpdateItemGroups
@@ -528,7 +560,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('item_groups', this.options)}`;
+      requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -692,9 +724,9 @@ class Catalog {
   }
 
   /**
-   * Retrieve one way synonym(s)
+   * Retrieve one way synonym
    *
-   * @function getOneWaySynonyms
+   * @function getOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
    * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
@@ -702,9 +734,8 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
-  getOneWaySynonyms(parameters = {}) {
+  getOneWaySynonym(parameters = {}) {
     const { phrase } = parameters;
-    const urlPath = phrase ? `one_way_synonyms/${phrase}` : 'one_way_synonyms';
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -724,7 +755,58 @@ class Catalog {
     }
 
     try {
-      requestUrl = `${createCatalogUrl(urlPath, this.options, queryParams, 'v2')}`;
+      requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
+   * Retrieve one way synonyms
+   *
+   * @function getOneWaySynonyms
+   * @param {object} [parameters] - Additional parameters for synonym details
+   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
+   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
+   */
+  getOneWaySynonyms(parameters = {}) {
+    const { phrase } = parameters;
+    const queryParams = {};
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    if (parameters) {
+      const { num_results_per_page: numResultsPerPage, page } = parameters;
+
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
+
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
+    }
+
+    try {
+      requestUrl = createCatalogUrl('one_way_synonyms', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
