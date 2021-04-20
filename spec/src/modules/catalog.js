@@ -9,6 +9,7 @@ const nodeFetch = require('node-fetch');
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../test/constructorio');
+const helpers = require('../../mocha.helpers');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -457,6 +458,92 @@ describe('ConstructorIO - Catalog', () => {
       });
 
       return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+    });
+  });
+
+  describe.only('getItem', () => {
+    const mockItem = createMockItem();
+
+    before((done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      mockItem.id = uuidv4();
+
+      catalog.addItem(mockItem).then(done);
+    });
+
+    it('Should resolve when getting item by ID', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.getItem({ item_id: mockItem.id, section: 'Products' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('name').to.equal(mockItem.item_name);
+        expect(res).to.have.property('id').to.equal(mockItem.id);
+        expect(res).to.have.property('url').to.equal(mockItem.url);
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('_dt');
+        done();
+      });
+    });
+
+    it('Should resolve when getting items by section', (done) => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      catalog.getItem({ section: 'Products' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('items').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('_dt');
+        done();
+      });
+    });
+
+    it('Should return error when getting item by ID that does not exist', () => {
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.getItem({ item_id: uuidv4(), section: 'Products' })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API key', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiKey = 'abc123';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+    });
+
+    it('Should return error when adding an item with an invalid API token', () => {
+      const invalidOptions = cloneDeep(validOptions);
+
+      invalidOptions.apiToken = 'foo987';
+
+      const { catalog } = new ConstructorIO({
+        ...invalidOptions,
+        fetch: fetchSpy,
+      });
+
+      return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
     });
   });
 });

@@ -4,13 +4,16 @@ const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied path and options
-function createCatalogUrl(path, options) {
+function createCatalogUrl(path, options, additionalQueryParams = {}) {
   const {
     apiKey,
     version,
     serviceUrl,
   } = options;
-  let queryParams = { c: version };
+  let queryParams = {
+    c: version,
+    ...additionalQueryParams,
+  };
 
   // Validate path is provided
   if (!path || typeof path !== 'string') {
@@ -330,56 +333,62 @@ class Catalog {
   }
 
   /**
-   * Retrieves item(s) from your index for the given section or specific item id
+   * Retrieves item(s) from index for the given section or specific item ID
    *
    * @function getItem
    * @param {object} params - Additional parameters for item details
-   TODO: This is a URL parameter
-   * @param {string} params.id - The id of the item you'd like to retrieve
-   * @param {string} params.key - The index you'd like to to retrieve results from
+   * @param {string} params.item_id - The ID of the item you'd like to retrieve
    * @param {string} params.section - The index section you'd like to retrieve results from
-   * @param {string[]} [params.id] - Id(s) of items to return
    * @param {number} [params.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
-   * @param {number} [params.page] - The page of results to return. Defaults to 1.
+   * @param {number} [params.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/items/get_items
    */
   getItem(params) {
-    const { num_results_per_page: numResultsPerPage, page, section, item_id: itemId } = params;
+    const { item_id: itemId } = params;
     const urlPath = itemId ? `item/${itemId}` : 'item';
-    const qsParams = new URLSearchParams();
+    const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (numResultsPerPage) {
-      qsParams.append('num_results_per_page', numResultsPerPage);
-    }
+    if (params) {
+      const { num_results_per_page: numResultsPerPage, page, section } = params;
 
-    if (page) {
-      qsParams.append('page', page);
-    }
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
 
-    if (section) {
-      qsParams.append('section', section);
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
+
+      // Pull section from parameters
+      if (section) {
+        queryParams.section = section;
+      }
     }
 
     try {
-      requestUrl = `${createCatalogUrl(urlPath)}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl(urlPath, this.options, queryParams)}`;
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
