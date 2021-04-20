@@ -311,7 +311,7 @@ describe.only('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('addItemBatch', () => {
+    describe('addItemsBatch', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -325,7 +325,7 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
 
-        catalog.addItemBatch({ items, section: 'Products' }).then(done);
+        catalog.addItemsBatch({ items, section: 'Products' }).then(done);
       });
 
       it('Should return error when adding multiple items with an invalid API key', () => {
@@ -338,7 +338,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding multiple items with an invalid API token', () => {
@@ -351,11 +351,11 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
     });
 
-    describe('addOrUpdateItemBatch', () => {
+    describe('addOrUpdateItemsBatch', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -369,7 +369,7 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
 
-        catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+        catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
       });
 
       it('Should resolve when updating multiple items', (done) => {
@@ -379,7 +379,7 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
 
-        catalog.addOrUpdateItemBatch({ items, section: 'Products' }).then(done);
+        catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
       });
 
       it('Should return error when updating items with an invalid API key', () => {
@@ -392,7 +392,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating items with an invalid API token', () => {
@@ -405,11 +405,11 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
     });
 
-    describe('removeItemBatch', () => {
+    describe('removeItemsBatch', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -427,7 +427,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemBatch({ items, section: 'Products' }).then(done);
+        catalog.addItemsBatch({ items, section: 'Products' }).then(done);
       });
 
       it('Should resolve when removing multiple items', (done) => {
@@ -436,7 +436,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.removeItemBatch({ items, section: 'Products' }).then(done);
+        catalog.removeItemsBatch({ items, section: 'Products' }).then(done);
       });
 
       it('Should return error when removing items that do not exist', () => {
@@ -447,7 +447,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeItemBatch({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.removeItemsBatch({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing items with an invalid API key', () => {
@@ -460,7 +460,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.removeItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing items with an invalid API token', () => {
@@ -473,7 +473,7 @@ describe.only('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeItemBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.removeItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
     });
 
@@ -503,23 +503,6 @@ describe.only('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.equal(mockItem.item_name);
           expect(res).to.have.property('id').to.equal(mockItem.id);
           expect(res).to.have.property('url').to.equal(mockItem.url);
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
-          expect(requestedUrlParams).to.have.property('_dt');
-          done();
-        });
-      });
-
-      it('Should return a response when getting items by section', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.getItem({ section: 'Products' }).then((res) => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-          expect(res).to.have.property('items').to.be.an('array');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('_dt');
@@ -560,6 +543,64 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getItems', () => {
+      const mockItem = createMockItem();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockItem.id = uuidv4();
+
+        catalog.addItem(mockItem).then(done);
+      });
+
+      it('Should return a response when getting items by section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItems({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('items').to.be.an('array');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('_dt');
+          done();
+        });
+      });
+
+      it('Should return error when adding an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItems({ item_id: mockItem.id })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItems({ item_id: mockItem.id })).to.eventually.be.rejected;
       });
     });
   });

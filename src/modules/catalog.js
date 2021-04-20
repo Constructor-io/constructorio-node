@@ -227,14 +227,14 @@ class Catalog {
   /**
    * Add multiple items to index (limit of 1,000)
    *
-   * @function addItemBatch
+   * @function addItemsBatch
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_items
    */
-  addItemBatch(parameters = {}) {
+  addItemsBatch(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -263,14 +263,14 @@ class Catalog {
   /**
    * Add multiple items to index whilst updating existing ones (limit of 1,000)
    *
-   * @function addOrUpdateItemBatch
+   * @function addOrUpdateItemsBatch
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
    */
-  addOrUpdateItemBatch(parameters = {}) {
+  addOrUpdateItemsBatch(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -299,14 +299,14 @@ class Catalog {
   /**
    * Remove multiple items from your index (limit of 1,000)
    *
-   * @function removeItemBatch
+   * @function removeItemsBatch
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_remove_items
    */
-  removeItemBatch(parameters = {}) {
+  removeItemsBatch(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -335,10 +335,9 @@ class Catalog {
   /**
    * Retrieves item(s) from index for the given section or specific item ID
    *
-   * @function getItems
+   * @function getItem
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.item_id - The ID of the item you'd like to retrieve
-   * @param {string} parameters.section - The index section you'd like to retrieve results from
    * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
@@ -346,7 +345,6 @@ class Catalog {
    */
   getItem(parameters = {}) {
     const { item_id: itemId } = parameters;
-    const urlPath = itemId ? `item/${itemId}` : 'item';
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -371,7 +369,63 @@ class Catalog {
     }
 
     try {
-      requestUrl = `${createCatalogUrl(urlPath, this.options, queryParams)}`;
+      requestUrl = createCatalogUrl(`item/${itemId}`, this.options, queryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
+   * Retrieves items from index for the given section
+   *
+   * @function getItems
+   * @param {object} parameters - Additional parameters for item details
+   * @param {string} parameters.section - The index section you'd like to retrieve results from
+   * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
+   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/items/get_items
+   */
+  getItems(parameters = {}) {
+    const queryParams = {};
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    if (parameters) {
+      const { num_results_per_page: numResultsPerPage, page, section } = parameters;
+
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
+
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
+
+      // Pull section from parameters
+      if (section) {
+        queryParams.section = section;
+      }
+    }
+
+    try {
+      requestUrl = createCatalogUrl('item', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
