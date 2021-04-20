@@ -121,7 +121,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.addOrUpdateItem(mockItem).then(done);
     });
 
-    it('Should resolve when adding an item with an ID', (done) => {
+    it('Should resolve when adding an item with an id', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -130,7 +130,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.addOrUpdateItem(mockItemWithID).then(done);
     });
 
-    it('Should resolve when updating an item with an ID', (done) => {
+    it('Should resolve when updating an item with an id', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -190,7 +190,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.removeItem(mockItem).then(done);
     });
 
-    it('Should resolve when removing an item with an ID', (done) => {
+    it('Should resolve when removing an item with an id', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -461,7 +461,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('getItem', () => {
+  describe('getItem', () => {
     const mockItem = createMockItem();
 
     before((done) => {
@@ -475,7 +475,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.addItem(mockItem).then(done);
     });
 
-    it('Should resolve when getting item by ID', (done) => {
+    it('Should resolve when getting item by id', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -511,7 +511,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    it('Should return error when getting item by ID that does not exist', () => {
+    it('Should return error when getting item by id that does not exist', () => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
