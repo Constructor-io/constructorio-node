@@ -41,6 +41,12 @@ function createMockItemGroup() {
   };
 }
 
+function createMockOneWaySynonymPhrase() {
+  const uuid = uuidv4();
+
+  return `phrase-${uuid}`;
+}
+
 describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
@@ -558,7 +564,7 @@ describe.only('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('Groups', () => {
+  describe('Groups', () => {
     describe('addItemGroups', () => {
       const groups = [
         createMockItemGroup(),
@@ -864,6 +870,68 @@ describe.only('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeItemGroups()).to.eventually.be.rejected;
+      });
+    });
+  });
+
+  describe('One Way Synonyms', () => {
+    describe.only('addOneWaySynonym', () => {
+      const mockOneWaySynonymPhrase = createMockOneWaySynonymPhrase();
+
+      it('Should resolve when adding a one way synonym', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [createMockOneWaySynonymPhrase()],
+        }).then(done);
+      });
+
+      it('Should return error when adding a one way synonym that already exists', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [createMockOneWaySynonymPhrase()],
+        })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding a one way synonym with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [createMockOneWaySynonymPhrase()],
+        })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding a one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [createMockOneWaySynonymPhrase()],
+        })).to.eventually.be.rejected;
       });
     });
   });

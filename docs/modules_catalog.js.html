@@ -1,4 +1,55 @@
-/* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>modules/catalog.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ConstructorIO.html">ConstructorIO</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-autocomplete.html">autocomplete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-autocomplete.html#~getAutocompleteResults">getAutocompleteResults</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-browse.html">browse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-browse.html#~getBrowseResults">getBrowseResults</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-catalog.html">catalog</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addItem">addItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addItemBatch">addItemBatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addItemGroups">addItemGroups</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOneWaySynonym">addOneWaySynonym</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOneWaySynonym">addOneWaySynonym</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOrUpdateItem">addOrUpdateItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOrUpdateItem">addOrUpdateItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOrUpdateItemBatch">addOrUpdateItemBatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addOrUpdateItemGroups">addOrUpdateItemGroups</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addRedirectRuleTODO:Wheretodefineredirectobject">addRedirectRule
+   TODO: Where to define redirect object</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~addSynonymGroup//TODO:Notsurewhatgoesintotheparams">addSynonymGroup
+  // TODO: Not sure what goes into the params</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getItem">getItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getItemGroup">getItemGroup</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getOneWaySynonym//TODO:Nodocumentationforthisonde">getOneWaySynonym
+  // TODO: No documentation for this onde</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getOneWaySynonyms">getOneWaySynonyms</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getRedirectRule">getRedirectRule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getRedirectRules">getRedirectRules</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getSynonymGroup">getSynonymGroup</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~getSynonymGroups">getSynonymGroups</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~modifyItem">modifyItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~modifyItemGroup">modifyItemGroup</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~modifyRedirectRuleTODO:Whatgoesintoparams?">modifyRedirectRule
+   TODO: What goes into params?</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~modifySynonymGroup//TODO:Notsurewhatgoesintotheparams">modifySynonymGroup
+  // TODO: Not sure what goes into the params</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~removeItemBatch">removeItemBatch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~removeItemGroups">removeItemGroups</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~removeOneWaySynonyms//TODO:Notsurewhatgoesintotheparams">removeOneWaySynonyms
+  // TODO: Not sure what goes into the params</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~removeSynonymGroup">removeSynonymGroup</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~removeSynonymGroups">removeSynonymGroups</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~replaceCatalogTODO:Whatgoesintoparams?">replaceCatalog
+   TODO: What goes into params?</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~updateCatalogTODO:Whatgoesintoparams?">updateCatalog
+   TODO: What goes into params?</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~updateRedirectRuleTODO:Whatgoesintoparams?">updateRedirectRule
+   TODO: What goes into params?</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-catalog.html#~updateRedirectRuleTODO:Whatgoesintoparams?">updateRedirectRule
+   TODO: What goes into params?</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-recommendations.html">recommendations</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-recommendations.html#~getRecommendations">getRecommendations</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-search.html">search</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-search.html#~getSearchResults">getSearchResults</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">modules/catalog.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
@@ -70,7 +121,7 @@ class Catalog {
    */
   addItem(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
@@ -116,10 +167,10 @@ class Catalog {
    */
   addOrUpdateItem(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('item', this.options)}&force=1`;
+      requestUrl = `${createCatalogUrl('item', this.options)}&amp;force=1`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -153,7 +204,7 @@ class Catalog {
    */
   removeItem(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
@@ -200,7 +251,7 @@ class Catalog {
    */
   modifyItem(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
@@ -236,7 +287,7 @@ class Catalog {
    */
   addItemBatch(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('batch_items', this.options);
@@ -272,10 +323,10 @@ class Catalog {
    */
   addOrUpdateItemBatch(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('batch_items', this.options)}&force=1`;
+      requestUrl = `${createCatalogUrl('batch_items', this.options)}&amp;force=1`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -308,7 +359,7 @@ class Catalog {
    */
   removeItemBatch(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('batch_items', this.options);
@@ -349,7 +400,7 @@ class Catalog {
     const urlPath = itemId ? `item/${itemId}` : 'item';
     const queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPage, page, section } = parameters;
@@ -402,7 +453,7 @@ class Catalog {
    */
   addItemGroups(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
@@ -437,7 +488,7 @@ class Catalog {
    */
   getItemGroup(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl(`item_groups/${parameters.group_id}`, this.options);
@@ -471,7 +522,7 @@ class Catalog {
    */
   addOrUpdateItemGroups(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = `${createCatalogUrl('item_groups', this.options)}`;
@@ -509,7 +560,7 @@ class Catalog {
    */
   modifyItemGroup(parameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { id, ...rest } = parameters;
 
     try {
@@ -543,7 +594,7 @@ class Catalog {
    */
   removeItemGroups() {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
@@ -575,7 +626,7 @@ class Catalog {
    */
   addOneWaySynonym(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { phrase, ...rest } = params;
 
     try {
@@ -611,7 +662,7 @@ class Catalog {
    */
   modifyOneWaySynonym(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { phrase, ...rest } = params;
 
     try {
@@ -649,7 +700,7 @@ class Catalog {
     const { num_results_per_page: numResultsPerPage, phrase, page } = params;
     const qsParams = new URLSearchParams();
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     if (numResultsPerPage) {
       qsParams.append('num_results_per_page', numResultsPerPage);
@@ -665,7 +716,7 @@ class Catalog {
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
-      requestUrl = `${createCatalogUrl('one_way_synonyms', { basePath: 'v2' })}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('one_way_synonyms', { basePath: 'v2' })}&amp;${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -698,7 +749,7 @@ class Catalog {
    */
   getOneWaySynonym(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { phrase, ...rest } = params;
 
     try {
@@ -732,7 +783,7 @@ class Catalog {
    */
   removeOneWaySynonyms(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('one_way_synonyms', { basePath: 'v2' });
@@ -765,7 +816,7 @@ class Catalog {
    */
   addSynonymGroup(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('synonym_groups');
@@ -798,7 +849,7 @@ class Catalog {
    */
   modifySynonymGroup(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -836,7 +887,7 @@ class Catalog {
     const { num_results_per_page: numResultsPerPage, phrase, page } = params;
     const qsParams = new URLSearchParams();
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     if (numResultsPerPage) {
       qsParams.append('num_results_per_page', numResultsPerPage);
@@ -851,7 +902,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = `${createCatalogUrl('synonym_groups', { appendVersionParameter: false })}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('synonym_groups', { appendVersionParameter: false })}&amp;${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -880,7 +931,7 @@ class Catalog {
    */
   getSynonymGroup(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -915,7 +966,7 @@ class Catalog {
    */
   removeSynonymGroups(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('synonym_groups');
@@ -947,7 +998,7 @@ class Catalog {
    */
   removeSynonymGroup(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { group_id: groupId, ...rest } = params;
 
     try {
@@ -981,7 +1032,7 @@ class Catalog {
    */
   addRedirectRule(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
       requestUrl = createCatalogUrl('redirect_rules');
@@ -1019,7 +1070,7 @@ class Catalog {
     const { num_results_per_page: numResultsPerPage, page, query, status } = params;
     const qsParams = new URLSearchParams();
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     if (numResultsPerPage) {
       qsParams.append('num_results_per_page', numResultsPerPage);
@@ -1038,7 +1089,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = `${createCatalogUrl('redirect_rules', { appendVersionParameter: false })}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('redirect_rules', { appendVersionParameter: false })}&amp;${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1068,7 +1119,7 @@ class Catalog {
    */
   getRedirectRule(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1102,7 +1153,7 @@ class Catalog {
    */
   modifyRedirectRule(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1136,7 +1187,7 @@ class Catalog {
    */
   updateRedirectRule(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1170,7 +1221,7 @@ class Catalog {
    */
   removeRedirectRule(params) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
     const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
@@ -1243,10 +1294,10 @@ class Catalog {
     }
 
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('catalog')}&amp;${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1319,10 +1370,10 @@ class Catalog {
     }
 
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const fetch = (this.options &amp;&amp; this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('catalog')}&amp;${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1346,3 +1397,22 @@ class Catalog {
 }
 
 module.exports = Catalog;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon Apr 19 2021 20:36:42 GMT-0600 (Mountain Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
