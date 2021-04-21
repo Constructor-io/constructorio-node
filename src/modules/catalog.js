@@ -1,6 +1,8 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
+const FormData = require('form-data');
+const fs = require('fs');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied path and options
@@ -34,6 +36,22 @@ function createAuthHeader(options) {
   const { apiToken } = options;
 
   return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
+}
+
+// Convert a read stream to buffer
+function convertToBuffer(stream) {
+  return new Promise((resolve, reject) => {
+    let buffer = '';
+    stream.on('data', (chunk) => {
+      buffer += chunk;
+    });
+    stream.on('end', () => {
+      resolve(buffer);
+    });
+    stream.on('error', (err) => {
+      reject(err);
+    });
+  });
 }
 
 /**
@@ -1311,57 +1329,66 @@ class Catalog {
    * Send full catalogs to replace the current catalog
    *
    * @function replaceCatalog
-   TODO: What goes into params?
    * @param {object} params - Additional parameters for catalog details
    * @param {string} params.section - The section that you want to update
    * @param {string} [params.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
    * @param {boolean} [params.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
-   TODO: CSV File type?
    * @param {file} [params.items] - The CSV file with all new items
    * @param {file} [params.variations] - The CSV file with all new variations
    * @param {file} [params.item_groups] - The CSV file with all new item_groups
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  replaceCatalog(params) {
-    // Read Streams
-    const { items, variations, item_groups: itemGroups, section = 'Products' } = params;
+  async replaceCatalog(params) {
+    const { section = 'Products' } = params;
+    let { items, variations, item_groups: itemGroups } = params;
     const qsParams = new URLSearchParams();
-    const formData = {};
+    const formData = new FormData();
+
+    try {
+      if (items instanceof fs.ReadStream) {
+        items = await convertToBuffer(items);
+      }
+
+      if (variations instanceof fs.ReadStream) {
+        variations = await convertToBuffer(variations);
+      }
+
+      if (itemGroups instanceof fs.ReadStream) {
+        itemGroups = await convertToBuffer(itemGroups);
+      }
+
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
     if (section) {
       qsParams.append('section', section);
     }
 
     if (items) {
-      formData.items = {
-        buffer: items,
-        content_type: 'application/octet-stream',
+      formData.append('items', items, {
         filename: 'items.csv',
-      };
+      });
     }
 
     if (variations) {
-      formData.variations = {
-        buffer: variations,
-        content_type: 'application/octet-stream',
+      formData.append('variations', variations, {
         filename: 'variations.csv',
-      };
+      });
     }
 
     if (itemGroups) {
-      formData.item_groups = {
-        buffer: itemGroups,
-        content_type: 'application/octet-stream',
+      formData.append('item_groups', itemGroups, {
         filename: 'item_groups.csv',
-      };
+      });
     }
 
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('catalog', this.options)}&${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1369,7 +1396,7 @@ class Catalog {
     try {
       return fetch(requestUrl, {
         method: 'PUT',
-        body: JSON.stringify(params),
+        body: formData,
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
@@ -1381,71 +1408,81 @@ class Catalog {
     } catch (error) {
       return Promise.reject(error);
     }
+
+
   }
 
   /**
    * Send deltas to update the current catalog
    *
    * @function updateCatalog
-   TODO: What goes into params?
    * @param {object} params - Additional parameters for catalog details
    * @param {string} params.section - The section that you want to update
    * @param {string} [params.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
    * @param {boolean} [params.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
-   TODO: CSV File type?
    * @param {file} [params.items] - The CSV file with all new items
    * @param {file} [params.variations] - The CSV file with all new variations
    * @param {file} [params.item_groups] - The CSV file with all new item_groups
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  updateCatalog(params) {
-    // Read Streams
-    const { items, variations, item_groups: itemGroups, section = 'Products' } = params;
+  async updateCatalog(params) {
+    const { section = 'Products' } = params;
+    let { items, variations, item_groups: itemGroups } = params;
     const qsParams = new URLSearchParams();
-    const formData = {};
+    const formData = new FormData();
+
+    try {
+      if (items instanceof fs.ReadStream) {
+        items = await convertToBuffer(items);
+      }
+
+      if (variations instanceof fs.ReadStream) {
+        variations = await convertToBuffer(variations);
+      }
+
+      if (itemGroups instanceof fs.ReadStream) {
+        itemGroups = await convertToBuffer(itemGroups);
+      }
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
     if (section) {
       qsParams.append('section', section);
     }
 
     if (items) {
-      formData.items = {
-        buffer: items,
-        content_type: 'application/octet-stream',
+      formData.append('items', items, {
         filename: 'items.csv',
-      };
+      });
     }
 
     if (variations) {
-      formData.variations = {
-        buffer: variations,
-        content_type: 'application/octet-stream',
+      formData.append('variations', variations, {
         filename: 'variations.csv',
-      };
+      });
     }
 
     if (itemGroups) {
-      formData.item_groups = {
-        buffer: itemGroups,
-        content_type: 'application/octet-stream',
+      formData.append('item_groups', itemGroups, {
         filename: 'item_groups.csv',
-      };
+      });
     }
 
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = `${createCatalogUrl('catalog')}&${qsParams.toString()}`;
+      requestUrl = `${createCatalogUrl('catalog', this.options)}&${qsParams.toString()}`;
     } catch (e) {
       return Promise.reject(e);
     }
 
     try {
       return fetch(requestUrl, {
-        method: 'PUT',
-        body: JSON.stringify(params),
+        method: 'PATCH',
+        body: formData,
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
