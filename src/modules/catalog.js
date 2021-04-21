@@ -454,6 +454,44 @@ class Catalog {
   }
 
   /**
+   * Add item group to index
+   *
+   * @function addItemGroup
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} parameters.id - Item group ID
+   * @param {string} parameters.name - Item group name
+   * @param {string} [parameters.parent_id] - Item group parent ID
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/item_groups
+   */
+  addItemGroup(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { id, ...rest } = parameters;
+
+    try {
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
    * Add item groups to index (limit of 1,000)
    *
    * @function addItemGroups

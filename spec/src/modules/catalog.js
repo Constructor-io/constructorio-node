@@ -610,6 +610,45 @@ describe('ConstructorIO - Catalog', () => {
   });
 
   describe('Groups', () => {
+    describe.only('addItemGroup', () => {
+      const group = createMockItemGroup();
+
+      it('Should resolve when adding item group', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroup(group).then(done);
+      });
+
+      it('Should return error when adding an item group with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemGroup(group)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding an item group with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemGroup(group)).to.eventually.be.rejected;
+      });
+    });
+
     describe('addItemGroups', () => {
       const groups = [
         createMockItemGroup(),
@@ -1337,7 +1376,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
   });
-  describe.only('replaceCatalog', function replaceCatalog() {
+  describe('replaceCatalog', function replaceCatalog() {
     this.timeout(3000);
 
     beforeEach((done) => {
@@ -1508,7 +1547,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('updateCatalog', function updateCatalog() {
+  describe('updateCatalog', function updateCatalog() {
     this.timeout(3000);
 
     beforeEach((done) => {
