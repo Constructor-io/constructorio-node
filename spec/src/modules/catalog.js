@@ -1383,7 +1383,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('Synonym Groups', () => {
+  describe('Synonym Groups', () => {
     describe('addSynonymGroup', () => {
       const mockSynonym = createMockSynonym();
 
@@ -1738,14 +1738,15 @@ describe('ConstructorIO - Catalog', () => {
   });
 
   describe('replaceCatalog', function replaceCatalog() {
-    this.timeout(3000);
+    // Ensure Mocha doesn't time out waiting for operation to complete
+    this.timeout(10000);
 
-    beforeEach((done) => {
+    afterEach((done) => {
       // Wait between each test to prevent throttle error from server
       setTimeout(done, 1000);
     });
 
-    it('should replace a catalog of items using streams', (done) => {
+    it('Should replace a catalog of items using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1761,7 +1762,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of items using buffers', (done) => {
+    it('Should replace a catalog of items using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1777,7 +1778,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of variations using streams', (done) => {
+    it('Should replace a catalog of variations using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1793,7 +1794,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of variations using buffers', (done) => {
+    it('Should replace a catalog of variations using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1809,7 +1810,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of item groups using streams', (done) => {
+    it('Should replace a catalog of item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1825,7 +1826,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of item groups using buffers', (done) => {
+    it('Should replace a catalog of item groups using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1841,7 +1842,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of item groups using streams', (done) => {
+    it('Should replace a catalog of item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1857,7 +1858,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of items, variations, and item groups using buffers', (done) => {
+    it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1865,13 +1866,10 @@ describe('ConstructorIO - Catalog', () => {
 
       const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
       const itemsBuffer = fs.readFileSync(itemsPath);
-
       const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
       const variationsBuffer = fs.readFileSync(variationsPath);
-
       const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
       const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
-
       const data = {
         items: itemsBuffer,
         variations: variationsBuffer,
@@ -1882,7 +1880,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.replaceCatalog(data).then(done);
     });
 
-    it('should replace a catalog of items, variations, and item groups using streams', (done) => {
+    it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1890,13 +1888,10 @@ describe('ConstructorIO - Catalog', () => {
 
       const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
       const itemsStream = fs.createReadStream(itemsPath);
-
       const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
       const variationsStream = fs.createReadStream(variationsPath);
-
       const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
       const itemGroupsStream = fs.createReadStream(itemGroupsPath);
-
       const data = {
         items: itemsStream,
         variations: variationsStream,
@@ -1909,14 +1904,15 @@ describe('ConstructorIO - Catalog', () => {
   });
 
   describe('updateCatalog', function updateCatalog() {
+    // Ensure Mocha doesn't time out waiting for operation to complete
     this.timeout(3000);
 
-    beforeEach((done) => {
+    afterEach((done) => {
       // Wait between each test to prevent throttle error from server
       setTimeout(done, 1000);
     });
 
-    it('should update a catalog of items using streams', (done) => {
+    it('Should update a catalog of items using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1932,7 +1928,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of items using buffers', (done) => {
+    it('Should update a catalog of items using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1948,7 +1944,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of variations using streams', (done) => {
+    it('Should update a catalog of variations using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1964,7 +1960,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of variations using buffers', (done) => {
+    it('Should update a catalog of variations using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1980,7 +1976,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of item groups using streams', (done) => {
+    it('Should update a catalog of item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1996,7 +1992,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of item groups using buffers', (done) => {
+    it('Should update a catalog of item groups using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -2012,7 +2008,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of item groups using streams', (done) => {
+    it('Should update a catalog of item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -2028,7 +2024,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of items, variations, and item groups using buffers', (done) => {
+    it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -2036,13 +2032,10 @@ describe('ConstructorIO - Catalog', () => {
 
       const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
       const itemsBuffer = fs.readFileSync(itemsPath);
-
       const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
       const variationsBuffer = fs.readFileSync(variationsPath);
-
       const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
       const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
-
       const data = {
         items: itemsBuffer,
         variations: variationsBuffer,
@@ -2053,7 +2046,7 @@ describe('ConstructorIO - Catalog', () => {
       catalog.updateCatalog(data).then(done);
     });
 
-    it('should update a catalog of items, variations, and item groups using streams', (done) => {
+    it('Should update a catalog of items, variations, and item groups using streams', (done) => {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -2061,13 +2054,10 @@ describe('ConstructorIO - Catalog', () => {
 
       const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
       const itemsStream = fs.createReadStream(itemsPath);
-
       const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
       const variationsStream = fs.createReadStream(variationsPath);
-
       const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
       const itemGroupsStream = fs.createReadStream(itemGroupsPath);
-
       const data = {
         items: itemsStream,
         variations: variationsStream,

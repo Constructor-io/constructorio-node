@@ -1364,69 +1364,77 @@ class Catalog {
   }
 
   /**
-   * Send full catalogs to replace the current catalog
+   * Send full catalog files to replace the current catalog
    *
    * @function replaceCatalog
-   * @param {object} params - Additional parameters for catalog details
-   * @param {string} params.section - The section that you want to update
-   * @param {string} [params.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
-   * @param {boolean} [params.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
-   * @param {file} [params.items] - The CSV file with all new items
-   * @param {file} [params.variations] - The CSV file with all new variations
-   * @param {file} [params.item_groups] - The CSV file with all new item_groups
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section that you want to update
+   * @param {string} [parameters.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails
+   * @param {boolean} [parameters.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to false
+   * @param {file} [parameters.items] - The CSV file with all new items
+   * @param {file} [parameters.variations] - The CSV file with all new variations
+   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/full_catalog
    */
-  async replaceCatalog(params) {
-    const { section = 'Products' } = params;
-    let { items, variations, item_groups: itemGroups } = params;
-    const qsParams = new URLSearchParams();
-    const formData = new FormData();
-
-    try {
-      if (items instanceof fs.ReadStream) {
-        items = await convertToBuffer(items);
-      }
-
-      if (variations instanceof fs.ReadStream) {
-        variations = await convertToBuffer(variations);
-      }
-
-      if (itemGroups instanceof fs.ReadStream) {
-        itemGroups = await convertToBuffer(itemGroups);
-      }
-
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    if (section) {
-      qsParams.append('section', section);
-    }
-
-    if (items) {
-      formData.append('items', items, {
-        filename: 'items.csv',
-      });
-    }
-
-    if (variations) {
-      formData.append('variations', variations, {
-        filename: 'variations.csv',
-      });
-    }
-
-    if (itemGroups) {
-      formData.append('item_groups', itemGroups, {
-        filename: 'item_groups.csv',
-      });
-    }
-
+  async replaceCatalog(parameters = {}) {
     let requestUrl;
+    const queryParams = {};
+    const formData = new FormData();
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
+    if (parameters) {
+      const { section } = parameters;
+      let { items, variations, item_groups: itemGroups } = parameters;
+
+      try {
+        // Convert items to buffer if passed as stream
+        if (items instanceof fs.ReadStream) {
+          items = await convertToBuffer(items);
+        }
+
+        // Convert variations to buffer if passed as stream
+        if (variations instanceof fs.ReadStream) {
+          variations = await convertToBuffer(variations);
+        }
+
+        // Convert item groups to buffer if passed as stream
+        if (itemGroups instanceof fs.ReadStream) {
+          itemGroups = await convertToBuffer(itemGroups);
+        }
+      } catch (e) {
+        return Promise.reject(e);
+      }
+
+      // Pull section from parameters
+      if (section) {
+        queryParams.section = section;
+      }
+
+      // Pull items from parameters
+      if (items) {
+        formData.append('items', items, {
+          filename: 'items.csv',
+        });
+      }
+
+      // Pull variations from parameters
+      if (variations) {
+        formData.append('variations', variations, {
+          filename: 'variations.csv',
+        });
+      }
+
+      // Pull item groups from parameters
+      if (itemGroups) {
+        formData.append('item_groups', itemGroups, {
+          filename: 'item_groups.csv',
+        });
+      }
+    }
+
     try {
-      requestUrl = `${createCatalogUrl('catalog', this.options)}&${qsParams.toString()}`;
+      requestUrl = createCatalogUrl('catalog', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1446,73 +1454,80 @@ class Catalog {
     } catch (error) {
       return Promise.reject(error);
     }
-
-
   }
 
   /**
-   * Send deltas to update the current catalog
+   * Send delta catalog files to update the current catalog
    *
    * @function updateCatalog
-   * @param {object} params - Additional parameters for catalog details
-   * @param {string} params.section - The section that you want to update
-   * @param {string} [params.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
-   * @param {boolean} [params.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
-   * @param {file} [params.items] - The CSV file with all new items
-   * @param {file} [params.variations] - The CSV file with all new variations
-   * @param {file} [params.item_groups] - The CSV file with all new item_groups
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section that you want to update
+   * @param {string} [parameters.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
+   * @param {boolean} [parameters.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
+   * @param {file} [parameters.items] - The CSV file with all new items
+   * @param {file} [parameters.variations] - The CSV file with all new variations
+   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/full_catalog
    */
-  async updateCatalog(params) {
-    const { section = 'Products' } = params;
-    let { items, variations, item_groups: itemGroups } = params;
-    const qsParams = new URLSearchParams();
-    const formData = new FormData();
-
-    try {
-      if (items instanceof fs.ReadStream) {
-        items = await convertToBuffer(items);
-      }
-
-      if (variations instanceof fs.ReadStream) {
-        variations = await convertToBuffer(variations);
-      }
-
-      if (itemGroups instanceof fs.ReadStream) {
-        itemGroups = await convertToBuffer(itemGroups);
-      }
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    if (section) {
-      qsParams.append('section', section);
-    }
-
-    if (items) {
-      formData.append('items', items, {
-        filename: 'items.csv',
-      });
-    }
-
-    if (variations) {
-      formData.append('variations', variations, {
-        filename: 'variations.csv',
-      });
-    }
-
-    if (itemGroups) {
-      formData.append('item_groups', itemGroups, {
-        filename: 'item_groups.csv',
-      });
-    }
-
+  async updateCatalog(parameters = {}) {
     let requestUrl;
+    const queryParams = {};
+    const formData = new FormData();
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
+    if (parameters) {
+      const { section } = parameters;
+      let { items, variations, item_groups: itemGroups } = parameters;
+
+      try {
+        // Convert items to buffer if passed as stream
+        if (items instanceof fs.ReadStream) {
+          items = await convertToBuffer(items);
+        }
+
+        // Convert variations to buffer if passed as stream
+        if (variations instanceof fs.ReadStream) {
+          variations = await convertToBuffer(variations);
+        }
+
+        // Convert item groups to buffer if passed as stream
+        if (itemGroups instanceof fs.ReadStream) {
+          itemGroups = await convertToBuffer(itemGroups);
+        }
+      } catch (e) {
+        return Promise.reject(e);
+      }
+
+      // Pull section from parameters
+      if (section) {
+        queryParams.section = section;
+      }
+
+      // Pull items from parameters
+      if (items) {
+        formData.append('items', items, {
+          filename: 'items.csv',
+        });
+      }
+
+      // Pull variations from parameters
+      if (variations) {
+        formData.append('variations', variations, {
+          filename: 'variations.csv',
+        });
+      }
+
+      // Pull item groups from parameters
+      if (itemGroups) {
+        formData.append('item_groups', itemGroups, {
+          filename: 'item_groups.csv',
+        });
+      }
+    }
+
     try {
-      requestUrl = `${createCatalogUrl('catalog', this.options)}&${qsParams.toString()}`;
+      requestUrl = createCatalogUrl('catalog', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
