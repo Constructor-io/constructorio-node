@@ -56,6 +56,18 @@ function createMockSynonym() {
   return `synonym-${uuid}`;
 }
 
+function createMockRedirectRule() {
+  const uuid = uuidv4();
+
+  return {
+    url: `http://www.${uuid}.com`,
+    matches: [{
+      match_type: 'EXACT',
+      pattern: uuid,
+    }],
+  };
+}
+
 describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
@@ -1427,6 +1439,365 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addSynonymGroup({ synonyms: [mockSynonym] })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('modifySynonymGroup', () => {
+      const mockSynonym = createMockSynonym();
+      let synonymGroupId;
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then((res) => {
+          synonymGroupId = res.group_id;
+
+          done();
+        });
+      });
+
+      it('Should resolve when modifying a synonym group', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifySynonymGroup({ id: synonymGroupId, synonyms: [mockSynonym] }).then(done);
+      });
+
+      it('Should return an error when modifying a synonym group that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifySynonymGroup({
+          id: 'abc123',
+          synonyms: [mockSynonym],
+        })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifySynonymGroup({
+          id: synonymGroupId,
+          synonyms: [mockSynonym],
+        })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying an item with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifySynonymGroup({
+          id: synonymGroupId,
+          synonyms: [mockSynonym],
+        })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getSynonymGroup', () => {
+      const mockSynonym = createMockSynonym();
+      let synonymGroupId;
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then((res) => {
+          synonymGroupId = res.group_id;
+
+          done();
+        });
+      });
+
+      it('Should return a response when getting synonym group with id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getSynonymGroup({ id: synonymGroupId }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('synonym_groups').to.be.an('array').length(1);
+          expect(res.synonym_groups[0]).to.have.property('synonym_group_id').to.be.a('number').to.equal(synonymGroupId);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when getting one way synonym with id that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getSynonymGroup({ id: 'abc123' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting one way synonym with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getSynonymGroups', () => {
+      const mockSynonym = createMockSynonym();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
+      });
+
+      it('Should return a response when getting synonym groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getSynonymGroups().then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gt(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when getting one way synonym with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when getting one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
+      });
+    });
+
+    describe('removeSynonymGroup', () => {
+      const mockSynonym = createMockSynonym();
+      let synonymGroupId;
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then((res) => {
+          synonymGroupId = res.group_id;
+
+          done();
+        });
+      });
+
+      it('Should resolve when removing synonyms group with id', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeSynonymGroup({ id: synonymGroupId }).then(done);
+      });
+
+      it('Should return error when removing synonyms group with id that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeSynonymGroup({ id: 'abc123' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing one way synonym with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('removeSynonymGroups', () => {
+      const mockSynonym = createMockSynonym();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
+      });
+
+      it('Should resolve when removing synonym groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeSynonymGroups().then(done);
+      });
+
+      it('Should return error when removing one way synonyms with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing one way synonyms with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
+      });
+    });
+  });
+
+  describe.only('Redirect Rules', () => {
+    describe('addRedirectRule', () => {
+      const mockRedirectRule = createMockRedirectRule();
+
+      it('Should return a response when adding a redirect rule', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addRedirectRule(mockRedirectRule).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('id').to.be.a('number');
+          expect(res).to.have.property('url').to.eq(mockRedirectRule.url);
+          expect(res).to.have.property('matches').to.be.an('array').of.length(1);
+          expect(res.matches[0]).to.have.property('id').to.be.a('number');
+          expect(res.matches[0]).to.have.property('pattern').to.eq(mockRedirectRule.matches[0].pattern);
+          expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when a synonym group with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addRedirectRule(mockRedirectRule)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding a one way synonym with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addRedirectRule(mockRedirectRule)).to.eventually.be.rejected;
       });
     });
 

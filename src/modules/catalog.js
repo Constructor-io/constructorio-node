@@ -1111,8 +1111,6 @@ class Catalog {
 
   /**
    * Remove all synonym groups
-   TODO: What to do with this note?
-   Note: If not given a group_id, all synonyms belonging to the given key will be deleted.
    *
    * @function removeSynonymGroups
    * @returns {Promise}
@@ -1144,33 +1142,40 @@ class Catalog {
    * Create a redirect rule
    *
    * @function addRedirectRule
-   TODO: Where to define redirect object
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params. -
+   * @param {object} parameters - Additional parameters for redirect rule details
+   * @param {string} parameters.url - Target URL returned when a match happens
+   * @param {object[]} parameters.matches - List of match definitions
+   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  addRedirectRule(params) {
+  addRedirectRule(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl('redirect_rules');
+      requestUrl = createCatalogUrl('redirect_rules', this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
