@@ -928,52 +928,54 @@ class Catalog {
    * Add a synonym group
    *
    * @function addSynonymGroup
-  // TODO: Not sure what goes into the params
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {object[]} params.synonyms - Allows you to add synonyms to the newly created group.
+   * @param {object} parameters - Additional parameters for synonym group details
+   * @param {object[]} parameters.synonyms - Allows you to add synonyms to the newly created group
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest-api.html
    */
-  addSynonymGroup(params) {
+  addSynonymGroup(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl('synonym_groups');
+      requestUrl = createCatalogUrl('synonym_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
-   * Modify a synonym group for supplied id
+   * Modify a synonym group for supplied ID
    *
    * @function modifySynonymGroup
-  // TODO: Not sure what goes into the params
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {object[]} params.synonyms - Determines what phrases will be included in the final synonym group
+   * @param {object} parameters - Additional parameters for synonym group details
+   * @param {number} parameters.id - Synonym group ID
+   * @param {object[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifySynonymGroup(params) {
+  modifySynonymGroup(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { group_id: groupId, ...rest } = params;
+    const { id, ...rest } = parameters;
 
     try {
-      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`);
+      requestUrl = createCatalogUrl(`synonym_groups/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -981,7 +983,10 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
