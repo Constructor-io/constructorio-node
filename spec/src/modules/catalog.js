@@ -1737,335 +1737,337 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe('replaceCatalog', function replaceCatalog() {
-    // Ensure Mocha doesn't time out waiting for operation to complete
-    this.timeout(10000);
+  describe('Catalog', () => {
+    describe('replaceCatalog', function replaceCatalog() {
+      // Ensure Mocha doesn't time out waiting for operation to complete
+      this.timeout(10000);
 
-    afterEach((done) => {
-      // Wait between each test to prevent throttle error from server
-      setTimeout(done, 1000);
-    });
-
-    it('Should replace a catalog of items using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+      afterEach((done) => {
+        // Wait between each test to prevent throttle error from server
+        setTimeout(done, 1000);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemsStream,
-        section: 'Products',
-      };
+      it('Should replace a catalog of items using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of items using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: itemsBuffer,
-        section: 'Products',
-      };
+      it('Should replace a catalog of items using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of variations using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsStream = fs.createReadStream(filePath);
-      const data = {
-        items: variationsStream,
-        section: 'Products',
-      };
+      it('Should replace a catalog of variations using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(filePath);
+        const data = {
+          items: variationsStream,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of variations using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: variationsBuffer,
-        section: 'Products',
-      };
+      it('Should replace a catalog of variations using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: variationsBuffer,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should replace a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemGroupsStream,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of item groups using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: itemGroupBuffer,
-        section: 'Products',
-      };
+      it('Should replace a catalog of item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: itemGroupBuffer,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should replace a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemGroupsStream,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsBuffer = fs.readFileSync(itemsPath);
-      const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsBuffer = fs.readFileSync(variationsPath);
-      const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
-      const data = {
-        items: itemsBuffer,
-        variations: variationsBuffer,
-        itemGroups: itemGroupsBuffer,
-        section: 'Products',
-      };
+      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
+        const data = {
+          items: itemsBuffer,
+          variations: variationsBuffer,
+          itemGroups: itemGroupsBuffer,
+          section: 'Products',
+        };
 
-    it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.replaceCatalog(data).then(done);
       });
 
-      const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsStream = fs.createReadStream(itemsPath);
-      const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsStream = fs.createReadStream(variationsPath);
-      const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(itemGroupsPath);
-      const data = {
-        items: itemsStream,
-        variations: variationsStream,
-        itemGroups: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.replaceCatalog(data).then(done);
-    });
-  });
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
+        const data = {
+          items: itemsStream,
+          variations: variationsStream,
+          itemGroups: itemGroupsStream,
+          section: 'Products',
+        };
 
-  describe('updateCatalog', function updateCatalog() {
-    // Ensure Mocha doesn't time out waiting for operation to complete
-    this.timeout(3000);
-
-    afterEach((done) => {
-      // Wait between each test to prevent throttle error from server
-      setTimeout(done, 1000);
+        catalog.replaceCatalog(data).then(done);
+      });
     });
 
-    it('Should update a catalog of items using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+    describe('updateCatalog', function updateCatalog() {
+      // Ensure Mocha doesn't time out waiting for operation to complete
+      this.timeout(10000);
+
+      afterEach((done) => {
+        // Wait between each test to prevent throttle error from server
+        setTimeout(done, 1000);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemsStream,
-        section: 'Products',
-      };
+      it('Should update a catalog of items using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of items using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: itemsBuffer,
-        section: 'Products',
-      };
+      it('Should update a catalog of items using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of variations using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsStream = fs.createReadStream(filePath);
-      const data = {
-        items: variationsStream,
-        section: 'Products',
-      };
+      it('Should update a catalog of variations using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(filePath);
+        const data = {
+          items: variationsStream,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of variations using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: variationsBuffer,
-        section: 'Products',
-      };
+      it('Should update a catalog of variations using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: variationsBuffer,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should update a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemGroupsStream,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of item groups using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupBuffer = fs.readFileSync(filePath);
-      const data = {
-        items: itemGroupBuffer,
-        section: 'Products',
-      };
+      it('Should update a catalog of item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: itemGroupBuffer,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(filePath);
-      const data = {
-        items: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should update a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemGroupsStream,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsBuffer = fs.readFileSync(itemsPath);
-      const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsBuffer = fs.readFileSync(variationsPath);
-      const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
-      const data = {
-        items: itemsBuffer,
-        variations: variationsBuffer,
-        itemGroups: itemGroupsBuffer,
-        section: 'Products',
-      };
+      it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
-    });
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
+        const data = {
+          items: itemsBuffer,
+          variations: variationsBuffer,
+          itemGroups: itemGroupsBuffer,
+          section: 'Products',
+        };
 
-    it('Should update a catalog of items, variations, and item groups using streams', (done) => {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
+        catalog.updateCatalog(data).then(done);
       });
 
-      const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-      const itemsStream = fs.createReadStream(itemsPath);
-      const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-      const variationsStream = fs.createReadStream(variationsPath);
-      const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-      const itemGroupsStream = fs.createReadStream(itemGroupsPath);
-      const data = {
-        items: itemsStream,
-        variations: variationsStream,
-        itemGroups: itemGroupsStream,
-        section: 'Products',
-      };
+      it('Should update a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
 
-      catalog.updateCatalog(data).then(done);
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
+        const data = {
+          items: itemsStream,
+          variations: variationsStream,
+          itemGroups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.updateCatalog(data).then(done);
+      });
     });
   });
 });
