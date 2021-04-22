@@ -1580,7 +1580,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(done);
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
       });
 
       it('Should return a response when getting synonym groups', (done) => {
@@ -1697,7 +1697,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(done);
+        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
       });
 
       it('Should resolve when removing synonym groups', (done) => {
