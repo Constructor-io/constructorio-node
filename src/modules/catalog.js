@@ -997,77 +997,108 @@ class Catalog {
   }
 
   /**
-   * Retrieve all synonym groups optionally filtered by phrase
+   * Retrieves synonym group for supplied ID
    *
-   * @function getSynonymGroups
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {string} [params.group_id] - The synonym group you would like returned
-   * @param {string} [params.phrase] - The phrase for which all synonym groups containing it will be returned
-   * @param {number} [params.num_results_per_page] - The number of synonym groups to return. Defaults to 100
-   * @param {number} [params.page] - The page of results to return. Defaults to 1
+   * @function getSynonymGroup
+   * @param {object} parameters - Additional parameters for synonym group details
+   * @param {number} parameters.id - The synonym group you would like returned
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroups(params) {
-    const { num_results_per_page: numResultsPerPage, phrase, page } = params;
-    const qsParams = new URLSearchParams();
+  getSynonymGroup(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (numResultsPerPage) {
-      qsParams.append('num_results_per_page', numResultsPerPage);
-    }
-
-    if (phrase) {
-      qsParams.append('phrase', phrase);
-    }
-
-    if (page) {
-      qsParams.append('page', page);
-    }
-
     try {
-      requestUrl = `${createCatalogUrl('synonym_groups', { appendVersionParameter: false })}&${qsParams.toString()}`;
+      requestUrl = createCatalogUrl(`synonym_groups/${parameters.id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(params),
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
-   * Retrieves synonym group for supplied id
+   * Retrieve all synonym groups optionally filtered by phrase
    *
-   * @function getSynonymGroup
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {string} params.group_id - The synonym group you would like returned
+   * @function getSynonymGroups
+   * @param {object} [parameters] - Additional parameters for synonym group details
+   * @param {string} [parameters.phrase] - The phrase for which all synonym groups containing it will be returned
+   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
+   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroup(params) {
+  getSynonymGroups(parameters = {}) {
+    const queryParams = {};
+    const { phrase } = parameters;
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { group_id: groupId, ...rest } = params;
+
+    if (parameters) {
+      const { num_results_per_page: numResultsPerPage, page } = parameters;
+
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
+
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
+    }
 
     try {
-      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`, { appendVersionParameter: false });
+      requestUrl = createCatalogUrl(phrase ? `synonym_groups/${phrase}` : 'synonym_groups', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(rest),
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+
+  /**
+   * Remove synonym group for supplied ID
+   *
+   * @function removeSynonymGroup
+   * @param {object} parameters - Additional parameters for synonym group details
+   * @param {number} parameters.id - The synonym group you would like deleted
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest-api.html#catalog
+   */
+  removeSynonymGroup(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { id } = parameters;
+
+    try {
+      requestUrl = createCatalogUrl(`synonym_groups/${id}`, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
@@ -1084,57 +1115,21 @@ class Catalog {
    Note: If not given a group_id, all synonyms belonging to the given key will be deleted.
    *
    * @function removeSynonymGroups
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {string} [params.group_id] - The synonym group you would like deleted
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeSynonymGroups(params) {
+  removeSynonymGroups() {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl('synonym_groups');
+      requestUrl = createCatalogUrl('synonym_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(params),
-      headers: createAuthHeader(this.options),
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Remove synonym group for supplied id
-   *
-   * @function removeSynonymGroup
-   * @param {object} params - Additional parameters for synonym group details
-   * @param {string} params.group_id - The synonym group you would like deleted
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
-   */
-  removeSynonymGroup(params) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { group_id: groupId, ...rest } = params;
-
-    try {
-      requestUrl = createCatalogUrl(`synonym_groups/${groupId}`);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    return fetch(requestUrl, {
-      method: 'DELETE',
-      body: JSON.stringify(rest),
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
