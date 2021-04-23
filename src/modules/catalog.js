@@ -25,7 +25,7 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/${apiVersion}/${path}?${queryString}`;
+  return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
 }
 
 // Create authorization header to be transmitted with requests
