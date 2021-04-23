@@ -1179,6 +1179,90 @@ class Catalog {
   }
 
   /**
+   * Completely update a redirect rule for supplied ID
+   *
+   * @function updateRedirectRule
+   * @param {object} params - Additional parameters for redirect rule details
+   * @param {string} params.id - Redirect rule ID
+   * @param {string} parameters.url - Target URL returned when a match happens
+   * @param {object[]} parameters.matches - List of match definitions
+   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {object} [parameters.metadata] - Object with arbitrary metadata
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest-api.html#catalog
+   */
+  updateRedirectRule(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { id, ...rest } = parameters;
+
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
+   * Partially update (modify) a redirect rule for supplied ID
+   *
+   * @function modifyRedirectRule
+   * @param {object} params - Additional parameters for redirect rule details
+   * @param {string} params.id - Redirect rule ID
+   * @param {string} parameters.url - Target URL returned when a match happens
+   * @param {object[]} parameters.matches - List of match definitions
+   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {object} [parameters.metadata] - Object with arbitrary metadata
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest-api.html#catalog
+   */
+  modifyRedirectRule(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { id, ...rest } = parameters;
+
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
    * Retrieve all redirect rules optionally filtered by query or status
    *
    * @function getRedirectRules
@@ -1255,74 +1339,6 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Completely update a redirect rule for supplied id
-   *
-   * @function modifyRedirectRule
-   TODO: What goes into params?
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.redirect_rule_id -
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
-   */
-  modifyRedirectRule(params) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { redirect_rule_id: redirectRuleId, ...rest } = params;
-
-    try {
-      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Partially update a redirect rule for supplied id
-   *
-   * @function updateRedirectRule
-   TODO: What goes into params?
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.redirect_rule_id -
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
-   */
-  updateRedirectRule(params) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { redirect_rule_id: redirectRuleId, ...rest } = params;
-
-    try {
-      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    return fetch(requestUrl, {
-      method: 'PATCH',
       body: JSON.stringify(rest),
       headers: createAuthHeader(this.options),
     }).then((response) => {
