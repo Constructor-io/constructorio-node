@@ -39,12 +39,15 @@ function createAuthHeader(options) {
 function convertToBuffer(stream) {
   return new Promise((resolve, reject) => {
     let buffer = '';
+
     stream.on('data', (chunk) => {
       buffer += chunk;
     });
+
     stream.on('end', () => {
       resolve(buffer);
     });
+
     stream.on('error', (err) => {
       reject(err);
     });
@@ -352,14 +355,13 @@ class Catalog {
    *
    * @function getItem
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.item_id - The ID of the item you'd like to retrieve
+   * @param {string} parameters.id - The ID of the item you'd like to retrieve
    * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/get_items
    */
   getItem(parameters = {}) {
-    const { item_id: itemId } = parameters;
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -374,7 +376,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`item/${itemId}`, this.options, queryParams);
+      requestUrl = createCatalogUrl(`item/${parameters.id}`, this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -528,7 +530,7 @@ class Catalog {
    *
    * @function getItemGroup
    * @param {object} parameters - Additional parameters for item group details
-   * @param {string} parameters.group_id - The group ID you'd like to retrieve results for
+   * @param {string} parameters.id - The group ID you'd like to retrieve results for
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
@@ -537,7 +539,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${parameters.group_id}`, this.options);
+      requestUrl = createCatalogUrl(`item_groups/${parameters.id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -629,7 +631,7 @@ class Catalog {
    *
    * @function modifyItemGroup
    * @param {object} parameters - Additional parameters for item group details
-   * @param {string} parameters.group_id - The group ID to update
+   * @param {string} parameters.id - The group ID to update
    * @param {string} [parameters.name] - Item group display name
    * @param {string} [parameters.parent_id] - Parent item group customer ID or null for root item groups
    * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group

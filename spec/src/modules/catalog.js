@@ -17,7 +17,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const sendTimeout = 200;
+const sendTimeout = 300;
 const testApiKey = process.env.TEST_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validOptions = {
@@ -501,7 +501,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('getItem', () => {
+    describe.only('getItem', () => {
       const mockItem = createMockItem();
 
       before((done) => {
@@ -521,7 +521,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getItem({ item_id: mockItem.id, section: 'Products' }).then((res) => {
+        catalog.getItem({ id: mockItem.id, section: 'Products' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('name').to.equal(mockItem.item_name);
@@ -539,7 +539,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItem({ item_id: uuidv4(), section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.getItem({ id: uuidv4(), section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding an item with an invalid API key', () => {
@@ -552,7 +552,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+        return expect(catalog.getItem({ id: mockItem.id })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding an item with an invalid API token', () => {
@@ -565,7 +565,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItem({ item_id: mockItem.id })).to.eventually.be.rejected;
+        return expect(catalog.getItem({ id: mockItem.id })).to.eventually.be.rejected;
       });
     });
 
@@ -2177,7 +2177,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe('Catalog', () => {
+  describe('Catalog Files', () => {
     describe('replaceCatalog', function replaceCatalog() {
       // Ensure Mocha doesn't time out waiting for operation to complete
       this.timeout(10000);
