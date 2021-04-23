@@ -9,11 +9,9 @@ const helpers = require('../utils/helpers');
 function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
   const {
     apiKey,
-    // version, // TODO: Restore?
     serviceUrl,
   } = options;
   let queryParams = {
-    // c: version, // TODO: Restore?
     ...additionalQueryParams,
   };
 
@@ -23,7 +21,6 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
   }
 
   queryParams.key = apiKey;
-  // queryParams._dt = Date.now(); // TODO: Restore?
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
@@ -1191,7 +1188,7 @@ class Catalog {
    * @param {object[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/redirect_rules
    */
   updateRedirectRule(parameters = {}) {
     let requestUrl;
@@ -1233,7 +1230,7 @@ class Catalog {
    * @param {object[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/redirect_rules
    */
   modifyRedirectRule(parameters = {}) {
     let requestUrl;
@@ -1263,125 +1260,124 @@ class Catalog {
   }
 
   /**
+   * Retrieve redirect rule for supplied ID
+   *
+   * @function getRedirectRule
+   * @param {object} parameters - Additional parameters for redirect rule details
+   * @param {string} parameters.id - Redirect rule ID
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/redirect_rules
+   */
+  getRedirectRule(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createCatalogUrl(`redirect_rules/${parameters.id}`, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: createAuthHeader(this.options),
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
+
+  /**
    * Retrieve all redirect rules optionally filtered by query or status
    *
    * @function getRedirectRules
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.key - The index you'd like to to retrieve redirect rules from
-   * @param {number} [params.num_results_per_page] - The number of rules to return. Defaults to 20
-   * @param {number} [params.page] - The page of redirect rules to return. Defaults to 1
-   * @param {string} [params.query] - Return redirect rules whose url or match pattern match the provided query
-   * @param {string} [params.status] - One of "current" (return redirect rules that are currently active), "pending" (return redirect rules that will become active in the future), and "expired" (return redirect rules that are not active anymore)
+   * @param {object} [parameters] - Additional parameters for redirect rule details
+   * @param {number} [parameters.num_results_per_page] - The number of rules to return. Defaults to 20
+   * @param {number} [parameters.page] - The page of redirect rules to return. Defaults to 1
+   * @param {string} [parameters.query] - Return redirect rules whose url or match pattern match the provided query
+   * @param {string} [parameters.status] - One of "current" (return redirect rules that are currently active), "pending" (return redirect rules that will become active in the future), and "expired" (return redirect rules that are not active anymore)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  getRedirectRules(params) {
-    const { num_results_per_page: numResultsPerPage, page, query, status } = params;
-    const qsParams = new URLSearchParams();
+  getRedirectRules(parameters = {}) {
+    const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
-    if (numResultsPerPage) {
-      qsParams.append('num_results_per_page', numResultsPerPage);
-    }
+    if (parameters) {
+      const { num_results_per_page: numResultsPerPage, page, query, status } = parameters;
 
-    if (page) {
-      qsParams.append('page', page);
-    }
+      // Pull number of results per page from parameters
+      if (numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPage;
+      }
 
-    if (query) {
-      qsParams.append('query', query);
-    }
+      // Pull page from parameters
+      if (page) {
+        queryParams.page = page;
+      }
 
-    if (status) {
-      qsParams.append('status', status);
+      // Pull query from parameters
+      if (query) {
+        queryParams.query = query;
+      }
+
+      // Pull status from parameters
+      if (status) {
+        queryParams.status = status;
+      }
     }
 
     try {
-      requestUrl = `${createCatalogUrl('redirect_rules', { appendVersionParameter: false })}&${qsParams.toString()}`;
+      requestUrl = createCatalogUrl('redirect_rules', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'GET',
-      body: JSON.stringify(params),
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
-   * Retrieve redirect rule for supplied id
+   * Remove redirect rule for supplied ID
    *
-   * @function getRedirectRule
+   * @function removeRedirectRule
    * @param {object} params - Additional parameters for redirect rule details
-   TODO: Which id?
-   * @param {string} params.key - The index you'd like to to retrieve redirect rules from
+   * @param {string} parameters.id - Redirect rule ID
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
+   * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  getRedirectRule(params) {
+  removeRedirectRule(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { redirect_rule_id: redirectRuleId, ...rest } = params;
 
     try {
-      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`, { appendVersionParameter: false });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    return fetch(requestUrl, {
-      method: 'GET',
-      body: JSON.stringify(rest),
-      headers: createAuthHeader(this.options),
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Remove redirect rule for supplied id
-   *
-   * @function updateRedirectRule
-   TODO: What goes into params?
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.redirect_rule_id -
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#catalog
-   */
-  removeRedirectRule(params) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { redirect_rule_id: redirectRuleId, ...rest } = params;
-
-    try {
-      requestUrl = createCatalogUrl(`redirect_rules/${redirectRuleId}`);
+      requestUrl = createCatalogUrl(`redirect_rules/${parameters.id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(rest),
       headers: createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**

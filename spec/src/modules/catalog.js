@@ -1749,7 +1749,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('Redirect Rules', () => {
+  describe('Redirect Rules', () => {
     describe('addRedirectRule', () => {
       const mockRedirectRule = createMockRedirectRule();
 
@@ -1818,7 +1818,7 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should resolve when completely updating a redirect rule', (done) => {
+      it('Should return a response when completely updating a redirect rule', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -1905,7 +1905,7 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should resolve when partially updating a redirect rule', (done) => {
+      it('Should return a response when partially updating a redirect rule', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -1968,9 +1968,9 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('getSynonymGroup', () => {
-      const mockSynonym = createMockSynonym();
-      let synonymGroupId;
+    describe('getRedirectRule', () => {
+      const mockRedirectRule = createMockRedirectRule();
+      let redirectRuleId;
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -1978,40 +1978,44 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then((res) => {
-          synonymGroupId = res.group_id;
+        catalog.addRedirectRule(mockRedirectRule).then((res) => {
+          redirectRuleId = res.id;
 
           done();
         });
       });
 
-      it('Should return a response when getting synonym group with id', (done) => {
+      it('Should return a response when getting redirect rule with id', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.getSynonymGroup({ id: synonymGroupId }).then((res) => {
+        catalog.getRedirectRule({ id: redirectRuleId }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('synonym_groups').to.be.an('array').length(1);
-          expect(res.synonym_groups[0]).to.have.property('synonym_group_id').to.be.a('number').to.equal(synonymGroupId);
+          expect(res).to.have.property('id').to.be.a('number');
+          expect(res).to.have.property('url').to.eq(mockRedirectRule.url);
+          expect(res).to.have.property('matches').to.be.an('array').of.length(1);
+          expect(res.matches[0]).to.have.property('id').to.be.a('number');
+          expect(res.matches[0]).to.have.property('pattern').to.eq(mockRedirectRule.matches[0].pattern);
+          expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
         });
       });
 
-      it('Should return error when getting one way synonym with id that does not exist', () => {
+      it('Should return error when getting redirect rule with id that does not exist', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSynonymGroup({ id: 'abc123' })).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRule({ id: 'abc123' })).to.eventually.be.rejected;
       });
 
-      it('Should return error when getting one way synonym with an invalid API key', () => {
+      it('Should return error when getting redirect rule with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiKey = 'abc123';
@@ -2021,10 +2025,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
 
-      it('Should return error when getting one way synonym with an invalid API token', () => {
+      it('Should return error when getting redirect rule with an invalid API token', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiToken = 'foo987';
@@ -2034,12 +2038,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
     });
 
-    describe('getSynonymGroups', () => {
-      const mockSynonym = createMockSynonym();
+    describe('getRedirectRules', () => {
+      const mockRedirectRule = createMockRedirectRule();
+      let redirectRuleId;
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -2047,26 +2052,30 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
+        catalog.addRedirectRule(mockRedirectRule).then((res) => {
+          redirectRuleId = res.id;
+
+          done();
+        });
       });
 
-      it('Should return a response when getting synonym groups', (done) => {
+      it('Should return a response when getting redirect rules', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.getSynonymGroups().then((res) => {
+        catalog.getRedirectRules().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gt(1);
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
         });
       });
 
-      it('Should return error when getting one way synonym with an invalid API key', () => {
+      it('Should return error when getting redirect rules with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiKey = 'abc123';
@@ -2076,10 +2085,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
 
-      it('Should return error when getting one way synonym with an invalid API token', () => {
+      it('Should return error when getting redirect rules with an invalid API token', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiToken = 'foo987';
@@ -2089,13 +2098,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
     });
 
-    describe('removeSynonymGroup', () => {
-      const mockSynonym = createMockSynonym();
-      let synonymGroupId;
+    describe('removeRedirectRule', () => {
+      const mockRedirectRule = createMockRedirectRule();
+      let redirectRuleId;
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -2103,32 +2112,44 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then((res) => {
-          synonymGroupId = res.group_id;
+        catalog.addRedirectRule(mockRedirectRule).then((res) => {
+          redirectRuleId = res.id;
 
           done();
         });
       });
 
-      it('Should resolve when removing synonyms group with id', (done) => {
+      it('Should return a response when removing redirect rule with id', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.removeSynonymGroup({ id: synonymGroupId }).then(done);
+        catalog.removeRedirectRule({ id: redirectRuleId }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('id').to.be.a('number');
+          expect(res).to.have.property('url').to.eq(mockRedirectRule.url);
+          expect(res).to.have.property('matches').to.be.an('array').of.length(1);
+          expect(res.matches[0]).to.have.property('id').to.be.a('number');
+          expect(res.matches[0]).to.have.property('pattern').to.eq(mockRedirectRule.matches[0].pattern);
+          expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
       });
 
-      it('Should return error when removing synonyms group with id that does not exist', () => {
+      it('Should return error when removing redirect rule with id that does not exist', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeSynonymGroup({ id: 'abc123' })).to.eventually.be.rejected;
+        return expect(catalog.removeRedirectRule({ id: 'abc123' })).to.eventually.be.rejected;
       });
 
-      it('Should return error when removing one way synonym with an invalid API key', () => {
+      it('Should return error when removing redirect rule with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiKey = 'abc123';
@@ -2138,10 +2159,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+        return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
 
-      it('Should return error when removing one way synonym with an invalid API token', () => {
+      it('Should return error when removing redirect rule with an invalid API token', () => {
         const invalidOptions = cloneDeep(validOptions);
 
         invalidOptions.apiToken = 'foo987';
@@ -2151,55 +2172,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
-      });
-    });
-
-    describe('removeSynonymGroups', () => {
-      const mockSynonym = createMockSynonym();
-
-      before((done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.addSynonymGroup({ synonyms: [mockSynonym] }).then(() => done());
-      });
-
-      it('Should resolve when removing synonym groups', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.removeSynonymGroups().then(done);
-      });
-
-      it('Should return error when removing one way synonyms with an invalid API key', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiKey = 'abc123';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing one way synonyms with an invalid API token', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiToken = 'foo987';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
+        return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
     });
   });
