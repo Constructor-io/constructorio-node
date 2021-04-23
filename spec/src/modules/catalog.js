@@ -501,7 +501,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe.only('getItem', () => {
+    describe('getItem', () => {
       const mockItem = createMockItem();
 
       before((done) => {
@@ -590,6 +590,22 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.getItems({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('items').to.be.an('array');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting items by section with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItems({ section: 'Products', num_results_per_page: 10, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('items').to.be.an('array');
@@ -1258,7 +1274,23 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getOneWaySynonyms().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('one_way_synonym_relations').to.be.an('array').length.gt(1);
+          expect(res).to.have.property('one_way_synonym_relations').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting one way synonyms with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getOneWaySynonyms({ num_results_per_page: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('one_way_synonym_relations').to.be.an('array').length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -1604,7 +1636,23 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getSynonymGroups().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gt(1);
+          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting synonym groups with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getSynonymGroups({ num_results_per_page: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -2075,6 +2123,54 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when getting redirect rules with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getRedirectRules({ num_results_per_page: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting redirect rules with phrase parameter', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getRedirectRules({ phrase: mockRedirectRule.matches[0].pattern }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting redirect rules with status parameter', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getRedirectRules({ status: 'current' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
       it('Should return error when getting redirect rules with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
@@ -2228,7 +2324,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
         const variationsStream = fs.createReadStream(filePath);
         const data = {
-          items: variationsStream,
+          variations: variationsStream,
           section: 'Products',
         };
 
@@ -2244,7 +2340,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
         const variationsBuffer = fs.readFileSync(filePath);
         const data = {
-          items: variationsBuffer,
+          variations: variationsBuffer,
           section: 'Products',
         };
 
@@ -2260,7 +2356,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
-          items: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -2276,7 +2372,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
-          items: itemGroupBuffer,
+          item_groups: itemGroupBuffer,
           section: 'Products',
         };
 
@@ -2292,7 +2388,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
-          items: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -2314,7 +2410,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
-          itemGroups: itemGroupsBuffer,
+          item_groups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -2336,7 +2432,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsStream,
           variations: variationsStream,
-          itemGroups: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -2394,7 +2490,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
         const variationsStream = fs.createReadStream(filePath);
         const data = {
-          items: variationsStream,
+          variations: variationsStream,
           section: 'Products',
         };
 
@@ -2410,7 +2506,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
         const variationsBuffer = fs.readFileSync(filePath);
         const data = {
-          items: variationsBuffer,
+          variations: variationsBuffer,
           section: 'Products',
         };
 
@@ -2426,7 +2522,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
-          items: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -2442,7 +2538,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
-          items: itemGroupBuffer,
+          item_groups: itemGroupBuffer,
           section: 'Products',
         };
 
@@ -2458,7 +2554,7 @@ describe('ConstructorIO - Catalog', () => {
         const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
         const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
-          items: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -2480,7 +2576,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
-          itemGroups: itemGroupsBuffer,
+          item_groups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -2502,7 +2598,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsStream,
           variations: variationsStream,
-          itemGroups: itemGroupsStream,
+          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
