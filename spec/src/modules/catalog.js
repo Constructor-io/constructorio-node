@@ -744,7 +744,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getItemGroup({ group_id: mockItemGroup.id }).then((res) => {
+        catalog.getItemGroup({ id: mockItemGroup.id }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('item_groups').to.be.an('array').to.have.length(1);
@@ -2130,6 +2130,22 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.getRedirectRules({ num_results_per_page: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting redirect rules with query parameter', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getRedirectRules({ query: 'constructor' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);

@@ -1181,8 +1181,8 @@ class Catalog {
    * Completely update a redirect rule for supplied ID
    *
    * @function updateRedirectRule
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.id - Redirect rule ID
+   * @param {object} parameters - Additional parameters for redirect rule details
+   * @param {string} parameters.id - Redirect rule ID
    * @param {string} parameters.url - Target URL returned when a match happens
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
@@ -1223,8 +1223,8 @@ class Catalog {
    * Partially update (modify) a redirect rule for supplied ID
    *
    * @function modifyRedirectRule
-   * @param {object} params - Additional parameters for redirect rule details
-   * @param {string} params.id - Redirect rule ID
+   * @param {object} parameters - Additional parameters for redirect rule details
+   * @param {string} parameters.id - Redirect rule ID
    * @param {string} parameters.url - Target URL returned when a match happens
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
@@ -1355,7 +1355,7 @@ class Catalog {
    * Remove redirect rule for supplied ID
    *
    * @function removeRedirectRule
-   * @param {object} params - Additional parameters for redirect rule details
+   * @param {object} parameters - Additional parameters for redirect rule details
    * @param {string} parameters.id - Redirect rule ID
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
