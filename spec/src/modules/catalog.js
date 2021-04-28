@@ -2395,22 +2395,6 @@ describe('ConstructorIO - Catalog', () => {
         catalog.replaceCatalog(data).then(done);
       });
 
-      it('Should replace a catalog of item groups using streams', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(filePath);
-        const data = {
-          item_groups: itemGroupsStream,
-          section: 'Products',
-        };
-
-        catalog.replaceCatalog(data).then(done);
-      });
-
       it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -2555,22 +2539,6 @@ describe('ConstructorIO - Catalog', () => {
         const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
           item_groups: itemGroupBuffer,
-          section: 'Products',
-        };
-
-        catalog.updateCatalog(data).then(done);
-      });
-
-      it('Should update a catalog of item groups using streams', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(filePath);
-        const data = {
-          item_groups: itemGroupsStream,
           section: 'Products',
         };
 
