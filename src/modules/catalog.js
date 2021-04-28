@@ -161,7 +161,7 @@ class Catalog {
   /**
    * Remove item from index
    *
-   * @function addOrUpdateItem
+   * @function removeItem
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.item_name - The name of the item, as it will appear in the results
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
