@@ -857,9 +857,9 @@ class Catalog {
   }
 
   /**
-   * Remove all one way synonym
+   * Remove one way synonym
    *
-   * @function removeOneWaySynonyms
+   * @function removeOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
    * @returns {Promise}
