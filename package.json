@@ -1,46 +1,64 @@
 {
   "name": "@constructor-io/constructorio-node",
   "version": "2.9.1",
-  "description": "Constructor.io API client",
-  "homepage": "https://github.com/Constructor-io/constructorio-node",
+  "description": "Constructor.io Node.js client",
   "main": "lib/constructorio.js",
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "clean": "sudo rm -rf node_modules package-lock.json",
+    "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-deps": "npm-check",
-    "lint": "eslint lib test",
-    "test": "mocha --timeout 5000",
-    "precoverage": "rm -rf ./coverage",
-    "coverage": "NODE_ENV=dev-local nyc --all --reporter=html mocha --timeout 5000",
-    "postcoverage": "http-server ./coverage -p 8080"
+    "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
+    "lint": "chmod 766 .git/hooks/pre-push && eslint 'src/**/*.js' 'spec/**/*.js'",
+    "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/* --opts ./mocha.opts --recursive",
+    "precoverage": "rm -rf ./coverage && rm -rf ./.nyc_output",
+    "coverage": "nyc --all --reporter=html npm run test",
+    "postcoverage": "serve --listen 8080 --config ./serve.json && rm -rf test",
+    "docs": "jsdoc --configure ./.jsdoc.json ./README.md --recurse ./src --destination ./docs"
   },
-  "author": "Dan McCormick <dan@constructor.io> (https://constructor.io)",
-  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Constructor-io/constructorio-node.git"
+    "url": "git+https://github.com/Constructor-io/constructorio-node.git"
+  },
+  "author": "constructor.io",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Constructor-io/constructorio-node/issues"
+  },
+  "homepage": "https://github.com/Constructor-io/constructorio-node#readme",
+  "engines": {
+    "node": ">=8.3.0"
   },
   "pre-push": [
     "lint"
   ],
-  "engines": {
-    "node": ">= v0.8.0"
-  },
-  "dependencies": {
-    "lodash.clonedeep": "^4.5.0",
-    "needle": "^2.6.0",
-    "qs": "^6.10.0"
-  },
+  "files": [
+    "src/**/*"
+  ],
   "devDependencies": {
     "chai": "^4.2.0",
-    "deepfreeze": "^2.0.0",
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.0",
-    "http-server": "^0.12.3",
-    "mocha": "^7.1.2",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^8.1.0",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.15.0",
+    "jsdoc": "^3.6.3",
+    "jsdom": "^15.1.1",
+    "license-checker": "^25.0.1",
+    "lodash.clonedeep": "^4.5.0",
+    "minami": "^1.2.3",
+    "mocha": "^6.2.0",
+    "mocha-jsdom": "^2.0.0",
     "npm-check": "^5.9.2",
-    "nyc": "^15.0.0",
+    "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
-    "uuid": "^3.4.0"
+    "serve": "^11.3.2",
+    "sinon": "^7.5.0",
+    "sinon-chai": "^3.3.0",
+    "uuid": "^8.3.2"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.6.1",
+    "qs": "6.7.2"
   }
 }
