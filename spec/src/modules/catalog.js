@@ -2312,7 +2312,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of items using buffers', (done) => {
@@ -2328,7 +2332,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of variations using streams', (done) => {
@@ -2344,7 +2352,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of variations using buffers', (done) => {
@@ -2360,7 +2372,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of item groups using streams', (done) => {
@@ -2376,7 +2392,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of item groups using buffers', (done) => {
@@ -2392,7 +2412,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
@@ -2414,7 +2438,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
@@ -2436,7 +2464,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.replaceCatalog(data).then(done);
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
     });
 
@@ -2462,7 +2494,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of items using buffers', (done) => {
@@ -2478,7 +2514,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of variations using streams', (done) => {
@@ -2494,7 +2534,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of variations using buffers', (done) => {
@@ -2510,7 +2554,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of item groups using streams', (done) => {
@@ -2526,7 +2574,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of item groups using buffers', (done) => {
@@ -2542,7 +2594,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
@@ -2564,7 +2620,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should update a catalog of items, variations, and item groups using streams', (done) => {
@@ -2586,7 +2646,11 @@ describe('ConstructorIO - Catalog', () => {
           section: 'Products',
         };
 
-        catalog.updateCatalog(data).then(done);
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
     });
   });

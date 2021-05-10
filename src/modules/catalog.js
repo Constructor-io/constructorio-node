@@ -1475,7 +1475,7 @@ class Catalog {
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
-          return Promise.resolve();
+          return Promise.resolve(response.json());
         }
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
@@ -1578,7 +1578,7 @@ class Catalog {
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
-          return Promise.resolve();
+          return Promise.resolve(response.json());
         }
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
