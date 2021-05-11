@@ -356,8 +356,6 @@ class Catalog {
    * @function getItem
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.id - The ID of the item you'd like to retrieve
-   * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
-   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/get_items
    */
@@ -774,8 +772,6 @@ class Catalog {
    * @function getOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
-   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
-   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
