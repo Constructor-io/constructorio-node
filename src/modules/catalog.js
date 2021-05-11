@@ -1403,7 +1403,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     if (parameters) {
-      const { section } = parameters;
+      const { section, notification_email: notificationEmail, force } = parameters;
       let { items, variations, item_groups: itemGroups } = parameters;
 
       try {
@@ -1428,6 +1428,16 @@ class Catalog {
       // Pull section from parameters
       if (section) {
         queryParams.section = section;
+      }
+
+      // Pull notification email from parameters
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
+      // Pull force from parameters
+      if (force) {
+        queryParams.force = force;
       }
 
       // Pull items from parameters
@@ -1465,7 +1475,7 @@ class Catalog {
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
-          return Promise.resolve();
+          return Promise.resolve(response.json());
         }
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
@@ -1496,7 +1506,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     if (parameters) {
-      const { section } = parameters;
+      const { section, notification_email: notificationEmail, force } = parameters;
       let { items, variations, item_groups: itemGroups } = parameters;
 
       try {
@@ -1521,6 +1531,16 @@ class Catalog {
       // Pull section from parameters
       if (section) {
         queryParams.section = section;
+      }
+
+      // Pull notification email from parameters
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
+      // Pull force from parameters
+      if (force) {
+        queryParams.force = force;
       }
 
       // Pull items from parameters
@@ -1558,7 +1578,7 @@ class Catalog {
         headers: createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
-          return Promise.resolve();
+          return Promise.resolve(response.json());
         }
 
         return helpers.throwHttpErrorFromResponse(new Error(), response);
