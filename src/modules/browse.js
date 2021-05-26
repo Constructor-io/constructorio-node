@@ -97,6 +97,105 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
   return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
 }
 
+// Create query params from parameters and options
+function createQueryParams(parameters, options) {
+  const {
+    apiKey,
+    version
+  } = options;
+  let queryParams = { c: version };
+
+  queryParams.key = apiKey;
+
+  if (parameters) {
+    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
+
+    // Pull page from parameters
+    if (!helpers.isNil(page)) {
+      queryParams.page = page;
+    }
+
+    // Pull results per page from parameters
+    if (!helpers.isNil(resultsPerPage)) {
+      queryParams.num_results_per_page = resultsPerPage;
+    }
+
+    if (filters) {
+      queryParams.filters = filters;
+    }
+
+    // Pull sort by from parameters
+    if (sortBy) {
+      queryParams.sort_by = sortBy;
+    }
+
+    // Pull sort order from parameters
+    if (sortOrder) {
+      queryParams.sort_order = sortOrder;
+    }
+
+    // Pull section from parameters
+    if (section) {
+      queryParams.section = section;
+    }
+
+    // Pull format options from parameters
+    if (fmtOptions) {
+      queryParams.fmt_options = fmtOptions;
+    }
+  }
+
+  queryParams._dt = Date.now();
+  queryParams = helpers.cleanParams(queryParams);
+
+  return queryParams;
+}
+
+// Create URL from supplied id's
+function createBrowseUrlFromIDs(ids, parameters, userParameters, options) {
+
+  const {
+    sessionId,
+    clientId,
+    userId,
+    segments,
+    testCells,
+  } = userParameters;
+
+  const { serviceUrl } = options;
+
+  // Validate id's are provided
+  if (!ids || !(ids instanceof Array) || !ids.length) {
+    throw new Error('ids is a required parameter of type array');
+  }
+
+  const queryParams = { ...createQueryParams(parameters, options), ids };
+
+  queryParams.i = clientId;
+  queryParams.s = sessionId;
+
+  // Pull test cells from options
+  if (testCells) {
+    Object.keys(testCells).forEach((testCellKey) => {
+      queryParams[`ef-${testCellKey}`] = testCells[testCellKey];
+    });
+  }
+
+  // Pull user segments from options
+  if (segments && segments.length) {
+    queryParams.us = segments;
+  }
+
+  // Pull user id from options
+  if (userId) {
+    queryParams.ui = userId;
+  }
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/browse/items?${queryString}`;
+}
+
 /**
  * Interface to browse related API calls
  *
@@ -185,6 +284,72 @@ class Browse {
 
       throw new Error('getBrowseResults response data is malformed');
     });
+  }
+
+  /**
+   * Retrieve browse results from API using item id's
+   *
+   * @function getBrowseResultsByItemIds
+   * @param {string[]} itemIds - Item id's of results to fetch
+   * @param {object} [parameters] - Additional parameters to refine result set
+   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.resultsPerPage] - The number of results per page to return
+   * @param {object} [parameters.filters] - Filters used to refine results
+   * @param {string} [parameters.sortBy='relevance'] - The sort method for results
+   * @param {string} [parameters.sortOrder='descending'] - The sort order for results
+   * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/browse/items/
+  */
+  getBrowseResultsByItemIds(itemIds, parameters = {}, userParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createBrowseUrlFromIDs(itemIds, parameters, userParameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
+    // Append user IP as 'X-Forwarded-For' if available
+    if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+      headers['X-Forwarded-For'] = userParameters.userIp;
+    }
+
+    // Append user agent as 'User-Agent' if available
+    if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+      headers['User-Agent'] = userParameters.userAgent;
+    }
+
+    return fetch(requestUrl)
+      .then((response) => {
+        if (response.ok) { 
+          return response.json();
+        }
+        
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
+      })
+      .then((json) => {
+        if (json.response && json.response.results) {
+          if (json.result_id) {
+            // Append `result_id` to each result item
+            json.response.results.forEach((result) => {
+              // eslint-disable-next-line no-param-reassign
+              result.result_id = json.result_id;
+            });
+          }
+
+          // this.eventDispatcher.queue('browse.getBrowseResultsByItemIds.completed', json);
+
+          return json;
+        }
+        throw new Error('getBrowseResultsByItemIds response data is malformed');
+      })
   }
 }
 
