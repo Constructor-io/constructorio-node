@@ -101,7 +101,7 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
 function createQueryParams(parameters, options) {
   const {
     apiKey,
-    version
+    version,
   } = options;
   let queryParams = { c: version };
 
@@ -304,6 +304,7 @@ class Browse {
   getBrowseResultsByItemIds(itemIds, parameters = {}, userParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const headers = {};
 
     try {
       requestUrl = createBrowseUrlFromIDs(itemIds, parameters, userParameters, this.options);
@@ -328,10 +329,10 @@ class Browse {
 
     return fetch(requestUrl)
       .then((response) => {
-        if (response.ok) { 
+        if (response.ok) {
           return response.json();
         }
-        
+
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
@@ -349,7 +350,7 @@ class Browse {
           return json;
         }
         throw new Error('getBrowseResultsByItemIds response data is malformed');
-      })
+      });
   }
 }
 

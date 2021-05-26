@@ -8,7 +8,8 @@ const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
-const { expect } = require('chai');
+
+const { expect } = chai;
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -440,7 +441,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe.only('getBrowseResultsByItemIds', () => {
+  describe('getBrowseResultsByItemIds', () => {
     const ids = ['fc00a355-1e91-49a1-b6c6-c8c74c50259d', '1f32b500-f397-4faa-90e0-4c4625b3e3b5'];
 
     it('Should return a response with valid ids', (done) => {
@@ -466,23 +467,23 @@ describe('ConstructorIO - Browse', () => {
     it('should return a response with valid ids, client id and session id', (done) => {
       const userParameters = {
         clientId: 'example client id',
-        sessionId: 123456789
-      }
+        sessionId: 123456789,
+      };
       const { browse } = new ConstructorIO({
         apiKey: testApiKey,
-        fetch: fetchSpy
-      })
+        fetch: fetchSpy,
+      });
 
       browse.getBrowseResultsByItemIds(ids, null, userParameters).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(requestedUrlParams).to.have.property(`i`).to.equal('example client id');
-        expect(requestedUrlParams).to.have.property(`s`).to.equal('123456789');
+        expect(requestedUrlParams).to.have.property('i').to.equal('example client id');
+        expect(requestedUrlParams).to.have.property('s').to.equal('123456789');
         done();
       });
-    })
+    });
 
     it('Should return a response with valid ids and testCells', (done) => {
       const testCells = { foo: 'bar' };
