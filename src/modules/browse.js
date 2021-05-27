@@ -102,7 +102,7 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
     throw new Error('filterValue is a required parameter of type string');
   }
 
-  queryParams = createQueryParams(parameters, userParameters, options)
+  let queryParams = createQueryParams(parameters, userParameters, options);
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
@@ -255,7 +255,7 @@ class Browse {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
-    return fetch(requestUrl, {headers})
+    return fetch(requestUrl, { headers })
       .then((response) => {
         if (response.ok) {
           return response.json();
