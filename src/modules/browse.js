@@ -102,7 +102,7 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
     throw new Error('filterValue is a required parameter of type string');
   }
 
-  let queryParams = createQueryParams(parameters, userParameters, options);
+  const queryParams = createQueryParams(parameters, userParameters, options);
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
@@ -272,7 +272,6 @@ class Browse {
               result.result_id = json.result_id;
             });
           }
-          
           return json;
         }
         throw new Error('getBrowseResultsByItemIds response data is malformed');
