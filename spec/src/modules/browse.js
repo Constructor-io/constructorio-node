@@ -441,7 +441,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe('getBrowseResultsByItemIds', () => {
+  describe.only('getBrowseResultsByItemIds', () => {
     const ids = ['fc00a355-1e91-49a1-b6c6-c8c74c50259d', '1f32b500-f397-4faa-90e0-4c4625b3e3b5'];
 
     it('Should return a response with valid ids', (done) => {
@@ -464,7 +464,7 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
-    it('should return a response with valid ids, client id and session id', (done) => {
+    it.only('should return a response with valid ids, client id and session id', (done) => {
       const userParameters = {
         clientId: 'example client id',
         sessionId: 123456789,
@@ -476,6 +476,7 @@ describe('ConstructorIO - Browse', () => {
 
       browse.getBrowseResultsByItemIds(ids, null, userParameters).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        console.log(res)
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');

@@ -327,7 +327,7 @@ class Browse {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
-    return fetch(requestUrl)
+    return fetch(requestUrl, {headers})
       .then((response) => {
         if (response.ok) {
           return response.json();
