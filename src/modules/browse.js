@@ -87,10 +87,8 @@ function createQueryParams(parameters, userParameters, options) {
 
 // Create URL from supplied filter name, value and parameters
 // eslint-disable-next-line max-params
-function createBrowseUrl(filterName, filterValue, parameters, userParameters, options) {
-  const {
-    serviceUrl,
-  } = options;
+function createBrowseUrlFromFilter(filterName, filterValue, parameters, userParameters, options) {
+  const { serviceUrl } = options;
 
   // Validate filter name is provided
   if (!filterName || typeof filterName !== 'string') {
@@ -103,7 +101,6 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
   }
 
   const queryParams = createQueryParams(parameters, userParameters, options);
-
   const queryString = qs.stringify(queryParams, { indices: false });
 
   return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
@@ -166,7 +163,7 @@ class Browse {
     const headers = {};
 
     try {
-      requestUrl = createBrowseUrl(filterName, filterValue, parameters, userParameters, this.options);
+      requestUrl = createBrowseUrlFromFilter(filterName, filterValue, parameters, userParameters, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -226,6 +223,14 @@ class Browse {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/items/
   */
