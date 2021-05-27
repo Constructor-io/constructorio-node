@@ -3,13 +3,11 @@ const qs = require('qs');
 const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
 
-// Create URL from supplied filter name, value and parameters
-// eslint-disable-next-line max-params
-function createBrowseUrl(filterName, filterValue, parameters, userParameters, options) {
+// Create query params from parameters and options
+function createQueryParams(parameters, userParameters, options) {
   const {
     apiKey,
     version,
-    serviceUrl,
   } = options;
   const {
     sessionId,
@@ -18,11 +16,81 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
     segments,
     testCells,
   } = userParameters;
+
+
   let queryParams = { c: version };
 
   queryParams.key = apiKey;
   queryParams.i = clientId;
   queryParams.s = sessionId;
+
+  if (parameters) {
+    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
+
+    // Pull page from parameters
+    if (!helpers.isNil(page)) {
+      queryParams.page = page;
+    }
+
+    // Pull results per page from parameters
+    if (!helpers.isNil(resultsPerPage)) {
+      queryParams.num_results_per_page = resultsPerPage;
+    }
+
+    if (filters) {
+      queryParams.filters = filters;
+    }
+
+    // Pull sort by from parameters
+    if (sortBy) {
+      queryParams.sort_by = sortBy;
+    }
+
+    // Pull sort order from parameters
+    if (sortOrder) {
+      queryParams.sort_order = sortOrder;
+    }
+
+    // Pull section from parameters
+    if (section) {
+      queryParams.section = section;
+    }
+
+    // Pull format options from parameters
+    if (fmtOptions) {
+      queryParams.fmt_options = fmtOptions;
+    }
+  }
+
+  // Pull test cells from options
+  if (testCells) {
+    Object.keys(testCells).forEach((testCellKey) => {
+      queryParams[`ef-${testCellKey}`] = testCells[testCellKey];
+    });
+  }
+
+  // Pull user segments from options
+  if (segments && segments.length) {
+    queryParams.us = segments;
+  }
+
+  // Pull user id from options
+  if (userId) {
+    queryParams.ui = userId;
+  }
+
+  queryParams._dt = Date.now();
+  queryParams = helpers.cleanParams(queryParams);
+
+  return queryParams;
+}
+
+// Create URL from supplied filter name, value and parameters
+// eslint-disable-next-line max-params
+function createBrowseUrl(filterName, filterValue, parameters, userParameters, options) {
+  const {
+    serviceUrl,
+  } = options;
 
   // Validate filter name is provided
   if (!filterName || typeof filterName !== 'string') {
@@ -34,134 +102,15 @@ function createBrowseUrl(filterName, filterValue, parameters, userParameters, op
     throw new Error('filterValue is a required parameter of type string');
   }
 
-  // Pull test cells from options
-  if (testCells) {
-    Object.keys(testCells).forEach((testCellKey) => {
-      queryParams[`ef-${testCellKey}`] = testCells[testCellKey];
-    });
-  }
-
-  // Pull user segments from options
-  if (segments && segments.length) {
-    queryParams.us = segments;
-  }
-
-  // Pull user id from options
-  if (userId) {
-    queryParams.ui = userId;
-  }
-
-  if (parameters) {
-    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
-
-    // Pull page from parameters
-    if (!helpers.isNil(page)) {
-      queryParams.page = page;
-    }
-
-    // Pull results per page from parameters
-    if (!helpers.isNil(resultsPerPage)) {
-      queryParams.num_results_per_page = resultsPerPage;
-    }
-
-    if (filters) {
-      queryParams.filters = filters;
-    }
-
-    // Pull sort by from parameters
-    if (sortBy) {
-      queryParams.sort_by = sortBy;
-    }
-
-    // Pull sort order from parameters
-    if (sortOrder) {
-      queryParams.sort_order = sortOrder;
-    }
-
-    // Pull section from parameters
-    if (section) {
-      queryParams.section = section;
-    }
-
-    // Pull format options from parameters
-    if (fmtOptions) {
-      queryParams.fmt_options = fmtOptions;
-    }
-  }
-
-  queryParams._dt = Date.now();
-  queryParams = helpers.cleanParams(queryParams);
+  queryParams = createQueryParams(parameters, userParameters, options)
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
   return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
 }
 
-// Create query params from parameters and options
-function createQueryParams(parameters, options) {
-  const {
-    apiKey,
-    version,
-  } = options;
-  let queryParams = { c: version };
-
-  queryParams.key = apiKey;
-
-  if (parameters) {
-    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
-
-    // Pull page from parameters
-    if (!helpers.isNil(page)) {
-      queryParams.page = page;
-    }
-
-    // Pull results per page from parameters
-    if (!helpers.isNil(resultsPerPage)) {
-      queryParams.num_results_per_page = resultsPerPage;
-    }
-
-    if (filters) {
-      queryParams.filters = filters;
-    }
-
-    // Pull sort by from parameters
-    if (sortBy) {
-      queryParams.sort_by = sortBy;
-    }
-
-    // Pull sort order from parameters
-    if (sortOrder) {
-      queryParams.sort_order = sortOrder;
-    }
-
-    // Pull section from parameters
-    if (section) {
-      queryParams.section = section;
-    }
-
-    // Pull format options from parameters
-    if (fmtOptions) {
-      queryParams.fmt_options = fmtOptions;
-    }
-  }
-
-  queryParams._dt = Date.now();
-  queryParams = helpers.cleanParams(queryParams);
-
-  return queryParams;
-}
-
 // Create URL from supplied id's
 function createBrowseUrlFromIDs(ids, parameters, userParameters, options) {
-
-  const {
-    sessionId,
-    clientId,
-    userId,
-    segments,
-    testCells,
-  } = userParameters;
-
   const { serviceUrl } = options;
 
   // Validate id's are provided
@@ -169,28 +118,7 @@ function createBrowseUrlFromIDs(ids, parameters, userParameters, options) {
     throw new Error('ids is a required parameter of type array');
   }
 
-  const queryParams = { ...createQueryParams(parameters, options), ids };
-
-  queryParams.i = clientId;
-  queryParams.s = sessionId;
-
-  // Pull test cells from options
-  if (testCells) {
-    Object.keys(testCells).forEach((testCellKey) => {
-      queryParams[`ef-${testCellKey}`] = testCells[testCellKey];
-    });
-  }
-
-  // Pull user segments from options
-  if (segments && segments.length) {
-    queryParams.us = segments;
-  }
-
-  // Pull user id from options
-  if (userId) {
-    queryParams.ui = userId;
-  }
-
+  const queryParams = { ...createQueryParams(parameters, userParameters, options), ids };
   const queryString = qs.stringify(queryParams, { indices: false });
 
   return `${serviceUrl}/browse/items?${queryString}`;

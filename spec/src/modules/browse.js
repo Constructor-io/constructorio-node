@@ -37,7 +37,7 @@ describe('ConstructorIO - Browse', () => {
     fetchSpy = null;
   });
 
-  describe('getBrowseResults', () => {
+  describe.only('getBrowseResults', () => {
     const filterName = 'group_id';
     const filterValue = 'drill_collection';
     const filterNameCollection = 'collection_id';
@@ -464,7 +464,7 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
-    it.only('should return a response with valid ids, client id and session id', (done) => {
+    it('should return a response with valid ids, client id and session id', (done) => {
       const userParameters = {
         clientId: 'example client id',
         sessionId: 123456789,
@@ -476,7 +476,6 @@ describe('ConstructorIO - Browse', () => {
 
       browse.getBrowseResultsByItemIds(ids, null, userParameters).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-        console.log(res)
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
