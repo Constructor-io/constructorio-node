@@ -272,9 +272,7 @@ class Browse {
               result.result_id = json.result_id;
             });
           }
-
-          // this.eventDispatcher.queue('browse.getBrowseResultsByItemIds.completed', json);
-
+          
           return json;
         }
         throw new Error('getBrowseResultsByItemIds response data is malformed');
