@@ -37,7 +37,7 @@ describe('ConstructorIO - Browse', () => {
     fetchSpy = null;
   });
 
-  describe.only('getBrowseResults', () => {
+  describe('getBrowseResults', () => {
     const filterName = 'group_id';
     const filterValue = 'drill_collection';
     const filterNameCollection = 'collection_id';
@@ -441,7 +441,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe.only('getBrowseResultsByItemIds', () => {
+  describe('getBrowseResultsByItemIds', () => {
     const ids = ['fc00a355-1e91-49a1-b6c6-c8c74c50259d', '1f32b500-f397-4faa-90e0-4c4625b3e3b5'];
 
     it('Should return a response with valid ids', (done) => {
