@@ -441,7 +441,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe('getBrowseResultsByItemIds', () => {
+  describe('getBrowseResultsForItemIds', () => {
     const ids = ['fc00a355-1e91-49a1-b6c6-c8c74c50259d', '1f32b500-f397-4faa-90e0-4c4625b3e3b5'];
 
     it('Should return a response with valid ids', (done) => {
@@ -450,7 +450,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids).then((res) => {
+      browse.getBrowseResultsForItemIds(ids).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
@@ -474,7 +474,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, null, userParameters).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, null, userParameters).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
@@ -492,7 +492,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, null, { testCells }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, null, { testCells }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -512,7 +512,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, null, { segments }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, null, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -531,7 +531,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, null, { userId }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, null, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -549,7 +549,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, { page }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, { page }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -568,7 +568,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, { resultsPerPage }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, { resultsPerPage }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -588,7 +588,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, { filters }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, { filters }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -608,7 +608,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, { fmtOptions }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, { fmtOptions }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -629,7 +629,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResultsByItemIds(ids, { section }).then((res) => {
+      browse.getBrowseResultsForItemIds(ids, { section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -644,7 +644,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids with a result_id appended to each result', (done) => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      browse.getBrowseResultsByItemIds(ids).then((res) => {
+      browse.getBrowseResultsForItemIds(ids).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
@@ -659,25 +659,25 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid ids are provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds('invalid-ids')).to.eventually.be.rejected;
+      return expect(browse.getBrowseResultsForItemIds('invalid-ids')).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no ids are provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(null)).to.eventually.be.rejected;
+      return expect(browse.getBrowseResultsForItemIds(null)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when empty ids array id provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds([])).to.eventually.be.rejected;
+      return expect(browse.getBrowseResultsForItemIds([])).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         page: 'abc',
       })).to.eventually.be.rejected;
     });
@@ -685,7 +685,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         resultsPerPage: 'abc',
       })).to.eventually.be.rejected;
     });
@@ -693,7 +693,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid filters parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         filters: 123,
       })).to.eventually.be.rejected;
     });
@@ -701,7 +701,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid sortBy parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         sortBy: { foo: 'bar' },
       })).to.eventually.be.rejected;
     });
@@ -709,7 +709,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid sortOrder parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         sortOrder: 'abc',
       })).to.eventually.be.rejected;
     });
@@ -717,7 +717,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid section parameter is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: testApiKey });
 
-      return expect(browse.getBrowseResultsByItemIds(ids, {
+      return expect(browse.getBrowseResultsForItemIds(ids, {
         section: 123,
       })).to.eventually.be.rejected;
     });
@@ -725,7 +725,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should be rejected when invalid apiKey is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
-      return expect(browse.getBrowseResultsByItemIds(ids)).to.eventually.be.rejected;
+      return expect(browse.getBrowseResultsForItemIds(ids)).to.eventually.be.rejected;
     });
   });
 });

@@ -211,7 +211,7 @@ class Browse {
   /**
    * Retrieve browse results from API using item ID's
    *
-   * @function getBrowseResultsByItemIds
+   * @function getBrowseResultsForItemIds
    * @param {string[]} itemIds - Item ID's of results to fetch
    * @param {object} [parameters] - Additional parameters to refine result set
    * @param {number} [parameters.page] - The page number of the results
@@ -231,7 +231,7 @@ class Browse {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/items/
   */
-  getBrowseResultsByItemIds(itemIds, parameters = {}, userParameters = {}) {
+  getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const headers = {};
@@ -276,7 +276,7 @@ class Browse {
           }
           return json;
         }
-        throw new Error('getBrowseResultsByItemIds response data is malformed');
+        throw new Error('getBrowseResultsForItemIds response data is malformed');
       });
   }
 }
