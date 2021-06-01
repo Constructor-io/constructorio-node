@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-underscore-dangle */
+/* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
 const nodeFetch = require('node-fetch');
 const helpers = require('../utils/helpers');
@@ -16,8 +16,6 @@ function createQueryParams(parameters, userParameters, options) {
     segments,
     testCells,
   } = userParameters;
-
-
   let queryParams = { c: version };
 
   queryParams.key = apiKey;
@@ -86,7 +84,6 @@ function createQueryParams(parameters, userParameters, options) {
 }
 
 // Create URL from supplied filter name, value and parameters
-// eslint-disable-next-line max-params
 function createBrowseUrlFromFilter(filterName, filterValue, parameters, userParameters, options) {
   const { serviceUrl } = options;
 
@@ -106,16 +103,16 @@ function createBrowseUrlFromFilter(filterName, filterValue, parameters, userPara
   return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
 }
 
-// Create URL from supplied id's
-function createBrowseUrlFromIDs(ids, parameters, userParameters, options) {
+// Create URL from supplied ID's
+function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   const { serviceUrl } = options;
 
-  // Validate id's are provided
-  if (!ids || !(ids instanceof Array) || !ids.length) {
-    throw new Error('ids is a required parameter of type array');
+  // Validate item ID's are provided
+  if (!itemIds || !(itemIds instanceof Array) || !itemIds.length) {
+    throw new Error('itemIds is a required parameter of type array');
   }
 
-  const queryParams = { ...createQueryParams(parameters, userParameters, options), ids };
+  const queryParams = { ...createQueryParams(parameters, userParameters, options), ids: itemIds };
   const queryString = qs.stringify(queryParams, { indices: false });
 
   return `${serviceUrl}/browse/items?${queryString}`;
@@ -212,10 +209,10 @@ class Browse {
   }
 
   /**
-   * Retrieve browse results from API using item id's
+   * Retrieve browse results from API using item ID's
    *
    * @function getBrowseResultsByItemIds
-   * @param {string[]} itemIds - Item id's of results to fetch
+   * @param {string[]} itemIds - Item ID's of results to fetch
    * @param {object} [parameters] - Additional parameters to refine result set
    * @param {number} [parameters.page] - The page number of the results
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
