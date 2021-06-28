@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/Constructor-io/constructorio-node#readme",
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=14.5.0"
   },
   "pre-push": [
     "lint"
