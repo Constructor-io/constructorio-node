@@ -4,19 +4,20 @@ const nodeFetch = require('node-fetch');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 
-// TODO: Add support to send origin referrer
-function applyParams(parameters, options) {
+// TODO: Add support for new user parameters + tests
+function applyParams(parameters, userParameters, options) {
   const {
     apiKey,
     version,
+  } = options;
+  const {
     sessionId,
     clientId,
     userId,
     segments,
     testCells,
-    requestMethod,
-    beaconMode,
-  } = options;
+    originReferrer,
+  } = userParameters;
   let aggregateParams = Object.assign(parameters);
 
   if (version) {
@@ -49,8 +50,8 @@ function applyParams(parameters, options) {
     });
   }
 
-  if (beaconMode && requestMethod && requestMethod.match(/POST/i)) {
-    aggregateParams.beacon = true;
+  if (originReferrer) {
+    aggregateParams.origin_referrer = originReferrer;
   }
 
   aggregateParams._dt = Date.now();
@@ -60,8 +61,8 @@ function applyParams(parameters, options) {
 }
 
 // Append common parameters to supplied parameters object and return as string
-function applyParamsAsString(parameters, options) {
-  return qs.stringify(applyParams(parameters, options), { indices: false });
+function applyParamsAsString(parameters, userParameters, options) {
+  return qs.stringify(applyParams(parameters, userParameters, options), { indices: false });
 }
 
 // Send request to server
@@ -138,13 +139,21 @@ class Tracker {
    * Send session start event to API
    *
    * @function trackSessionStart
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    */
-  trackSessionStart() {
+  trackSessionStart(userParameters) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'session_start' };
 
-    send.call(this, `${url}${applyParamsAsString(queryParams, this.options)}`);
+    send.call(this, `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
     return true;
   }
@@ -153,14 +162,22 @@ class Tracker {
    * Send input focus event to API
    *
    * @function trackInputFocus
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User focused on search input element
    */
-  trackInputFocus() {
+  trackInputFocus(userParameters) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'focus' };
 
-    send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+    send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
     return true;
   }
@@ -177,10 +194,18 @@ class Tracker {
    * @param {string} [parameters.tr] - Trigger used to select the item (click, etc.)
    * @param {string} [parameters.group_id] - Group identifier of selected item
    * @param {string} [parameters.display_name] - Display name of group of selected item
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User selected (clicked, or navigated to via keyboard) a result that appeared within autocomplete
    */
-  trackAutocompleteSelect(term, parameters) {
+  trackAutocompleteSelect(term, parameters, userParameters) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -220,7 +245,7 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
         return true;
       }
@@ -241,10 +266,18 @@ class Tracker {
    * @param {string} parameters.result_id - Customer ID of the selected autocomplete item
    * @param {string} [parameters.group_id] - Group identifier of selected item
    * @param {string} [parameters.display_name] - Display name of group of selected item
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User submitted a search (pressing enter within input element, or clicking submit element)
    */
-  trackSearchSubmit(term, parameters) {
+  trackSearchSubmit(term, parameters, userParameters) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -268,7 +301,7 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
         return true;
       }
@@ -287,10 +320,18 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {number} parameters.num_results - Number of search results in total
    * @param {array} [parameters.customer_ids] - List of customer item id's returned from search
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User loaded a search product listing page
    */
-  trackSearchResultsLoaded(term, parameters) {
+  trackSearchResultsLoaded(term, parameters, userParameters) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -307,7 +348,7 @@ class Tracker {
           queryParams.customer_ids = customer_ids.join(',');
         }
 
-        send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
         return true;
       }
@@ -327,10 +368,18 @@ class Tracker {
    * @param {string} parameters.name - Identifier
    * @param {string} parameters.customer_id - Customer id
    * @param {string} [parameters.result_id] - Result id
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    */
-  trackSearchResultClick(term, parameters) {
+  trackSearchResultClick(term, parameters, userParameters) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -355,7 +404,7 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
 
         return true;
       }
@@ -381,10 +430,18 @@ class Tracker {
    * @param {string} [parameters.display_name] - Display name for the custom conversion type
    * @param {string} [parameters.result_id] - Result id
    * @param {string} [parameters.section] - Autocomplete section
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User performed an action indicating interest in an item (add to cart, add to wishlist, etc.)
    */
-  trackConversion(term, parameters) {
+  trackConversion(term, parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const searchTerm = helpers.ourEncodeURIComponent(term) || 'TERM_UNKNOWN';
@@ -446,7 +503,7 @@ class Tracker {
         bodyParams.display_name = display_name;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString(queryParams, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -471,10 +528,18 @@ class Tracker {
    * @param {number} parameters.revenue - Revenue
    * @param {string} [parameters.order_id] - Customer unique order identifier
    * @param {string} [parameters.section] - Autocomplete section
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User completed an order (usually fired on order confirmation page)
    */
-  trackPurchase(parameters) {
+  trackPurchase(parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/purchase?`;
@@ -508,7 +573,7 @@ class Tracker {
         queryParams.section = 'Products';
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString(queryParams, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -538,10 +603,18 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} parameters.pod_id - Pod identifier
    * @param {number} parameters.num_results_viewed - Number of results viewed
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    */
-  trackRecommendationView(parameters) {
+  trackRecommendationView(parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/recommendation_result_view?`;
@@ -586,7 +659,7 @@ class Tracker {
         bodyParams.num_results_viewed = num_results_viewed;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -619,10 +692,18 @@ class Tracker {
    * @param {string} parameters.pod_id - Pod identifier
    * @param {string} parameters.strategy_id - Strategy identifier
    * @param {string} parameters.item_id - Identifier of clicked item
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User clicked an item that appeared within a list of recommended results
    */
-  trackRecommendationClick(parameters) {
+  trackRecommendationClick(parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/recommendation_result_click?`;
@@ -682,7 +763,7 @@ class Tracker {
         bodyParams.item_id = item_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -714,10 +795,18 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} parameters.filter_name - Filter name
    * @param {string} parameters.filter_value - Filter value
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User loaded a browse product listing page
    */
-  trackBrowseResultsLoaded(parameters) {
+  trackBrowseResultsLoaded(parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/browse_result_load?`;
@@ -782,7 +871,7 @@ class Tracker {
         bodyParams.items = items;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -814,10 +903,18 @@ class Tracker {
    * @param {string} parameters.filter_name - Filter name
    * @param {string} parameters.filter_value - Filter value
    * @param {string} parameters.item_id - ID of clicked item
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    */
-  trackBrowseResultClick(parameters) {
+  trackBrowseResultClick(parameters, userParameters) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/browse_result_click?`;
@@ -882,7 +979,7 @@ class Tracker {
         bodyParams.item_id = item_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
@@ -907,10 +1004,18 @@ class Tracker {
    * @param {string} [parameters.item_name] - Name of clicked item
    * @param {string} [parameters.variation_id] - Variation ID of clicked item
    * @param {string} [parameters.section="Products"] - Results section
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    */
-  trackGenericResultClick(parameters) {
+  trackGenericResultClick(parameters, userParameters) {
     // Ensure required parameters are provided
     if (typeof parameters === 'object' && !!parameters.item_id) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/result_click?`;
@@ -933,7 +1038,7 @@ class Tracker {
         bodyParams.variation_id = variation_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, this.options)}`;
+      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 

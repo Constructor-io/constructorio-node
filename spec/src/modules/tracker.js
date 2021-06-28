@@ -21,8 +21,8 @@ describe.only('ConstructorIO - Tracker', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy = null;
   const userParameters = {
-    i: '6c73138f-c27b-49f0-872d-63b00ed0e395',
-    s: 1,
+    clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
+    sessionId: 1,
   };
 
   jsdom({ url: 'http://localhost' });
@@ -44,7 +44,6 @@ describe.only('ConstructorIO - Tracker', () => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -58,7 +57,6 @@ describe.only('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('action').to.equal('session_start');
         expect(requestParams).to.have.property('c').to.equal(clientVersion);
         expect(requestParams).to.have.property('_dt');
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -67,16 +65,14 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSessionStart()).to.equal(true);
+      expect(tracker.trackSessionStart(userParameters)).to.equal(true);
     });
 
     it('Should respond with a valid response with segments', (done) => {
       const segments = ['foo', 'bar'];
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
-        segments,
         fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -93,107 +89,10 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSessionStart()).to.equal(true);
-    });
-
-    it('Should respond with a valid response with userId', (done) => {
-      const userId = 'user-id';
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        userId,
-        fetch: fetchSpy,
+      expect(tracker.trackSessionStart({
         ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('ui').to.equal(userId);
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSessionStart()).to.equal(true);
-    });
-
-    it('Should send along origin_referrer query param if sendReferrerWithTrackingEvents is not defined', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSessionStart()).to.equal(true);
-    });
-
-    it('Should send along origin_referrer query param if sendReferrerWithTrackingEvents is true', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: true,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSessionStart()).to.equal(true);
-    });
-
-    it('Should not send along origin_referrer query param if sendReferrerWithTrackingEvents is false', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: false,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.not.have.property('origin_referrer');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSessionStart()).to.equal(true);
+        segments,
+      })).to.equal(true);
     });
 
     it('Should respond with a valid response with testCells', (done) => {
@@ -201,8 +100,6 @@ describe.only('ConstructorIO - Tracker', () => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        testCells,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -219,7 +116,10 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSessionStart()).to.equal(true);
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
     });
 
     it('Should respond with a valid response with multiple testCells', (done) => {
@@ -231,8 +131,6 @@ describe.only('ConstructorIO - Tracker', () => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        testCells,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -251,7 +149,10 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSessionStart()).to.equal(true);
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
     });
   });
 
