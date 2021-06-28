@@ -4,6 +4,7 @@ const nodeFetch = require('node-fetch');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 
+// TODO: Add support to send origin referrer
 function applyParams(parameters, options) {
   const {
     apiKey,
@@ -16,10 +17,6 @@ function applyParams(parameters, options) {
     requestMethod,
     beaconMode,
   } = options;
-  const { host, pathname } = helpers.getWindowLocation();
-  const sendReferrerWithTrackingEvents = (options.sendReferrerWithTrackingEvents === false)
-    ? false
-    : true; // Defaults to 'true'
   let aggregateParams = Object.assign(parameters);
 
   if (version) {
@@ -56,14 +53,6 @@ function applyParams(parameters, options) {
     aggregateParams.beacon = true;
   }
 
-  if (sendReferrerWithTrackingEvents && host) {
-    aggregateParams.origin_referrer = host;
-
-    if (pathname) {
-      aggregateParams.origin_referrer += pathname;
-    }
-  }
-
   aggregateParams._dt = Date.now();
   aggregateParams = helpers.cleanParams(aggregateParams);
 
@@ -78,13 +67,14 @@ function applyParamsAsString(parameters, options) {
 // Send request to server
 function send(url, method = 'GET', body) {
   let request;
+  const fetch = (this.options && this.options.fetch) || nodeFetch;
 
   if (method === 'GET') {
-    request = nodeFetch(url);
+    request = fetch(url);
   }
 
   if (method === 'POST') {
-    request = nodeFetch(url, {
+    request = fetch(url, {
       method,
       body: JSON.stringify(body),
       mode: 'cors',
@@ -154,7 +144,7 @@ class Tracker {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'session_start' };
 
-    send(`${url}${applyParamsAsString(queryParams, this.options)}`);
+    send.call(this, `${url}${applyParamsAsString(queryParams, this.options)}`);
 
     return true;
   }
