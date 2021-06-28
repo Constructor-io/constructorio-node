@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "sudo rm -rf node_modules package-lock.json",
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
-    "check-deps": "npm-check",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "chmod 766 .git/hooks/pre-push && eslint 'src/**/*.js' 'spec/**/*.js'",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/* --opts ./mocha.opts --recursive",
@@ -35,12 +34,12 @@
     "src/**/*"
   ],
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.6.0",
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-import": "^2.23.4",
     "jsdoc": "^3.6.7",
     "jsdom": "^15.1.1",
     "license-checker": "^25.0.1",
@@ -48,12 +47,11 @@
     "minami": "^1.2.3",
     "mocha": "^6.2.0",
     "mocha-jsdom": "^2.0.0",
-    "npm-check": "^5.9.2",
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
     "serve": "^11.3.2",
     "sinon": "^7.5.0",
-    "sinon-chai": "^3.3.0",
+    "sinon-chai": "^3.7.0",
     "uuid": "^8.3.2"
   },
   "dependencies": {
