@@ -41,7 +41,7 @@
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.7",
     "jsdom": "^15.1.1",
     "license-checker": "^25.0.1",
     "lodash.clonedeep": "^4.5.0",
