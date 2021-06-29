@@ -17,6 +17,8 @@ dotenv.config();
 const delayBetweenTests = 25;
 const testApiKey = process.env.TEST_API_KEY;
 
+// TODO:
+// - Should we enforce that tracker always has i & s parameters
 describe.only('ConstructorIO - Tracker', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy = null;
@@ -39,7 +41,7 @@ describe.only('ConstructorIO - Tracker', () => {
     setTimeout(done, delayBetweenTests);
   });
 
-  describe.only('trackSessionStart', () => {
+  describe('trackSessionStart', () => {
     it('Should respond with a valid response', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -68,7 +70,7 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSessionStart(userParameters)).to.equal(true);
     });
 
-    it('Should respond with a valid response with ui', (done) => {
+    it('Should respond with a valid response with user identifier', (done) => {
       const userId = 'bd2d9d1f097614c4b4de';
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -122,7 +124,7 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it('Should respond with a valid response with testCells', (done) => {
+    it('Should respond with a valid response with test cells', (done) => {
       const testCells = { foo: 'bar' };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -149,7 +151,7 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it('Should respond with a valid response with multiple testCells', (done) => {
+    it('Should respond with a valid response with multiple test cells', (done) => {
       const testCells = {
         foo: 'bar',
         bar: 'foo',
@@ -179,6 +181,33 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSessionStart({
         ...userParameters,
         testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        originReferrer,
       })).to.equal(true);
     });
 
@@ -262,12 +291,11 @@ describe.only('ConstructorIO - Tracker', () => {
     });
   });
 
-  describe('trackInputFocus', () => {
+  describe.only('trackInputFocus', () => {
     it('Should respond with a valid response', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -281,7 +309,6 @@ describe.only('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('action').to.equal('focus');
         expect(requestParams).to.have.property('c').to.equal(clientVersion);
         expect(requestParams).to.have.property('_dt');
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -290,42 +317,14 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackInputFocus()).to.equal(true);
+      expect(tracker.trackInputFocus(userParameters)).to.equal(true);
     });
 
-    it('Should respond with a valid response with segments', (done) => {
-      const segments = ['foo', 'bar'];
+    it('Should respond with a valid response with user identifier', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
-        segments,
         fetch: fetchSpy,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('us').to.deep.equal(segments);
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackInputFocus()).to.equal(true);
-    });
-
-    it('Should respond with a valid response with userId', (done) => {
-      const userId = 'user-id';
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        userId,
-        fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -342,15 +341,17 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackInputFocus()).to.equal(true);
+      expect(tracker.trackInputFocus({
+        userId,
+        ...userParameters,
+      })).to.equal(true);
     });
 
-    it('Should send along origin_referrer query param if sendReferrerWithTrackingEvents is true', (done) => {
+    it('Should respond with a valid response with segments', (done) => {
+      const segments = ['foo', 'bar'];
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: true,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -358,7 +359,7 @@ describe.only('ConstructorIO - Tracker', () => {
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -367,41 +368,17 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackInputFocus()).to.equal(true);
-    });
-
-    it('Should not send along origin_referrer query param if sendReferrerWithTrackingEvents is false', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: false,
+      expect(tracker.trackInputFocus({
+        segments,
         ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).not.to.have.property('origin_referrer');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackInputFocus()).to.equal(true);
+      })).to.equal(true);
     });
 
-    it('Should respond with a valid response with testCells', (done) => {
+    it('Should respond with a valid response with test cells', (done) => {
       const testCells = { foo: 'bar' };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        testCells,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -418,7 +395,149 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackInputFocus()).to.equal(true);
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with multiple test cells', (done) => {
+      const testCells = {
+        foo: 'bar',
+        bar: 'foo',
+        far: 'boo',
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+        expect(requestParams).to.have.property(`ef-${Object.keys(testCells)[1]}`).to.equal(Object.values(testCells)[1]);
+        expect(requestParams).to.have.property(`ef-${Object.keys(testCells)[2]}`).to.equal(Object.values(testCells)[2]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with security token', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus(userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response with user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
     });
   });
 
