@@ -541,7 +541,7 @@ describe.only('ConstructorIO - Tracker', () => {
     });
   });
 
-  describe.only('trackAutocompleteSelect', () => {
+  describe('trackAutocompleteSelect', () => {
     const term = 'Where The Wild Things Are';
     const requiredParameters = {
       original_query: 'original-query',
@@ -1110,7 +1110,7 @@ describe.only('ConstructorIO - Tracker', () => {
     });
   });
 
-  describe('trackSearchResultsLoaded', () => {
+  describe.only('trackSearchResultsLoaded', () => {
     const term = 'Cat in the Hat';
     const requiredParameters = {
       num_results: 1337,
@@ -1123,7 +1123,6 @@ describe.only('ConstructorIO - Tracker', () => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -1137,7 +1136,6 @@ describe.only('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('c').to.equal(clientVersion);
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('num_results').to.equal(requiredParameters.num_results.toString());
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -1146,42 +1144,14 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, userParameters)).to.equal(true);
     });
 
-    it('Should respond with a valid response when term, required parameters and segments are provided', (done) => {
-      const segments = ['foo', 'bar'];
+    it('Should respond with a valid response when term, required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
-        segments,
         fetch: fetchSpy,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('us').to.deep.equal(segments);
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
-    });
-
-    it('Should respond with a valid response when term, required parameters and userId are provided', (done) => {
-      const userId = 'user-id';
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        userId,
-        fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -1198,16 +1168,44 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
     });
 
-    it('Should respond with a valid response when term, required parameters and testCells are provided', (done) => {
+    it('Should respond with a valid response when term, required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and test cells are provided', (done) => {
       const testCells = { foo: 'bar' };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        testCells,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -1224,14 +1222,122 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        originReferrer,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        userIp,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        userAgent,
+        ...userParameters,
+      })).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required and optional parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
-        ...userParameters,
       });
 
       tracker.on('success', (responseParams) => {
@@ -1245,12 +1351,14 @@ describe.only('ConstructorIO - Tracker', () => {
         expect(responseParams).to.have.property('method').to.equal('GET');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
-
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, Object.assign(requiredParameters, optionalParameters)))
-        .to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(
+        term,
+        Object.assign(requiredParameters, optionalParameters),
+        userParameters,
+      )).to.equal(true);
     });
 
     it('Should respond with a valid response when term, and zero value num_results parameter are provided', (done) => {
@@ -1275,81 +1383,31 @@ describe.only('ConstructorIO - Tracker', () => {
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, { num_results: 0 })).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, { num_results: 0 }, userParameters)).to.equal(true);
     });
 
     it('Should throw an error when invalid term is provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
-      expect(tracker.trackSearchResultsLoaded([], requiredParameters)).to.be.an('error');
+      expect(tracker.trackSearchResultsLoaded([], requiredParameters, userParameters)).to.be.an('error');
     });
 
     it('Should throw an error when no term is provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
-      expect(tracker.trackSearchResultsLoaded(null, requiredParameters)).to.be.an('error');
+      expect(tracker.trackSearchResultsLoaded(null, requiredParameters, userParameters)).to.be.an('error');
     });
 
     it('Should throw an error when invalid parameters are provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
-      expect(tracker.trackSearchResultsLoaded(term, [])).to.be.an('error');
+      expect(tracker.trackSearchResultsLoaded(term, [], userParameters)).to.be.an('error');
     });
 
     it('Should throw an error when no parameters are provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
-      expect(tracker.trackSearchResultsLoaded(term)).to.be.an('error');
-    });
-
-    it('Should send along origin_referrer query param if sendReferrerWithTrackingEvents is true', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: true,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('origin_referrer').to.equal('localhost.test/path/name');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
-    });
-
-    it('Should not send along origin_referrer query param if sendReferrerWithTrackingEvents is false', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-        sendReferrerWithTrackingEvents: false,
-        ...userParameters,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.not.have.property('origin_referrer');
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters)).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, null, userParameters)).to.be.an('error');
     });
   });
 
