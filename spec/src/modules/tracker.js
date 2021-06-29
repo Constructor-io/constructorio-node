@@ -68,6 +68,33 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSessionStart(userParameters)).to.equal(true);
     });
 
+    it('Should respond with a valid response with ui', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with segments', (done) => {
       const segments = ['foo', 'bar'];
       const { tracker } = new ConstructorIO({
@@ -152,6 +179,85 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSessionStart({
         ...userParameters,
         testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with security token', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart(userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response with user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        userAgent,
       })).to.equal(true);
     });
   });

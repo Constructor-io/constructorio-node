@@ -4,7 +4,6 @@ const nodeFetch = require('node-fetch');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 
-// TODO: Add support for new user parameters + tests
 function applyParams(parameters, userParameters, options) {
   const {
     apiKey,
@@ -66,12 +65,28 @@ function applyParamsAsString(parameters, userParameters, options) {
 }
 
 // Send request to server
-function send(url, method = 'GET', body) {
+function send(url, userParameters, method = 'GET', body) {
   let request;
   const fetch = (this.options && this.options.fetch) || nodeFetch;
+  const headers = {};
+
+  // Append security token as 'x-cnstrc-token' if available
+  if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+    headers['x-cnstrc-token'] = this.options.securityToken;
+  }
+
+  // Append user IP as 'X-Forwarded-For' if available
+  if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+    headers['X-Forwarded-For'] = userParameters.userIp;
+  }
+
+  // Append user agent as 'User-Agent' if available
+  if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+    headers['User-Agent'] = userParameters.userAgent;
+  }
 
   if (method === 'GET') {
-    request = fetch(url);
+    request = fetch(url, { headers });
   }
 
   if (method === 'POST') {
@@ -79,7 +94,10 @@ function send(url, method = 'GET', body) {
       method,
       body: JSON.stringify(body),
       mode: 'cors',
-      headers: { 'Content-Type': 'text/plain' },
+      headers: {
+        ...headers,
+        'Content-Type': 'text/plain',
+      },
     });
   }
 
@@ -153,7 +171,11 @@ class Tracker {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'session_start' };
 
-    send.call(this, `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+    send.call(
+      this,
+      `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+      userParameters,
+    );
 
     return true;
   }
@@ -177,7 +199,11 @@ class Tracker {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'focus' };
 
-    send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+    send.call(
+      this,
+      `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+      userParameters,
+    );
 
     return true;
   }
@@ -245,7 +271,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+        send.call(
+          this,
+          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          userParameters,
+        );
 
         return true;
       }
@@ -301,7 +331,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+        send.call(
+          this,
+          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          userParameters,
+        );
 
         return true;
       }
@@ -348,7 +382,11 @@ class Tracker {
           queryParams.customer_ids = customer_ids.join(',');
         }
 
-        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+        send.call(
+          this,
+          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          userParameters,
+        );
 
         return true;
       }
@@ -404,7 +442,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
-        send(`${url}${applyParamsAsString(queryParams, userParameters, this.options)}`);
+        send.call(
+          this,
+          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          userParameters,
+        );
 
         return true;
       }
@@ -507,8 +549,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -577,8 +621,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -663,8 +709,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -767,8 +815,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -875,8 +925,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -983,8 +1035,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
@@ -1042,8 +1096,10 @@ class Tracker {
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
 
-      send(
+      send.call(
+        this,
         requestURL,
+        userParameters,
         requestMethod,
         requestBody,
       );
