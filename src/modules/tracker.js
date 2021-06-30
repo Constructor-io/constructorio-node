@@ -547,7 +547,7 @@ class Tracker {
 
       const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
-      const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
+      const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
