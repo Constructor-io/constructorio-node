@@ -17,7 +17,7 @@ dotenv.config();
 const delayBetweenTests = 25;
 const testApiKey = process.env.TEST_API_KEY;
 
-describe.only('ConstructorIO - Tracker', () => {
+describe('ConstructorIO - Tracker', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy = null;
   const userParameters = {
