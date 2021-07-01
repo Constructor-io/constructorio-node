@@ -293,8 +293,8 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const headers = createHeaders(this.options, userParameters);
     const { serviceUrl } = this.options;
-
     const queryParams = createQueryParams(parameters, userParameters, this.options);
+
     delete queryParams._dt;
 
     const queryString = qs.stringify(queryParams, { indices: false });
