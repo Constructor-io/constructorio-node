@@ -86,6 +86,16 @@ function send(url, userParameters, method = 'GET', body) {
     headers['User-Agent'] = userParameters.userAgent;
   }
 
+  // Append language as 'Accept-Language' if available
+  if (userParameters.acceptLanguage && typeof userParameters.acceptLanguage === 'string') {
+    headers['Accept-Language'] = userParameters.acceptLanguage;
+  }
+
+  // Append referrer as 'Referer' if available
+  if (userParameters.referer && typeof userParameters.referer === 'string') {
+    headers.Referer = userParameters.referer;
+  }
+
   if (method === 'GET') {
     request = fetch(url, { headers });
   }
@@ -164,8 +174,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    */
   trackSessionStart(userParameters) {
@@ -191,8 +204,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User focused on search input element
    */
@@ -227,8 +243,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User selected (clicked, or navigated to via keyboard) a result that appeared within autocomplete
    */
@@ -303,8 +322,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User submitted a search (pressing enter within input element, or clicking submit element)
    */
@@ -361,8 +383,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User loaded a search product listing page
    */
@@ -413,8 +438,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    */
@@ -479,8 +507,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User performed an action indicating interest in an item (add to cart, add to wishlist, etc.)
    */
@@ -579,8 +610,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User completed an order (usually fired on order confirmation page)
    */
@@ -646,8 +680,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    */
@@ -735,8 +772,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User clicked an item that appeared within a list of recommended results
    */
@@ -840,8 +880,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User loaded a browse product listing page
    */
@@ -950,8 +993,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    */
@@ -1053,8 +1099,11 @@ class Tracker {
    * @param {object} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.userIp] - Origin user IP, from client
-   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    */
