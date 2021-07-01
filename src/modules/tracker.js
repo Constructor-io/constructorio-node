@@ -592,14 +592,6 @@ class Tracker {
       const { items, revenue, order_id, section } = parameters;
 
       if (order_id) {
-        // Don't send another purchase event if we have already tracked the order
-        if (helpers.hasOrderIdRecord(order_id)) {
-          return false;
-        }
-
-        helpers.addOrderIdRecord(order_id);
-
-        // Add order_id to the tracking params
         bodyParams.order_id = order_id;
       }
 
@@ -619,7 +611,7 @@ class Tracker {
 
       const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
-      const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
+      const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
@@ -631,8 +623,6 @@ class Tracker {
 
       return true;
     }
-
-    this.requests.send();
 
     return new Error('parameters are required of type object');
   }
@@ -719,8 +709,6 @@ class Tracker {
 
       return true;
     }
-
-    this.requests.send();
 
     return new Error('parameters are required of type object');
   }
