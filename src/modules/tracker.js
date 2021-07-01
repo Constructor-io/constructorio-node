@@ -54,6 +54,7 @@ function applyParams(parameters, userParameters, options) {
   }
 
   aggregateParams._dt = Date.now();
+  aggregateParams.beacon = true;
   aggregateParams = helpers.cleanParams(aggregateParams);
 
   return aggregateParams;
@@ -697,7 +698,7 @@ class Tracker {
 
       const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
-      const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
+      const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
