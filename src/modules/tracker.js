@@ -1060,7 +1060,7 @@ class Tracker {
    */
   trackGenericResultClick(parameters, userParameters) {
     // Ensure required parameters are provided
-    if (typeof parameters === 'object' && !!parameters.item_id) {
+    if (typeof parameters === 'object' && parameters && parameters.item_id) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/result_click?`;
       const bodyParams = {};
       const {
@@ -1083,7 +1083,7 @@ class Tracker {
 
       const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
-      const requestBody = applyParams(bodyParams, { ...this.options, requestMethod });
+      const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
