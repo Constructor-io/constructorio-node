@@ -17,9 +17,6 @@ dotenv.config();
 const delayBetweenTests = 25;
 const testApiKey = process.env.TEST_API_KEY;
 
-// TODO:
-// - Should we enforce that tracker always has i & s parameters
-// - Is beacon mode relevant in this implementation? if so, need to restore some methods for trackPurchase
 describe.only('ConstructorIO - Tracker', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy = null;
@@ -291,6 +288,60 @@ describe.only('ConstructorIO - Tracker', () => {
         userAgent,
       })).to.equal(true);
     });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
   });
 
   describe('trackInputFocus', () => {
@@ -542,6 +593,60 @@ describe.only('ConstructorIO - Tracker', () => {
         userAgent,
       })).to.equal(true);
     });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
   });
 
   describe('trackAutocompleteSelect', () => {
@@ -773,6 +878,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackAutocompleteSelect(term, requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -1060,6 +1219,60 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, {
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response when term, required and optional parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -1337,6 +1550,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -1640,6 +1907,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultClick(term, requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -1988,6 +2309,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackConversion(term, requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(term, requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(term, requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -2450,6 +2825,60 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(requiredParameters, {
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
+
     it('Should throw an error when invalid parameters are provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
@@ -2761,6 +3190,60 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, {
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
+
     it('Should throw an error when invalid parameters are provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
@@ -3031,6 +3514,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackRecommendationClick(requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -3349,6 +3886,60 @@ describe.only('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, {
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response when required and optional parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -3652,6 +4243,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackBrowseResultClick(requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
@@ -3985,6 +4630,60 @@ describe.only('ConstructorIO - Tracker', () => {
       expect(tracker.trackGenericResultClick(requiredParameters, {
         userAgent,
         ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, {
+        ...userParameters,
+        referer,
       })).to.equal(true);
     });
 
