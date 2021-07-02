@@ -184,10 +184,11 @@ class Tracker {
   trackSessionStart(userParameters) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'session_start' };
+    const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
 
     send.call(
       this,
-      `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+      requestUrl,
       userParameters,
     );
 
@@ -215,10 +216,11 @@ class Tracker {
   trackInputFocus(userParameters) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'focus' };
+    const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
 
     send.call(
       this,
-      `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+      requestUrl,
       userParameters,
     );
 
@@ -291,9 +293,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
+        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
         send.call(
           this,
-          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          requestUrl,
           userParameters,
         );
 
@@ -354,9 +358,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
+        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
         send.call(
           this,
-          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          requestUrl,
           userParameters,
         );
 
@@ -408,9 +414,11 @@ class Tracker {
           queryParams.customer_ids = customer_ids.join(',');
         }
 
+        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
         send.call(
           this,
-          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          requestUrl,
           userParameters,
         );
 
@@ -471,9 +479,11 @@ class Tracker {
           queryParams.result_id = result_id;
         }
 
+        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
         send.call(
           this,
-          `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`,
+          requestUrl,
           userParameters,
         );
 
@@ -577,13 +587,13 @@ class Tracker {
         bodyParams.display_name = display_name;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -644,13 +654,13 @@ class Tracker {
         queryParams.section = 'Products';
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -733,13 +743,13 @@ class Tracker {
         bodyParams.num_results_viewed = num_results_viewed;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -840,13 +850,13 @@ class Tracker {
         bodyParams.item_id = item_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -953,13 +963,13 @@ class Tracker {
         bodyParams.items = items;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -1066,13 +1076,13 @@ class Tracker {
         bodyParams.item_id = item_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
@@ -1130,13 +1140,13 @@ class Tracker {
         bodyParams.variation_id = variation_id;
       }
 
-      const requestURL = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
-        requestURL,
+        requestUrl,
         userParameters,
         requestMethod,
         requestBody,
