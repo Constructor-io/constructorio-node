@@ -5,6 +5,7 @@ const Search = require('./modules/search');
 const Browse = require('./modules/browse');
 const Autocomplete = require('./modules/autocomplete');
 const Recommendations = require('./modules/recommendations');
+const Tracker = require('./modules/tracker');
 const Catalog = require('./modules/catalog');
 const { version: packageVersion } = require('../package.json');
 
@@ -22,6 +23,7 @@ class ConstructorIO {
    * @property {object} [browse] - Interface to {@link module:browse}
    * @property {object} [autocomplete] - Interface to {@link module:autocomplete}
    * @property {object} [recommendations] - Interface to {@link module:recommendations}
+   * @property {object} [tracker] - Interface to {@link module:tracker}
    * @property {object} [catalog] - Interface to {@link module:catalog}
    * @returns {class}
    */
@@ -53,6 +55,7 @@ class ConstructorIO {
     this.browse = new Browse(this.options);
     this.autocomplete = new Autocomplete(this.options);
     this.recommendations = new Recommendations(this.options);
+    this.tracker = new Tracker(this.options);
     this.catalog = new Catalog(this.options);
   }
 }
