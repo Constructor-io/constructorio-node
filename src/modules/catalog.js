@@ -1583,6 +1583,130 @@ class Catalog {
       return Promise.reject(error);
     }
   }
+
+  /**
+   * Create a facet configuration
+   * 
+   * @function addFacetConfiguration
+   * @param {object} parameters - Aditional paramaters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
+   * @param {string} parameters.section - The section in which your facet is defined. Default value is Products.
+   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {string} [parameters.sort_order] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overriden by setting position attribute on facet options.
+   * @param {boolean} [parameters.sort_descending] - Set to true if the options should be sorted in descending order, false to sort ascencing. Default value is true if sort_order is relevance and false for others.
+   * @param {string} [parameters.range_type] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
+   * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
+   * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
+   * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
+   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
+   * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users. Setting to true will require authentication to view the facet. Default value is false.
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
+   * @param {object[]} [parameters.options]
+   * @param {string} parameters.options.value
+   * @param {string} parameters.options.display_name
+   * @param {number} parameters.options.position
+   * @param {object} parameters.options.data
+   * @param {boolean} parameters.options.hidden
+   */
+  addFacetConfiguration(parameters = {}, section = "Products") {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const additionalQueryParams = { section };
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+      
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get all facet configurations
+   * 
+   * @function getFacetConfigurations
+   */
+
+  /**
+   * Get a single facet's configuration
+   * 
+   * @function getFacetConfiguration
+   */
+
+  /**
+   * Modify the configurations of multiple facets (partially) at once
+   * 
+   * @function modifyFacetConfigurations
+   */
+
+  /**
+   * Replace the configuration of a facet (completely)
+   * 
+   * Caution: Overwrites all other configurations you may have defined for the facet group, resetting them to their defaults. This includes all facet option configurations you may have defined.
+   * 
+   * @function replaceFacetConfiguration
+   */
+
+  /**
+   * Modify the configuration of a facet (partially)
+   * 
+   * @function modifyFacetConfiguration
+   */
+
+  /**
+   * Remove a facet configuration
+   * 
+   * Caution: Once a facet group's configuration is removed, all configurations will return to their default values. This includes all facet option configurations (display name, position, etc) you may have defined for the facet group.
+   * 
+   * @function removeFacetConfiguration
+   * @param {object} parameters - Aditional paramaters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   */
+    removeFacetConfiguration(parameters = {}, section = "Products") {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { name } = parameters;
+    const additionalQueryParams = { section };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(parameters),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+      
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
 }
 
 module.exports = Catalog;

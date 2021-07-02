@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
+const { mock } = require('sinon');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -66,6 +67,16 @@ function createMockRedirectRule() {
       pattern: uuid,
     }],
   };
+}
+
+function createMockFacetConfiguration() {
+  const uuid = uuidv4();
+
+  return {
+    name: `facet-${uuid}`,
+    display_name: `Facet ${uuid}`,
+    type: "multiple",
+  }
 }
 
 describe('ConstructorIO - Catalog', () => {
@@ -2653,5 +2664,69 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
     });
+  });
+
+  describe.only('Facet Configuration', () => {
+    const facetConfigurations = [];
+
+    after(async () => {
+      // Clean up all the facet configurations that were created
+      const { catalog } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      for await (const facetConfig of facetConfigurations) {
+        await catalog.removeFacetConfiguration(facetConfig);
+      }
+    });
+    
+    describe('addFacetConfiguration', () => {
+      let mockFacetConfiguration = createMockFacetConfiguration();
+      facetConfigurations.push(mockFacetConfiguration);
+      console.log(mockFacetConfiguration);
+
+      it('Should resolve when adding a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addFacetConfiguration(mockFacetConfiguration).then(done);
+      });
+  
+      it('Should return error when adding a facet configuration that already exists', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+  
+        return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
+      });
+  
+      // it('Should return error when adding a facet configuration with unsupported options', () => {
+      //   const { catalog } = new ConstructorIO({
+      //     ...validOptions,
+      //     fetch: fetchSpy,
+      //   });
+  
+      //   mockFacetConfiguration = createMockFacetConfiguration();
+      //   mockFacetConfiguration.sort_by = "not ascending";
+  
+      //   catalog.addFacetConfiguration(mockFacetConfiguration).then(x => console.log).catch(y => console.log);
+      //   return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
+      // });
+    });
+
+    // describe('removeFacetConfiguration', () => {
+    //   it('Should resolve when removing a facet configuration', (done) => {
+    //     const { catalog } = new ConstructorIO({
+    //       ...validOptions,
+    //       fetch: fetchSpy,
+    //     });
+  
+    //     catalog.removeFacetConfiguration(mockFacetConfiguration).then(done);
+    //   });
+    // });
   });
 });
