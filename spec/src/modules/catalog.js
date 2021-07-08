@@ -2692,7 +2692,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addFacetConfiguration(mockFacetConfiguration).then(done);
+        catalog.addFacetConfiguration(mockFacetConfiguration).then(() => done());
       });
   
       it('Should return error when adding a facet configuration that already exists', () => {
@@ -2704,18 +2704,29 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
       });
   
-      // it('Should return error when adding a facet configuration with unsupported options', () => {
-      //   const { catalog } = new ConstructorIO({
-      //     ...validOptions,
-      //     fetch: fetchSpy,
-      //   });
+      it('Should return error when adding a facet configuration with unsupported options', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
   
-      //   mockFacetConfiguration = createMockFacetConfiguration();
-      //   mockFacetConfiguration.sort_by = "not ascending";
+        mockFacetConfiguration = createMockFacetConfiguration();
+        mockFacetConfiguration.sort_ascending = "true";
+
+        return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding a facet configuration with unsupported option values', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
   
-      //   catalog.addFacetConfiguration(mockFacetConfiguration).then(x => console.log).catch(y => console.log);
-      //   return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
-      // });
+        mockFacetConfiguration = createMockFacetConfiguration();
+        mockFacetConfiguration.sort_by = "not ascending";
+
+        return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
+      });
     });
 
     // describe('removeFacetConfiguration', () => {
