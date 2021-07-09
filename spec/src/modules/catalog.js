@@ -2665,7 +2665,7 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('Facet Configurations', () => {
+  describe('Facet Configurations', () => {
     const facetConfigurations = [];
 
     after(async () => {
