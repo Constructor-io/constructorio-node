@@ -2776,7 +2776,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getFacetConfigurations({ num_results_per_page: 10, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('one_way_synonym_relations').to.be.an('array').length.gte(1);
+          expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -2891,9 +2891,115 @@ describe('ConstructorIO - Catalog', () => {
             name: 'non-existent-facet-config-2',
             sort_descending: true,
           }
-        ]
+        ];
 
         return expect(catalog.modifyFacetConfigurations({ facetConfigurations })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('replaceFacetConfiguration', () => {
+      const mockFacetConfiguration =  createMockFacetConfiguration();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        // Push mock facet configuration into saved list to be cleaned up afterwards
+        catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
+          facetConfigurations.push(mockFacetConfiguration);
+          done();
+        });
+      });
+
+      it('Should return a response when replacing a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.replaceFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name',
+          type: 'multiple',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('type').to.be.a('string').to.equal('multiple');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when replacing a facet configuration with name that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const facetConfiguration = {
+          name: 'non-existent-facet-config',
+          position: 5,
+        };
+
+        return expect(catalog.replaceFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
+      });
+    });
+
+    describe('modifyFacetConfiguration', () => {
+      const mockFacetConfiguration =  createMockFacetConfiguration();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        // Push mock facet configuration into saved list to be cleaned up afterwards
+        catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
+          facetConfigurations.push(mockFacetConfiguration);
+          done();
+        });
+      });
+
+      it('Should return a response when modifying a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifyFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when modifying a facet configuration with name that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const facetConfiguration = {
+          name: 'non-existent-facet-config',
+          position: 5,
+        };
+
+        return expect(catalog.modifyFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
     });
 
