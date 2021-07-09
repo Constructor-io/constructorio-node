@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions, import/no-unresolved */
+/* eslint-disable no-unused-expressions, import/no-unresolved, no-restricted-syntax, max-nested-callbacks */
 const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
@@ -10,11 +10,10 @@ const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
-const ConstructorIO = require('../../../test/constructorio');
-const helpers = require('../../mocha.helpers');
-const { mock } = require('sinon');
 const { before } = require('mocha');
 const { expect } = require('chai');
+const helpers = require('../../mocha.helpers');
+const ConstructorIO = require('../../../test/constructorio');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -77,8 +76,8 @@ function createMockFacetConfiguration() {
   return {
     name: `facet-${uuid}`,
     display_name: `Facet ${uuid}`,
-    type: "multiple",
-  }
+    type: 'multiple',
+  };
 }
 
 describe('ConstructorIO - Catalog', () => {
@@ -2682,7 +2681,7 @@ describe('ConstructorIO - Catalog', () => {
         await catalog.removeFacetConfiguration(facetConfig);
       }
     });
-    
+
     describe('addFacetConfiguration', () => {
       let mockFacetConfiguration = createMockFacetConfiguration();
 
@@ -2698,7 +2697,7 @@ describe('ConstructorIO - Catalog', () => {
           done();
         });
       });
-  
+
       it('Should return error when adding a facet configuration that already exists', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -2707,10 +2706,10 @@ describe('ConstructorIO - Catalog', () => {
 
         // Grab a mock configuration that already exists and try to add it
         const facetConfiguration = facetConfigurations[0];
-  
+
         return expect(catalog.addFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
-  
+
       it('Should return error when adding a facet configuration with unsupported options', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -2718,7 +2717,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         mockFacetConfiguration = createMockFacetConfiguration();
-        mockFacetConfiguration.sort_ascending = "true";
+        mockFacetConfiguration.sort_ascending = 'true';
 
         return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
       });
@@ -2730,7 +2729,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         mockFacetConfiguration = createMockFacetConfiguration();
-        mockFacetConfiguration.sort_by = "not ascending";
+        mockFacetConfiguration.sort_by = 'not ascending';
 
         return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
       });
@@ -2747,7 +2746,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
-          done()
+          done();
         });
       });
 
@@ -2796,7 +2795,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
-          done()
+          done();
         });
       });
 
@@ -2857,13 +2856,13 @@ describe('ConstructorIO - Catalog', () => {
           facetConfigurations: [
             {
               name: mockFacetConfigurations[0].name,
-              display_name: 'New Facet Display Name'
+              display_name: 'New Facet Display Name',
             },
             {
               name: mockFacetConfigurations[1].name,
               position: 5,
-            }
-          ]
+            },
+          ],
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
@@ -2882,7 +2881,7 @@ describe('ConstructorIO - Catalog', () => {
           ...validOptions,
           fetch: fetchSpy,
         });
-        const facetConfigurations = [
+        const nonExistentFacetConfigurations = [
           {
             name: 'non-existent-facet-config-1',
             type: 'range',
@@ -2890,15 +2889,15 @@ describe('ConstructorIO - Catalog', () => {
           {
             name: 'non-existent-facet-config-2',
             sort_descending: true,
-          }
+          },
         ];
 
-        return expect(catalog.modifyFacetConfigurations({ facetConfigurations })).to.eventually.be.rejected;
+        return expect(catalog.modifyFacetConfigurations({ nonExistentFacetConfigurations })).to.eventually.be.rejected;
       });
     });
 
     describe('replaceFacetConfiguration', () => {
-      const mockFacetConfiguration =  createMockFacetConfiguration();
+      const mockFacetConfiguration = createMockFacetConfiguration();
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -2952,7 +2951,7 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('modifyFacetConfiguration', () => {
-      const mockFacetConfiguration =  createMockFacetConfiguration();
+      const mockFacetConfiguration = createMockFacetConfiguration();
 
       before((done) => {
         const { catalog } = new ConstructorIO({

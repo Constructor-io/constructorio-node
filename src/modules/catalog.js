@@ -1586,7 +1586,7 @@ class Catalog {
 
   /**
    * Create a facet configuration
-   * 
+   *
    * @function addFacetConfiguration
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
@@ -1613,7 +1613,7 @@ class Catalog {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1633,14 +1633,14 @@ class Catalog {
       if (response.ok) {
         return response.json();
       }
-      
+
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then(json => json);
   }
 
   /**
    * Get all facet configurations
-   * 
+   *
    * @function getFacetConfigurations
    * @param {object} parameters - Aditional paramaters for retrieving facet configurations.
    * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
@@ -1653,7 +1653,7 @@ class Catalog {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1679,7 +1679,7 @@ class Catalog {
 
   /**
    * Get a single facet's configuration
-   * 
+   *
    * @function getFacetConfiguration
    * @param {object} parameters - Aditional paramaters for retrieving a facet configuration.
    * @param {number} [parameters.name] - Page number you'd like to request. Defaults to 1.
@@ -1688,10 +1688,10 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/facets#get-a-single-facets-config
    */
   getFacetConfiguration(parameters = {}) {
-    let requestUrl; 
+    let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1717,7 +1717,7 @@ class Catalog {
 
   /**
    * Modify the configurations of multiple facets (partially) at once
-   * 
+   *
    * @function modifyFacetConfigurations
    * @param {object} parameters - Aditional paramaters for modifying facet configurations
    * @param {array} [parameters.facetConfigurations] - List of facet configurations you would like to update
@@ -1726,14 +1726,14 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/facets#update-facet-configs-partial
    */
   modifyFacetConfigurations(parameters = {}) {
-    let requestUrl; 
+    let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets`, this.options, additionalQueryParams);
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1756,9 +1756,9 @@ class Catalog {
 
   /**
    * Replace the configuration of a facet (completely)
-   * 
+   *
    * Caution: Overwrites all other configurations you may have defined for the facet group, resetting them to their defaults. This includes all facet option configurations you may have defined.
-   * 
+   *
    * @function replaceFacetConfiguration
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
@@ -1782,10 +1782,10 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-total
    */
   replaceFacetConfiguration(parameters = {}) {
-    let requestUrl; 
+    let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1812,7 +1812,7 @@ class Catalog {
 
   /**
    * Modify the configuration of a facet (partially)
-   * 
+   *
    * @function modifyFacetConfiguration
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
@@ -1836,10 +1836,10 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-partial
    */
   modifyFacetConfiguration(parameters = {}) {
-    let requestUrl; 
+    let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1866,9 +1866,9 @@ class Catalog {
 
   /**
    * Remove a facet configuration
-   * 
+   *
    * Caution: Once a facet group's configuration is removed, all configurations will return to their default values. This includes all facet option configurations (display name, position, etc) you may have defined for the facet group.
-   * 
+   *
    * @function removeFacetConfiguration
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
@@ -1881,7 +1881,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const { name } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || "Products",
+      section: parameters.section || 'Products',
     };
 
     try {
@@ -1901,7 +1901,7 @@ class Catalog {
       if (response.ok) {
         return response.json();
       }
-      
+
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then(json => json);
   }
