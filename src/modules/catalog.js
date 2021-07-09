@@ -1591,7 +1591,6 @@ class Catalog {
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
-   * @param {string} parameters.section - The section in which your facet is defined. Default value is Products.
    * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
    * @param {string} [parameters.sort_order] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overriden by setting position attribute on facet options.
    * @param {boolean} [parameters.sort_descending] - Set to true if the options should be sorted in descending order, false to sort ascencing. Default value is true if sort_order is relevance and false for others.
@@ -1605,17 +1604,17 @@ class Catalog {
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
    * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users. Setting to true will require authentication to view the facet. Default value is false.
    * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
-   * @param {object[]} [parameters.options]
-   * @param {string} parameters.options.value
-   * @param {string} parameters.options.display_name
-   * @param {number} parameters.options.position
-   * @param {object} parameters.options.data
-   * @param {boolean} parameters.options.hidden
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object[]} [parameters.options] - List of facet option configurations to create and associate with this facet group. Default value is [] (empty list).
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facets#create-a-facet-config
    */
-  addFacetConfiguration(parameters = {}, section = "Products") {
+  addFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const additionalQueryParams = { section };
+    const additionalQueryParams = {
+      section: parameters.section || "Products",
+    };
 
     try {
       requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams);
@@ -1632,30 +1631,126 @@ class Catalog {
       },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
       
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 
   /**
    * Get all facet configurations
    * 
    * @function getFacetConfigurations
+   * @param {object} parameters - Aditional paramaters for retrieving facet configurations.
+   * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
+   * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facets#get-all-facet-configs
    */
+  getFacetConfigurations(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const additionalQueryParams = {
+      section: parameters.section || "Products",
+    };
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
 
   /**
    * Get a single facet's configuration
    * 
    * @function getFacetConfiguration
+   * @param {object} parameters - Aditional paramaters for retrieving a facet configuration.
+   * @param {number} [parameters.name] - Page number you'd like to request. Defaults to 1.
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facets#get-a-single-facets-config
    */
+  getFacetConfiguration(parameters = {}) {
+    let requestUrl; 
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const additionalQueryParams = {
+      section: parameters.section || "Products",
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${parameters.name}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
 
   /**
    * Modify the configurations of multiple facets (partially) at once
    * 
    * @function modifyFacetConfigurations
+   * @param {object} parameters - Aditional paramaters for modifying facet configurations
+   * @param {array} [parameters.facetConfigurations] - List of facet configurations you would like to update
+   * @see {@link addFacetConfiguration} for additional details on what parameters you can supply for each facet configuration.
    */
+    modifyFacetConfigurations(parameters = {}) {
+    let requestUrl; 
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const additionalQueryParams = {
+      section: parameters.section || "Products",
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(parameters.facetConfigurations),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then(json => json);
+  }
 
   /**
    * Replace the configuration of a facet (completely)
@@ -1679,8 +1774,11 @@ class Catalog {
    * @function removeFacetConfiguration
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
    */
-    removeFacetConfiguration(parameters = {}, section = "Products") {
+  removeFacetConfiguration(parameters = {}, section = "Products") {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const { name } = parameters;
@@ -1701,11 +1799,11 @@ class Catalog {
       },
     }).then((response) => {
       if (response.ok) {
-        return Promise.resolve();
+        return response.json();
       }
       
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    }).then(json => json);
   }
 }
 
