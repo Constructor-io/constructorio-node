@@ -1963,7 +1963,7 @@ class Catalog {
    * @param {string} parameters.value - Value for this facet option. Must be unique for a particular facet
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
+   * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
    */
   removeFacetOptionConfiguration(parameters = {}) {
     let requestUrl;
