@@ -1612,8 +1612,9 @@ class Catalog {
   addFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { section, ...rest } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
@@ -1624,7 +1625,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),
@@ -1690,12 +1691,13 @@ class Catalog {
   getFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { section, name } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${parameters.name}`, this.options, additionalQueryParams);
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1728,8 +1730,9 @@ class Catalog {
   modifyFacetConfigurations(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { section, facetConfigurations } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
@@ -1740,7 +1743,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(parameters.facetConfigurations),
+      body: JSON.stringify(facetConfigurations),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),
@@ -1784,19 +1787,20 @@ class Catalog {
   replaceFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { section, name, ...rest } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${parameters.name}`, this.options, additionalQueryParams);
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),
@@ -1838,19 +1842,20 @@ class Catalog {
   modifyFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { section, name, ...rest } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${parameters.name}`, this.options, additionalQueryParams);
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams);
     } catch (e) {
       return Promise.reject(e);
     }
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),
@@ -1879,9 +1884,9 @@ class Catalog {
   removeFacetConfiguration(parameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const { name } = parameters;
+    const { section, name } = parameters;
     const additionalQueryParams = {
-      section: parameters.section || 'Products',
+      section: section || 'Products',
     };
 
     try {
@@ -1892,7 +1897,6 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),
