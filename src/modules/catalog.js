@@ -1718,12 +1718,11 @@ class Catalog {
   }
 
   /**
-   * Modify the configurations of multiple facets (partially) at once
+   * Modify the configurations of multiple facets (partially) at once.
    *
    * @function modifyFacetConfigurations
    * @param {object} parameters - Aditional paramaters for modifying facet configurations
-   * @param {array} [parameters.facetConfigurations] - List of facet configurations you would like to update
-   * @see {@link addFacetConfiguration} for additional details on what parameters you can supply for each facet configuration.
+   * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update. See [addFacetConfiguration]{@link module:catalog~addFacetConfiguration} for additional details on what parameters you can supply for each facet configuration.
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-facet-configs-partial
    */
