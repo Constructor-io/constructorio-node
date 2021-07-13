@@ -1908,6 +1908,91 @@ class Catalog {
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
+
+  /**
+   * Create a facet configuration
+   *
+   * @function addFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet configuration details
+   * @param {string} parameters.facetGroupName  Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value  A value for the facet option. Must be unique for a particular facet.
+   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet option is hidden from users. Default value is false.
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
+   */
+  addFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Remove a facet option configuration
+   *
+   * @function removeFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - Value for this facet option. Must be unique for a particular facet
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
+   */
+  removeFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, value } = parameters;
+    const additionalQueryParams = {
+      section: parameters.section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
 }
 
 module.exports = Catalog;
