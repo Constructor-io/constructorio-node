@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
+const { expect } = require('chai');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -3197,6 +3198,97 @@ describe('ConstructorIO - Catalog', () => {
         mockFacetOptionConfiguration.position = 'one';
 
         return expect(catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
+      });
+    });
+
+    describe.only('addOrModifyFacetOptionConfigurations', () => {
+      let mockFacetOptionConfigurations = [
+        createMockFacetOptionConfiguration(),
+        createMockFacetOptionConfiguration(),
+      ];
+
+      it('Should resolve when adding facet configurations', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName,
+          facetOptionConfigurations: mockFacetOptionConfigurations,
+        }).then(() => done());
+      });
+
+      it('Should return a response when modifying facet configurations', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const newFacetOptionConfigurations = [
+          {
+            value: mockFacetOptionConfigurations[0].value,
+            display_name: 'New Facet Option Display Name',
+            position: 3,
+          },
+          {
+            value: mockFacetOptionConfigurations[1].value,
+            display_name: 'New Facet Option Display Name #2',
+            position: 5,
+          },
+        ];
+
+        catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName,
+          facetOptionConfigurations: newFacetOptionConfigurations,
+        }).then((res) => {
+          expect(res[0]).to.have.property('value').to.be.a('string').to.be.oneOf([mockFacetOptionConfigurations[0].value, mockFacetOptionConfigurations[1].value]);
+          expect(res[0]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].display_name, newFacetOptionConfigurations[1].display_name]);
+          expect(res[0]).to.have.property('position').to.be.a('number').to.be.oneOf([newFacetOptionConfigurations[0].position, newFacetOptionConfigurations[1].position]);
+          expect(res[1]).to.have.property('value').to.be.a('string').to.be.oneOf([mockFacetOptionConfigurations[0].value, mockFacetOptionConfigurations[1].value]);
+          expect(res[1]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].display_name, newFacetOptionConfigurations[1].display_name]);
+          expect(res[1]).to.have.property('position').to.be.a('number').to.be.oneOf([newFacetOptionConfigurations[0].position, newFacetOptionConfigurations[1].position]);
+          expect(fetchSpy).to.have.been.called;
+          done();
+        });
+      });
+
+      it('Should return error when adding or modifying facet configurations with unsupported options', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockFacetOptionConfigurations = [
+          {
+            ...createMockFacetConfiguration(),
+            type: 'hidden',
+          }
+        ];
+
+        return expect(catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName: mockFacetOptionConfigurations,
+          facetOptionConfigurations: mockFacetOptionConfigurations,
+        })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when adding or modifying facet configurations with unsupported option values', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockFacetOptionConfigurations = [
+          {
+            ...createMockFacetConfiguration(),
+            position: 'one',
+          },
+        ];
+
+        return expect(catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName: mockFacetOptionConfigurations,
+          facetOptionConfigurations: mockFacetOptionConfigurations,
+        })).to.eventually.be.rejected;
       });
     });
 
