@@ -2045,7 +2045,7 @@ class Catalog {
    * @param {string} parameters.value - The facet option value. Unique for a particular facet.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
+   * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
    */
   getFacetOptionConfiguration(parameters = {}) {
     let requestUrl;
@@ -2063,6 +2063,51 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Replace a facet option configuration
+   *
+   * @function replaceFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - The facet option value. Must be unique for a particular facet.
+   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet option is hidden from users. Default value is false.
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
+   */
+  replaceFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, value, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify({ value, ...rest }),
       headers: {
         'Content-Type': 'application/json',
         ...createAuthHeader(this.options),

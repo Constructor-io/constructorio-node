@@ -3397,6 +3397,84 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
+    describe('replaceFacetOptionConfiguration', () => {
+      const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+
+      before(async () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        await catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration);
+      });
+
+      it('Should return a response when replacing a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.replaceFacetOptionConfiguration({
+          ...mockFacetOptionConfiguration,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Option Display Name',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Option Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when replacing a facet option configuration with value that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const facetOptionConfiguration = {
+          value: 'non-existent-facet-config',
+          position: 5,
+        };
+
+        return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
+      });
+
+
+      it('Should return error when replacing a facet option configuration with unsupported options', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const facetOptionConfiguration = {
+          value: mockFacetOptionConfiguration.value,
+          placement: 5,
+        };
+
+        return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when replacing a facet option configuration with unsupported option values', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const facetOptionConfiguration = {
+          value: mockFacetOptionConfiguration.value,
+          type: 'slider',
+        };
+
+        return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
+      });
+    });
+
     describe('removeFacetOptionConfiguration', () => {
       it('Should resolve when removing a facet option configuration', (done) => {
         const { catalog } = new ConstructorIO({
