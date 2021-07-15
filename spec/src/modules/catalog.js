@@ -12,7 +12,6 @@ const fs = require('fs');
 const path = require('path');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
-const { expect } = require('chai');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -82,11 +81,16 @@ function createMockFacetConfiguration() {
 function createMockFacetOptionConfiguration(facetGroupName) {
   const uuid = uuidv4();
 
-  return {
-    facetGroupName,
+  const mockFacetOptionConfiguration = {
     value: `facet-option-${uuid}`,
     display_name: `Facet Option ${uuid}`,
   };
+
+  if (facetGroupName) {
+    mockFacetOptionConfiguration.facetGroupName = facetGroupName;
+  }
+
+  return mockFacetOptionConfiguration;
 }
 
 describe('ConstructorIO - Catalog', () => {
@@ -3345,6 +3349,51 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           done();
         });
+      });
+    });
+
+    describe('getFacetOptionConfiguration', () => {
+      const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+
+      before(async () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        await catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration);
+      });
+
+      it('Should return a response when getting a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const { value } = mockFacetOptionConfiguration;
+
+        catalog.getFacetOptionConfiguration({
+          facetGroupName,
+          value,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('value').to.be.a('string').to.equal(value);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when getting a facet option configuration with value that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getFacetOptionConfiguration({
+          facetGroupName,
+          value: 'non-existent-facet-option-value',
+        })).to.eventually.be.rejected;
       });
     });
 

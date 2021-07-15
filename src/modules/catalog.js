@@ -2001,6 +2001,8 @@ class Catalog {
    * @function getFacetOptionConfigurations
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
+   * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
@@ -2015,6 +2017,46 @@ class Catalog {
 
     try {
       requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get a single facet option configuration for a given facet
+   * 
+   * @function getFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - The facet option value. Unique for a particular facet.
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
+   */
+  getFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, value, section } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
     } catch (e) {
       return Promise.reject(e);
     }
