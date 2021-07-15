@@ -3201,7 +3201,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe.only('addOrModifyFacetOptionConfigurations', () => {
+    describe('addOrModifyFacetOptionConfigurations', () => {
       let mockFacetOptionConfigurations = [
         createMockFacetOptionConfiguration(),
         createMockFacetOptionConfiguration(),
@@ -3289,6 +3289,62 @@ describe('ConstructorIO - Catalog', () => {
           facetGroupName: mockFacetOptionConfigurations,
           facetOptionConfigurations: mockFacetOptionConfigurations,
         })).to.eventually.be.rejected;
+      });
+    });
+
+    describe('getFacetOptionConfigurations', () => {
+      before(async () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const mockFacetOptionConfigurations = [
+          createMockFacetOptionConfiguration(),
+          createMockFacetOptionConfiguration(),
+        ];
+
+        await catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName,
+          facetOptionConfigurations: mockFacetOptionConfigurations,
+        });
+      });
+
+      it('Should return a response when getting facet option configurations', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getFacetOptionConfigurations({
+          facetGroupName,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('facet_options').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when getting facet option configurations with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getFacetOptionConfigurations({
+          facetGroupName,
+          num_results_per_page: 10,
+          page: 1,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('facet_options').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
       });
     });
 
