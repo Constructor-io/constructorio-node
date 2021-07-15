@@ -1997,7 +1997,7 @@ class Catalog {
 
   /**
    * Get all facet option configurations for a given facet
-   * 
+   *
    * @function getFacetOptionConfigurations
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
@@ -2038,7 +2038,7 @@ class Catalog {
 
   /**
    * Get a single facet option configuration for a given facet
-   * 
+   *
    * @function getFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog

@@ -3267,7 +3267,7 @@ describe('ConstructorIO - Catalog', () => {
           {
             ...createMockFacetConfiguration(),
             type: 'hidden',
-          }
+          },
         ];
 
         return expect(catalog.addOrModifyFacetOptionConfigurations({
@@ -3518,13 +3518,13 @@ describe('ConstructorIO - Catalog', () => {
           ...validOptions,
           fetch: fetchSpy,
         });
-        const facetConfiguration = {
+        const facetOptionConfiguration = {
           facetGroupName,
           value: 'non-existent-facet-config',
           position: 5,
         };
 
-        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
+        return expect(catalog.modifyFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
 
       it('Should return error when modifying a facet option configuration with unsupported options', () => {
@@ -3533,13 +3533,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const facetConfiguration = {
+        const facetOptionConfiguration = {
           facetGroupName,
           value: mockFacetOptionConfiguration.value,
           placement: 5,
         };
 
-        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
+        return expect(catalog.modifyFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
 
       it('Should return error when modifying a facet option configuration with unsupported option values', () => {
@@ -3548,13 +3548,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const facetConfiguration = {
+        const facetOptionConfiguration = {
           facetGroupName,
           value: mockFacetOptionConfiguration.value,
           type: 'slider',
         };
 
-        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
+        return expect(catalog.modifyFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
     });
 
