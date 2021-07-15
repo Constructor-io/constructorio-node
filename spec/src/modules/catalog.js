@@ -3416,7 +3416,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.replaceFacetOptionConfiguration({
-          ...mockFacetOptionConfiguration,
+          facetGroupName,
           value: mockFacetOptionConfiguration.value,
           display_name: 'New Facet Option Display Name',
           position: 5,
@@ -3438,6 +3438,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
         const facetOptionConfiguration = {
+          facetGroupName,
           value: 'non-existent-facet-config',
           position: 5,
         };
@@ -3453,6 +3454,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const facetOptionConfiguration = {
+          facetGroupName,
           value: mockFacetOptionConfiguration.value,
           placement: 5,
         };
@@ -3467,11 +3469,92 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const facetOptionConfiguration = {
+          facetGroupName,
           value: mockFacetOptionConfiguration.value,
           type: 'slider',
         };
 
         return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
+      });
+    });
+
+    describe('modifyFacetOptionConfiguration', () => {
+      const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+
+      before(async () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        await catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration);
+      });
+
+      it('Should return a response when modifying a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifyFacetOptionConfiguration({
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Display Name',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when modifying a facet option configuration with value that does not exist', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const facetConfiguration = {
+          facetGroupName,
+          value: 'non-existent-facet-config',
+          position: 5,
+        };
+
+        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying a facet option configuration with unsupported options', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const facetConfiguration = {
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          placement: 5,
+        };
+
+        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should return error when modifying a facet option configuration with unsupported option values', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const facetConfiguration = {
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          type: 'slider',
+        };
+
+        return expect(catalog.modifyFacetOptionConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
     });
 
