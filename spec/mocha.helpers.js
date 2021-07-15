@@ -31,7 +31,7 @@ const extractBodyParamsFromFetch = (fetch) => {
 const extractHeadersFromFetch = (fetch) => {
   const lastCallArguments = fetch && fetch.args && fetch.args[fetch.args.length - 1];
   const requestData = lastCallArguments[1];
-  const { headers } = requestData;
+  const { headers } = requestData || {};
 
   if (headers) {
     return headers;
