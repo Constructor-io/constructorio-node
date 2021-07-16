@@ -122,8 +122,10 @@ function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
 function createBrowseUrlForFacets(parameters, userParameters, options) {
   const { serviceUrl } = options;
   const queryParams = { ...createQueryParams(parameters, userParameters, options) };
-  const queryString = qs.stringify(queryParams, { indices: false });
 
+  delete queryParams._dt;
+
+  const queryString = qs.stringify(queryParams, { indices: false });
   return `${serviceUrl}/browse/facets?${queryString}`;
 }
 
@@ -328,6 +330,14 @@ class Browse {
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
    * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/facets
    * @example
@@ -339,33 +349,23 @@ class Browse {
    *     }
    * });
    */
-  getFacets(parameters) {
+  getFacets(parameters = {}, userParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
     try {
-      requestUrl = createBrowseUrlForFacets(parameters, this.options);
+      requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
 
-    return fetch(requestUrl)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+    return fetch(requestUrl).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
 
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      })
-      .then((json) => {
-        if (json.response && json.response.facets) {
-          this.eventDispatcher.queue('browse.getFacets.completed', json);
-
-          return json;
-        }
-
-        throw new Error('getFacets response data is malformed');
-      });
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
   }
 }
 

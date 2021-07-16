@@ -847,7 +847,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe('getFacets', () => {
+  describe.only('getFacets', () => {
     it('Should return a response without any parameters', (done) => {
       const { browse } = new ConstructorIO({
         apiKey: testApiKey,
@@ -863,8 +863,6 @@ describe('ConstructorIO - Browse', () => {
         expect(res.response).to.have.property('facets').to.be.an('array');
         expect(fetchSpy).to.have.been.called;
         expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('i');
-        expect(requestedUrlParams).to.have.property('s');
         expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         done();
       });
@@ -888,6 +886,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedUrlParams).to.have.property('i').to.equal('example client id');
         expect(requestedUrlParams).to.have.property('s').to.equal('123456789');
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         done();
       });
     });
@@ -910,7 +910,6 @@ describe('ConstructorIO - Browse', () => {
         expect(res.request.fmt_options).to.deep.equal(fmtOptions);
         expect(res.response).to.have.property('groups').to.be.an('array');
         expect(requestedUrlParams).to.have.property('fmt_options');
-        expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         done();
       });
     });
