@@ -846,4 +846,73 @@ describe('ConstructorIO - Browse', () => {
       return expect(browse.getBrowseGroups()).to.eventually.be.rejected;
     });
   });
+
+  describe('getFacets', () => {
+    it('Should return a response without any parameters', (done) => {
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getFacets().then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('facets').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('i');
+        expect(requestedUrlParams).to.have.property('s');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        done();
+      });
+    });
+
+    it('should return a response with valid ids, client id and session id', (done) => {
+      const userParameters = {
+        clientId: 'example client id',
+        sessionId: 123456789,
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseGroups({}, userParameters).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('i').to.equal('example client id');
+        expect(requestedUrlParams).to.have.property('s').to.equal('123456789');
+        done();
+      });
+    });
+
+    it('Should return a response with valid fmtOptions', (done) => {
+      const fmtOptions = { show_hidden_facets: true, show_protected_facets: true };
+      const securityToken = 'cio-node-test';
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseGroups({ fmtOptions }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.response).to.have.property('groups').to.be.an('array');
+        expect(requestedUrlParams).to.have.property('fmt_options');
+        expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
+        done();
+      });
+    });
+  });
 });

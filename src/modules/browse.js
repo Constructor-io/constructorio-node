@@ -118,6 +118,15 @@ function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   return `${serviceUrl}/browse/items?${queryString}`;
 }
 
+// Create URL from supplied ID's
+function createBrowseUrlForFacets(parameters, userParameters, options) {
+  const { serviceUrl } = options;
+  const queryParams = { ...createQueryParams(parameters, userParameters, options) };
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/browse/facets?${queryString}`;
+}
+
 // Create request headers using supplied options and user parameters
 function createHeaders(options, userParameters) {
   const headers = {};
@@ -307,6 +316,56 @@ class Browse {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
+  }
+
+  /**
+   * Retrieve facets from API
+   *
+   * @function getFacets
+   * @param {object} [parameters] - Additional parameters to refine result set
+   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.resultsPerPage] - The number of results per page to return
+   * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
+   * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/browse/facets
+   * @example
+   * constructorio.browse.getFacets({
+   *     page: 1,
+   *     resultsPerPage: 10,
+   *     fmtOptions: {
+   *       show_hidden_facets: true,
+   *     }
+   * });
+   */
+  getFacets(parameters) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createBrowseUrlForFacets(parameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
+      })
+      .then((json) => {
+        if (json.response && json.response.facets) {
+          this.eventDispatcher.queue('browse.getFacets.completed', json);
+
+          return json;
+        }
+
+        throw new Error('getFacets response data is malformed');
+      });
   }
 }
 
