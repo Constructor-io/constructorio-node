@@ -91,7 +91,7 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackSessionStart({
-        userParameters,
+        ...userParameters,
         userId,
       })).to.equal(true);
     });
