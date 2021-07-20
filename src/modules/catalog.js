@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const FormData = require('form-data');
 const fs = require('fs');
 const helpers = require('../utils/helpers');

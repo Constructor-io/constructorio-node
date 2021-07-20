@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create query params from parameters and options
