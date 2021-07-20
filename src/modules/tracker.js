@@ -1165,7 +1165,10 @@ class Tracker {
    * @param {string} messageType - Type of message to listen for ('success' or 'error')
    * @param {function} callback - Callback to be invoked when message received
    * @returns {(true|Error)}
-   * @description If an error event is emitted and does not have at least one listener registered for the 'error' event, the error is thrown, a stack trace is printed, and the Node.js process exits - it is best practice to always bind a `.on('error')` handler
+   * @description
+   * If an error event is emitted and does not have at least one listener registered for the
+   * 'error' event, the error is thrown, a stack trace is printed, and the Node.js process
+   * exits - it is best practice to always bind a `.on('error')` handler
    * @see https://nodejs.org/api/events.html#events_error_events
    */
   on(messageType, callback) {
