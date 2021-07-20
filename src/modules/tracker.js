@@ -1,6 +1,6 @@
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 

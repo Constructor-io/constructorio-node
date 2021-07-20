@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
