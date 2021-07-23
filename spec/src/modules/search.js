@@ -36,7 +36,7 @@ describe('ConstructorIO - Search', () => {
   });
 
   describe('getSearchResults', () => {
-    const query = 'drill';
+    const query = 'item';
     const section = 'Products';
 
     it('Should return a response with a valid query, section, and client + session identifiers', (done) => {

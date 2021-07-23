@@ -36,7 +36,7 @@ describe('ConstructorIO - Autocomplete', () => {
   });
 
   describe('getAutocompleteResults', () => {
-    const query = 'drill';
+    const query = 'item';
 
     it('Should return a response with a valid query and client + session identifiers', (done) => {
       const clientSessionIdentifiers = {
