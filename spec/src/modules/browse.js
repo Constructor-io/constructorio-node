@@ -446,7 +446,7 @@ describe('ConstructorIO - Browse', () => {
 
     it('Should return a response with valid ids', (done) => {
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -470,7 +470,7 @@ describe('ConstructorIO - Browse', () => {
         sessionId: 123456789,
       };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -488,7 +488,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -507,7 +507,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -526,7 +526,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -545,7 +545,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and page', (done) => {
       const page = 1;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -564,7 +564,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -584,7 +584,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -604,7 +604,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -625,7 +625,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and section', (done) => {
       const section = 'Products';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -732,7 +732,7 @@ describe('ConstructorIO - Browse', () => {
   describe('getBrowseGroups', () => {
     it('Should return a response without any parameters', (done) => {
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -756,7 +756,7 @@ describe('ConstructorIO - Browse', () => {
         sessionId: 123456789,
       };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -775,7 +775,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -794,7 +794,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional filters', (done) => {
       const filters = { group_id: ['drill_collection'] };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -814,7 +814,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
