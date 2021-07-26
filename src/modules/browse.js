@@ -294,7 +294,6 @@ class Browse {
    * @function getBrowseGroups
    * @param {object} [parameters.filters] - Filters used to refine results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
-   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
