@@ -282,6 +282,7 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
         done();
       });
