@@ -642,7 +642,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should return a response with valid ids with a result_id appended to each result', (done) => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       browse.getBrowseResultsForItemIds(ids).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -657,25 +657,25 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid ids are provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds('invalid-ids')).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no ids are provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(null)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when empty ids array id provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds([])).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         page: 'abc',
@@ -683,7 +683,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         resultsPerPage: 'abc',
@@ -691,7 +691,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         filters: 123,
@@ -699,7 +699,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortBy parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         sortBy: { foo: 'bar' },
@@ -707,7 +707,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortOrder parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         sortOrder: 'abc',
@@ -715,7 +715,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid section parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         section: 123,
@@ -833,7 +833,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseGroups({
         filters: 123,
