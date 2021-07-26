@@ -678,7 +678,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and hiddenFields', (done) => {
       const hiddenFields = ['hiddenField1', 'hiddenField2'];
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
