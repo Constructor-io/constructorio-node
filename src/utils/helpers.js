@@ -43,6 +43,13 @@ const utils = {
   }),
 
   isNil: value => value == null,
+
+  // Create authorization header to be transmitted with requests
+  createAuthHeader: (options) => {
+    const { apiToken } = options;
+
+    return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
+  },
 };
 
 module.exports = utils;

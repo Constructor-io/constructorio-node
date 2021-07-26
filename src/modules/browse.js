@@ -359,7 +359,12 @@ class Browse {
       return Promise.reject(e);
     }
 
-    return fetch(requestUrl).then((response) => {
+    return fetch(requestUrl, {
+      // Needs headers to pass apiToken for certain requests
+      headers: {
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
       if (response.ok) {
         return response.json();
       }

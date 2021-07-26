@@ -16,6 +16,7 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const testApiToken = process.env.TEST_API_TOKEN;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
@@ -847,7 +848,7 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe.only('getFacets', () => {
+  describe('getFacets', () => {
     it('Should return a response without any parameters', (done) => {
       const { browse } = new ConstructorIO({
         apiKey: testApiKey,
@@ -868,47 +869,23 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
-    it('should return a response with valid ids, client id and session id', (done) => {
-      const userParameters = {
-        clientId: 'example client id',
-        sessionId: 123456789,
-      };
-      const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-      });
-
-      browse.getBrowseGroups({}, userParameters).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        expect(requestedUrlParams).to.have.property('i').to.equal('example client id');
-        expect(requestedUrlParams).to.have.property('s').to.equal('123456789');
-        expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
-        done();
-      });
-    });
-
-    it('Should return a response with valid fmtOptions', (done) => {
+    it('Should return a response with valid fmtOptions and supplied api token', (done) => {
       const fmtOptions = { show_hidden_facets: true, show_protected_facets: true };
-      const securityToken = 'cio-node-test';
+      const apiToken = testApiToken;
       const { browse } = new ConstructorIO({
         apiKey: testApiKey,
-        securityToken,
+        apiToken,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseGroups({ fmtOptions }).then((res) => {
+      browse.getFacets({ fmtOptions }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
-        expect(res.response).to.have.property('groups').to.be.an('array');
+        expect(res.request.fmt_options.show_protected_facets).to.equal(true);
+        expect(res.request.fmt_options.show_hidden_facets).to.equal(true);
         expect(requestedUrlParams).to.have.property('fmt_options');
         done();
       });

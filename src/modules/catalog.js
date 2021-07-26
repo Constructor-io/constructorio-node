@@ -28,13 +28,6 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
   return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
 }
 
-// Create authorization header to be transmitted with requests
-function createAuthHeader(options) {
-  const { apiToken } = options;
-
-  return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
-}
-
 // Convert a read stream to buffer
 function convertToBuffer(stream) {
   return new Promise((resolve, reject) => {
@@ -101,7 +94,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -147,7 +140,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -184,7 +177,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -231,7 +224,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -267,7 +260,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -303,7 +296,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -339,7 +332,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -383,7 +376,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -439,7 +432,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -477,7 +470,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -512,7 +505,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -546,7 +539,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -578,7 +571,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -613,7 +606,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -652,7 +645,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -682,7 +675,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -718,7 +711,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -755,7 +748,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -791,7 +784,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -841,7 +834,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -876,7 +869,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -908,7 +901,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -943,7 +936,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -980,7 +973,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1012,7 +1005,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1061,7 +1054,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1094,7 +1087,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1123,7 +1116,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1162,7 +1155,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1204,7 +1197,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1246,7 +1239,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1278,7 +1271,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1337,7 +1330,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1368,7 +1361,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1468,7 +1461,7 @@ class Catalog {
       return fetch(requestUrl, {
         method: 'PUT',
         body: formData,
-        headers: createAuthHeader(this.options),
+        headers: helpers.createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
@@ -1571,7 +1564,7 @@ class Catalog {
       return fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
-        headers: createAuthHeader(this.options),
+        headers: helpers.createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
