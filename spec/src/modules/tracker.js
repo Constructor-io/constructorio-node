@@ -993,9 +993,7 @@ describe('ConstructorIO - Tracker', () => {
 
   describe('trackSearchSubmit', () => {
     const term = 'Where The Wild Things Are';
-    const requiredParameters = {
-      original_query: 'original-query',
-    };
+    const requiredParameters = { original_query: 'original-query' };
     const optionalParameters = {
       group_id: 'group-id',
       display_name: 'display-name',
