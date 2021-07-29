@@ -91,17 +91,17 @@ function send(url, userParameters, method = 'GET', body) {
     if (userParameters.userIp && typeof userParameters.userIp === 'string') {
       headers['X-Forwarded-For'] = userParameters.userIp;
     }
-  
+
     // Append user agent as 'User-Agent' if available
     if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
       headers['User-Agent'] = userParameters.userAgent;
     }
-  
+
     // Append language as 'Accept-Language' if available
     if (userParameters.acceptLanguage && typeof userParameters.acceptLanguage === 'string') {
       headers['Accept-Language'] = userParameters.acceptLanguage;
     }
-  
+
     // Append referrer as 'Referer' if available
     if (userParameters.referer && typeof userParameters.referer === 'string') {
       headers.Referer = userParameters.referer;
