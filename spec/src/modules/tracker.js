@@ -995,7 +995,6 @@ describe('ConstructorIO - Tracker', () => {
     const term = 'Where The Wild Things Are';
     const requiredParameters = {
       original_query: 'original-query',
-      result_id: 'result-id',
     };
     const optionalParameters = {
       group_id: 'group-id',
@@ -1020,7 +1019,6 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
         expect(requestParams).to.have.property('original_query').to.equal(requiredParameters.original_query);
-        expect(requestParams).to.have.property('result_id').to.equal(requiredParameters.result_id);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
