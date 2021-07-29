@@ -16,7 +16,7 @@ function applyParams(parameters, userParameters, options) {
     segments,
     testCells,
     originReferrer,
-  } = userParameters;
+  } = userParameters || {};
   let aggregateParams = Object.assign(parameters);
 
   // Validate session ID is provided
@@ -86,24 +86,26 @@ function send(url, userParameters, method = 'GET', body) {
     headers['x-cnstrc-token'] = this.options.securityToken;
   }
 
-  // Append user IP as 'X-Forwarded-For' if available
-  if (userParameters.userIp && typeof userParameters.userIp === 'string') {
-    headers['X-Forwarded-For'] = userParameters.userIp;
-  }
-
-  // Append user agent as 'User-Agent' if available
-  if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
-    headers['User-Agent'] = userParameters.userAgent;
-  }
-
-  // Append language as 'Accept-Language' if available
-  if (userParameters.acceptLanguage && typeof userParameters.acceptLanguage === 'string') {
-    headers['Accept-Language'] = userParameters.acceptLanguage;
-  }
-
-  // Append referrer as 'Referer' if available
-  if (userParameters.referer && typeof userParameters.referer === 'string') {
-    headers.Referer = userParameters.referer;
+  if (userParameters) {
+    // Append user IP as 'X-Forwarded-For' if available
+    if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+      headers['X-Forwarded-For'] = userParameters.userIp;
+    }
+  
+    // Append user agent as 'User-Agent' if available
+    if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+      headers['User-Agent'] = userParameters.userAgent;
+    }
+  
+    // Append language as 'Accept-Language' if available
+    if (userParameters.acceptLanguage && typeof userParameters.acceptLanguage === 'string') {
+      headers['Accept-Language'] = userParameters.acceptLanguage;
+    }
+  
+    // Append referrer as 'Referer' if available
+    if (userParameters.referer && typeof userParameters.referer === 'string') {
+      headers.Referer = userParameters.referer;
+    }
   }
 
   if (method === 'GET') {
