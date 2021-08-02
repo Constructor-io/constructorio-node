@@ -1585,6 +1585,109 @@ class Catalog {
   }
 
   /**
+   * Send patch delta catalog files to patch the current catalog
+   *
+   * @function patchCatalog
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section that you want to update
+   * @param {string} [parameters.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
+   * @param {boolean} [parameters.force] - Process the catalog even if it will invalidate a large number of existing items. Defaults to False.
+   * @param {file} [parameters.items] - The CSV file with all new items
+   * @param {file} [parameters.variations] - The CSV file with all new variations
+   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/full_catalog
+   */
+  async patchCatalog(parameters = {}) {
+    let requestUrl;
+    const queryParams = { patch_delta: true };
+    const formData = new FormData();
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    if (parameters) {
+      const { section, notification_email: notificationEmail, force } = parameters;
+      let { items, variations, item_groups: itemGroups } = parameters;
+
+      try {
+        // Convert items to buffer if passed as stream
+        if (items instanceof fs.ReadStream) {
+          items = await convertToBuffer(items);
+        }
+
+        // Convert variations to buffer if passed as stream
+        if (variations instanceof fs.ReadStream) {
+          variations = await convertToBuffer(variations);
+        }
+
+        // Convert item groups to buffer if passed as stream
+        if (itemGroups instanceof fs.ReadStream) {
+          itemGroups = await convertToBuffer(itemGroups);
+        }
+      } catch (e) {
+        return Promise.reject(e);
+      }
+
+      // Pull section from parameters
+      if (section) {
+        queryParams.section = section;
+      }
+
+      // Pull notification email from parameters
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
+      // Pull force from parameters
+      if (force) {
+        queryParams.force = force;
+      }
+
+      // Pull items from parameters
+      if (items) {
+        formData.append('items', items, {
+          filename: 'items.csv',
+        });
+      }
+
+      // Pull variations from parameters
+      if (variations) {
+        formData.append('variations', variations, {
+          filename: 'variations.csv',
+        });
+      }
+
+      // Pull item groups from parameters
+      if (itemGroups) {
+        formData.append('item_groups', itemGroups, {
+          filename: 'item_groups.csv',
+        });
+      }
+    }
+
+    try {
+      requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    try {
+      return fetch(requestUrl, {
+        method: 'PATCH',
+        body: formData,
+        headers: createAuthHeader(this.options),
+      }).then((response) => {
+        if (response.ok) {
+          return Promise.resolve(response.json());
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
    * Create a facet configuration
    *
    * @function addFacetConfiguration
