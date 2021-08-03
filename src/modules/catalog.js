@@ -1936,7 +1936,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1977,7 +1977,7 @@ class Catalog {
       body: JSON.stringify(facetOptionConfigurations),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2018,7 +2018,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2058,7 +2058,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2103,7 +2103,7 @@ class Catalog {
       body: JSON.stringify({ value, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2148,7 +2148,7 @@ class Catalog {
       body: JSON.stringify({ value, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2188,7 +2188,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
