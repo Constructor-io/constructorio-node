@@ -1621,7 +1621,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1660,7 +1660,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1699,7 +1699,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1738,7 +1738,7 @@ class Catalog {
       body: JSON.stringify(facetConfigurations),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1795,7 +1795,7 @@ class Catalog {
       body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1850,7 +1850,7 @@ class Catalog {
       body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1891,7 +1891,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
