@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
@@ -357,6 +357,25 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a valid filterName, filterValue and hiddenFields', (done) => {
+      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { hiddenFields }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        done();
+      });
+    });
+
     it('Should be rejected when invalid filterName is provided', () => {
       const { browse } = new ConstructorIO(validOptions);
 
@@ -447,7 +466,7 @@ describe('ConstructorIO - Browse', () => {
 
     it('Should return a response with valid ids', (done) => {
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -471,7 +490,7 @@ describe('ConstructorIO - Browse', () => {
         sessionId: 123456789,
       };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -489,7 +508,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -508,7 +527,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         segments,
         fetch: fetchSpy,
       });
@@ -527,7 +546,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -546,7 +565,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and page', (done) => {
       const page = 1;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -565,7 +584,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -585,7 +604,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -605,7 +624,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -626,7 +645,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and section', (done) => {
       const section = 'Products';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -643,7 +662,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should return a response with valid ids with a result_id appended to each result', (done) => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       browse.getBrowseResultsForItemIds(ids).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
@@ -657,26 +676,45 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with valid ids and hiddenFields', (done) => {
+      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(ids, { hiddenFields }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        done();
+      });
+    });
+
     it('Should be rejected when invalid ids are provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds('invalid-ids')).to.eventually.be.rejected;
     });
 
     it('Should be rejected when no ids are provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(null)).to.eventually.be.rejected;
     });
 
     it('Should be rejected when empty ids array id provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds([])).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         page: 'abc',
@@ -684,7 +722,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         resultsPerPage: 'abc',
@@ -692,7 +730,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         filters: 123,
@@ -700,7 +738,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortBy parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         sortBy: { foo: 'bar' },
@@ -708,7 +746,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid sortOrder parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         sortOrder: 'abc',
@@ -716,7 +754,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid section parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseResultsForItemIds(ids, {
         section: 123,
@@ -733,7 +771,7 @@ describe('ConstructorIO - Browse', () => {
   describe('getBrowseGroups', () => {
     it('Should return a response without any parameters', (done) => {
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -757,7 +795,7 @@ describe('ConstructorIO - Browse', () => {
         sessionId: 123456789,
       };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -776,7 +814,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         userId,
         fetch: fetchSpy,
       });
@@ -795,7 +833,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional filters', (done) => {
       const filters = { group_id: ['drill_collection'] };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -815,7 +853,7 @@ describe('ConstructorIO - Browse', () => {
     it('Should return a response with valid ids and additional fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { browse } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
@@ -834,7 +872,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should be rejected when invalid filters parameter is provided', () => {
-      const { browse } = new ConstructorIO({ apiKey: testApiKey });
+      const { browse } = new ConstructorIO({ ...validOptions });
 
       return expect(browse.getBrowseGroups({
         filters: 123,

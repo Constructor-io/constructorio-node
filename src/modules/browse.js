@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create query params from parameters and options
@@ -23,7 +23,16 @@ function createQueryParams(parameters, userParameters, options) {
   queryParams.s = sessionId;
 
   if (parameters) {
-    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
+    const {
+      page,
+      resultsPerPage,
+      filters,
+      sortBy,
+      sortOrder,
+      section,
+      fmtOptions,
+      hiddenFields,
+    } = parameters;
 
     // Pull page from parameters
     if (!helpers.isNil(page)) {
@@ -57,6 +66,11 @@ function createQueryParams(parameters, userParameters, options) {
     // Pull format options from parameters
     if (fmtOptions) {
       queryParams.fmt_options = fmtOptions;
+    }
+
+    // Pull hidden fields from parameters
+    if (hiddenFields) {
+      queryParams.hidden_fields = hiddenFields;
     }
   }
 
@@ -176,6 +190,7 @@ class Browse {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -238,6 +253,7 @@ class Browse {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results

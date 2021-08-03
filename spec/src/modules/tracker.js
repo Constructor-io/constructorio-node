@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
@@ -91,7 +91,7 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackSessionStart({
-        userParameters,
+        ...userParameters,
         userId,
       })).to.equal(true);
     });
@@ -993,10 +993,7 @@ describe('ConstructorIO - Tracker', () => {
 
   describe('trackSearchSubmit', () => {
     const term = 'Where The Wild Things Are';
-    const requiredParameters = {
-      original_query: 'original-query',
-      result_id: 'result-id',
-    };
+    const requiredParameters = { original_query: 'original-query' };
     const optionalParameters = {
       group_id: 'group-id',
       display_name: 'display-name',
@@ -1020,7 +1017,6 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
         expect(requestParams).to.have.property('original_query').to.equal(requiredParameters.original_query);
-        expect(requestParams).to.have.property('result_id').to.equal(requiredParameters.result_id);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');

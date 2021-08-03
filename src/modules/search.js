@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters
@@ -46,7 +46,17 @@ function createSearchUrl(query, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { page, resultsPerPage, filters, sortBy, sortOrder, section, collectionId, fmtOptions } = parameters;
+    const {
+      page,
+      resultsPerPage,
+      filters,
+      sortBy,
+      sortOrder,
+      section,
+      collectionId,
+      fmtOptions,
+      hiddenFields,
+    } = parameters;
 
     // Pull page from parameters
     if (!helpers.isNil(page)) {
@@ -87,6 +97,11 @@ function createSearchUrl(query, parameters, userParameters, options) {
     if (fmtOptions) {
       queryParams.fmt_options = fmtOptions;
     }
+
+    // Pull hidden fields from parameters
+    if (hiddenFields) {
+      queryParams.hidden_fields = hiddenFields;
+    }
   }
 
   queryParams._dt = Date.now();
@@ -121,6 +136,7 @@ class Search {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
