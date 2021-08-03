@@ -28,13 +28,6 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
   return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
 }
 
-// Create authorization header to be transmitted with requests
-function createAuthHeader(options) {
-  const { apiToken } = options;
-
-  return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
-}
-
 // Convert a read stream to buffer
 function convertToBuffer(stream) {
   return new Promise((resolve, reject) => {
@@ -101,7 +94,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -147,7 +140,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -184,7 +177,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -231,7 +224,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -267,7 +260,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -303,7 +296,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -339,7 +332,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -383,7 +376,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -439,7 +432,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -477,7 +470,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -512,7 +505,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -546,7 +539,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -578,7 +571,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -613,7 +606,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -652,7 +645,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -682,7 +675,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -718,7 +711,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -755,7 +748,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -791,7 +784,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -841,7 +834,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -876,7 +869,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -908,7 +901,7 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -943,7 +936,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -980,7 +973,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1012,7 +1005,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1061,7 +1054,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1094,7 +1087,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1123,7 +1116,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1162,7 +1155,7 @@ class Catalog {
       body: JSON.stringify(parameters),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1204,7 +1197,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1246,7 +1239,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1278,7 +1271,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1337,7 +1330,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'GET',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1368,7 +1361,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: createAuthHeader(this.options),
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1468,7 +1461,7 @@ class Catalog {
       return fetch(requestUrl, {
         method: 'PUT',
         body: formData,
-        headers: createAuthHeader(this.options),
+        headers: helpers.createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
@@ -1571,7 +1564,7 @@ class Catalog {
       return fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
-        headers: createAuthHeader(this.options),
+        headers: helpers.createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
@@ -1731,7 +1724,7 @@ class Catalog {
       body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1770,7 +1763,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1809,7 +1802,7 @@ class Catalog {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1848,7 +1841,7 @@ class Catalog {
       body: JSON.stringify(facetConfigurations),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1905,7 +1898,7 @@ class Catalog {
       body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -1960,7 +1953,7 @@ class Catalog {
       body: JSON.stringify({ name, ...rest }),
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
@@ -2001,7 +1994,304 @@ class Catalog {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...createAuthHeader(this.options),
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Create a facet option configuration
+   *
+   * @function addFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - A unique value for the facet option
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
+   */
+  addFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Create new facet option configurations or modify if they already exist
+   *
+   * @function addOrModifyFacetOptionConfigurations
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in the catalog
+   * @param {object[]} parameters.facetOptionConfigurations - List of facet option configurations to would like to update - refer to [addFacetConfiguration]{@link module:catalog~addFacetOptionConfiguration} for additional details on what parameters can be supplied for each facet option configuration
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#batch-update-or-create-facet-options-configs
+   */
+  addOrModifyFacetOptionConfigurations(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, facetOptionConfigurations } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(facetOptionConfigurations),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get all facet option configurations for a given facet
+   *
+   * @function getFacetOptionConfigurations
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {number} [parameters.page=1] - Page number you'd like to request
+   * @param {number} [parameters.num_results_per_page=100] - Number of facets per page in paginated response
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
+   */
+  getFacetOptionConfigurations(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get a single facet option configuration for a given facet
+   *
+   * @function getFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - The facet option value. Unique for a particular facet
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
+   */
+  getFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, value, section } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Replace a facet option configuration
+   *
+   * @function replaceFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - A unique facet option value
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
+   */
+  replaceFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, value, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify({ value, ...rest }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Modify a facet option configuration
+   *
+   * @function modifyFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - A unique facet option value
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-partial
+   */
+  modifyFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, section, value, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ value, ...rest }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Remove a facet option configuration
+   *
+   * @function removeFacetOptionConfiguration
+   * @param {object} parameters - Aditional paramaters for facet option configuration details
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.value - A unique value for this facet option
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
+   */
+  removeFacetOptionConfiguration(parameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { facetGroupName, value } = parameters;
+    const additionalQueryParams = {
+      section: parameters.section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${facetGroupName}/options/${value}`, this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
       },
     }).then((response) => {
       if (response.ok) {
