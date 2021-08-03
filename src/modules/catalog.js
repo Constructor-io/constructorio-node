@@ -1582,8 +1582,8 @@ class Catalog {
    *
    * @function patchCatalog
    * @param {object} parameters - Additional parameters for catalog details
-   * @param {string} parameters.section - The section that you want to update
-   * @param {string} [parameters.notification_email] - An email address where you'd like to receive an email notifcation in case the task fails.
+   * @param {string} parameters.section - The section to update
+   * @param {string} [parameters.notification_email] - An email address to receive an email notifcation if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
