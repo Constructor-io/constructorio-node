@@ -2678,6 +2678,188 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
     });
+
+    describe('patchCatalog', function patchCatalog() {
+      // Ensure Mocha doesn't time out waiting for operation to complete
+      this.timeout(10000);
+
+      afterEach((done) => {
+        // Wait between each test to prevent throttle error from server
+        setTimeout(done, 1000);
+      });
+
+      it('Should patch a catalog of items using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(filePath);
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of items using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(filePath);
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of variations using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(filePath);
+        const data = {
+          variations: variationsStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of variations using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(filePath);
+        const data = {
+          variations: variationsBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(filePath);
+        const data = {
+          item_groups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupBuffer = fs.readFileSync(filePath);
+        const data = {
+          item_groups: itemGroupBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsBuffer = fs.readFileSync(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsBuffer = fs.readFileSync(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
+        const data = {
+          items: itemsBuffer,
+          variations: variationsBuffer,
+          item_groups: itemGroupsBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
+        const itemsStream = fs.createReadStream(itemsPath);
+        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
+        const variationsStream = fs.createReadStream(variationsPath);
+        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
+        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
+        const data = {
+          items: itemsStream,
+          variations: variationsStream,
+          item_groups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+    });
   });
 
   describe('Facet Configurations', () => {
