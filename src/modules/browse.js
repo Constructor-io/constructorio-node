@@ -323,7 +323,7 @@ class Browse {
   /**
    * Retrieve facets from API
    *
-   * @function getFacets
+   * @function getBrowseFacets
    * @param {object} [parameters] - Additional parameters to refine result set
    * @param {number} [parameters.page] - The page number of the results
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
@@ -341,7 +341,7 @@ class Browse {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/facets
    * @example
-   * constructorio.browse.getFacets({
+   * constructorio.browse.getBrowseFacets({
    *     page: 1,
    *     resultsPerPage: 10,
    *     fmtOptions: {
@@ -349,7 +349,7 @@ class Browse {
    *     }
    * });
    */
-  getFacets(parameters = {}, userParameters = {}) {
+  getBrowseFacets(parameters = {}, userParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
 
@@ -360,10 +360,7 @@ class Browse {
     }
 
     return fetch(requestUrl, {
-      // Needs headers to pass apiToken for certain requests
-      headers: {
-        ...helpers.createAuthHeader(this.options),
-      },
+      headers: helpers.createAuthHeader(this.options),
     }).then((response) => {
       if (response.ok) {
         return response.json();

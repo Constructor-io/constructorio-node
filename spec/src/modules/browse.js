@@ -21,7 +21,7 @@ const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
 
-describe('ConstructorIO - Browse', () => {
+describe.only('ConstructorIO - Browse', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -848,14 +848,14 @@ describe('ConstructorIO - Browse', () => {
     });
   });
 
-  describe('getFacets', () => {
+  describe('getBrowseFacets', () => {
     it('Should return a response without any parameters', (done) => {
       const { browse } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
 
-      browse.getFacets().then((res) => {
+      browse.getBrowseFacets().then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -869,7 +869,7 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
-    it('Should return a response with valid fmtOptions and supplied api token', (done) => {
+    it('Should return a response with valid fmtOptions and authorized token', (done) => {
       const fmtOptions = { show_hidden_facets: true, show_protected_facets: true };
       const apiToken = testApiToken;
       const { browse } = new ConstructorIO({
@@ -878,7 +878,7 @@ describe('ConstructorIO - Browse', () => {
         fetch: fetchSpy,
       });
 
-      browse.getFacets({ fmtOptions }).then((res) => {
+      browse.getBrowseFacets({ fmtOptions }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
@@ -889,6 +889,12 @@ describe('ConstructorIO - Browse', () => {
         expect(requestedUrlParams).to.have.property('fmt_options');
         done();
       });
+    });
+
+    it('Should be rejected when invalid apiKey is provided', () => {
+      const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+
+      return expect(browse.getBrowseFacets()).to.eventually.be.rejected;
     });
   });
 });
