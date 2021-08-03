@@ -1667,7 +1667,7 @@ class Catalog {
       return fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
-        headers: createAuthHeader(this.options),
+        headers: helpers.createAuthHeader(this.options),
       }).then((response) => {
         if (response.ok) {
           return Promise.resolve(response.json());
