@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create query params from parameters and options
@@ -23,7 +23,16 @@ function createQueryParams(parameters, userParameters, options) {
   queryParams.s = sessionId;
 
   if (parameters) {
-    const { page, resultsPerPage, filters, sortBy, sortOrder, section, fmtOptions } = parameters;
+    const {
+      page,
+      resultsPerPage,
+      filters,
+      sortBy,
+      sortOrder,
+      section,
+      fmtOptions,
+      hiddenFields,
+    } = parameters;
 
     // Pull page from parameters
     if (!helpers.isNil(page)) {
@@ -57,6 +66,11 @@ function createQueryParams(parameters, userParameters, options) {
     // Pull format options from parameters
     if (fmtOptions) {
       queryParams.fmt_options = fmtOptions;
+    }
+
+    // Pull hidden fields from parameters
+    if (hiddenFields) {
+      queryParams.hidden_fields = hiddenFields;
     }
   }
 
@@ -118,6 +132,17 @@ function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   return `${serviceUrl}/browse/items?${queryString}`;
 }
 
+// Create URL from supplied ID's
+function createBrowseUrlForFacets(parameters, userParameters, options) {
+  const { serviceUrl } = options;
+  const queryParams = { ...createQueryParams(parameters, userParameters, options) };
+
+  delete queryParams._dt;
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+  return `${serviceUrl}/browse/facets?${queryString}`;
+}
+
 // Create request headers using supplied options and user parameters
 function createHeaders(options, userParameters) {
   const headers = {};
@@ -165,6 +190,7 @@ class Browse {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -227,6 +253,7 @@ class Browse {
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -301,6 +328,56 @@ class Browse {
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
     return fetch(requestUrl, { headers }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Retrieve facets from API
+   *
+   * @function getBrowseFacets
+   * @param {object} [parameters] - Additional parameters to refine result set
+   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.resultsPerPage] - The number of results per page to return
+   * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
+   * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {object} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/browse/facets
+   * @example
+   * constructorio.browse.getBrowseFacets({
+   *     page: 1,
+   *     resultsPerPage: 10,
+   *     fmtOptions: {
+   *       show_hidden_facets: true,
+   *     }
+   * });
+   */
+  getBrowseFacets(parameters = {}, userParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+
+    try {
+      requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    return fetch(requestUrl, {
+      headers: helpers.createAuthHeader(this.options),
+    }).then((response) => {
       if (response.ok) {
         return response.json();
       }

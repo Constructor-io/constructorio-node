@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
@@ -36,7 +36,7 @@ describe('ConstructorIO - Autocomplete', () => {
   });
 
   describe('getAutocompleteResults', () => {
-    const query = 'drill';
+    const query = 'item';
 
     it('Should return a response with a valid query and client + session identifiers', (done) => {
       const clientSessionIdentifiers = {
@@ -265,6 +265,25 @@ describe('ConstructorIO - Autocomplete', () => {
         sectionItems.forEach((item) => {
           expect(item).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
         });
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query and hiddenFields', (done) => {
+      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, { hiddenFields }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
         done();
       });
     });

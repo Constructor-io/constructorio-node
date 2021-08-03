@@ -1,10 +1,9 @@
 {
   "name": "@constructor-io/constructorio-node",
-  "version": "3.3.0",
+  "version": "3.3.5",
   "description": "Constructor.io Node.js client",
   "main": "src/constructorio.js",
   "scripts": {
-    "clean": "sudo rm -rf node_modules package-lock.json",
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "chmod 766 .git/hooks/pre-push && eslint 'src/**/*.js' 'spec/**/*.js'",

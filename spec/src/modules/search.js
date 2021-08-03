@@ -5,7 +5,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
@@ -36,7 +36,7 @@ describe('ConstructorIO - Search', () => {
   });
 
   describe('getSearchResults', () => {
-    const query = 'drill';
+    const query = 'item';
     const section = 'Products';
 
     it('Should return a response with a valid query, section, and client + session identifiers', (done) => {
@@ -328,6 +328,25 @@ describe('ConstructorIO - Search', () => {
         res.response.results.forEach((result) => {
           expect(result).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
         });
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and hiddenFields', (done) => {
+      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { section, hiddenFields }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
         done();
       });
     });

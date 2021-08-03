@@ -29,7 +29,7 @@ var constructorio = new ConstructorIOClient({
 
 ## 4. Retrieve Results
 
-After instantiating an instance of the client, four modules will be exposed as properties to help retrieve data from Constructor.io: `search`, `browse`, `autocomplete`, `recommendations` and `catalog`.
+After instantiating an instance of the client, four modules will be exposed as properties to help retrieve data from Constructor.io: `search`, `browse`, `autocomplete`, `recommendations`, `catalog` and `tracker`.
 
 Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-node)
 

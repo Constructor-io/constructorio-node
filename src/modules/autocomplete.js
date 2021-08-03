@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const nodeFetch = require('node-fetch');
+const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters
@@ -46,7 +46,7 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, resultsPerSection, filters } = parameters;
+    const { numResults, resultsPerSection, filters, hiddenFields } = parameters;
 
     // Pull results number from parameters
     if (numResults) {
@@ -63,6 +63,11 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
     // Pull filters from parameters
     if (filters) {
       queryParams.filters = filters;
+    }
+
+    // Pull hidden fields from parameters
+    if (hiddenFields) {
+      queryParams.hidden_fields = hiddenFields;
     }
   }
 
@@ -94,6 +99,7 @@ class Autocomplete {
    * @param {number} [parameters.numResults] - The total number of results to return
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {object} [parameters.resultsPerSection] - Number of results to return (value) per section (key)
+   * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
