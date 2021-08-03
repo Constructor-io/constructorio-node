@@ -1915,12 +1915,12 @@ class Catalog {
    * @function addFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {string} parameters.value - A value for the facet option. Must be unique for a particular facet.
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
-   * @param {boolean} [parameters.hidden] - Specifies whether the facet option is hidden from users. Default value is false.
-   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.value - A unique value for the facet option
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
    */
@@ -1959,9 +1959,9 @@ class Catalog {
    *
    * @function addOrModifyFacetOptionConfigurations
    * @param {object} parameters - Aditional paramaters for facet option configuration details
-   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {object[]} parameters.facetOptionConfigurations - List of facet option configurations you would like to update. See [addFacetConfiguration]{@link module:catalog~addFacetOptionConfiguration} for additional details on what parameters you can supply for each facet option configuration.
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in the catalog
+   * @param {object[]} parameters.facetOptionConfigurations - List of facet option configurations to would like to update - refer to [addFacetConfiguration]{@link module:catalog~addFacetOptionConfiguration} for additional details on what parameters can be supplied for each facet option configuration
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#batch-update-or-create-facet-options-configs
    */
@@ -2001,9 +2001,9 @@ class Catalog {
    * @function getFacetOptionConfigurations
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
-   * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {number} [parameters.page=1] - Page number you'd like to request
+   * @param {number} [parameters.num_results_per_page=100] - Number of facets per page in paginated response
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
    */
@@ -2042,8 +2042,8 @@ class Catalog {
    * @function getFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {string} parameters.value - The facet option value. Unique for a particular facet.
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.value - The facet option value. Unique for a particular facet
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
    */
@@ -2082,12 +2082,12 @@ class Catalog {
    * @function replaceFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {string} parameters.value - The facet option value. Must be unique for a particular facet.
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
-   * @param {boolean} [parameters.hidden] - Specifies whether the facet option is hidden from users. Default value is false.
-   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.value - A unique facet option value
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
    */
@@ -2127,12 +2127,12 @@ class Catalog {
    * @function modifyFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {string} parameters.value - The facet option value. Must be unique for a particular facet.
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
-   * @param {boolean} [parameters.hidden] - Specifies whether the facet option is hidden from users. Default value is false.
-   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.value - A unique facet option value
+   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
+   * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section='Products] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-partial
    */
@@ -2172,8 +2172,8 @@ class Catalog {
    * @function removeFacetOptionConfiguration
    * @param {object} parameters - Aditional paramaters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
-   * @param {string} parameters.value - Value for this facet option. Must be unique for a particular facet
-   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {string} parameters.value - A unique value for this facet option
+   * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
    */
