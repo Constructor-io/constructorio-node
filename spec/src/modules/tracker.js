@@ -1645,7 +1645,6 @@ describe('ConstructorIO - Tracker', () => {
         expect(responseParams).to.have.property('method').to.equal('GET');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
-
         done();
       });
 

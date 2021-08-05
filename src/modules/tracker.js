@@ -273,7 +273,6 @@ class Tracker {
         const queryParams = {};
         const {
           original_query,
-          result_id,
           section,
           original_section,
           tr,
@@ -298,10 +297,6 @@ class Tracker {
             group_id,
             display_name,
           };
-        }
-
-        if (result_id) {
-          queryParams.result_id = result_id;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
