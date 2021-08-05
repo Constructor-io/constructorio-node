@@ -218,7 +218,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1267">line 1267</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1270">line 1270</a>
     </li></ul></dd>
     
 
@@ -560,40 +560,6 @@ exits - it is best practice to always bind a `.on('error')` handler
 
             <td class="description last">
                 The current autocomplete search query
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>result_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">
-                Customer id of the selected autocomplete item
                 
             </td>
         </tr>
@@ -1263,7 +1229,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1071">line 1071</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1074">line 1074</a>
     </li></ul></dd>
     
 
@@ -1354,6 +1320,120 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
+                <td class="name"><code>filter_name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Filter name
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filter_value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Filter value
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>item_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Product item unique identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>section</code></td>
             
 
@@ -1387,7 +1467,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Results section
+                Index section
                 
             </td>
         </tr>
@@ -1427,7 +1507,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Variation ID of clicked item
+                Product item variation unique identifier
                 
             </td>
         </tr>
@@ -1467,7 +1547,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result identifier
+                Browse result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -1668,120 +1748,6 @@ exits - it is best practice to always bind a `.on('error')` handler
 
             <td class="description last">
                 Selected filters
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter_name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Filter name
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter_value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Filter value
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>item_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                ID of clicked item
                 
             </td>
         </tr>
@@ -2314,7 +2280,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line945">line 945</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line948">line 948</a>
     </li></ul></dd>
     
 
@@ -2405,6 +2371,120 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Current page URL
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filter_name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Filter name
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filter_value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Filter value
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>section</code></td>
             
 
@@ -2438,7 +2518,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Results section
+                Index section
                 
             </td>
         </tr>
@@ -2558,7 +2638,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result identifier
+                Browse result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -2718,121 +2798,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                List of objects of customer items returned from browse
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Current page URL
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter_name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Filter name
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filter_value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Filter value
+                List of product item objects
                 
             </td>
         </tr>
@@ -3365,7 +3331,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line535">line 535</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line538">line 538</a>
     </li></ul></dd>
     
 
@@ -3482,7 +3448,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
-                <td class="name"><code>customer_id</code></td>
+                <td class="name"><code>item_id</code></td>
             
 
             <td class="type">
@@ -3511,7 +3477,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Customer id
+                Product item unique identifier
                 
             </td>
         </tr>
@@ -3549,7 +3515,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Revenue
+                Revenue (price) of product item
                 
             </td>
         </tr>
@@ -3589,7 +3555,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Identifier
+                Product item name
                 
             </td>
         </tr>
@@ -3629,7 +3595,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Variation id
+                Product item variation unique identifier
                 
             </td>
         </tr>
@@ -3791,7 +3757,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result id
+                Result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -3831,7 +3797,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Autocomplete section
+                Index section
                 
             </td>
         </tr>
@@ -4361,7 +4327,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1197">line 1197</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1200">line 1200</a>
     </li></ul></dd>
     
 
@@ -4491,7 +4457,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                ID of clicked item
+                Product item unique identifier
                 
             </td>
         </tr>
@@ -4531,7 +4497,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Name of clicked item
+                Product item name
                 
             </td>
         </tr>
@@ -4571,7 +4537,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Variation ID of clicked item
+                Product item variation unique identifier
                 
             </td>
         </tr>
@@ -4613,7 +4579,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Results section
+                Index section
                 
             </td>
         </tr>
@@ -5696,7 +5662,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line654">line 654</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line658">line 658</a>
     </li></ul></dd>
     
 
@@ -5810,7 +5776,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                List of objects of customer items returned from browse
+                List of product item objects
                 
             </td>
         </tr>
@@ -5880,7 +5846,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Customer unique order identifier
+                Unique order identifier
                 
             </td>
         </tr>
@@ -5916,7 +5882,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Autocomplete section
+                Index section
                 
             </td>
         </tr>
@@ -6443,7 +6409,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line826">line 826</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line830">line 830</a>
     </li></ul></dd>
     
 
@@ -6534,6 +6500,120 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
+                <td class="name"><code>pod_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Pod identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>strategy_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Strategy identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>item_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Product item unique identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>variation_id</code></td>
             
 
@@ -6565,7 +6645,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Variation identifier
+                Product item variation unique identifier
                 
             </td>
         </tr>
@@ -6607,7 +6687,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Results section
+                Index section
                 
             </td>
         </tr>
@@ -6647,47 +6727,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result identifier
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>result_count</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Number of results displayed
+                Recommendation result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -6808,120 +6848,6 @@ exits - it is best practice to always bind a `.on('error')` handler
 
             <td class="description last">
                 Number of results on page
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pod_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Pod identifier
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>strategy_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Strategy identifier
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>item_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Identifier of clicked item
                 
             </td>
         </tr>
@@ -7453,7 +7379,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line728">line 728</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line732">line 732</a>
     </li></ul></dd>
     
 
@@ -7540,6 +7466,120 @@ exits - it is best practice to always bind a `.on('error')` handler
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Current page URL
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pod_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Pod identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>num_results_viewed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Number of results viewed
+                
+            </td>
+        </tr>
+
     
 
         <tr>
@@ -7655,7 +7695,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result identifier
+                Recommendation result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -7698,120 +7738,6 @@ exits - it is best practice to always bind a `.on('error')` handler
 
             <td class="description last">
                 Results section
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Current page URL
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>pod_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Pod identifier
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>num_results_viewed</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Number of results viewed
                 
             </td>
         </tr>
@@ -8340,7 +8266,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line464">line 464</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line460">line 460</a>
     </li></ul></dd>
     
 
@@ -8455,7 +8381,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>item_name</code></td>
             
 
             <td class="type">
@@ -8480,7 +8406,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Identifier
+                Product item name
                 
             </td>
         </tr>
@@ -8489,7 +8415,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
-                <td class="name"><code>customer_id</code></td>
+                <td class="name"><code>item_id</code></td>
             
 
             <td class="type">
@@ -8514,7 +8440,43 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Customer id
+                Product item unique identifier
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>variation_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                Product item variation unique identifier
                 
             </td>
         </tr>
@@ -8550,7 +8512,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                Result id
+                Search result identifier (returned in response from Constructor)
                 
             </td>
         </tr>
@@ -9076,7 +9038,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line403">line 403</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line397">line 397</a>
     </li></ul></dd>
     
 
@@ -9225,7 +9187,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 
         <tr>
             
-                <td class="name"><code>customer_ids</code></td>
+                <td class="name"><code>item_ids</code></td>
             
 
             <td class="type">
@@ -9252,7 +9214,7 @@ exits - it is best practice to always bind a `.on('error')` handler
             
 
             <td class="description last">
-                List of customer item id's returned from search
+                List of product item unique identifiers in search results listing
                 
             </td>
         </tr>
@@ -9777,7 +9739,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line337">line 337</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line331">line 331</a>
     </li></ul></dd>
     
 
@@ -11033,7 +10995,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Aug 05 2021 12:50:21 GMT-0600 (Mountain Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Aug 05 2021 12:53:51 GMT-0600 (Mountain Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
