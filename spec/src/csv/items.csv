@@ -1,12 +1,12 @@
-id,item_name,url,group_ids,facet:Color,facet:Brand
-10001,Item1,https://test.com/p/10001,All,Blue,XYZ
-10002,Item2,https://test.com/p/10002,BrandXY,yellow,
-10003,Item3,https://test.com/p/10003,,,
-10004,Item4,https://test.com/p/10004,,,
-10005,Item5,https://test.com/p/10005,,,
-10006,Item6,https://test.com/p/10006,,,
-10007,Item7,https://test.com/p/10007,,green,
-10008,Item8,https://test.com/p/10008,,,
-10009,Item9,https://test.com/p/10009,,,
-luistrenker-jacket-K245511299-cream,Jacket “Rivka“ Luis Trenker cream,https://demo.commercetools.com/en/luistrenker-jacket-K245511299-cream.html,,,
-peanut-1,peanut,https://test.com/p/peanut-1,All,,
+id,item_name,url,group_ids,facet:Color,facet:Brand,metadata:testField
+10001,Item1,https://test.com/p/10001,All,Blue,XYZ,hiddenFieldValue
+10002,Item2,https://test.com/p/10002,BrandXY,yellow,,testFieldValue
+10003,Item3,https://test.com/p/10003,,,,
+10004,Item4,https://test.com/p/10004,,,,
+10005,Item5,https://test.com/p/10005,,,,
+10006,Item6,https://test.com/p/10006,,,,
+10007,Item7,https://test.com/p/10007,,green,,
+10008,Item8,https://test.com/p/10008,,,,
+10009,Item9,https://test.com/p/10009,,,,
+luistrenker-jacket-K245511299-cream,Jacket “Rivka“ Luis Trenker cream,https://demo.commercetools.com/en/luistrenker-jacket-K245511299-cream.html,,,,
+peanut-1,peanut,https://test.com/p/peanut-1,All,,,
