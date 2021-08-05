@@ -47,6 +47,74 @@ function convertToBuffer(stream) {
   });
 }
 
+// Create query parameters and form data using the parameters
+async function createQueryParamsAndFormData(parameters) {
+  const queryParams = {};
+  const formData = new FormData();
+
+  if (parameters) {
+    const { section, notification_email: notificationEmail, force } = parameters;
+    let { items, variations, item_groups: itemGroups } = parameters;
+
+    try {
+    // Convert items to buffer if passed as stream
+      if (items instanceof fs.ReadStream) {
+        items = await convertToBuffer(items);
+      }
+
+      // Convert variations to buffer if passed as stream
+      if (variations instanceof fs.ReadStream) {
+        variations = await convertToBuffer(variations);
+      }
+
+      // Convert item groups to buffer if passed as stream
+      if (itemGroups instanceof fs.ReadStream) {
+        itemGroups = await convertToBuffer(itemGroups);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+
+    // Pull section from parameters
+    if (section) {
+      queryParams.section = section;
+    }
+
+    // Pull notification email from parameters
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
+
+    // Pull force from parameters
+    if (force) {
+      queryParams.force = force;
+    }
+
+    // Pull items from parameters
+    if (items) {
+      formData.append('items', items, {
+        filename: 'items.csv',
+      });
+    }
+
+    // Pull variations from parameters
+    if (variations) {
+      formData.append('variations', variations, {
+        filename: 'variations.csv',
+      });
+    }
+
+    // Pull item groups from parameters
+    if (itemGroups) {
+      formData.append('item_groups', itemGroups, {
+        filename: 'item_groups.csv',
+      });
+    }
+  }
+
+  return { queryParams, formData };
+}
+
 /**
  * Interface to catalog related API calls
  *
@@ -1386,89 +1454,21 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/full_catalog
    */
   async replaceCatalog(parameters = {}) {
-    let requestUrl;
-    const queryParams = {};
-    const formData = new FormData();
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-
-    if (parameters) {
-      const { section, notification_email: notificationEmail, force } = parameters;
-      let { items, variations, item_groups: itemGroups } = parameters;
-
-      try {
-        // Convert items to buffer if passed as stream
-        if (items instanceof fs.ReadStream) {
-          items = await convertToBuffer(items);
-        }
-
-        // Convert variations to buffer if passed as stream
-        if (variations instanceof fs.ReadStream) {
-          variations = await convertToBuffer(variations);
-        }
-
-        // Convert item groups to buffer if passed as stream
-        if (itemGroups instanceof fs.ReadStream) {
-          itemGroups = await convertToBuffer(itemGroups);
-        }
-      } catch (e) {
-        return Promise.reject(e);
-      }
-
-      // Pull section from parameters
-      if (section) {
-        queryParams.section = section;
-      }
-
-      // Pull notification email from parameters
-      if (notificationEmail) {
-        queryParams.notification_email = notificationEmail;
-      }
-
-      // Pull force from parameters
-      if (force) {
-        queryParams.force = force;
-      }
-
-      // Pull items from parameters
-      if (items) {
-        formData.append('items', items, {
-          filename: 'items.csv',
-        });
-      }
-
-      // Pull variations from parameters
-      if (variations) {
-        formData.append('variations', variations, {
-          filename: 'variations.csv',
-        });
-      }
-
-      // Pull item groups from parameters
-      if (itemGroups) {
-        formData.append('item_groups', itemGroups, {
-          filename: 'item_groups.csv',
-        });
-      }
-    }
-
     try {
-      requestUrl = createCatalogUrl('catalog', this.options, queryParams);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    try {
-      return fetch(requestUrl, {
+      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      const response = await fetch(requestUrl, {
         method: 'PUT',
         body: formData,
         headers: helpers.createAuthHeader(this.options),
-      }).then((response) => {
-        if (response.ok) {
-          return Promise.resolve(response.json());
-        }
-
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
       });
+
+      if (response.ok) {
+        return Promise.resolve(response.json());
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
     } catch (error) {
       return Promise.reject(error);
     }
