@@ -2321,7 +2321,10 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe.only('Catalog Files', () => {
+  describe('Catalog Files', function catalogFiles() {
+    // Ensure Mocha doesn't time out waiting for operation to complete
+    this.timeout(10000);
+
     const catalogExamplesBaseUrl = 'https://raw.githubusercontent.com/Constructor-io/integration-examples/main/catalog/';
     let itemsBuffer = null;
     let itemsStream = null;
@@ -2345,15 +2348,18 @@ describe('ConstructorIO - Catalog', () => {
       itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
     });
 
-    describe('replaceCatalog', function replaceCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
+    beforeEach(async () => {
+      itemsStream = createStreamFromBuffer(itemsBuffer);
+      variationsStream = createStreamFromBuffer(variationsBuffer);
+      itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
+    });
 
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
+    afterEach((done) => {
+      // Wait between each test to prevent throttle error from server
+      setTimeout(done, 1000);
+    });
 
+    describe('replaceCatalog', () => {
       it('Should replace a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -2503,15 +2509,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('updateCatalog', function updateCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
-
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
-
+    describe('updateCatalog', () => {
       it('Should update a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -2661,15 +2659,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('patchCatalog', function patchCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
-
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
-
+    describe('patchCatalog', () => {
       it('Should patch a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
