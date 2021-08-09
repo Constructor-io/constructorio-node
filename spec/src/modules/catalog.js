@@ -2337,15 +2337,12 @@ describe('ConstructorIO - Catalog', () => {
       // Grab catalog files from Integration Examples repo
       const itemsResponse = await nodeFetch(`${catalogExamplesBaseUrl}items.csv`);
       itemsBuffer = await itemsResponse.buffer();
-      itemsStream = createStreamFromBuffer(itemsBuffer);
 
       const variationsResponse = await nodeFetch(`${catalogExamplesBaseUrl}variations.csv`);
       variationsBuffer = await variationsResponse.buffer();
-      variationsStream = createStreamFromBuffer(variationsBuffer);
 
       const itemGroupsResponse = await nodeFetch(`${catalogExamplesBaseUrl}item_groups.csv`);
       itemGroupsBuffer = await itemGroupsResponse.buffer();
-      itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
     });
 
     beforeEach(async () => {
