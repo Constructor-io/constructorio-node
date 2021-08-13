@@ -8,8 +8,7 @@ const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
-const path = require('path');
+const { Duplex } = require('stream');
 const ConstructorIO = require('../../../test/constructorio');
 const helpers = require('../../mocha.helpers');
 
@@ -91,6 +90,15 @@ function createMockFacetOptionConfiguration(facetGroupName) {
   }
 
   return mockFacetOptionConfiguration;
+}
+
+function createStreamFromBuffer(buffer) {
+  const stream = new Duplex();
+
+  stream.push(buffer);
+  stream.push(null);
+
+  return stream;
 }
 
 describe('ConstructorIO - Catalog', () => {
@@ -2314,24 +2322,48 @@ describe('ConstructorIO - Catalog', () => {
     });
   });
 
-  describe('Catalog Files', () => {
-    describe('replaceCatalog', function replaceCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
+  describe('Catalog Files', function catalogFiles() {
+    // Ensure Mocha doesn't time out waiting for operation to complete
+    this.timeout(10000);
 
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
+    const catalogExamplesBaseUrl = 'https://raw.githubusercontent.com/Constructor-io/integration-examples/main/catalog/';
+    let itemsBuffer = null;
+    let itemsStream = null;
+    let variationsBuffer = null;
+    let variationsStream = null;
+    let itemGroupsBuffer = null;
+    let itemGroupsStream = null;
 
+    before(async () => {
+      // Grab catalog files from Integration Examples repo
+      const itemsResponse = await nodeFetch(`${catalogExamplesBaseUrl}items.csv`);
+      itemsBuffer = await itemsResponse.buffer();
+
+      const variationsResponse = await nodeFetch(`${catalogExamplesBaseUrl}variations.csv`);
+      variationsBuffer = await variationsResponse.buffer();
+
+      const itemGroupsResponse = await nodeFetch(`${catalogExamplesBaseUrl}item_groups.csv`);
+      itemGroupsBuffer = await itemGroupsResponse.buffer();
+    });
+
+    beforeEach(async () => {
+      itemsStream = createStreamFromBuffer(itemsBuffer);
+      variationsStream = createStreamFromBuffer(variationsBuffer);
+      itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
+    });
+
+    afterEach((done) => {
+      // Wait between each test to prevent throttle error from server
+      setTimeout(done, 1000);
+    });
+
+    describe('replaceCatalog', () => {
       it('Should replace a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(filePath);
         const data = {
           items: itemsStream,
           section: 'Products',
@@ -2350,8 +2382,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(filePath);
         const data = {
           items: itemsBuffer,
           section: 'Products',
@@ -2370,8 +2400,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(filePath);
         const data = {
           variations: variationsStream,
           section: 'Products',
@@ -2390,8 +2418,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(filePath);
         const data = {
           variations: variationsBuffer,
           section: 'Products',
@@ -2410,8 +2436,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
@@ -2430,10 +2454,8 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
-          item_groups: itemGroupBuffer,
+          item_groups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -2450,12 +2472,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
@@ -2476,12 +2492,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
         const data = {
           items: itemsStream,
           variations: variationsStream,
@@ -2497,23 +2507,13 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('updateCatalog', function updateCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
-
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
-
+    describe('updateCatalog', () => {
       it('Should update a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(filePath);
         const data = {
           items: itemsStream,
           section: 'Products',
@@ -2532,8 +2532,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(filePath);
         const data = {
           items: itemsBuffer,
           section: 'Products',
@@ -2552,8 +2550,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(filePath);
         const data = {
           variations: variationsStream,
           section: 'Products',
@@ -2572,8 +2568,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(filePath);
         const data = {
           variations: variationsBuffer,
           section: 'Products',
@@ -2592,8 +2586,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
@@ -2612,10 +2604,8 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
-          item_groups: itemGroupBuffer,
+          item_groups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -2632,12 +2622,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
@@ -2658,12 +2642,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
         const data = {
           items: itemsStream,
           variations: variationsStream,
@@ -2679,23 +2657,13 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('patchCatalog', function patchCatalog() {
-      // Ensure Mocha doesn't time out waiting for operation to complete
-      this.timeout(10000);
-
-      afterEach((done) => {
-        // Wait between each test to prevent throttle error from server
-        setTimeout(done, 1000);
-      });
-
+    describe('patchCatalog', () => {
       it('Should patch a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(filePath);
         const data = {
           items: itemsStream,
           section: 'Products',
@@ -2714,8 +2682,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(filePath);
         const data = {
           items: itemsBuffer,
           section: 'Products',
@@ -2734,8 +2700,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(filePath);
         const data = {
           variations: variationsStream,
           section: 'Products',
@@ -2754,8 +2718,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(filePath);
         const data = {
           variations: variationsBuffer,
           section: 'Products',
@@ -2774,8 +2736,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(filePath);
         const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
@@ -2794,10 +2754,8 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const filePath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupBuffer = fs.readFileSync(filePath);
         const data = {
-          item_groups: itemGroupBuffer,
+          item_groups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -2814,12 +2772,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsBuffer = fs.readFileSync(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsBuffer = fs.readFileSync(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsBuffer = fs.readFileSync(itemGroupsPath);
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
@@ -2840,12 +2792,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const itemsPath = path.join(process.cwd(), './spec/src/csv/items.csv');
-        const itemsStream = fs.createReadStream(itemsPath);
-        const variationsPath = path.join(process.cwd(), './spec/src/csv/variations.csv');
-        const variationsStream = fs.createReadStream(variationsPath);
-        const itemGroupsPath = path.join(process.cwd(), './spec/src/csv/item_groups.csv');
-        const itemGroupsStream = fs.createReadStream(itemGroupsPath);
         const data = {
           items: itemsStream,
           variations: variationsStream,
