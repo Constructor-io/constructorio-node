@@ -94,6 +94,7 @@ function createMockFacetOptionConfiguration(facetGroupName) {
 
 function createStreamFromBuffer(buffer) {
   const stream = new Duplex();
+
   stream.push(buffer);
   stream.push(null);
 
