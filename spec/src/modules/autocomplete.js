@@ -339,5 +339,11 @@ describe('ConstructorIO - Autocomplete', () => {
 
       return expect(autocomplete.getAutocompleteResults(query)).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { autocomplete } = new ConstructorIO(validOptions);
+
+      return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejected;
+    });
   });
 });

@@ -364,7 +364,12 @@ describe('ConstructorIO - Recommendations', () => {
     it('Should be rejected when request timeout is provided and reached', () => {
       const { recommendations } = new ConstructorIO(validOptions);
 
-      return expect(recommendations.getRecommendations(podId, { itemIds }, {}, { timeout: 10 })).to.eventually.be.rejected;
+      return expect(recommendations.getRecommendations(
+        podId,
+        { itemIds },
+        {},
+        { timeout: 10 },
+      )).to.eventually.be.rejected;
     });
   });
 });
