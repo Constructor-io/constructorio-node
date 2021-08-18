@@ -4,9 +4,6 @@ const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
-const controller = new AbortController();
-const { signal } = controller;
-
 // Create URL from supplied query (term) and parameters
 function createSearchUrl(query, parameters, userParameters, options) {
   const {
@@ -149,15 +146,17 @@ class Search {
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
-   * @param {object} [requestParameters] - Parameters relevant to the network request
-   * @param {number} [requestParameters.timeout] - Request timeout (in milliseconds)
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#search
    */
 
-  getSearchResults(query, parameters = {}, userParameters = {}, requestParameters = {}) {
+  getSearchResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const headers = {};
 
     try {
@@ -181,8 +180,8 @@ class Search {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
-    if (requestParameters.timeout && typeof requestParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), requestParameters.timeout);
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
