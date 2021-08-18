@@ -440,5 +440,11 @@ describe('ConstructorIO - Search', () => {
 
       return expect(search.getSearchResults(query, { section })).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { search } = new ConstructorIO(validOptions);
+
+      return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejected;
+    });
   });
 });

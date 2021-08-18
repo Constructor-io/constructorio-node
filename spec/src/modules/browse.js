@@ -459,6 +459,18 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseResults(filterName, filterValue)).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(
+        filterName,
+        filterValue,
+        {},
+        {},
+        { timeout: 10 },
+      )).to.eventually.be.rejected;
+    });
   });
 
   describe('getBrowseResultsForItemIds', () => {
