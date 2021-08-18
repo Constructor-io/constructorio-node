@@ -180,6 +180,7 @@ class Search {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
+    // Handle timeout if specified
     if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
       setTimeout(() => controller.abort(), networkParameters.timeout);
     }

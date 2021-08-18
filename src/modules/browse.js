@@ -218,6 +218,7 @@ class Browse {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
     if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
       setTimeout(() => controller.abort(), networkParameters.timeout);
     }
@@ -289,6 +290,7 @@ class Browse {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
     if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
       setTimeout(() => controller.abort(), networkParameters.timeout);
     }
@@ -348,6 +350,7 @@ class Browse {
     const queryString = qs.stringify(queryParams, { indices: false });
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
+    // Handle timeout if specified
     if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
       setTimeout(() => controller.abort(), networkParameters.timeout);
     }
@@ -404,6 +407,7 @@ class Browse {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
     if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
       setTimeout(() => controller.abort(), networkParameters.timeout);
     }
