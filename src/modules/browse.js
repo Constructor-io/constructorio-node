@@ -219,9 +219,7 @@ class Browse {
     }
 
     // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
@@ -291,9 +289,7 @@ class Browse {
     }
 
     // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal })
       .then((response) => {
@@ -351,9 +347,7 @@ class Browse {
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
     // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
@@ -408,9 +402,7 @@ class Browse {
     }
 
     // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       headers: helpers.createAuthHeader(this.options),
