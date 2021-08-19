@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
+const { AbortController } = require('node-abort-controller');
 const FormData = require('form-data');
 const fs = require('fs');
 const helpers = require('../utils/helpers');
@@ -144,17 +145,26 @@ class Catalog {
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
    * @param {object[]} [parameters.variations] - List of this item's variations
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/add_an_item
    */
-  addItem(parameters = {}) {
+  addItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -164,6 +174,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -190,17 +201,26 @@ class Catalog {
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
    * @param {object[]} [parameters.variations] - List of this item's variations
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/add_or_update_an_item
    */
-  addOrUpdateItem(parameters = {}) {
+  addOrUpdateItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = `${createCatalogUrl('item', this.options)}&force=1`;
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -210,6 +230,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -227,17 +248,26 @@ class Catalog {
    * @param {string} parameters.item_name - The name of the item, as it will appear in the results
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {string} parameters.id - An arbitrary ID you optionally specified when adding the item. If supplied, you don't need to pass in item_name
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/remove_an_item
    */
-  removeItem(parameters = {}) {
+  removeItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -247,6 +277,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -274,17 +305,26 @@ class Catalog {
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
    * @param {object[]} [parameters.variations] - List of this item's variations
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/modify_an_item
    */
-  modifyItem(parameters = {}) {
+  modifyItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -294,6 +334,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -310,17 +351,26 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_items
    */
-  addItemsBatch(parameters = {}) {
+  addItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('batch_items', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -330,6 +380,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -346,17 +397,26 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
    */
-  addOrUpdateItemsBatch(parameters = {}) {
+  addOrUpdateItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = `${createCatalogUrl('batch_items', this.options)}&force=1`;
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -366,6 +426,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -382,17 +443,26 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_remove_items
    */
-  removeItemsBatch(parameters = {}) {
+  removeItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('batch_items', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -402,6 +472,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -417,13 +488,17 @@ class Catalog {
    * @function getItem
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.id - The ID of the item you'd like to retrieve
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/get_items
    */
-  getItem(parameters = {}) {
+  getItem(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     if (parameters) {
       const { section } = parameters;
@@ -440,12 +515,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -463,13 +544,17 @@ class Catalog {
    * @param {string} parameters.section - The index section you'd like to retrieve results from
    * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/get_items
    */
-  getItems(parameters = {}) {
+  getItems(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPage, page, section } = parameters;
@@ -496,12 +581,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -519,18 +610,27 @@ class Catalog {
    * @param {string} parameters.id - Item group ID
    * @param {string} parameters.name - Item group name
    * @param {string} [parameters.parent_id] - Item group parent ID
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  addItemGroup(parameters = {}) {
+  addItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -540,6 +640,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -555,17 +656,26 @@ class Catalog {
    * @function addItemGroups
    * @param {object} parameters - Additional parameters for item group details
    * @param {object[]} parameters.item_groups - A list of item groups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  addItemGroups(parameters = {}) {
+  addItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -575,6 +685,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -590,17 +701,26 @@ class Catalog {
    * @function getItemGroup
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - The group ID you'd like to retrieve results for
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  getItemGroup(parameters = {}) {
+  getItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`item_groups/${parameters.id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -609,6 +729,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -622,17 +743,26 @@ class Catalog {
    * Retrieves item groups from index
    *
    * @function getItemGroups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  getItemGroups() {
+  getItemGroups(networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -641,6 +771,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -656,17 +787,26 @@ class Catalog {
    * @function addOrUpdateItemGroups
    * @param {object} parameters - Additional parameters for item group details
    * @param {object[]} parameters.item_groups - A list of item groups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  addOrUpdateItemGroups(parameters = {}) {
+  addOrUpdateItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -676,6 +816,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -694,18 +835,27 @@ class Catalog {
    * @param {string} [parameters.name] - Item group display name
    * @param {string} [parameters.parent_id] - Parent item group customer ID or null for root item groups
    * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    */
-  modifyItemGroup(parameters = {}) {
+  modifyItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -715,6 +865,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -728,12 +879,16 @@ class Catalog {
    * Remove all item groups from index
    *
    * @function removeItemGroups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeItemGroups() {
+  removeItemGroups(networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
@@ -741,9 +896,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -760,18 +921,27 @@ class Catalog {
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
    * @param {string[]} parameters.child_phrases - Array of synonyms
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/add_synonyms
    */
-  addOneWaySynonym(parameters = {}) {
+  addOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { phrase, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -781,6 +951,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -797,18 +968,27 @@ class Catalog {
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
    * @param {string[]} parameters.child_phrases - Array of synonyms
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/modify_synonyms
    */
-  modifyOneWaySynonym(parameters = {}) {
+  modifyOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { phrase, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -818,6 +998,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -833,19 +1014,28 @@ class Catalog {
    * @function getOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
-  getOneWaySynonym(parameters = {}) {
+  getOneWaySynonym(parameters = {}, networkParameters = {}) {
     const { phrase } = parameters;
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -854,6 +1044,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -870,13 +1061,17 @@ class Catalog {
    * @param {object} [parameters] - Additional parameters for synonym details
    * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    */
-  getOneWaySynonyms(parameters = {}) {
+  getOneWaySynonyms(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPage, page } = parameters;
@@ -898,12 +1093,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -919,18 +1120,27 @@ class Catalog {
    * @function removeOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
    */
-  removeOneWaySynonym(parameters = {}) {
+  removeOneWaySynonym(parameters = {}, networkParameters = {}) {
     const { phrase } = parameters;
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`one_way_synonyms/${phrase}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -939,6 +1149,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -952,17 +1163,26 @@ class Catalog {
    * Remove all one way synonyms
    *
    * @function removeOneWaySynonyms
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
    */
-  removeOneWaySynonyms() {
+  removeOneWaySynonyms(networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('one_way_synonyms', this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -971,6 +1191,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -986,17 +1207,26 @@ class Catalog {
    * @function addSynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {object[]} parameters.synonyms - Allows you to add synonyms to the newly created group
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html
    */
-  addSynonymGroup(parameters = {}) {
+  addSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('synonym_groups', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -1006,6 +1236,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1022,18 +1253,27 @@ class Catalog {
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {number} parameters.id - Synonym group ID
    * @param {object[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  modifySynonymGroup(parameters = {}) {
+  modifySynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`synonym_groups/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -1043,6 +1283,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1058,12 +1299,16 @@ class Catalog {
    * @function getSynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {number} parameters.id - The synonym group you would like returned
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroup(parameters = {}) {
+  getSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`synonym_groups/${parameters.id}`, this.options);
@@ -1071,9 +1316,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1091,14 +1342,18 @@ class Catalog {
    * @param {string} [parameters.phrase] - The phrase for which all synonym groups containing it will be returned
    * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  getSynonymGroups(parameters = {}) {
+  getSynonymGroups(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     const { phrase } = parameters;
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPage, page } = parameters;
@@ -1120,9 +1375,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1139,12 +1400,16 @@ class Catalog {
    * @function removeSynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {number} parameters.id - The synonym group you would like deleted
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeSynonymGroup(parameters = {}) {
+  removeSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id } = parameters;
 
     try {
@@ -1153,9 +1418,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1169,12 +1440,16 @@ class Catalog {
    * Remove all synonym groups
    *
    * @function removeSynonymGroups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#catalog
    */
-  removeSynonymGroups() {
+  removeSynonymGroups(networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('synonym_groups', this.options);
@@ -1182,9 +1457,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return Promise.resolve();
@@ -1205,17 +1486,26 @@ class Catalog {
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
    * @param {object[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  addRedirectRule(parameters = {}) {
+  addRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl('redirect_rules', this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -1225,6 +1515,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1246,18 +1537,27 @@ class Catalog {
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
    * @param {object[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  updateRedirectRule(parameters = {}) {
+  updateRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -1267,6 +1567,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1288,18 +1589,27 @@ class Catalog {
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
    * @param {object[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  modifyRedirectRule(parameters = {}) {
+  modifyRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { id, ...rest } = parameters;
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
     } catch (e) {
       return Promise.reject(e);
+    }
+
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
     }
 
     return fetch(requestUrl, {
@@ -1309,6 +1619,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1324,12 +1635,16 @@ class Catalog {
    * @function getRedirectRule
    * @param {object} parameters - Additional parameters for redirect rule details
    * @param {string} parameters.id - Redirect rule ID
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  getRedirectRule(parameters = {}) {
+  getRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${parameters.id}`, this.options);
@@ -1337,9 +1652,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1358,13 +1679,17 @@ class Catalog {
    * @param {number} [parameters.page] - The page of redirect rules to return. Defaults to 1
    * @param {string} [parameters.query] - Return redirect rules whose url or match pattern match the provided query
    * @param {string} [parameters.status] - One of "current" (return redirect rules that are currently active), "pending" (return redirect rules that will become active in the future), and "expired" (return redirect rules that are not active anymore)
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  getRedirectRules(parameters = {}) {
+  getRedirectRules(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPage, page, query, status } = parameters;
@@ -1396,9 +1721,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1414,12 +1745,16 @@ class Catalog {
    * @function removeRedirectRule
    * @param {object} parameters - Additional parameters for redirect rule details
    * @param {string} parameters.id - Redirect rule ID
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
    */
-  removeRedirectRule(parameters = {}) {
+  removeRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${parameters.id}`, this.options);
@@ -1427,9 +1762,15 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1450,18 +1791,29 @@ class Catalog {
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
    */
-  async replaceCatalog(parameters = {}) {
+  async replaceCatalog(parameters = {}, networkParameters = {}) {
     try {
       const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const controller = new AbortController();
+      const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+
+      // Handle timeout if specified
+      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+        setTimeout(() => controller.abort(), networkParameters.timeout);
+      }
+
       const response = await fetch(requestUrl, {
         method: 'PUT',
         body: formData,
         headers: helpers.createAuthHeader(this.options),
+        signal,
       });
 
       if (response.ok) {
@@ -1485,18 +1837,29 @@ class Catalog {
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
    */
-  async updateCatalog(parameters = {}) {
+  async updateCatalog(parameters = {}, networkParameters = {}) {
     try {
       const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const controller = new AbortController();
+      const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+
+      // Handle timeout if specified
+      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+        setTimeout(() => controller.abort(), networkParameters.timeout);
+      }
+
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
         headers: helpers.createAuthHeader(this.options),
+        signal,
       });
 
       if (response.ok) {
@@ -1520,18 +1883,29 @@ class Catalog {
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
    */
-  async patchCatalog(parameters = {}) {
+  async patchCatalog(parameters = {}, networkParameters = {}) {
     try {
       const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const controller = new AbortController();
+      const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
+
+      // Handle timeout if specified
+      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+        setTimeout(() => controller.abort(), networkParameters.timeout);
+      }
+
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
         headers: helpers.createAuthHeader(this.options),
+        signal,
       });
 
       if (response.ok) {
@@ -1566,12 +1940,16 @@ class Catalog {
    * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object[]} [parameters.options] - List of facet option configurations to create and associate with this facet group. Default value is [] (empty list).
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#create-a-facet-config
    */
-  addFacetConfiguration(parameters = {}) {
+  addFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1583,6 +1961,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'POST',
       body: JSON.stringify(rest),
@@ -1590,6 +1973,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1607,12 +1991,16 @@ class Catalog {
    * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
    * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#get-all-facet-configs
    */
-  getFacetConfigurations(parameters = {}) {
+  getFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const additionalQueryParams = {
       section: parameters.section || 'Products',
     };
@@ -1623,12 +2011,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1645,12 +2039,16 @@ class Catalog {
    * @param {object} parameters - Aditional paramaters for retrieving a facet configuration.
    * @param {number} [parameters.name] - Page number you'd like to request. Defaults to 1.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#get-a-single-facets-config
    */
-  getFacetConfiguration(parameters = {}) {
+  getFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, name } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1662,12 +2060,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1683,12 +2087,16 @@ class Catalog {
    * @function modifyFacetConfigurations
    * @param {object} parameters - Aditional paramaters for modifying facet configurations
    * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update. See [addFacetConfiguration]{@link module:catalog~addFacetConfiguration} for additional details on what parameters you can supply for each facet configuration.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-facet-configs-partial
    */
-  modifyFacetConfigurations(parameters = {}) {
+  modifyFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, facetConfigurations } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1700,6 +2108,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PATCH',
       body: JSON.stringify(facetConfigurations),
@@ -1707,6 +2120,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1740,12 +2154,16 @@ class Catalog {
    * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object[]} [parameters.options] - List of facet option configurations to create and associate with this facet group. Default value is [] (empty list).
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-total
    */
-  replaceFacetConfiguration(parameters = {}) {
+  replaceFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, name, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1757,6 +2175,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify({ name, ...rest }),
@@ -1764,6 +2187,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1795,12 +2219,16 @@ class Catalog {
    * @param {object} [parameters.data] - Dictionary/Object with any extra facet data. Default value is {} (empty dictionary/object).
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object[]} [parameters.options] - List of facet option configurations to create and associate with this facet group. Default value is [] (empty list).
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-partial
    */
-  modifyFacetConfiguration(parameters = {}) {
+  modifyFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, name, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1812,6 +2240,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PATCH',
       body: JSON.stringify({ name, ...rest }),
@@ -1819,6 +2252,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1837,12 +2271,16 @@ class Catalog {
    * @param {object} parameters - Aditional paramaters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
    */
-  removeFacetConfiguration(parameters = {}) {
+  removeFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { section, name } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1854,12 +2292,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1881,12 +2325,16 @@ class Catalog {
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
    */
-  addFacetOptionConfiguration(parameters = {}) {
+  addFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, section, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1898,6 +2346,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'POST',
       body: JSON.stringify(rest),
@@ -1905,6 +2358,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1922,12 +2376,16 @@ class Catalog {
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in the catalog
    * @param {object[]} parameters.facetOptionConfigurations - List of facet option configurations to would like to update - refer to [addFacetConfiguration]{@link module:catalog~addFacetOptionConfiguration} for additional details on what parameters can be supplied for each facet option configuration
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#batch-update-or-create-facet-options-configs
    */
-  addOrModifyFacetOptionConfigurations(parameters = {}) {
+  addOrModifyFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, section, facetOptionConfigurations } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1939,6 +2397,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PATCH',
       body: JSON.stringify(facetOptionConfigurations),
@@ -1946,6 +2409,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -1964,12 +2428,16 @@ class Catalog {
    * @param {number} [parameters.page=1] - Page number you'd like to request
    * @param {number} [parameters.num_results_per_page=100] - Number of facets per page in paginated response
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
    */
-  getFacetOptionConfigurations(parameters = {}) {
+  getFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, section } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -1981,12 +2449,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -2004,12 +2478,16 @@ class Catalog {
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - The facet option value. Unique for a particular facet
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
    */
-  getFacetOptionConfiguration(parameters = {}) {
+  getFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, value, section } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -2021,12 +2499,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -2048,12 +2532,16 @@ class Catalog {
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
    */
-  replaceFacetOptionConfiguration(parameters = {}) {
+  replaceFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, section, value, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -2065,6 +2553,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PUT',
       body: JSON.stringify({ value, ...rest }),
@@ -2072,6 +2565,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -2093,12 +2587,16 @@ class Catalog {
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
    * @param {string} [parameters.section='Products] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-partial
    */
-  modifyFacetOptionConfiguration(parameters = {}) {
+  modifyFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, section, value, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
@@ -2110,6 +2608,11 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'PATCH',
       body: JSON.stringify({ value, ...rest }),
@@ -2117,6 +2620,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -2134,12 +2638,16 @@ class Catalog {
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique value for this facet option
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
    */
-  removeFacetOptionConfiguration(parameters = {}) {
+  removeFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const { facetGroupName, value } = parameters;
     const additionalQueryParams = {
       section: parameters.section || 'Products',
@@ -2151,12 +2659,18 @@ class Catalog {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();
