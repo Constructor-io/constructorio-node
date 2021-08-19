@@ -1,6 +1,7 @@
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
+const { AbortController } = require('node-abort-controller');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 
@@ -76,9 +77,11 @@ function applyParamsAsString(parameters, userParameters, options) {
 }
 
 // Send request to server
-function send(url, userParameters, method = 'GET', body) {
+function send(url, userParameters, networkParameters, method = 'GET', body) { // eslint-disable-line max-params
   let request;
   const fetch = (this.options && this.options.fetch) || nodeFetch;
+  const controller = new AbortController();
+  const { signal } = controller;
   const headers = {};
 
   // Append security token as 'x-cnstrc-token' if available
@@ -108,8 +111,13 @@ function send(url, userParameters, method = 'GET', body) {
     }
   }
 
+  // Handle timeout if specified
+  if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+    setTimeout(() => controller.abort(), networkParameters.timeout);
+  }
+
   if (method === 'GET') {
-    request = fetch(url, { headers });
+    request = fetch(url, { headers, signal });
   }
 
   if (method === 'POST') {
@@ -121,6 +129,7 @@ function send(url, userParameters, method = 'GET', body) {
         ...headers,
         'Content-Type': 'text/plain',
       },
+      signal,
     });
   }
 
@@ -191,11 +200,13 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @example
    * constructorio.tracker.trackSessionStart();
    */
-  trackSessionStart(userParameters) {
+  trackSessionStart(userParameters, networkParameters = {}) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'session_start' };
     const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -204,6 +215,7 @@ class Tracker {
       this,
       requestUrl,
       userParameters,
+      networkParameters,
     );
 
     return true;
@@ -224,12 +236,14 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User focused on search input element
    * @example
    * constructorio.tracker.trackInputFocus();
    */
-  trackInputFocus(userParameters) {
+  trackInputFocus(userParameters, networkParameters = {}) {
     const url = `${this.options.serviceUrl}/behavior?`;
     const queryParams = { action: 'focus' };
     const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -238,6 +252,7 @@ class Tracker {
       this,
       requestUrl,
       userParameters,
+      networkParameters,
     );
 
     return true;
@@ -265,6 +280,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User selected (clicked, or navigated to via keyboard) a result that appeared within autocomplete
    * @example
@@ -276,7 +293,7 @@ class Tracker {
    *   display_name: 'apparel',
    * });
    */
-  trackAutocompleteSelect(term, parameters, userParameters) {
+  trackAutocompleteSelect(term, parameters, userParameters, networkParameters = {}) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -317,6 +334,7 @@ class Tracker {
           this,
           requestUrl,
           userParameters,
+          networkParameters,
         );
 
         return true;
@@ -348,6 +366,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User submitted a search (pressing enter within input element, or clicking submit element)
    * @example
@@ -357,7 +377,7 @@ class Tracker {
    *   display_name: 'apparel',
    * });
    */
-  trackSearchSubmit(term, parameters, userParameters) {
+  trackSearchSubmit(term, parameters, userParameters, networkParameters = {}) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -383,6 +403,7 @@ class Tracker {
           this,
           requestUrl,
           userParameters,
+          networkParameters,
         );
 
         return true;
@@ -413,6 +434,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User loaded a search product listing page
    * @example
@@ -421,7 +444,7 @@ class Tracker {
    *   item_ids: ['KMH876', 'KMH140', 'KMH437'],
    * });
    */
-  trackSearchResultsLoaded(term, parameters, userParameters) {
+  trackSearchResultsLoaded(term, parameters, userParameters, networkParameters = {}) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -446,6 +469,7 @@ class Tracker {
           this,
           requestUrl,
           userParameters,
+          networkParameters,
         );
 
         return true;
@@ -478,6 +502,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    * @example
@@ -487,7 +513,7 @@ class Tracker {
    *   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
    * });
    */
-  trackSearchResultClick(term, parameters, userParameters) {
+  trackSearchResultClick(term, parameters, userParameters, networkParameters = {}) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
@@ -524,6 +550,7 @@ class Tracker {
           this,
           requestUrl,
           userParameters,
+          networkParameters,
         );
 
         return true;
@@ -561,6 +588,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User performed an action indicating interest in an item (add to cart, add to wishlist, etc.)
    * @example
@@ -574,7 +603,7 @@ class Tracker {
    *   section: 'Products',
    * });
    */
-  trackConversion(term, parameters, userParameters) {
+  trackConversion(term, parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const searchTerm = helpers.ourEncodeURIComponent(term) || 'TERM_UNKNOWN';
@@ -645,6 +674,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -675,6 +705,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User completed an order (usually fired on order confirmation page)
    * @example
@@ -685,7 +717,7 @@ class Tracker {
    *   section: 'Products',
    * });
    */
-  trackPurchase(parameters, userParameters) {
+  trackPurchase(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/purchase?`;
@@ -719,6 +751,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -752,6 +785,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a search product listing page
    * @example
@@ -764,7 +799,7 @@ class Tracker {
    *   num_results_viewed: 3,
    * });
    */
-  trackRecommendationView(parameters, userParameters) {
+  trackRecommendationView(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/recommendation_result_view?`;
@@ -817,6 +852,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -852,6 +888,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User clicked an item that appeared within a list of recommended results
    * @example
@@ -867,7 +905,7 @@ class Tracker {
    *   item_id: 'KMH876',
    * });
    */
-  trackRecommendationClick(parameters, userParameters) {
+  trackRecommendationClick(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/recommendation_result_click?`;
@@ -935,6 +973,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -972,6 +1011,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User loaded a browse product listing page
    * @example
@@ -988,7 +1029,7 @@ class Tracker {
    *   filter_value: 'XYZ',
    * });
    */
-  trackBrowseResultsLoaded(parameters, userParameters) {
+  trackBrowseResultsLoaded(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/browse_result_load?`;
@@ -1061,6 +1102,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -1098,6 +1140,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    * @example
@@ -1114,7 +1158,7 @@ class Tracker {
    *   item_id: 'KMH876',
    * });
    */
-  trackBrowseResultClick(parameters, userParameters) {
+  trackBrowseResultClick(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/browse_result_click?`;
@@ -1187,6 +1231,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
@@ -1217,6 +1262,8 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User clicked a result that appeared within a browse product listing page
    * @example
@@ -1226,7 +1273,7 @@ class Tracker {
    *   variation_id: 'KMH879-7632',
    * });
    */
-  trackGenericResultClick(parameters, userParameters) {
+  trackGenericResultClick(parameters, userParameters, networkParameters = {}) {
     // Ensure required parameters are provided
     if (typeof parameters === 'object' && parameters && parameters.item_id) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/result_click?`;
@@ -1257,6 +1304,7 @@ class Tracker {
         this,
         requestUrl,
         userParameters,
+        networkParameters,
         requestMethod,
         requestBody,
       );
