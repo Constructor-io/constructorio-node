@@ -369,7 +369,7 @@ describe('ConstructorIO - Recommendations', () => {
         { itemIds },
         {},
         { timeout: 10 },
-      )).to.eventually.be.rejected;
+      )).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -382,7 +382,7 @@ describe('ConstructorIO - Recommendations', () => {
         podId,
         { itemIds },
         {},
-      )).to.eventually.be.rejected;
+      )).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });
