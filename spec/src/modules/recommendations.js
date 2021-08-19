@@ -361,7 +361,7 @@ describe('ConstructorIO - Recommendations', () => {
       })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when request timeout is provided and reached', () => {
+    it('Should be rejected when network request timeout is provided and reached', () => {
       const { recommendations } = new ConstructorIO(validOptions);
 
       return expect(recommendations.getRecommendations(
@@ -369,6 +369,19 @@ describe('ConstructorIO - Recommendations', () => {
         { itemIds },
         {},
         { timeout: 10 },
+      )).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', () => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        networkParameters: { timeout: 20 },
+      });
+
+      return expect(recommendations.getRecommendations(
+        podId,
+        { itemIds },
+        {},
       )).to.eventually.be.rejected;
     });
   });
