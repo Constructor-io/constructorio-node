@@ -343,12 +343,23 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackSessionStart(userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackSessionStart(userParameters)).to.equal(true);
     });
   });
 
@@ -656,12 +667,23 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackInputFocus(userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackInputFocus(userParameters)).to.equal(true);
     });
   });
 
@@ -1004,12 +1026,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackAutocompleteSelect(term, null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackAutocompleteSelect(term, requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -1345,8 +1378,19 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchSubmit(term, null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
 
       tracker.on('error', () => { done(); });
 
@@ -1732,7 +1776,7 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultsLoaded(term, null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
@@ -1742,6 +1786,21 @@ describe('ConstructorIO - Tracker', () => {
         requiredParameters,
         userParameters,
         { timeout: 10 },
+      )).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackSearchResultsLoaded(
+        term,
+        requiredParameters,
+        userParameters,
       )).to.equal(true);
     });
   });
@@ -2134,12 +2193,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultClick(term, null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackSearchResultClick(term, requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -2692,12 +2762,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackConversion(term, null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackConversion(term, requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackConversion(term, requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -3065,12 +3146,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackPurchase(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackPurchase(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackPurchase(requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -3426,12 +3518,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackRecommendationView(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackRecommendationView(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackRecommendationView(requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -3792,12 +3895,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackRecommendationClick(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackRecommendationClick(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -4170,12 +4284,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackBrowseResultsLoaded(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackBrowseResultsLoaded(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -4572,12 +4697,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackBrowseResultClick(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackBrowseResultClick(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, userParameters)).to.equal(true);
     });
   });
 
@@ -4959,12 +5095,23 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackGenericResultClick(null, userParameters)).to.be.an('error');
     });
 
-    it('Should throw an error when request timeout is provided and reached', (done) => {
+    it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackGenericResultClick(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should throw an error when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: { timeout: 20 },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, userParameters)).to.equal(true);
     });
   });
 

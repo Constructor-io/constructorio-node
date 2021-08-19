@@ -1585,7 +1585,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getOneWaySynonym(
-          { phrase: mockOneWaySynonymPhrase }
+          { phrase: mockOneWaySynonymPhrase },
         )).to.eventually.be.rejected;
       });
     });
@@ -4635,7 +4635,10 @@ describe('ConstructorIO - Catalog', () => {
         const { catalog } = new ConstructorIO(validOptions);
         const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
 
-        expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration, { timeout: 10 })).to.eventually.be.rejected;
+        expect(catalog.removeFacetOptionConfiguration(
+          mockFacetOptionConfiguration,
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
