@@ -218,7 +218,7 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
+    // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
@@ -288,7 +288,7 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
+    // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal })
@@ -346,7 +346,7 @@ class Browse {
     const queryString = qs.stringify(queryParams, { indices: false });
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
-    // Handle timeout if specified
+    // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
@@ -401,7 +401,7 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
+    // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {

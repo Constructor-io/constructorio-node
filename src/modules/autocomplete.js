@@ -142,7 +142,7 @@ class Autocomplete {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
-    // Handle timeout if specified
+    // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {

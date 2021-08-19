@@ -162,10 +162,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -218,10 +216,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -265,10 +261,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -322,10 +316,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -368,10 +360,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -414,10 +404,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -460,10 +448,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -515,10 +501,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -581,10 +565,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -628,10 +610,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -673,10 +653,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -718,10 +696,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -760,10 +736,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -804,10 +778,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -853,10 +825,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -896,10 +866,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -939,10 +907,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -986,10 +952,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -1033,10 +997,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1093,10 +1055,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1138,10 +1098,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -1180,10 +1138,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -1224,10 +1180,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -1271,10 +1225,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -1316,10 +1268,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1375,10 +1325,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1418,10 +1366,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -1457,10 +1403,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -1503,10 +1447,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -1555,10 +1497,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -1607,10 +1547,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -1652,10 +1590,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1721,10 +1657,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -1762,10 +1696,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -1804,10 +1736,8 @@ class Catalog {
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
 
-      // Handle timeout if specified
-      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-        setTimeout(() => controller.abort(), networkParameters.timeout);
-      }
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
       const response = await fetch(requestUrl, {
         method: 'PUT',
@@ -1850,10 +1780,8 @@ class Catalog {
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
 
-      // Handle timeout if specified
-      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-        setTimeout(() => controller.abort(), networkParameters.timeout);
-      }
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
       const response = await fetch(requestUrl, {
         method: 'PATCH',
@@ -1896,10 +1824,8 @@ class Catalog {
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
 
-      // Handle timeout if specified
-      if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-        setTimeout(() => controller.abort(), networkParameters.timeout);
-      }
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
       const response = await fetch(requestUrl, {
         method: 'PATCH',
@@ -1961,10 +1887,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -2011,10 +1935,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -2060,10 +1982,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -2108,10 +2028,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -2175,10 +2093,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -2240,10 +2156,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -2292,10 +2206,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
@@ -2346,10 +2258,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'POST',
@@ -2397,10 +2307,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -2449,10 +2357,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -2499,10 +2405,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
@@ -2553,10 +2457,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PUT',
@@ -2608,10 +2510,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'PATCH',
@@ -2659,10 +2559,8 @@ class Catalog {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'DELETE',
