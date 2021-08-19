@@ -1,4 +1,4 @@
-/* eslint-disable camelcase, no-unneeded-ternary */
+/* eslint-disable camelcase, no-unneeded-ternary, max-len */
 
 // Modules
 const Search = require('./modules/search');
@@ -19,6 +19,8 @@ class ConstructorIO {
    * @param {string} [securityToken] - Constructor security token
    * @param {string} [serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
    * @param {function} [fetch] - If supplied, will be utilized for requests rather than default Fetch API
+   * @param {object} [networkParameters] - Parameters relevant to network requests
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds) - may be overridden within individual method calls
    * @property {object} [search] - Interface to {@link module:search}
    * @property {object} [browse] - Interface to {@link module:browse}
    * @property {object} [autocomplete] - Interface to {@link module:autocomplete}
@@ -35,6 +37,7 @@ class ConstructorIO {
       serviceUrl,
       securityToken,
       fetch,
+      networkParameters,
     } = options;
 
     if (!apiKey || typeof apiKey !== 'string') {
@@ -48,6 +51,7 @@ class ConstructorIO {
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: serviceUrl || 'https://ac.cnstrc.com',
       fetch,
+      networkParameters: networkParameters || {},
     };
 
     // Expose global modules
