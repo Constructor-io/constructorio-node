@@ -459,6 +459,18 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseResults(filterName, filterValue)).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(
+        filterName,
+        filterValue,
+        {},
+        {},
+        { timeout: 10 },
+      )).to.eventually.be.rejected;
+    });
   });
 
   describe('getBrowseResultsForItemIds', () => {
@@ -766,6 +778,12 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseResultsForItemIds(ids)).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResultsForItemIds(ids, {}, {}, { timeout: 10 })).to.eventually.be.rejected;
+    });
   });
 
   describe('getBrowseGroups', () => {
@@ -884,6 +902,12 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseGroups()).to.eventually.be.rejected;
     });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseGroups({}, {}, { timeout: 10 })).to.eventually.be.rejected;
+    });
   });
 
   describe('getBrowseFacets', () => {
@@ -933,6 +957,12 @@ describe('ConstructorIO - Browse', () => {
       const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
       return expect(browse.getBrowseFacets()).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseFacets({}, {}, { timeout: 10 })).to.eventually.be.rejected;
     });
   });
 });

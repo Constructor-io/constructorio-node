@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
+const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
 // Create query params from parameters and options
@@ -199,12 +200,16 @@ class Browse {
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#browse
    */
-  getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}) {
+  getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const headers = createHeaders(this.options, userParameters);
 
     try {
@@ -213,7 +218,12 @@ class Browse {
       return Promise.reject(e);
     }
 
-    return fetch(requestUrl, { headers }).then((response) => {
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
+    return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -262,12 +272,16 @@ class Browse {
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/items/
   */
-  getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}) {
+  getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const headers = createHeaders(this.options, userParameters);
 
     try {
@@ -276,7 +290,12 @@ class Browse {
       return Promise.reject(e);
     }
 
-    return fetch(requestUrl, { headers })
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
+    return fetch(requestUrl, { headers, signal })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -313,11 +332,15 @@ class Browse {
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest-api.html#browse-groups
    */
-  getBrowseGroups(parameters = {}, userParameters = {}) {
+  getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
     const headers = createHeaders(this.options, userParameters);
     const { serviceUrl } = this.options;
     const queryParams = createQueryParams(parameters, userParameters, this.options);
@@ -327,7 +350,12 @@ class Browse {
     const queryString = qs.stringify(queryParams, { indices: false });
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
-    return fetch(requestUrl, { headers }).then((response) => {
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
+    return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -354,6 +382,8 @@ class Browse {
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/facets
    * @example
@@ -365,9 +395,11 @@ class Browse {
    *     }
    * });
    */
-  getBrowseFacets(parameters = {}, userParameters = {}) {
+  getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
 
     try {
       requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
@@ -375,8 +407,14 @@ class Browse {
       return Promise.reject(e);
     }
 
+    // Handle timeout if specified
+    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
+      setTimeout(() => controller.abort(), networkParameters.timeout);
+    }
+
     return fetch(requestUrl, {
       headers: helpers.createAuthHeader(this.options),
+      signal,
     }).then((response) => {
       if (response.ok) {
         return response.json();

@@ -168,6 +168,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addItem(mockItem)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addItem(createMockItem(), { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('addOrUpdateItem', () => {
@@ -237,6 +243,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addOrUpdateItem(mockItem)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addOrUpdateItem(createMockItem(), { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeItem', () => {
@@ -296,6 +308,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeItem(mockItem)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeItem(mockItem, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -366,6 +384,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyItem(mockItem)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyItem(mockItem, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('addItemsBatch', () => {
@@ -409,6 +433,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addItemsBatch([createMockItem()], { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -463,6 +493,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -532,6 +568,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.removeItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeItemsBatch({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getItem', () => {
@@ -599,6 +641,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getItem({ id: mockItem.id })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getItem({ id: mockItem.id }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -673,6 +721,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getItems({ section: 'Products' })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getItems({ section: 'Products' }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
   });
 
@@ -713,6 +767,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addItemGroup(group)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addItemGroup(createMockItemGroup(), { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -756,6 +816,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addItemGroups([createMockItemGroup()], { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -826,6 +892,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getItemGroup({ group_id: mockItemGroup.id }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getItemGroups', () => {
@@ -880,6 +952,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getItemGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getItemGroups({ timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -955,6 +1033,15 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addOrUpdateItemGroups({ item_groups: groups })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addOrUpdateItemGroups(
+          { item_groups: groups },
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
+      });
     });
 
     describe('modifyItemGroup', () => {
@@ -1012,6 +1099,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.modifyItemGroup(mockItemGroup)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyItemGroup(mockItemGroup, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -1071,6 +1164,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeItemGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeItemGroups({ timeout: 10 })).to.eventually.be.rejected;
       });
     });
   });
@@ -1133,6 +1232,15 @@ describe('ConstructorIO - Catalog', () => {
           phrase: mockOneWaySynonymPhrase,
           child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addOneWaySynonym({
+          phrase: createMockOneWaySynonymPhrase(),
+          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -1205,6 +1313,15 @@ describe('ConstructorIO - Catalog', () => {
           phrase: mockOneWaySynonymPhrase,
           child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -1281,6 +1398,15 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getOneWaySynonym({ phrase: mockOneWaySynonymPhrase })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getOneWaySynonym(
+          { phrase: mockOneWaySynonymPhrase },
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
+      });
     });
 
     describe('getOneWaySynonyms', () => {
@@ -1355,6 +1481,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getOneWaySynonyms({}, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeOneWaySynonym', () => {
@@ -1405,6 +1537,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeOneWaySynonym({ phrase: mockOneWaySynonymPhrase })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeOneWaySynonym(
+          { phrase: mockOneWaySynonymPhrase },
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
       });
     });
 
@@ -1457,6 +1598,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeOneWaySynonyms({ timeout: 10 })).to.eventually.be.rejected;
+      });
     });
   });
 
@@ -1504,6 +1651,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addSynonymGroup({ synonyms: [mockSynonym] })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addSynonymGroup(
+          { synonyms: [createMockSynonym()] },
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
       });
     });
 
@@ -1576,6 +1732,15 @@ describe('ConstructorIO - Catalog', () => {
           synonyms: [mockSynonym],
         })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifySynonymGroup({
+          id: synonymGroupId,
+          synonyms: [mockSynonym],
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getSynonymGroup', () => {
@@ -1645,6 +1810,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -1717,6 +1888,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getSynonymGroups({}, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeSynonymGroup', () => {
@@ -1779,6 +1956,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeSynonymGroups', () => {
@@ -1826,6 +2009,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeSynonymGroups({ timeout: 10 })).to.eventually.be.rejected;
       });
     });
   });
@@ -1879,6 +2068,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.addRedirectRule(mockRedirectRule)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addRedirectRule(createMockRedirectRule(), { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -1962,6 +2157,15 @@ describe('ConstructorIO - Catalog', () => {
           id: redirectRuleId,
           ...mockRedirectRule,
         })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.updateRedirectRule({
+          id: redirectRuleId,
+          ...mockRedirectRule,
+        }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -2047,6 +2251,15 @@ describe('ConstructorIO - Catalog', () => {
           ...mockRedirectRule,
         })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyRedirectRule({
+          id: redirectRuleId,
+          ...mockRedirectRule,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getRedirectRule', () => {
@@ -2121,11 +2334,16 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getRedirectRules', () => {
       const mockRedirectRule = createMockRedirectRule();
-      let redirectRuleId;
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -2133,9 +2351,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addRedirectRule(mockRedirectRule).then((res) => {
-          redirectRuleId = res.id;
-
+        catalog.addRedirectRule(mockRedirectRule).then(() => {
           done();
         });
       });
@@ -2230,7 +2446,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRules()).to.eventually.be.rejected;
       });
 
       it('Should return error when getting redirect rules with an invalid API token', () => {
@@ -2243,7 +2459,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
+        return expect(catalog.getRedirectRules()).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getRedirectRules({}, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -2318,6 +2540,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.removeRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
   });
@@ -2505,6 +2733,17 @@ describe('ConstructorIO - Catalog', () => {
           done();
         });
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.replaceCatalog(data, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('updateCatalog', () => {
@@ -2654,6 +2893,17 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('task_status_path');
           done();
         });
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.updateCatalog(data, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -2805,6 +3055,17 @@ describe('ConstructorIO - Catalog', () => {
           done();
         });
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.patchCatalog(data, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
   });
 
@@ -2874,6 +3135,12 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addFacetConfiguration(mockFacetConfiguration, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getFacetConfigurations', () => {
@@ -2922,6 +3189,12 @@ describe('ConstructorIO - Catalog', () => {
           done();
         });
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getFacetConfigurations({}, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getFacetConfiguration', () => {
@@ -2964,6 +3237,12 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.getFacetConfiguration({ name: 'gibberish' })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addFacetConfiguration(mockFacetConfiguration, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -3072,6 +3351,25 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyFacetConfigurations({ facetConfigurations: badFacetConfigurations })).to.eventually.be.rejected; // eslint-disable-line max-len
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+        const newFacetConfigurations = [
+          {
+            name: mockFacetConfigurations[0].name,
+            display_name: 'New Facet Display Name',
+          },
+          {
+            name: mockFacetConfigurations[1].name,
+            position: 5,
+          },
+        ];
+
+        return expect(catalog.modifyFacetConfigurations(
+          { facetConfigurations: newFacetConfigurations },
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
+      });
     });
 
     describe('replaceFacetConfiguration', () => {
@@ -3155,6 +3453,17 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.replaceFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.replaceFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name',
+          type: 'multiple',
+          position: 5,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('modifyFacetConfiguration', () => {
@@ -3235,6 +3544,16 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name',
+          position: 5,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeFacetConfiguration', () => {
@@ -3260,6 +3579,16 @@ describe('ConstructorIO - Catalog', () => {
         const mockFacetConfiguration = createMockFacetConfiguration();
 
         return expect(catalog.removeFacetConfiguration(mockFacetConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+        const mockFacetConfiguration = createMockFacetConfiguration();
+
+        return expect(catalog.removeFacetConfiguration(
+          mockFacetConfiguration,
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
       });
     });
   });
@@ -3330,6 +3659,14 @@ describe('ConstructorIO - Catalog', () => {
         mockFacetOptionConfiguration.position = 'one';
 
         return expect(catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+        return expect(catalog.addFacetOptionConfiguration(
+          createMockFacetOptionConfiguration(facetGroupName),
+          { timeout: 10 },
+        )).to.eventually.be.rejected;
       });
     });
 
@@ -3422,6 +3759,15 @@ describe('ConstructorIO - Catalog', () => {
           facetOptionConfigurations: mockFacetOptionConfigurations,
         })).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.addOrModifyFacetOptionConfigurations({
+          facetGroupName,
+          facetOptionConfigurations: mockFacetOptionConfigurations,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getFacetOptionConfigurations', () => {
@@ -3478,6 +3824,14 @@ describe('ConstructorIO - Catalog', () => {
           done();
         });
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.getFacetOptionConfigurations({
+          facetGroupName,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('getFacetOptionConfiguration', () => {
@@ -3522,6 +3876,16 @@ describe('ConstructorIO - Catalog', () => {
           facetGroupName,
           value: 'non-existent-facet-option-value',
         })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+        const { value } = mockFacetOptionConfiguration;
+
+        return expect(catalog.getFacetOptionConfiguration({
+          facetGroupName,
+          value,
+        }, { timeout: 10 })).to.eventually.be.rejected;
       });
     });
 
@@ -3604,6 +3968,17 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.replaceFacetOptionConfiguration({
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Option Display Name',
+          position: 5,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('modifyFacetOptionConfiguration', () => {
@@ -3684,6 +4059,17 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.modifyFacetOptionConfiguration({
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Display Name',
+          position: 5,
+        }, { timeout: 10 })).to.eventually.be.rejected;
+      });
     });
 
     describe('removeFacetOptionConfiguration', () => {
@@ -3709,6 +4095,15 @@ describe('ConstructorIO - Catalog', () => {
         const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
 
         return expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+        const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+
+        catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => {
+          expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
+        });
       });
     });
   });
