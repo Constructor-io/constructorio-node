@@ -441,10 +441,19 @@ describe('ConstructorIO - Search', () => {
       return expect(search.getSearchResults(query, { section })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when request timeout is provided and reached', () => {
+    it('Should be rejected when network request timeout is provided and reached', () => {
       const { search } = new ConstructorIO(validOptions);
 
-      return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejected;
+      return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', () => {
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        networkParameters: { timeout: 20 },
+      });
+
+      return expect(search.getSearchResults(query, { section }, {})).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });

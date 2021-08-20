@@ -50,6 +50,16 @@ const utils = {
 
     return { Authorization: `Basic ${Buffer.from(`${apiToken}:`).toString('base64')}` };
   },
+
+  // Abort network request based on supplied timeout interval (in milliseconds)
+  // - method call parameter takes precedence over global options parameter
+  applyNetworkTimeout: (options = {}, networkParameters = {}, controller) => {
+    const timeout = options.networkParameters.timeout || networkParameters.timeout;
+
+    if (typeof timeout === 'number') {
+      setTimeout(() => controller.abort(), timeout);
+    }
+  },
 };
 
 module.exports = utils;

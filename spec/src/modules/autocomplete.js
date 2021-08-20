@@ -340,10 +340,19 @@ describe('ConstructorIO - Autocomplete', () => {
       return expect(autocomplete.getAutocompleteResults(query)).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when request timeout is provided and reached', () => {
+    it('Should be rejected when network request timeout is provided and reached', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
-      return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejected;
+      return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', () => {
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        networkParameters: { timeout: 20 },
+      });
+
+      return expect(autocomplete.getAutocompleteResults(query, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });

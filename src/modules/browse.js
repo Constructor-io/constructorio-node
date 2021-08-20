@@ -218,10 +218,8 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
@@ -290,10 +288,8 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal })
       .then((response) => {
@@ -350,10 +346,8 @@ class Browse {
     const queryString = qs.stringify(queryParams, { indices: false });
     const requestUrl = `${serviceUrl}/browse/groups?${queryString}`;
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
@@ -407,10 +401,8 @@ class Browse {
       return Promise.reject(e);
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       headers: helpers.createAuthHeader(this.options),

@@ -140,10 +140,8 @@ class Recommendations {
       headers['User-Agent'] = userParameters.userAgent;
     }
 
-    // Handle timeout if specified
-    if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-      setTimeout(() => controller.abort(), networkParameters.timeout);
-    }
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {

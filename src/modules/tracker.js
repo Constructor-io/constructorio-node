@@ -111,10 +111,8 @@ function send(url, userParameters, networkParameters, method = 'GET', body) { //
     }
   }
 
-  // Handle timeout if specified
-  if (networkParameters.timeout && typeof networkParameters.timeout === 'number') {
-    setTimeout(() => controller.abort(), networkParameters.timeout);
-  }
+  // Handle network timeout if specified
+  helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
   if (method === 'GET') {
     request = fetch(url, { headers, signal });

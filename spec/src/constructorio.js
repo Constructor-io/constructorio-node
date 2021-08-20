@@ -32,20 +32,30 @@ describe('ConstructorIO', () => {
     expect(instance).to.have.property('recommendations');
     expect(instance).to.have.property('browse');
     expect(instance).to.have.property('catalog');
+    expect(instance).to.have.property('tracker');
   });
 
   it('Should return an instance with custom options when valid API key is provided', () => {
     const serviceUrl = 'http://constructor.io';
     const version = 'custom-version';
+    const apiToken = 'token';
+    const securityToken = 'security-token';
+    const networkParameters = { timeout: 5000 };
     const instance = new ConstructorIO({
       ...validOptions,
+      apiToken,
       serviceUrl,
       version,
+      securityToken,
+      networkParameters,
     });
 
     expect(instance).to.be.an('object');
+    expect(instance.options).to.have.property('apiToken').to.equal(apiToken);
     expect(instance.options).to.have.property('serviceUrl').to.equal(serviceUrl);
     expect(instance.options).to.have.property('version').to.equal(version);
+    expect(instance.options).to.have.property('securityToken').to.equal(securityToken);
+    expect(instance.options).to.have.property('networkParameters').to.equal(networkParameters);
   });
 
   it('Should throw an error when invalid API key is provided', () => {
