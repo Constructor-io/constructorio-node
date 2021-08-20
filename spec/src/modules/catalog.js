@@ -4227,7 +4227,7 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addOrModifyFacetOptionConfigurations({
           facetGroupName: mockFacetOptionConfigurations,
           facetOptionConfigurations: mockFacetOptionConfigurations,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
+        })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
