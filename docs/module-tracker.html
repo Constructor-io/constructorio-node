@@ -218,7 +218,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1316">line 1316</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1393">line 1393</a>
     </li></ul></dd>
     
 
@@ -419,7 +419,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line259">line 259</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -1294,13 +1294,20 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackAutocompleteSelect('T-Shirt', {
+    <pre class="prettyprint"><code>constructorio.tracker.trackAutocompleteSelect(
+ 'T-Shirt',
+ {
   original_query: 'Shirt',
   section: 'Products',
   tr: 'click',
   group_id: '88JU230',
   display_name: 'apparel',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -1354,7 +1361,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1114">line 1114</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1179">line 1179</a>
     </li></ul></dd>
     
 
@@ -2457,7 +2464,8 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultClick({
+    <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultClick(
+ {
   variation_id: 'KMH879-7632',
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
   result_count: 22,
@@ -2468,7 +2476,12 @@ exits - it is best practice to always bind a `.on('error')` handler
   filter_name: 'brand',
   filter_value: 'XYZ',
   item_id: 'KMH876',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -2522,7 +2535,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line985">line 985</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1044">line 1044</a>
     </li></ul></dd>
     
 
@@ -3625,7 +3638,8 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultsLoaded({
+    <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultsLoaded(
+ {
   result_count: 22,
   result_page: 2,
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
@@ -3636,7 +3650,12 @@ exits - it is best practice to always bind a `.on('error')` handler
   url: 'https://demo.constructor.io/sandbox/farmstand',
   filter_name: 'brand',
   filter_value: 'XYZ',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -3690,7 +3709,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line563">line 563</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line597">line 597</a>
     </li></ul></dd>
     
 
@@ -4749,7 +4768,9 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackConversion('T-Shirt', {
+    <pre class="prettyprint"><code>constructorio.tracker.trackConversion(
+ 'T-Shirt',
+ {
   item_id: 'KMH876',
   revenue: 12.00,
   item_name: 'Red T-Shirt',
@@ -4757,7 +4778,12 @@ exits - it is best practice to always bind a `.on('error')` handler
   type: 'like',
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
   section: 'Products',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -4811,7 +4837,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1243">line 1243</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line1314">line 1314</a>
     </li></ul></dd>
     
 
@@ -5638,11 +5664,17 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackGenericResultClick({
+    <pre class="prettyprint"><code>constructorio.tracker.trackGenericResultClick(
+ {
   item_id: 'KMH876',
   item_name: 'Red T-Shirt',
   variation_id: 'KMH879-7632',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -5696,7 +5728,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line222">line 222</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line225">line 225</a>
     </li></ul></dd>
     
 
@@ -6300,7 +6332,10 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackInputFocus();</code></pre>
+    <pre class="prettyprint"><code>constructorio.tracker.trackInputFocus({
+ sessionId: 1,
+ clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+});</code></pre>
 
 </div>
 
@@ -6354,7 +6389,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line686">line 686</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line727">line 727</a>
     </li></ul></dd>
     
 
@@ -7159,12 +7194,18 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackPurchase({
+    <pre class="prettyprint"><code>constructorio.tracker.trackPurchase(
+ {
   items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
   revenue: 12.00,
   order_id: 'OUNXBG2HMA',
   section: 'Products',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -7218,7 +7259,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line864">line 864</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line917">line 917</a>
     </li></ul></dd>
     
 
@@ -8241,7 +8282,8 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationClick({
+    <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationClick(
+ {
   variation_id: 'KMH879-7632',
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
   result_count: 22,
@@ -8251,7 +8293,12 @@ exits - it is best practice to always bind a `.on('error')` handler
   pod_id: '019927c2-f955-4020',
   strategy_id: 'complimentary',
   item_id: 'KMH876',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -8305,7 +8352,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line763">line 763</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line810">line 810</a>
     </li></ul></dd>
     
 
@@ -9248,14 +9295,20 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationView({
+    <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationView(
+ {
   result_count: 22,
   result_page: 2,
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
   url: 'https://demo.constructor.io/sandbox/farmstand',
   pod_id: '019927c2-f955-4020',
   num_results_viewed: 3,
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -9309,7 +9362,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line482">line 482</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line509">line 509</a>
     </li></ul></dd>
     
 
@@ -10148,11 +10201,18 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultClick('T-Shirt', {
+    <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultClick(
+ 'T-Shirt',
+ {
   item_name: 'Red T-Shirt',
   item_id: 'KMH876',
   result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -10206,7 +10266,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line416">line 416</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line436">line 436</a>
     </li></ul></dd>
     
 
@@ -10975,10 +11035,17 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultsLoaded('T-Shirt', {
+    <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultsLoaded(
+ 'T-Shirt',
+ {
   num_results: 167,
   item_ids: ['KMH876', 'KMH140', 'KMH437'],
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -11032,7 +11099,7 @@ exits - it is best practice to always bind a `.on('error')` handler
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line347">line 347</a>
+        <a href="modules_tracker.js.html">modules/tracker.js</a>, <a href="modules_tracker.js.html#line360">line 360</a>
     </li></ul></dd>
     
 
@@ -11837,11 +11904,18 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackSearchSubmit('T-Shirt', {
+    <pre class="prettyprint"><code>constructorio.tracker.trackSearchSubmit(
+ 'T-Shirt',
+ {
   original_query: 'Shirt',
   group_id: '88JU230',
   display_name: 'apparel',
-});</code></pre>
+ },
+ {
+  sessionId: 1,
+  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+ },
+);</code></pre>
 
 </div>
 
@@ -12499,7 +12573,10 @@ exits - it is best practice to always bind a `.on('error')` handler
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>constructorio.tracker.trackSessionStart();</code></pre>
+    <pre class="prettyprint"><code>constructorio.tracker.trackSessionStart({
+ sessionId: 1,
+ clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
+});</code></pre>
 
 </div>
 
@@ -12522,7 +12599,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Aug 19 2021 18:07:23 GMT-0600 (Mountain Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Aug 31 2021 13:46:44 GMT-0600 (Mountain Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
