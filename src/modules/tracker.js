@@ -27,7 +27,7 @@ function applyParams(parameters, userParameters, options) {
 
   // Validate client ID is provided
   if (!clientId || typeof clientId !== 'string') {
-    throw new Error('clentId is a required user parameter of type string');
+    throw new Error('clientId is a required user parameter of type string');
   }
 
   if (version) {
