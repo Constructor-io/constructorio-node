@@ -149,7 +149,14 @@ class Search {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#search
+   * @see https://docs.constructor.io/rest_api/search/
+   * @example
+   * constructorio.search.getSearchResults('t-shirt', {
+   *     resultsPerPage: 40,
+   *     filters: {
+   *         size: 'medium'
+   *     },
+   * });
    */
 
   getSearchResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {

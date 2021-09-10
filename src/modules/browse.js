@@ -203,7 +203,14 @@ class Browse {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#browse
+   * @see https://docs.constructor.io/rest_api/browse/results
+   * @example
+   * constructorio.browse.getBrowseResults('group_id', 't-shirts', {
+   *     resultsPerPage: 40,
+   *     filters: {
+   *         size: 'medium'
+   *     },
+   * });
    */
   getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -274,6 +281,12 @@ class Browse {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/browse/items/
+   * @example
+   * constructorio.browse.getBrowseResultsForItemIds(['shirt-123', 'shirt-456', 'shirt-789'], {
+   *     filters: {
+   *         size: 'medium'
+   *     },
+   * });
   */
   getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -331,7 +344,16 @@ class Browse {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#browse-groups
+   * @see https://docs.constructor.io/rest_api/browse/groups
+   * @example
+   * constructorio.browse.getBrowseGroups({
+   *     filters: {
+   *         group_id: 'drill_collection'
+   *     },
+   *     fmtOptions: {
+   *         groups_max_depth: 2
+   *     }
+   * });
    */
   getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -384,9 +406,6 @@ class Browse {
    * constructorio.browse.getBrowseFacets({
    *     page: 1,
    *     resultsPerPage: 10,
-   *     fmtOptions: {
-   *       show_hidden_facets: true,
-   *     }
    * });
    */
   getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {

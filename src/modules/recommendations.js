@@ -108,7 +108,14 @@ class Recommendations {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#recommendations
+   * @see https://docs.constructor.io/rest_api/recommendations
+   * @example
+   * constructorio.recommendations.getRecommendations('t-shirt-best-sellers', {
+   *     numResults: 5,
+   *     filters: {
+   *         size: 'medium'
+   *     },
+   * });
    */
   getRecommendations(podId, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
