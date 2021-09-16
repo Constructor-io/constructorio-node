@@ -364,7 +364,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.on('error', (data) => {
-  // Handle tracking error
+    // Handle tracking error
 });</code></pre>
 
 </div>
@@ -1295,18 +1295,18 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackAutocompleteSelect(
- 'T-Shirt',
- {
-  original_query: 'Shirt',
-  section: 'Products',
-  tr: 'click',
-  group_id: '88JU230',
-  display_name: 'apparel',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    'T-Shirt',
+     {
+         original_query: 'Shirt',
+         section: 'Products',
+         tr: 'click',
+         group_id: '88JU230',
+         display_name: 'apparel',
+     },
+     {
+         sessionId: 1,
+         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     },
 );</code></pre>
 
 </div>
@@ -2465,22 +2465,22 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultClick(
- {
-  variation_id: 'KMH879-7632',
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-  result_count: 22,
-  result_page: 2,
-  result_position_on_page: 2,
-  num_results_per_page: 12,
-  selected_filters: [ 'brand', 'color' ],
-  filter_name: 'brand',
-  filter_value: 'XYZ',
-  item_id: 'KMH876',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        variation_id: 'KMH879-7632',
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        result_count: 22,
+        result_page: 2,
+        result_position_on_page: 2,
+        num_results_per_page: 12,
+        selected_filters: [ 'brand', 'color' ],
+        filter_name: 'brand',
+        filter_value: 'XYZ',
+        item_id: 'KMH876',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -3639,22 +3639,22 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackBrowseResultsLoaded(
- {
-  result_count: 22,
-  result_page: 2,
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-  selected_filters: [ 'brand', 'color' ],
-  sort_order: 'ascending',
-  sort_by: 'price',
-  items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
-  url: 'https://demo.constructor.io/sandbox/farmstand',
-  filter_name: 'brand',
-  filter_value: 'XYZ',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        result_count: 22,
+        result_page: 2,
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        selected_filters: [ 'brand', 'color' ],
+        sort_order: 'ascending',
+        sort_by: 'price',
+        items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
+        url: 'https://demo.constructor.io/sandbox/farmstand',
+        filter_name: 'brand',
+        filter_value: 'XYZ',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -4769,20 +4769,20 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackConversion(
- 'T-Shirt',
- {
-  item_id: 'KMH876',
-  revenue: 12.00,
-  item_name: 'Red T-Shirt',
-  variation_id: 'KMH879-7632',
-  type: 'like',
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-  section: 'Products',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    'T-Shirt',
+    {
+        item_id: 'KMH876',
+        revenue: 12.00,
+        item_name: 'Red T-Shirt',
+        variation_id: 'KMH879-7632',
+        type: 'like',
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        section: 'Products',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -5665,15 +5665,15 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackGenericResultClick(
- {
-  item_id: 'KMH876',
-  item_name: 'Red T-Shirt',
-  variation_id: 'KMH879-7632',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        item_id: 'KMH876',
+        item_name: 'Red T-Shirt',
+        variation_id: 'KMH879-7632',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -6333,8 +6333,8 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackInputFocus({
- sessionId: 1,
- clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    sessionId: 1,
+    clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
 });</code></pre>
 
 </div>
@@ -7195,16 +7195,16 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackPurchase(
- {
-  items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
-  revenue: 12.00,
-  order_id: 'OUNXBG2HMA',
-  section: 'Products',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
+        revenue: 12.00,
+        order_id: 'OUNXBG2HMA',
+        section: 'Products',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -8283,21 +8283,21 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationClick(
- {
-  variation_id: 'KMH879-7632',
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-  result_count: 22,
-  result_page: 2,
-  result_position_on_page: 2,
-  num_results_per_page: 12,
-  pod_id: '019927c2-f955-4020',
-  strategy_id: 'complimentary',
-  item_id: 'KMH876',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        variation_id: 'KMH879-7632',
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        result_count: 22,
+        result_page: 2,
+        result_position_on_page: 2,
+        num_results_per_page: 12,
+        pod_id: '019927c2-f955-4020',
+        strategy_id: 'complimentary',
+        item_id: 'KMH876',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -9296,18 +9296,18 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackRecommendationView(
- {
-  result_count: 22,
-  result_page: 2,
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-  url: 'https://demo.constructor.io/sandbox/farmstand',
-  pod_id: '019927c2-f955-4020',
-  num_results_viewed: 3,
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    {
+        result_count: 22,
+        result_page: 2,
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        url: 'https://demo.constructor.io/sandbox/farmstand',
+        pod_id: '019927c2-f955-4020',
+        num_results_viewed: 3,
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -10202,16 +10202,16 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultClick(
- 'T-Shirt',
- {
-  item_name: 'Red T-Shirt',
-  item_id: 'KMH876',
-  result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    'T-Shirt',
+    {
+        item_name: 'Red T-Shirt',
+        item_id: 'KMH876',
+        result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -11036,15 +11036,15 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackSearchResultsLoaded(
- 'T-Shirt',
- {
-  num_results: 167,
-  item_ids: ['KMH876', 'KMH140', 'KMH437'],
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    'T-Shirt',
+    {
+        num_results: 167,
+        item_ids: ['KMH876', 'KMH140', 'KMH437'],
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -11905,16 +11905,16 @@ exits - it is best practice to always bind a `.on('error')` handler
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.tracker.trackSearchSubmit(
- 'T-Shirt',
- {
-  original_query: 'Shirt',
-  group_id: '88JU230',
-  display_name: 'apparel',
- },
- {
-  sessionId: 1,
-  clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
- },
+    'T-Shirt',
+    {
+        original_query: 'Shirt',
+        group_id: '88JU230',
+        display_name: 'apparel',
+    },
+    {
+        sessionId: 1,
+        clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+    },
 );</code></pre>
 
 </div>
@@ -12599,7 +12599,7 @@ exits - it is best practice to always bind a `.on('error')` handler
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Tue Aug 31 2021 13:46:44 GMT-0600 (Mountain Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Sep 16 2021 15:19:36 GMT-0600 (Mountain Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
