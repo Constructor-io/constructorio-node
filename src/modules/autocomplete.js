@@ -112,7 +112,17 @@ class Autocomplete {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest-api.html#autocomplete
+   * @see https://docs.constructor.io/rest_api/autocomplete_queries
+   * @example
+   * constructorio.autocomplete.getAutocompleteResults('t-shirt', {
+   *     resultsPerSection: {
+   *         Products: 5,
+   *         'Search Suggestions': 10,
+   *     },
+   *     filters: {
+   *         size: 'medium'
+   *     },
+   * });
    */
   getAutocompleteResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
