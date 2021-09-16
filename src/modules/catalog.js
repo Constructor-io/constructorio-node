@@ -1166,7 +1166,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   addSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1210,7 +1210,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   modifySynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1254,7 +1254,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   getSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1295,7 +1295,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   getSynonymGroups(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -1351,7 +1351,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   removeSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1389,7 +1389,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/
+   * @see https://docs.constructor.io/rest_api/synonyms/
    */
   removeSynonymGroups(networkParameters = {}) {
     let requestUrl;
