@@ -14,9 +14,13 @@ chai.use(sinonChai);
 dotenv.config();
 
 const testApiKey = process.env.TEST_API_KEY;
+const testApiToken = process.env.TEST_API_TOKEN;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
-const validOptions = { apiKey: testApiKey };
+const validOptions = {
+  apiKey: testApiKey,
+  apiToken: testApiToken,
+};
 
 describe('ConstructorIO - Recommendations', () => {
   const clientVersion = 'cio-mocha';
@@ -383,6 +387,61 @@ describe('ConstructorIO - Recommendations', () => {
         { itemIds },
         {},
       )).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+  });
+
+  describe('getRecommendationPods', () => {
+    it('Should return a response', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendationPods().then((res) => {
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        done();
+      });
+    });
+
+    it('Should return a response with security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendationPods().then((res) => {
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        done();
+      });
+    });
+
+    it('Should be rejected when invalid apiKey is provided', () => {
+      const { recommendations } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+
+      return expect(recommendations.getRecommendationPods()).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when network request timeout is provided and reached', () => {
+      const { recommendations } = new ConstructorIO(validOptions);
+
+      return expect(recommendations.getRecommendationPods(
+        { timeout: 10 },
+      )).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', () => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        networkParameters: { timeout: 20 },
+      });
+
+      return expect(recommendations.getRecommendationPods()).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });

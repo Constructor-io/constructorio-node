@@ -177,6 +177,45 @@ class Recommendations {
       throw new Error('getRecommendations response data is malformed');
     });
   }
+
+  /**
+   * Get all recommendation pods
+   *
+   * @function getRecommendationPods
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @example
+   * constructorio.recommendations.getRecommendationPods();
+   */
+  getRecommendationPods(networkParameters = {}) {
+    const {
+      apiKey,
+      serviceUrl,
+    } = this.options;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const headers = {};
+    const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}`;
+
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, { headers: { ...headers, ...helpers.createAuthHeader(this.options) }, signal })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return helpers.throwHttpErrorFromResponse(new Error(), response);
+      });
+  }
 }
 
 module.exports = Recommendations;
