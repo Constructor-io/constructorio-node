@@ -427,6 +427,18 @@ describe('ConstructorIO - Recommendations', () => {
       return expect(recommendations.getRecommendationPods()).to.eventually.be.rejected;
     });
 
+    it('Should be rejected when invalid apiToken is provided', () => {
+      const { recommendations } = new ConstructorIO({ ...validOptions, apiToken: 'fyzs7tfF8L161VoAXQ8u' });
+
+      return expect(recommendations.getRecommendationPods()).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when no apiToken is provided', () => {
+      const { recommendations } = new ConstructorIO({ ...validOptions, apiToken: null });
+
+      return expect(recommendations.getRecommendationPods()).to.eventually.be.rejected;
+    });
+
     it('Should be rejected when network request timeout is provided and reached', () => {
       const { recommendations } = new ConstructorIO(validOptions);
 
