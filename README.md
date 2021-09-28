@@ -11,6 +11,8 @@ A Node.js client for [Constructor.io](http://constructor.io/). [Constructor.io](
 
 This package can be installed via npm: `npm i @constructor-io/constructorio-node`. Once installed, simply import or require the package into your repository.
 
+Important: this library should only be used in a server-side context.
+
 ## 2. Retrieve an API key and token
 
 You can find this in your [Constructor.io dashboard](https://constructor.io/dashboard). Contact sales if you'd like to sign up, or support if you believe your company already has an account.
