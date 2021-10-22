@@ -475,7 +475,7 @@ class Tracker {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/behavior?`;
-        const queryParams = { action: 'search-results', term };
+        const queryParams = { action: 'search-results', term: term.trim() };
         const { num_results, customer_ids, item_ids } = parameters;
 
         if (!helpers.isNil(num_results)) {
