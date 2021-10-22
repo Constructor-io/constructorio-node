@@ -475,7 +475,7 @@ class Tracker {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/behavior?`;
-        const queryParams = { action: 'search-results', term: term.trim() };
+        const queryParams = { action: 'search-results', term };
         const { num_results, customer_ids, item_ids } = parameters;
 
         if (!helpers.isNil(num_results)) {
@@ -488,6 +488,7 @@ class Tracker {
         } else if (customer_ids && Array.isArray(customer_ids)) {
           queryParams.customer_ids = customer_ids.join(',');
         }
+
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
 
         send.call(
