@@ -488,6 +488,7 @@ class Tracker {
         } else if (customer_ids && Array.isArray(customer_ids)) {
           queryParams.customer_ids = customer_ids.join(',');
         }
+
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
 
         send.call(
@@ -598,7 +599,7 @@ class Tracker {
    * Send conversion event to API
    *
    * @function trackConversion
-   * @param {string} term - Search results query term
+   * @param {string} [term] - Search results query term that led to conversion event
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.item_id - Product item unique identifier
    * @param {number} parameters.revenue - Revenue (price) of product item
