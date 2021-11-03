@@ -7,6 +7,8 @@
 
 A Node.js client for [Constructor.io](http://constructor.io/). [Constructor.io](http://constructor.io/) provides search as a service that optimizes results using artificial intelligence (including natural language processing, re-ranking to optimize for conversions, and user personalization).
 
+> This client is intended for use in server side integrations.  If you want a JavaScript client for client side (i.e. front end) integrations please use [@constructor-io/constructorio-client-javascript](https://github.com/Constructor-io/constructorio-client-javascript)
+
 ## 1. Install
 
 This package can be installed via npm: `npm i @constructor-io/constructorio-node`. Once installed, simply import or require the package into your repository.
