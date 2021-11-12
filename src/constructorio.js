@@ -16,7 +16,7 @@ class ConstructorIO {
   /**
    * @param {object} parameters - Parameters for client instantiation
    * @param {string} parameters.apiKey - Constructor.io API key
-   * @param {string} [parameters.securityToken] - Constructor security token
+   * @param {string} [parameters.securityToken] - Constructor security token (required for catalog methods)
    * @param {string} [parameters.serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
    * @param {function} [parameters.fetch] - If supplied, will be utilized for requests rather than default Fetch API
    * @param {object} [parameters.networkParameters] - Parameters relevant to network requests
