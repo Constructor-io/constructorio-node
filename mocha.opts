@@ -1,2 +1,0 @@
---require ./spec/mocha.setup.js
---timeout 5000

@@ -46,7 +46,7 @@ const utils = {
     throw error;
   }),
 
-  isNil: value => value == null,
+  isNil: (value) => value == null,
 
   // Create authorization header to be transmitted with requests
   createAuthHeader: (options) => {
@@ -57,7 +57,7 @@ const utils = {
 
   // Abort network request based on supplied timeout interval (in milliseconds)
   // - method call parameter takes precedence over global options parameter
-  applyNetworkTimeout: (options = {}, networkParameters = {}, controller) => {
+  applyNetworkTimeout: (options = {}, networkParameters = {}, controller = undefined) => {
     const timeout = options.networkParameters.timeout || networkParameters.timeout;
 
     if (typeof timeout === 'number') {

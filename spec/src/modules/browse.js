@@ -6,7 +6,7 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
-const ConstructorIO = require('../../../test/constructorio');
+const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
 
 const { expect } = chai;
@@ -209,7 +209,6 @@ describe('ConstructorIO - Browse', () => {
         done();
       });
     });
-
 
     it('Should return a response with a valid filterName, filterValue and sortBy', (done) => {
       const sortBy = 'relevance';

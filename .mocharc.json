@@ -1,0 +1,4 @@
+{
+  "recursive": true,
+  "require": ["./spec/mocha.setup.js"]
+}
