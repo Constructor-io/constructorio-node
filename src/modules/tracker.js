@@ -1325,7 +1325,7 @@ class Tracker {
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {object} userParameters.userId - User ID, utilized to personalize results
+   * @param {string} userParameters.userId - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
