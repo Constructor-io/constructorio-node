@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved, no-new */
 const { expect } = require('chai');
 const jsdom = require('mocha-jsdom');
-const ConstructorIO = require('../../test/constructorio');
+const ConstructorIO = require('../../test/constructorio'); // eslint-disable-line import/extensions
 
 const validApiKey = 'testing';
 const validOptions = { apiKey: validApiKey };

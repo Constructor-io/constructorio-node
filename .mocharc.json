@@ -1,0 +1,5 @@
+{
+  "recursive": true,
+  "timeout": 5000,
+  "require": ["./spec/mocha.setup.js"]
+}

@@ -9,7 +9,7 @@ const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const { Duplex } = require('stream');
-const ConstructorIO = require('../../../test/constructorio');
+const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
 
 chai.use(chaiAsPromised);
@@ -441,7 +441,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-
         catalog.addItemsBatch({ items, section: 'Products' }).then(done);
       });
 
@@ -500,7 +499,6 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-
         catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
       });
 
@@ -509,7 +507,6 @@ describe('ConstructorIO - Catalog', () => {
           ...validOptions,
           fetch: fetchSpy,
         });
-
 
         catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
       });
@@ -3844,7 +3841,6 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.replaceFacetConfiguration(facetConfiguration)).to.eventually.be.rejected;
       });
 
-
       it('Should return error when replacing a facet configuration with unsupported options', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -4443,7 +4439,6 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
-
 
       it('Should return error when replacing a facet option configuration with unsupported options', () => {
         const { catalog } = new ConstructorIO({

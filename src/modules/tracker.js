@@ -77,7 +77,7 @@ function applyParamsAsString(parameters, userParameters, options) {
 }
 
 // Send request to server
-function send(url, userParameters, networkParameters, method = 'GET', body) { // eslint-disable-line max-params
+function send(url, userParameters, networkParameters, method = 'GET', body = {}) { // eslint-disable-line max-params
   let request;
   const fetch = (this.options && this.options.fetch) || nodeFetch;
   const controller = new AbortController();

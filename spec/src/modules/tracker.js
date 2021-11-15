@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
-const ConstructorIO = require('../../../test/constructorio');
+const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
 
 chai.use(chaiAsPromised);
@@ -2312,7 +2312,7 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackConversion(
         term,
-        Object.assign({}, requiredParameters, optionalParameters),
+        { ...requiredParameters, ...optionalParameters },
         userParameters,
       )).to.equal(true);
     });
@@ -2589,9 +2589,7 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = Object.assign({}, requiredParameters, {
-        type: 'add_to_wishlist',
-      });
+      const fullParameters = { ...requiredParameters, type: 'add_to_wishlist' };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -2615,11 +2613,10 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = Object.assign({}, requiredParameters, {
+      const fullParameters = { ...requiredParameters,
         type: 'add_to_loves',
         display_name: 'Add To Loves List',
-        is_custom_type: true,
-      });
+        is_custom_type: true };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -2675,10 +2672,9 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = Object.assign({}, requiredParameters, {
+      const fullParameters = { ...requiredParameters,
         display_name: 'Add To Loves List',
-        is_custom_type: true,
-      });
+        is_custom_type: true };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -2744,10 +2740,9 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = Object.assign({}, requiredParameters, {
+      const fullParameters = { ...requiredParameters,
         type: 'add_to_loves',
-        is_custom_type: true,
-      });
+        is_custom_type: true };
 
       tracker.on('error', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
