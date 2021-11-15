@@ -14,19 +14,20 @@ const { version: packageVersion } = require('../package.json');
  */
 class ConstructorIO {
   /**
-   * @param {string} apiKey - Constructor.io API key
-   * @param {string} [apiToken] - Constructor.io API token (required for catalog methods)
-   * @param {string} [securityToken] - Constructor security token
-   * @param {string} [serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
-   * @param {function} [fetch] - If supplied, will be utilized for requests rather than default Fetch API
-   * @param {object} [networkParameters] - Parameters relevant to network requests
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds) - may be overridden within individual method calls
-   * @property {object} [search] - Interface to {@link module:search}
-   * @property {object} [browse] - Interface to {@link module:browse}
-   * @property {object} [autocomplete] - Interface to {@link module:autocomplete}
-   * @property {object} [recommendations] - Interface to {@link module:recommendations}
-   * @property {object} [tracker] - Interface to {@link module:tracker}
-   * @property {object} [catalog] - Interface to {@link module:catalog}
+   * @param {object} parameters - Parameters for client instantiation
+   * @param {string} parameters.apiKey - Constructor.io API key
+   * @param {string} [parameters.apiToken] - Constructor.io API token (required for catalog methods)
+   * @param {string} [parameters.securityToken] - Constructor security token
+   * @param {string} [parameters.serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
+   * @param {function} [parameters.fetch] - If supplied, will be utilized for requests rather than default Fetch API
+   * @param {object} [parameters.networkParameters] - Parameters relevant to network requests
+   * @param {number} [parameters.networkParameters.timeout] - Request timeout (in milliseconds) - may be overridden within individual method calls
+   * @property {object} search - Interface to {@link module:search}
+   * @property {object} browse - Interface to {@link module:browse}
+   * @property {object} autocomplete - Interface to {@link module:autocomplete}
+   * @property {object} recommendations - Interface to {@link module:recommendations}
+   * @property {object} tracker - Interface to {@link module:tracker}
+   * @property {object} catalog - Interface to {@link module:catalog}
    * @returns {class}
    */
   constructor(options = {}) {
