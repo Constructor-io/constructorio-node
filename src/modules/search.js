@@ -54,7 +54,6 @@ function createSearchUrl(query, parameters, userParameters, options) {
       sortBy,
       sortOrder,
       section,
-      collectionId,
       fmtOptions,
       hiddenFields,
     } = parameters;
@@ -87,11 +86,6 @@ function createSearchUrl(query, parameters, userParameters, options) {
     // Pull section from parameters
     if (section) {
       queryParams.section = section;
-    }
-
-    // Pull collection id from parameters
-    if (collectionId) {
-      queryParams.collection_id = collectionId;
     }
 
     // Pull format options from parameters
@@ -136,6 +130,7 @@ class Search {
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
