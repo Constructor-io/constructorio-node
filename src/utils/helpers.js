@@ -46,7 +46,7 @@ const utils = {
     throw error;
   }),
 
-  isNil: (value) => value == null,
+  isNil: value => value == null,
 
   // Create authorization header to be transmitted with requests
   createAuthHeader: (options) => {
