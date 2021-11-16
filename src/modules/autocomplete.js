@@ -96,6 +96,7 @@ class Autocomplete {
    * Retrieve autocomplete results from API
    *
    * @function getAutocompleteResults
+   * @param {string} query - Term to use to perform an autocomplete search
    * @param {object} [parameters] - Additional parameters to refine result set
    * @param {number} [parameters.numResults] - The total number of results to return
    * @param {object} [parameters.filters] - Filters used to refine search
