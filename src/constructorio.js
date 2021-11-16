@@ -50,7 +50,7 @@ class ConstructorIO {
       apiToken: apiToken || '',
       securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
-      serviceUrl: serviceUrl || 'https://ac.cnstrc.com',
+      serviceUrl: serviceUrl.replace(/\/$/, '') || 'https://ac.cnstrc.com',
       fetch,
       networkParameters: networkParameters || {},
     };
