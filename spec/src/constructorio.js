@@ -58,6 +58,17 @@ describe('ConstructorIO', () => {
     expect(instance.options).to.have.property('networkParameters').to.equal(networkParameters);
   });
 
+  it('Should remove any trailing slashes from the serviceUrl', () => {
+    const serviceUrl = 'https://constructor.io/';
+    const instance = new ConstructorIO({
+      apiKey: validApiKey,
+      serviceUrl,
+    });
+
+    expect(instance).to.be.an('object');
+    expect(instance.options).to.have.property('serviceUrl').to.equal('https://constructor.io');
+  });
+
   it('Should throw an error when invalid API key is provided', () => {
     expect(() => new ConstructorIO({ ...validOptions, apiKey: 123456789 })).to.throw('API key is a required parameter of type string');
   });
