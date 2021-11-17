@@ -602,7 +602,7 @@ class Tracker {
    * @param {string} [term] - Search results query term that led to conversion event
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.item_id - Product item unique identifier
-   * @param {number} [parameters.revenue] - Revenue (price) of product item
+   * @param {number} [parameters.revenue] - Sale price if available, otherwise the regular (retail) price of item
    * @param {string} [parameters.item_name] - Product item name
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.type='add_to_cart'] - Conversion type
@@ -732,7 +732,7 @@ class Tracker {
    * @function trackPurchase
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {object[]} parameters.items - List of product item objects
-   * @param {number} parameters.revenue - Revenue
+   * @param {number} parameters.revenue - The subtotal (excluding taxes, shipping, etc.) of the entire order
    * @param {string} [parameters.order_id] - Unique order identifier
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
