@@ -517,7 +517,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -581,7 +581,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -712,7 +712,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -752,7 +752,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -795,7 +795,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -842,7 +842,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -879,7 +879,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1013,7 +1013,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1071,7 +1071,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1197,7 +1197,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1281,7 +1281,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1338,7 +1338,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1463,7 +1463,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1513,7 +1513,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1563,7 +1563,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1602,7 +1602,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1669,7 +1669,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
@@ -1708,7 +1708,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then(json => json);
+    }).then((json) => json);
   }
 
   /**
