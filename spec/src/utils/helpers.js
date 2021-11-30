@@ -9,8 +9,8 @@ const {
   throwHttpErrorFromResponse,
   isNil,
   applyNetworkTimeout,
+  createAuthHeader,
 } = require('../../../test/utils/helpers'); // eslint-disable-line import/extensions
-const { createAuthHeader } = require('../../../src/utils/helpers');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -148,6 +148,18 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
           expect(controller.signal.aborted).to.equal(true);
           done();
         }, 100);
+      });
+
+      it('should prefer timeout value from options (first parameter) over global timeout from networkParameters (second parameter)', (done) => {
+        const controller = new AbortController();
+
+        expect(controller.signal.aborted).to.equal(false);
+        applyNetworkTimeout({ networkParameters: { timeout: 50 } }, { timeout: 100 }, controller);
+
+        setTimeout(() => {
+          expect(controller.signal.aborted).to.equal(true);
+          done();
+        }, 75);
       });
     });
   }
