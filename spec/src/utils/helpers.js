@@ -18,38 +18,38 @@ dotenv.config();
 
 const bundled = process.env.BUNDLED === 'true';
 
-describe.only('ConstructorIO - Utils - Helpers', () => {
+describe('ConstructorIO - Utils - Helpers', () => {
   if (!bundled) {
     describe('ourEncodeURIComponent', () => {
-      it('should encode `+` as spaces (%20)', () => {
+      it('Should encode `+` as spaces (%20)', () => {
         const string = 'boink+doink';
         const encodedString = ourEncodeURIComponent(string);
 
         expect(encodedString).to.equal('boink%20doink');
       });
 
-      it('should encode special characters', () => {
+      it('Should encode special characters', () => {
         const string = "jáck's boink/yoink & doinks";
         const encodedString = ourEncodeURIComponent(string);
 
         expect(encodedString).to.equal('j%C3%A1ck%27s%20boink%2Fyoink%20%26%20doinks');
       });
 
-      it('should encode non-breaking space characters as spaces (%20)', () => {
+      it('Should encode non-breaking space characters as spaces (%20)', () => {
         const string = 'boink doink yoink'; // contains non-breaking spaces
         const encodedString = ourEncodeURIComponent(string);
 
         expect(encodedString).to.equal('boink%20doink%20yoink');
       });
 
-      it('should return null if it is not a string', () => {
+      it('Should return null if it is not a string', () => {
         const notAString = 123;
         expect(ourEncodeURIComponent(notAString)).to.equal(null);
       });
     });
 
     describe('cleanParams', () => {
-      it('should clean up parameters', () => {
+      it('Should clean up parameters', () => {
         const params = {
           origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza+burrito',
           filters: {
@@ -74,7 +74,7 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
     });
 
     describe('throwHttpErrorFromResponse', () => {
-      it('should throw an error based on the information from the response', async () => {
+      it('Should throw an error based on the information from the response', async () => {
         const errorMessage = 'Error Message';
         const responseData = {
           status: 400,
@@ -105,17 +105,17 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
     });
 
     describe('isNil', () => {
-      it('should return true if the value is null', () => {
+      it('Should return true if the value is null', () => {
         expect(isNil(null)).to.equal(true);
       });
 
-      it('should return false if the value is not null', () => {
+      it('Should return false if the value is not null', () => {
         expect(isNil({})).to.equal(false);
       });
     });
 
     describe('createAuthHeader', () => {
-      it('should create an authorization header obhect', () => {
+      it('Should create an authorization header object', () => {
         const options = { apiToken: 'api-token' };
         const authHeader = createAuthHeader(options);
 
@@ -126,7 +126,7 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
     });
 
     describe('applyNetworkTimeout', () => {
-      it('should send an abort signal to the controller using the networkParameter timeout', (done) => {
+      it('Should send an abort signal to the controller using the networkParameter timeout', (done) => {
         const controller = new AbortController();
 
         expect(controller.signal.aborted).to.equal(false);
@@ -138,7 +138,7 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
         }, 100);
       });
 
-      it('should send an abort signal to the controller using the options timeout', (done) => {
+      it('Should send an abort signal to the controller using the options timeout', (done) => {
         const controller = new AbortController();
 
         expect(controller.signal.aborted).to.equal(false);
@@ -150,7 +150,7 @@ describe.only('ConstructorIO - Utils - Helpers', () => {
         }, 100);
       });
 
-      it('should prefer timeout value from options (first parameter) over global timeout from networkParameters (second parameter)', (done) => {
+      it('Should prefer timeout value from options (first parameter) over global timeout from networkParameters (second parameter)', (done) => {
         const controller = new AbortController();
 
         expect(controller.signal.aborted).to.equal(false);
