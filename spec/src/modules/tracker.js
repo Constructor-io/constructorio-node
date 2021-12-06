@@ -3224,6 +3224,35 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response and limit items to no more than 100', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestBodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestBodyParams).to.have.property('items').length.to.be(100);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(
+        {
+          ...requiredParameters,
+          items: Array(200).fill({ item_id: 'product55f1b3a93ea01b91d52f45' }),
+        },
+        { ...userParameters },
+      )).to.equal(true);
+    });
+
     it('Should throw an error when invalid parameters are provided', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
