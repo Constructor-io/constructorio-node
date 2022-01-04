@@ -71,11 +71,11 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
 
       tasks.getAllTasks().then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-        const taskExists = res.tasks.find((task) => task.id === taskId);
+        const task = res.tasks.find((taskObj) => taskObj.id === taskId);
 
         expect(fetchSpy).to.have.been.called;
         expect(res.total_count).to.be.gte(1);
-        expect(taskExists).to.eq(true);
+        expect(task.id).to.eq(taskId);
         expect(requestedUrlParams).to.have.property('key');
         done();
       });

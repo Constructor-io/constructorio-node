@@ -44,7 +44,7 @@ class Tasks {
    *
    * @function getAllTasks
    * @param {object} parameters - Additional parameters for task details
-   * @param {number} [parameters.num_results_per_page = 20] - The number of tasks to return. Maximum value 100
+   * @param {number} [parameters.num_results_per_page = 20] - The number of tasks to return - maximum value 100
    * @param {number} [parameters.page = 1] - The page of results to return
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -101,7 +101,7 @@ class Tasks {
    *
    * @function getTask
    * @param {object} parameters - Additional parameters for task details
-   * @param {string} parameters.id - The ID of the task you'd like to retrieve
+   * @param {string} parameters.id - The ID of the task to be retrieved
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
