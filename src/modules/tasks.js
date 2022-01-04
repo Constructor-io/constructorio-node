@@ -44,8 +44,8 @@ class Tasks {
    *
    * @function getAllTasks
    * @param {object} parameters - Additional parameters for task details
-   * @param {number} [parameters.num_results_per_page] - The number of tasks to return. Defaults to 20. Maximum value 100
-   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @param {number} [parameters.num_results_per_page = 20] - The number of tasks to return. Maximum value 100
+   * @param {number} [parameters.page = 1] - The page of results to return
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
