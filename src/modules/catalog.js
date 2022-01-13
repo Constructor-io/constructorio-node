@@ -4,6 +4,7 @@ const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const FormData = require('form-data');
 const fs = require('fs');
+const { Duplex } = require('stream');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied path and options
@@ -59,17 +60,17 @@ async function createQueryParamsAndFormData(parameters) {
 
     try {
       // Convert items to buffer if passed as stream
-      if (items instanceof fs.ReadStream) {
+      if (items instanceof fs.ReadStream || items instanceof Duplex) {
         items = await convertToBuffer(items);
       }
 
       // Convert variations to buffer if passed as stream
-      if (variations instanceof fs.ReadStream) {
+      if (variations instanceof fs.ReadStream || variations instanceof Duplex) {
         variations = await convertToBuffer(variations);
       }
 
       // Convert item groups to buffer if passed as stream
-      if (itemGroups instanceof fs.ReadStream) {
+      if (itemGroups instanceof fs.ReadStream || itemGroups instanceof Duplex) {
         itemGroups = await convertToBuffer(itemGroups);
       }
     } catch (e) {
