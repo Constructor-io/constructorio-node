@@ -439,7 +439,7 @@ class Tracker {
    * @function trackSearchResultsLoaded
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {number} parameters.num_results - Number of search results in total
+   * @param {number} parameters.num_results - Total number of results
    * @param {string[]} [parameters.item_ids] - List of product item unique identifiers in search results listing
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -822,7 +822,7 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} parameters.pod_id - Pod identifier
    * @param {number} parameters.num_results_viewed - Number of results viewed
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
@@ -932,6 +932,7 @@ class Tracker {
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
    * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {number} [parameters.result_position_on_page] - Position of result on page
    * @param {number} [parameters.num_results_per_page] - Number of results on page
@@ -1057,7 +1058,7 @@ class Tracker {
    * @param {string} parameters.filter_name - Filter name
    * @param {string} parameters.filter_value - Filter value
    * @param {string} [parameters.section="Products"] - Index section
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
    * @param {object} [parameters.selected_filters] - Selected filters
@@ -1194,7 +1195,7 @@ class Tracker {
    * @param {string} [parameters.section="Products"] - Index section
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {number} [parameters.result_position_on_page] - Position of clicked item
    * @param {number} [parameters.num_results_per_page] - Number of results shown
