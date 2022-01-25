@@ -17,7 +17,7 @@ dotenv.config();
 const quizApiKey = process.env.QUIZ_API_KEY;
 const clientVersion = 'cio-mocha';
 
-describe('ConstructorIO - Quizzes', () => {
+describe.only('ConstructorIO - Quizzes', () => {
   const validQuizId = 'etchells-emporium-quiz';
   const validAnswers = [[1, 2], [1]];
   let fetchSpy;
@@ -59,7 +59,7 @@ describe('ConstructorIO - Quizzes', () => {
         apiKey: quizApiKey,
         fetch: fetchSpy,
       });
-      return quizzes.getNextQuiz(validQuizId, {}).then((res) => {
+      return quizzes.getNextQuiz(validQuizId, {}, {}).then((res) => {
         expect(res).to.have.property('version_id').to.be.an('string');
         expect(res.next_question.id).to.equal(1);
         expect(res.next_question.options[0].id).to.equal(1);
@@ -85,7 +85,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuiz(validQuizId, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getNextQuiz(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -152,7 +152,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getFinalizeQuiz(validQuizId, { a: validAnswers }, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getFinalizeQuiz(validQuizId, { a: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected when global network request timeout is provided and reached', () => {

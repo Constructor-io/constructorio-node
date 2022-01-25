@@ -74,6 +74,9 @@ class Quizzes {
    * @param {string} [parameters.section] - Section for customer's product catalog (optional)
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.version_id] - Specific version id for the quiz.
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -85,7 +88,8 @@ class Quizzes {
    *    version_id: "123"
    * });
    */
-  getNextQuiz(quizId, parameters, networkParameters = {}) {
+  getNextQuiz(quizId, parameters, userParameters = {}, networkParameters = {}) {
+    const headers = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
@@ -97,10 +101,25 @@ class Quizzes {
       return Promise.reject(e);
     }
 
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
+    // Append user IP as 'X-Forwarded-For' if available
+    if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+      headers['X-Forwarded-For'] = userParameters.userIp;
+    }
+
+    // Append user agent as 'User-Agent' if available
+    if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+      headers['User-Agent'] = userParameters.userAgent;
+    }
+
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { signal })
+    return fetch(requestUrl, { headers, signal })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -125,6 +144,9 @@ class Quizzes {
    * @param {string} [parameters.section] - Section for customer's product catalog (optional)
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.version_id] - Specific version id for the quiz.
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -136,8 +158,9 @@ class Quizzes {
    *    version_id: "123"
    * });
    */
-  getFinalizeQuiz(quizId, parameters, networkParameters = {}) {
+  getFinalizeQuiz(quizId, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
+    const headers = {};
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
@@ -148,10 +171,25 @@ class Quizzes {
       return Promise.reject(e);
     }
 
+    // Append security token as 'x-cnstrc-token' if available
+    if (this.options.securityToken && typeof this.options.securityToken === 'string') {
+      headers['x-cnstrc-token'] = this.options.securityToken;
+    }
+
+    // Append user IP as 'X-Forwarded-For' if available
+    if (userParameters.userIp && typeof userParameters.userIp === 'string') {
+      headers['X-Forwarded-For'] = userParameters.userIp;
+    }
+
+    // Append user agent as 'User-Agent' if available
+    if (userParameters.userAgent && typeof userParameters.userAgent === 'string') {
+      headers['User-Agent'] = userParameters.userAgent;
+    }
+
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { signal })
+    return fetch(requestUrl, { headers, signal })
       .then((response) => {
         if (response.ok) {
           return response.json();
