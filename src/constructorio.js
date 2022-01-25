@@ -8,6 +8,7 @@ const Recommendations = require('./modules/recommendations');
 const Tracker = require('./modules/tracker');
 const Catalog = require('./modules/catalog');
 const Tasks = require('./modules/tasks');
+const Quizzes = require('./modules/quizzes');
 const { version: packageVersion } = require('../package.json');
 
 /**
@@ -65,6 +66,7 @@ class ConstructorIO {
     this.tracker = new Tracker(this.options);
     this.catalog = new Catalog(this.options);
     this.tasks = new Tasks(this.options);
+    this.quizzes = new Quizzes(this.options);
   }
 }
 
