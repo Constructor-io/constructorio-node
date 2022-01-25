@@ -16,10 +16,8 @@ dotenv.config();
 
 const quizApiKey = process.env.QUIZ_API_KEY;
 const clientVersion = 'cio-mocha';
-const bundled = process.env.BUNDLED === 'true';
-const bundledDescriptionSuffix = bundled ? ' - Bundled' : '';
 
-describe.only(`ConstructorIO - Quizzes${bundledDescriptionSuffix}`, () => {
+describe('ConstructorIO - Quizzes', () => {
   const validQuizId = 'etchells-emporium-quiz';
   const validAnswers = [[1, 2], [1]];
   let fetchSpy;
