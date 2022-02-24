@@ -118,11 +118,11 @@ function createBrowseUrlFromFilter(filterName, filterValue, parameters, userPara
   return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
 }
 
-// Create URL from supplied ID's
+// Create URL from supplied IDs and parameters
 function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   const { serviceUrl } = options;
 
-  // Validate item ID's are provided
+  // Validate item IDs are provided
   if (!itemIds || !(itemIds instanceof Array) || !itemIds.length) {
     throw new Error('itemIds is a required parameter of type array');
   }
@@ -133,7 +133,7 @@ function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   return `${serviceUrl}/browse/items?${queryString}`;
 }
 
-// Create URL from supplied ID's
+// Create URL from supplied parameters
 function createBrowseUrlForFacets(parameters, userParameters, options) {
   const { serviceUrl } = options;
   const queryParams = { ...createQueryParams(parameters, userParameters, options) };
@@ -141,7 +141,26 @@ function createBrowseUrlForFacets(parameters, userParameters, options) {
   delete queryParams._dt;
 
   const queryString = qs.stringify(queryParams, { indices: false });
+
   return `${serviceUrl}/browse/facets?${queryString}`;
+}
+
+// Create URL from supplied facet name and parameters
+function createBrowseUrlForFacetOptions(facetName, parameters, userParameters, options) {
+  const { serviceUrl } = options;
+
+  // Validate facet name is provided
+  if (!facetName || typeof facetName !== 'string') {
+    throw new Error('facetName is a required parameter of type string');
+  }
+
+  const queryParams = { ...createQueryParams(parameters, userParameters, options) };
+
+  delete queryParams._dt;
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/browse/facet_options?facet_name=${facetName}&${queryString}`;
 }
 
 // Create request headers using supplied options and user parameters
@@ -257,10 +276,10 @@ class Browse {
   }
 
   /**
-   * Retrieve browse results from API using item ID's
+   * Retrieve browse results from API using item IDs
    *
    * @function getBrowseResultsForItemIds
-   * @param {string[]} itemIds - Item ID's of results to fetch
+   * @param {string[]} itemIds - Item IDs of results to fetch
    * @param {object} [parameters] - Additional parameters to refine result set
    * @param {number} [parameters.page] - The page number of the results
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
@@ -416,6 +435,59 @@ class Browse {
 
     try {
       requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      headers: helpers.createAuthHeader(this.options),
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Retrieve facet options from API
+   *
+   * @function getBrowseFacetOptions
+   * @param {string} facetName - Name of the facet whose options to return
+   * @param {object} [parameters] - Additional parameters to refine result set
+   * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
+   * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {string} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/browse/facet_options
+   * @example
+   * constructorio.browse.getBrowseFacetOptions('price', {
+   *     fmtOptions: { ... },
+   * });
+   */
+  getBrowseFacetOptions(facetName, parameters = {}, userParameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    try {
+      requestUrl = createBrowseUrlForFacetOptions(facetName, parameters, userParameters, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
