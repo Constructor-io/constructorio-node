@@ -141,7 +141,7 @@ class Catalog {
    * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
    * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
    * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own ID's of the items to more easily access them in other API calls
+   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
    * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
@@ -195,7 +195,7 @@ class Catalog {
    * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
    * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
    * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own ID's of the items to more easily access them in other API calls
+   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
    * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
@@ -295,7 +295,7 @@ class Catalog {
    * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
    * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
    * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own ID's of the items to more easily access them in other API calls
+   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
    * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
    * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
    * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
