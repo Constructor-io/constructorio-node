@@ -192,7 +192,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -205,6 +205,7 @@ class Tracker {
    * constructorio.tracker.trackSessionStart({
    *  sessionId: 1,
    *  clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
+   *  testCells: { 'testName': 'cellName', },
    * });
    */
   trackSessionStart(userParameters, networkParameters = {}) {
@@ -231,7 +232,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -245,6 +246,7 @@ class Tracker {
    * constructorio.tracker.trackInputFocus({
    *     sessionId: 1,
    *     clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *     testCells: { 'testName': 'cellName', },
    * });
    */
   trackInputFocus(userParameters, networkParameters = {}) {
@@ -278,7 +280,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -298,10 +300,13 @@ class Tracker {
    *          group_id: '88JU230',
    *          display_name: 'apparel',
    *      },
-   *      {
-   *          sessionId: 1,
-   *          clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *      },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
+   *     },
    * );
    */
   trackAutocompleteSelect(term, parameters, userParameters, networkParameters = {}) {
@@ -371,7 +376,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -392,6 +397,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -446,7 +454,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -466,6 +474,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -527,7 +538,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -548,6 +559,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -620,7 +634,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -646,6 +660,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -745,7 +762,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -766,6 +783,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -831,7 +851,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -854,6 +874,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -940,7 +963,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -966,6 +989,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -1069,7 +1095,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1096,6 +1122,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -1204,7 +1233,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1231,6 +1260,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */
@@ -1332,7 +1364,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} userParameters.userId - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1352,6 +1384,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *                          'testName': 'cellName',
+   *                    },
    *     },
    * );
    */

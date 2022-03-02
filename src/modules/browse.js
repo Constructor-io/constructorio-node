@@ -197,7 +197,7 @@ class Browse {
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -210,6 +210,10 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
    */
   getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -274,7 +278,7 @@ class Browse {
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -286,8 +290,12 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
-  */
+   */
   getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -338,7 +346,7 @@ class Browse {
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -353,6 +361,10 @@ class Browse {
    *     fmtOptions: {
    *         groups_max_depth: 2
    *     }
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
    */
   getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -395,7 +407,7 @@ class Browse {
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -406,6 +418,10 @@ class Browse {
    * constructorio.browse.getBrowseFacets({
    *     page: 1,
    *     resultsPerPage: 10,
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
    */
   getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {
