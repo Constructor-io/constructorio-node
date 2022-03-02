@@ -192,7 +192,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -231,7 +231,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -278,7 +278,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -371,7 +371,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -446,7 +446,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -527,7 +527,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -620,7 +620,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -745,7 +745,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -831,7 +831,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -940,7 +940,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1069,7 +1069,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1204,7 +1204,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1332,7 +1332,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} userParameters.userId - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells ex: { 'cellName' : 'cellValue' }
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
