@@ -96,22 +96,19 @@ function createSearchUrl(query, parameters, userParameters, options) {
 
     // Pull hidden fields from parameters
     if (hiddenFields) {
-      if (hiddenFields) {
-        queryParams.hidden_fields = hiddenFields;
-        if (queryParams.fmt_options) {
-          queryParams.fmt_options.hidden_fields = hiddenFields;
-        } else {
-          queryParams.fmt_options = { hidden_fields: hiddenFields };
-        }
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_fields = hiddenFields;
+      } else {
+        queryParams.fmt_options = { hidden_fields: hiddenFields };
       }
+    }
 
-      // Pull hidden facets from parameters
-      if (hiddenFacets) {
-        if (queryParams.fmt_options) {
-          queryParams.fmt_options.hidden_facets = hiddenFacets;
-        } else {
-          queryParams.fmt_options = { hidden_facets: hiddenFacets };
-        }
+    // Pull hidden facets from parameters
+    if (hiddenFacets) {
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_facets = hiddenFacets;
+      } else {
+        queryParams.fmt_options = { hidden_facets: hiddenFacets };
       }
     }
   }
