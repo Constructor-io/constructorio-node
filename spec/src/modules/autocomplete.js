@@ -291,7 +291,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it.only('Should return a response with a valid query and hiddenFields', (done) => {
+    it('Should return a response with a valid query and hiddenFields', (done) => {
       const hiddenFields = ['testField', 'hiddenField2'];
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
