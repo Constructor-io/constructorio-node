@@ -291,8 +291,8 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query and hiddenFields', (done) => {
-      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+    it.only('Should return a response with a valid query and hiddenFields', (done) => {
+      const hiddenFields = ['testField', 'hiddenField2'];
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -304,8 +304,9 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.hidden_fields).to.eql(hiddenFields);
-        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.sections.Products[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
         done();
       });
     });
