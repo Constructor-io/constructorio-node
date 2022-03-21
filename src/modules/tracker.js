@@ -205,7 +205,7 @@ class Tracker {
    * constructorio.tracker.trackSessionStart({
    *  sessionId: 1,
    *  clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
-   *  testCells: { 'testName': 'cellName', },
+   *  testCells: { testName: 'cellName' },
    * });
    */
   trackSessionStart(userParameters, networkParameters = {}) {
@@ -246,7 +246,7 @@ class Tracker {
    * constructorio.tracker.trackInputFocus({
    *     sessionId: 1,
    *     clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *     testCells: { 'testName': 'cellName', },
+   *     testCells: { testName: 'cellName' },
    * });
    */
   trackInputFocus(userParameters, networkParameters = {}) {
@@ -293,19 +293,19 @@ class Tracker {
    * @example
    * constructorio.tracker.trackAutocompleteSelect(
    *     'T-Shirt',
-   *      {
-   *          original_query: 'Shirt',
-   *          section: 'Products',
-   *          tr: 'click',
-   *          group_id: '88JU230',
-   *          display_name: 'apparel',
-   *      },
+   *     {
+   *         original_query: 'Shirt',
+   *         section: 'Products',
+   *         tr: 'click',
+   *         group_id: '88JU230',
+   *         display_name: 'apparel',
+   *     },
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -398,8 +398,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -475,8 +475,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -560,8 +560,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -661,8 +661,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -784,8 +784,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -875,8 +875,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -990,8 +990,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -1123,8 +1123,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -1261,8 +1261,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -1385,8 +1385,8 @@ class Tracker {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
    *         testCells: {
-   *                          'testName': 'cellName',
-   *                    },
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */

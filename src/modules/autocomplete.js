@@ -125,7 +125,7 @@ class Autocomplete {
    *     },
    * }, {
    *     testCells: {
-   *         'testName': 'cellName',
+   *         testName: 'cellName',
    *    },
    * });
    */

@@ -153,7 +153,7 @@ class Search {
    *     },
    * }, {
    *     testCells: {
-   *         'testName': 'cellName',
+   *         testName: 'cellName',
    *    },
    * });
    */

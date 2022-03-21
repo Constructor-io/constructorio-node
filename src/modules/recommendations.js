@@ -117,7 +117,7 @@ class Recommendations {
    *     },
    * }, {
    *     testCells: {
-   *         'testName': 'cellName',
+   *         testName: 'cellName',
    *    },
    * });
    */

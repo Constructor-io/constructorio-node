@@ -212,7 +212,7 @@ class Browse {
    *     },
    * }, {
    *     testCells: {
-   *         'testName': 'cellName',
+   *         testName: 'cellName',
    *    },
    * });
    */
