@@ -56,6 +56,7 @@ function createSearchUrl(query, parameters, userParameters, options) {
       section,
       fmtOptions,
       hiddenFields,
+      hiddenFacets,
     } = parameters;
 
     // Pull page from parameters
@@ -95,7 +96,20 @@ function createSearchUrl(query, parameters, userParameters, options) {
 
     // Pull hidden fields from parameters
     if (hiddenFields) {
-      queryParams.hidden_fields = hiddenFields;
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_fields = hiddenFields;
+      } else {
+        queryParams.fmt_options = { hidden_fields: hiddenFields };
+      }
+    }
+
+    // Pull hidden facets from parameters
+    if (hiddenFacets) {
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_facets = hiddenFacets;
+      } else {
+        queryParams.fmt_options = { hidden_facets: hiddenFacets };
+      }
     }
   }
 
@@ -133,6 +147,7 @@ class Search {
    * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
