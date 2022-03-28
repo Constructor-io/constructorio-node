@@ -1,20 +1,30 @@
 /* eslint-disable no-param-reassign */
-const qs = require('qs');
-
 const utils = {
   ourEncodeURIComponent: (str) => {
+    let newStr;
+    const encodingMap = {
+      '*': '%2A',
+      '!': '%21',
+      "'": '%27',
+      '(': '%28',
+      ')': '%29',
+    };
+
     if (str && typeof str === 'string') {
-      const cleanedString = str
-        .replace(/\[/g, '%5B') // Replace [
-        .replace(/\]/g, '%5D') // Replace ]
-        .replace(/&/g, '%26'); // Replace &
-      const trimmedCleanedString = cleanedString.trim();
-      const parsedStrObj = qs.parse(`s=${trimmedCleanedString}`);
+      // Trim trailing space and replace non-breaking spaces with a regular white space
+      newStr = str.trim().replace(/(\s)/g, ' ');
 
-      parsedStrObj.s = parsedStrObj.s.replace(/\s/g, ' ');
+      // Run through URI encoder
+      newStr = encodeURIComponent(newStr);
 
-      return qs.stringify(parsedStrObj).split('=')[1];
+      // Encode rest of special characters not handled by `encodeURIComponent`
+      Object.keys(encodingMap).forEach((encoding) => {
+        newStr = newStr.replace(new RegExp(`\\${encoding}`, 'g'), encodingMap[encoding]);
+      });
+
+      return newStr;
     }
+
     return null;
   },
 

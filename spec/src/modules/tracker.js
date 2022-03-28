@@ -2844,7 +2844,7 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('success', () => {
         const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
-        expect(bodyParams).to.have.property('search_term').to.equal(term);
+        expect(bodyParams).to.have.property('search_term').to.equal(encodeURIComponent(term));
 
         done();
       });

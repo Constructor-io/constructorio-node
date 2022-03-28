@@ -21,11 +21,18 @@ const bundled = process.env.BUNDLED === 'true';
 describe('ConstructorIO - Utils - Helpers', () => {
   if (!bundled) {
     describe('ourEncodeURIComponent', () => {
-      it('Should encode `+` as spaces (%20)', () => {
+      it('Should encode `+` appropriately (%2B)', () => {
         const string = 'boink+doink';
         const encodedString = ourEncodeURIComponent(string);
 
-        expect(encodedString).to.equal('boink%20doink');
+        expect(encodedString).to.equal('boink%2Bdoink');
+      });
+
+      it('Should encode `!` appropriately (%21)', () => {
+        const string = 'boink!doink';
+        const encodedString = ourEncodeURIComponent(string);
+
+        expect(encodedString).to.equal('boink%21doink');
       });
 
       it('Should encode special characters', () => {
@@ -62,12 +69,12 @@ describe('ConstructorIO - Utils - Helpers', () => {
         const cleanedParams = cleanParams(params);
 
         expect(cleanedParams).to.deep.equal({
-          origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
+          origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza+burrito',
           filters: {
             size: 'large',
             color: 'green',
           },
-          userId: 'boink doink yoink', // contains non-breaking spaces
+          userId: 'boink doink yoink',
           section: 'Products',
         });
       });
