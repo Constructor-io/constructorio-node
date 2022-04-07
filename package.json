@@ -6,7 +6,7 @@
   "scripts": {
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
-    "lint": "chmod 766 .git/hooks/pre-push && eslint 'src/**/*.js' 'spec/**/*.js'",
+    "lint": "eslint 'src/**/*.js' 'spec/**/*.js'",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/*",
     "precoverage": "rm -rf ./coverage && rm -rf ./.nyc_output",
     "coverage": "nyc --all --reporter=html npm run test",
