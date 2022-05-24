@@ -265,6 +265,77 @@ class Tracker {
   }
 
   /**
+   * Send item detail load event to API
+   *
+   * @function trackItemDetailLoad
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.item_name - Product item name
+   * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} [parameters.variation_id] - Product item variation unique identifier
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User loaded an item detail page
+   * @example
+   * constructorio.tracker.trackItemDetailLoad(
+   *     {
+   *         item_name: 'Red T-Shirt',
+   *         item_id: 'KMH876',
+   *     },
+   * );
+   */
+  trackItemDetailLoad(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
+      const url = `${this.options.serviceUrl}/behavior?`;
+      const queryParams = { action: 'item_detail_load' };
+      const { item_name, name, item_id, customer_id, variation_id } = parameters;
+
+      // Ensure support for both item_name and name as parameters
+      if (item_name) {
+        queryParams.name = item_name;
+      } else if (name) {
+        queryParams.name = name;
+      }
+
+      // Ensure support for both item_id and customer_id as parameters
+      if (item_id) {
+        queryParams.customer_id = item_id;
+      } else if (customer_id) {
+        queryParams.customer_id = customer_id;
+      }
+
+      if (variation_id) {
+        queryParams.variation_id = variation_id;
+      }
+
+      const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
+      send.call(
+        this,
+        requestUrl,
+        userParameters,
+        networkParameters,
+      );
+
+      return true;
+    }
+
+    return new Error('parameters are required of type object');
+  }
+
+  /**
    * Send autocomplete select event to API
    *
    * @function trackAutocompleteSelect
