@@ -497,7 +497,11 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`item/${parameters.id}`, this.options, queryParams);
+      if (parameters.id) {
+        requestUrl = createCatalogUrl(`item/${parameters.id}`, this.options, queryParams);
+      } else {
+        requestUrl = createCatalogUrl('item', this.options, queryParams);
+      }
     } catch (e) {
       return Promise.reject(e);
     }

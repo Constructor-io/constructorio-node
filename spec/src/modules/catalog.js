@@ -650,6 +650,22 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addItem(mockItem).then(done);
       });
 
+      it('Should return a response when no item id is passed', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItem({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('total_count').to.be.a('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
       it('Should return a response when getting item by id', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
