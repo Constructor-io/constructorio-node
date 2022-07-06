@@ -57,6 +57,7 @@ function createSearchUrl(query, parameters, userParameters, options) {
       fmtOptions,
       hiddenFields,
       hiddenFacets,
+      variationsMap,
     } = parameters;
 
     // Pull page from parameters
@@ -110,6 +111,11 @@ function createSearchUrl(query, parameters, userParameters, options) {
       } else {
         queryParams.fmt_options = { hidden_facets: hiddenFacets };
       }
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
