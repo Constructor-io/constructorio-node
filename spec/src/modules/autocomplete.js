@@ -331,6 +331,7 @@ describe('ConstructorIO - Autocomplete', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
+
       autocomplete.getAutocompleteResults('Jacket', { variationsMap }, {}).then((res) => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
