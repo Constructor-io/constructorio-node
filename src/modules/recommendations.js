@@ -39,7 +39,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, itemIds, section, term, filters } = parameters;
+    const { numResults, itemIds, section, term, filters, variationsMap } = parameters;
 
     // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
@@ -64,6 +64,11 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     // Pull filters from parameters
     if (filters) {
       queryParams.filters = filters;
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
@@ -97,6 +102,7 @@ class Recommendations {
    * @param {string} [parameters.section] - The section to return results from
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)
    * @param {object} [parameters.filters] - Filters used to refine results (strategy specific)
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
