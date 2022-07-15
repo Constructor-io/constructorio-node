@@ -47,7 +47,7 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, resultsPerSection, filters, hiddenFields } = parameters;
+    const { numResults, resultsPerSection, filters, hiddenFields, variationsMap } = parameters;
 
     // Pull results number from parameters
     if (numResults) {
@@ -73,6 +73,11 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
       } else {
         queryParams.fmt_options = { hidden_fields: hiddenFields };
       }
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
@@ -107,6 +112,7 @@ class Autocomplete {
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {object} [parameters.resultsPerSection] - Number of results to return (value) per section (key)
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
