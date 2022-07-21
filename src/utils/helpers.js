@@ -1,22 +1,9 @@
 /* eslint-disable no-param-reassign */
-const qs = require('qs');
-
 const utils = {
-  ourEncodeURIComponent: (str) => {
-    if (str && typeof str === 'string') {
-      const cleanedString = str
-        .replace(/\[/g, '%5B') // Replace [
-        .replace(/\]/g, '%5D') // Replace ]
-        .replace(/&/g, '%26'); // Replace &
-      const trimmedCleanedString = cleanedString.trim();
-      const parsedStrObj = qs.parse(`s=${trimmedCleanedString}`);
+  trimNonBreakingSpaces: (string) => string.replace(/\s/g, ' ').trim(),
 
-      parsedStrObj.s = parsedStrObj.s.replace(/\s/g, ' ');
-
-      return qs.stringify(parsedStrObj).split('=')[1];
-    }
-    return null;
-  },
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+  encodeURIComponentRFC3986: (string) => encodeURIComponent(string).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`),
 
   cleanParams: (paramsObj) => {
     const cleanedParams = {};
@@ -27,7 +14,7 @@ const utils = {
       if (typeof paramValue === 'string') {
         // Replace non-breaking spaces (or any other type of spaces caught by the regex)
         // - with a regular white space
-        cleanedParams[paramKey] = decodeURIComponent(utils.ourEncodeURIComponent(paramValue));
+        cleanedParams[paramKey] = utils.trimNonBreakingSpaces(paramValue);
       } else {
         cleanedParams[paramKey] = paramValue;
       }

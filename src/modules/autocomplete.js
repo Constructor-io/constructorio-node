@@ -85,8 +85,9 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
+  const cleanedQuery = query.replace(/^\//, '|'); // For compatibility with backend API
 
-  return `${serviceUrl}/autocomplete/${encodeURIComponent(query)}?${queryString}`;
+  return `${serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(cleanedQuery))}?${queryString}`;
 }
 
 /**

@@ -135,7 +135,7 @@ function createBrowseUrlFromFilter(filterName, filterValue, parameters, userPara
   const queryParams = createQueryParams(parameters, userParameters, options);
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
+  return `${serviceUrl}/browse/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterName))}/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterValue))}?${queryString}`;
 }
 
 // Create URL from supplied IDs and parameters
@@ -176,11 +176,13 @@ function createBrowseUrlForFacetOptions(facetName, parameters, userParameters, o
 
   const queryParams = { ...createQueryParams(parameters, userParameters, options) };
 
+  queryParams.facet_name = facetName;
+
   delete queryParams._dt;
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/browse/facet_options?facet_name=${facetName}&${queryString}`;
+  return `${serviceUrl}/browse/facet_options?${queryString}`;
 }
 
 // Create request headers using supplied options and user parameters
