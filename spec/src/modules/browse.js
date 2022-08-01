@@ -149,6 +149,25 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a valid filterName, filterValue and offset', (done) => {
+      const offset = 1;
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { offset }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.offset).to.equal(offset);
+        expect(requestedUrlParams).to.have.property('offset').to.equal(offset.toString());
+        done();
+      });
+    });
+
     it('Should return a response with a valid filterName, filterValue and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { browse } = new ConstructorIO({
@@ -563,6 +582,23 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         page: 'abc',
+      })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid offset parameter is provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(filterName, filterValue, {
+        offset: 'abc',
+      })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when offset and page parameters are provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(filterName, filterValue, {
+        offset: 1,
+        page: 1,
       })).to.eventually.be.rejected;
     });
 

@@ -147,6 +147,27 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should return a response with a valid query, section, and offset', (done) => {
+      const offset = 1;
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+      search.getSearchResults(query, {
+        section,
+        offset,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.offset).to.equal(offset);
+        expect(requestedUrlParams).to.have.property('offset').to.equal(offset.toString());
+        done();
+      });
+    });
+
     it('Should return a response with a valid query, section, and resultsPerPage', (done) => {
       const resultsPerPage = 2;
       const { search } = new ConstructorIO({
@@ -501,6 +522,27 @@ describe('ConstructorIO - Search', () => {
       const searchParams = {
         section,
         page: 'abc',
+      };
+
+      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid offset parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 'abc',
+      };
+
+      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when offset and page parameters are provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 1,
+        page: 1,
       };
 
       return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
