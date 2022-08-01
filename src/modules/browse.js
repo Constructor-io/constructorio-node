@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -232,8 +233,8 @@ class Browse {
    * @param {string} filterName - Filter name to display results from
    * @param {string} filterValue - Filter value to display results from
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
-   * @param {number} [parameters.offset] - The number of results to skip from the beginning
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine results
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
@@ -317,8 +318,8 @@ class Browse {
    * @function getBrowseResultsForItemIds
    * @param {string[]} itemIds - Item IDs of results to fetch
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
-   * @param {number} [parameters.offset] - The number of results to skip from the beginning
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine results
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
@@ -453,8 +454,8 @@ class Browse {
    *
    * @function getBrowseFacets
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
-   * @param {number} [parameters.offset] - The number of results to skip from the beginning
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {string} [parameters.section='Products'] - The section name for results
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
