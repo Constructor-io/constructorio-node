@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -5,6 +6,7 @@ const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters
+// eslint-disable-next-line complexity
 function createSearchUrl(query, parameters, userParameters, options) {
   const {
     apiKey,
@@ -49,6 +51,7 @@ function createSearchUrl(query, parameters, userParameters, options) {
   if (parameters) {
     const {
       page,
+      offset,
       resultsPerPage,
       filters,
       sortBy,
@@ -63,6 +66,11 @@ function createSearchUrl(query, parameters, userParameters, options) {
     // Pull page from parameters
     if (!helpers.isNil(page)) {
       queryParams.page = page;
+    }
+
+    // Pull offset from parameters
+    if (!helpers.isNil(offset)) {
+      queryParams.offset = offset;
     }
 
     // Pull results per page from parameters
@@ -145,7 +153,8 @@ class Search {
    * @function getSearchResults
    * @param {string} query - Term to use to perform a search
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
