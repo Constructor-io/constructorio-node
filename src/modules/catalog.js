@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -338,25 +339,35 @@ class Catalog {
   }
 
   /**
-   * Add multiple items to index (limit of 1,000)
+   * Adds multiple items to your index whilst updating existing ones (limit of 1,000)
    *
-   * @function addItemsBatch
+   * @function addOrReplaceItemsBatch
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_items
    */
-  addItemsBatch(parameters = {}, networkParameters = {}) {
+  addOrReplaceItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section, key, force = false, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+      force,
+      ...(notification_email && { notification_email }),
+    };
 
     try {
-      requestUrl = createCatalogUrl('batch_items', this.options);
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -365,8 +376,8 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      method: 'POST',
-      body: JSON.stringify(parameters),
+      method: 'PUT',
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -382,25 +393,35 @@ class Catalog {
   }
 
   /**
-   * Add multiple items to index whilst updating existing ones (limit of 1,000)
+   * update multiple items to (limit of 1,000)
    *
-   * @function addOrUpdateItemsBatch
+   * @function updateItemsBatch
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
    */
-  addOrUpdateItemsBatch(parameters = {}, networkParameters = {}) {
+  updateItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section, key, force, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+      force,
+      ...(notification_email && { notification_email }),
+    };
 
     try {
-      requestUrl = `${createCatalogUrl('batch_items', this.options)}&force=1`;
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -409,8 +430,8 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify(parameters),
+      method: 'PATCH',
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -430,6 +451,7 @@ class Catalog {
    *
    * @function removeItemsBatch
    * @param {object} parameters - Additional parameters for item details
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -443,8 +465,14 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
 
+    const { section, key, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+    };
+
     try {
-      requestUrl = createCatalogUrl('batch_items', this.options);
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -454,7 +482,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -475,6 +503,10 @@ class Catalog {
    * @function getItem
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.id - The ID of the item you'd like to retrieve
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
+   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {number} parameters.num_results_per_page - The number of items to return. Defaults to 100. Maximum value 100.
+   * @param {number} parameters.page -The page of results to return. Defaults to 1.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -488,11 +520,15 @@ class Catalog {
     const { signal } = controller;
 
     if (parameters) {
-      const { section } = parameters;
+      const { section, id } = parameters;
 
       // Pull section from parameters
       if (section) {
         queryParams.section = section;
+      }
+
+      if (id) {
+        queryParams.id = id;
       }
     }
 

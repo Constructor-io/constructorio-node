@@ -28,9 +28,18 @@ function createMockItem() {
   const uuid = uuidv4();
 
   return {
-    item_name: `product-${uuid}`,
-    url: `https://constructor.io/products/${uuid}`,
-    section: 'Products',
+    name: `product-${uuid}`,
+    id: uuid,
+    data: {
+      facets: { color: ['blue', 'red'] },
+      brand: 'abc',
+      url: 'https://constructor.io/products/',
+      image_url: 'https://constructor.io/products/',
+      complexMetadataField: {
+        key1: 'val1',
+        key2: 'val2',
+      },
+    },
   };
 }
 
@@ -428,7 +437,7 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
-    describe('addItemsBatch', () => {
+    describe('addOrReplaceItemsBatch', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -441,7 +450,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemsBatch({ items, section: 'Products' }).then(done);
+        catalog.addOrReplaceItemsBatch({ items, section: 'Products', key: testApiKey }).then((done));
       });
 
       it('Should return error when adding multiple items with an invalid API key', () => {
@@ -454,7 +463,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addOrReplaceItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding multiple items with an invalid API token', () => {
@@ -467,13 +476,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.addOrReplaceItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addItemsBatch([createMockItem()], { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.addOrReplaceItemsBatch([createMockItem()], { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -482,25 +491,16 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.addItemsBatch([createMockItem()])).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.addOrReplaceItemsBatch([createMockItem()])).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
-    describe('addOrUpdateItemsBatch', () => {
+    describe('updateItemsBatch', () => {
       const items = [
         createMockItem(),
         createMockItem(),
         createMockItem(),
       ];
-
-      it('Should resolve when adding multiple items', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
-      });
 
       it('Should resolve when updating multiple items', (done) => {
         const { catalog } = new ConstructorIO({
@@ -508,7 +508,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addOrUpdateItemsBatch({ items, section: 'Products' }).then(done);
+        catalog.updateItemsBatch({ items, section: 'Products', key: testApiKey }).then(done);
       });
 
       it('Should return error when updating items with an invalid API key', () => {
@@ -521,7 +521,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating items with an invalid API token', () => {
@@ -534,13 +534,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItemsBatch({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when network global request timeout is provided and reached', () => {
@@ -549,7 +549,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.addOrUpdateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItemsBatch({ items, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -571,7 +571,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemsBatch({ items, section: 'Products' }).then(done);
+        catalog.addOrReplaceItemsBatch({ items, section: 'Products', key: testApiKey }).then(done);
       });
 
       it('Should resolve when removing multiple items', (done) => {
@@ -580,7 +580,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.removeItemsBatch({ items, section: 'Products' }).then(done);
+        catalog.removeItemsBatch({ items: items.map((item) => item.id), section: 'Products', key: testApiKey }).then(done);
       });
 
       it('Should return error when removing items that do not exist', () => {
