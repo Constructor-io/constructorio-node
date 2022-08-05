@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -130,233 +131,35 @@ class Catalog {
   }
 
   /**
-   * Add item to index
+   * Adds multiple items to your index whilst updating existing ones (limit of 1,000)
    *
-   * @function addItem
+   * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.item_name - The name of the item, as it will appear in the results
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {number} [parameters.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [parameters.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a search term that isn't in the product name itself
-   * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
-   * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
-   * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
-   * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
-   * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
-   * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
-   * @param {object[]} [parameters.variations] - List of this item's variations
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/add_an_item
-   */
-  addItem(parameters = {}, networkParameters = {}) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    try {
-      requestUrl = createCatalogUrl('item', this.options);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
-    return fetch(requestUrl, {
-      method: 'POST',
-      body: JSON.stringify(parameters),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Add item to index or updates it if it already exists
-   *
-   * @function addOrUpdateItem
-   * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.item_name - The name of the item, as it will appear in the results
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {number} [parameters.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [parameters.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself
-   * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
-   * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
-   * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
-   * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
-   * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
-   * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
-   * @param {object[]} [parameters.variations] - List of this item's variations
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/add_or_update_an_item
-   */
-  addOrUpdateItem(parameters = {}, networkParameters = {}) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    try {
-      requestUrl = `${createCatalogUrl('item', this.options)}&force=1`;
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
-    return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify(parameters),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Remove item from index
-   *
-   * @function removeItem
-   * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.item_name - The name of the item, as it will appear in the results
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {string} parameters.id - An arbitrary ID you optionally specified when adding the item. If supplied, you don't need to pass in item_name
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/remove_an_item
-   */
-  removeItem(parameters = {}, networkParameters = {}) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    try {
-      requestUrl = createCatalogUrl('item', this.options);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
-    return fetch(requestUrl, {
-      method: 'DELETE',
-      body: JSON.stringify(parameters),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Modify an item in index
-   *
-   * @function modifyItem
-   * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.item_name - The name of the item, as it will appear in the results
-   * @param {string} parameters.new_item_name - The new name of the item, as it you'd like it to appear in the results
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {number} [parameters.suggested_score] - A number between 1 and 100 million that will influence the item's initial ranking relative to other item scores (the higher the score, the higher in the list of suggestions the item will appear)
-   * @param {string[]} [parameters.keywords] - An array of keywords for this item. Keywords are useful if you want a product name to appear when a user enters a searchterm that isn't in the product name itself
-   * @param {string} [parameters.url] - A URL to directly send the user after selecting the item
-   * @param {string} [parameters.image_url] - A URL that points to an image you'd like displayed next to some item (only applicable when URL is supplied)
-   * @param {string} [parameters.description] - A description for some item (only applicable when URL is supplied)
-   * @param {string} [parameters.id] - An arbitrary ID you would like associated with this item. You can use this field to store your own IDs of the items to more easily access them in other API calls
-   * @param {object} [parameters.facets] - Key/value pairs that can be associated with an item and used to filter them during a search. You can associate multiple values with the same key, by making values a list. Facets can be used as filters in search, autosuggest, and browse requests
-   * @param {object} [parameters.metadata] - You can associate schema-less data with items by passing in an object of keys and values. To configure search and display of this data reach out to support@constructor.io
-   * @param {string[]} [parameters.group_ids] - You can associate each item with one or more groups (i.e. categories). To set up a group hierarchy please contact support@constructor.io. group_ids can be used as filters in search, autosuggest, and browse requests
-   * @param {object[]} [parameters.variations] - List of this item's variations
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/modify_an_item
-   */
-  modifyItem(parameters = {}, networkParameters = {}) {
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    try {
-      requestUrl = createCatalogUrl('item', this.options);
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
-    return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify(parameters),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
-      if (response.ok) {
-        return Promise.resolve();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
-  }
-
-  /**
-   * Add multiple items to index (limit of 1,000)
-   *
-   * @function addItemsBatch
-   * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_add_items
+   * @see https://docs.constructor.io/rest_api/items/items#create-or-replace-items
    */
-  addItemsBatch(parameters = {}, networkParameters = {}) {
+  createOrReplaceItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section, key, force = false, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+      force,
+      ...(notification_email && { notification_email }),
+    };
 
     try {
-      requestUrl = createCatalogUrl('batch_items', this.options);
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -365,8 +168,8 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      method: 'POST',
-      body: JSON.stringify(parameters),
+      method: 'PUT',
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -382,25 +185,35 @@ class Catalog {
   }
 
   /**
-   * Add multiple items to index whilst updating existing ones (limit of 1,000)
+   * update multiple items to (limit of 1,000)
    *
-   * @function addOrUpdateItemsBatch
+   * @function updateItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
+   * @see https://docs.constructor.io/rest_api/items/items#update-items
    */
-  addOrUpdateItemsBatch(parameters = {}, networkParameters = {}) {
+  updateItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section, key, force, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+      force,
+      ...(notification_email && { notification_email }),
+    };
 
     try {
-      requestUrl = `${createCatalogUrl('batch_items', this.options)}&force=1`;
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -409,8 +222,8 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify(parameters),
+      method: 'PATCH',
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -428,23 +241,30 @@ class Catalog {
   /**
    * Remove multiple items from your index (limit of 1,000)
    *
-   * @function removeItemsBatch
+   * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
+   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_remove_items
+   * @see https://docs.constructor.io/rest_api/items/items#delete-items
    */
-  removeItemsBatch(parameters = {}, networkParameters = {}) {
+  deleteItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
 
+    const { section, key, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+    };
+
     try {
-      requestUrl = createCatalogUrl('batch_items', this.options);
+      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -454,7 +274,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(rest),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -472,100 +292,35 @@ class Catalog {
   /**
    * Retrieves item(s) from index for the given section or specific item ID
    *
-   * @function getItem
-   * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.id - The ID of the item you'd like to retrieve
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/get_items
-   */
-  getItem(parameters = {}, networkParameters = {}) {
-    const queryParams = {};
-    let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    if (parameters) {
-      const { section } = parameters;
-
-      // Pull section from parameters
-      if (section) {
-        queryParams.section = section;
-      }
-    }
-
-    try {
-      if (parameters.id) {
-        requestUrl = createCatalogUrl(`item/${parameters.id}`, this.options, queryParams);
-      } else {
-        requestUrl = createCatalogUrl('item', this.options, queryParams);
-      }
-    } catch (e) {
-      return Promise.reject(e);
-    }
-
-    // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
-    return fetch(requestUrl, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then((json) => json);
-  }
-
-  /**
-   * Retrieves items from index for the given section
-   *
    * @function getItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.section - The index section you'd like to retrieve results from
-   * @param {number} [parameters.num_results_per_page] - The number of items to return. Defaults to 20. Maximum value 1,000
-   * @param {number} [parameters.page] - The page of results to return. Defaults to 1
+   * @param {string} parameters.id - Id(s) of items to return. Maximum number of ids to request is 1000.
+   * @param {string} parameters.key - The API key of the index that you'd like to retrieve results from.
+   * @param {string} parameters.section - The index section you'd like to retrieve results from.
+   * @param {number} parameters.num_results_per_page - The number of items to return. Defaults to 100. Maximum value 100.
+   * @param {number} parameters.page -The page of results to return. Defaults to 1.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/get_items
+   * @see https://docs.constructor.io/rest_api/items/items#retrieve-items
    */
   getItems(parameters = {}, networkParameters = {}) {
-    const queryParams = {};
+    let queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-
-    if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page, section } = parameters;
-
-      // Pull number of results per page from parameters
-      if (numResultsPerPage) {
-        queryParams.num_results_per_page = numResultsPerPage;
-      }
-
-      // Pull page from parameters
-      if (page) {
-        queryParams.page = page;
-      }
-
-      // Pull section from parameters
-      if (section) {
-        queryParams.section = section;
-      }
-    }
+    const { id, key, section, num_results_per_page, page } = parameters;
+    queryParams = {
+      key,
+      section,
+      ...(num_results_per_page && { num_results_per_page }),
+      ...(page && { page }),
+      ...(id && { id }),
+    };
 
     try {
-      requestUrl = createCatalogUrl('item', this.options, queryParams);
+      requestUrl = createCatalogUrl('items', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -582,6 +337,7 @@ class Catalog {
       signal,
     }).then((response) => {
       if (response.ok) {
+
         return response.json();
       }
 
