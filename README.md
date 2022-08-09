@@ -8,6 +8,9 @@ A Node.js client for [Constructor.io](http://constructor.io/). [Constructor.io](
 
 > This client is intended for use in server side integrations.  If you want a JavaScript client for client side (i.e. front end) integrations please use [@constructor-io/constructorio-client-javascript](https://github.com/Constructor-io/constructorio-client-javascript)
 
+## Documentation
+Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-node)
+
 ## 1. Review the Requirements
 
 Requesting results from your Node.js back-end can be useful in order to control result rendering logic on your server, or augment/hydrate results with data from another system. However, a back-end integration has additional requirements compared to a front-end integration.  Please review [Back End API Integration](https://constructorio.zendesk.com/hc/en-us/articles/360047993194-Back-end-API-Integration) for more detail.
@@ -37,8 +40,6 @@ var constructorio = new ConstructorIOClient({
 ## 5. Retrieve Results
 
 After instantiating an instance of the client, four modules will be exposed as properties to help retrieve data from Constructor.io: `search`, `browse`, `autocomplete`, `recommendations`, `catalog` and `tracker`.
-
-Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-node)
 
 ## Development / npm commands
 
