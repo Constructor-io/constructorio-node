@@ -1658,6 +1658,20 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.addRedirectRule({
+   *     url: '/categories/cat_49203',
+   *     matches: [{
+   *         pattern: 'outerwear',
+   *         match_type: 'EXACT'
+   *     }],
+   *     start_time: '2022-08-11T23:41:02.568Z',
+   *     end_time: '2022-08-20T23:41:02.568Z',
+   *     user_segments: ['US', 'Mobile'],
+   *     metadata: {
+   *         additional_data: 'additional string data',
+   *     },
+   * });
    */
   addRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1707,6 +1721,19 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.updateRedirectRule({
+   *     id: 1,
+   *     url: '/categories/cat_49203',
+   *     matches: [{
+   *         pattern: 'outerwear',
+   *         match_type: 'EXACT'
+   *     }],
+   *     user_segments: ['US', 'Mobile', 'Web'],
+   *     metadata: {
+   *         additional_data: 'additional string data',
+   *     },
+   * });
    */
   updateRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1757,6 +1784,16 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.modifyRedirectRule({
+   *     id: '1',
+   *     url: '/categories/cat_49203',
+   *     matches: [{
+   *         pattern: 'outerwear',
+   *         match_type: 'EXACT'
+   *     }],
+   *     user_segments: ['US', 'Mobile', 'Web'],
+   * });
    */
   modifyRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1801,6 +1838,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.getRedirectRule({
+   *     id: '1',
+   * });
    */
   getRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1843,6 +1884,13 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.getRedirectRules({
+   *     num_results_per_page: 50,
+   *     page: 2,
+   *     query: 'outerwear',
+   *     status: 'active',
+   * });
    */
   getRedirectRules(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -1907,6 +1955,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @example
+   * constructorio.catalog.removeRedirectRule({
+   *     id: '1',
+   * });
    */
   removeRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1951,6 +2003,14 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.replaceCatalog({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     items: itemsFileBufferOrStream,
+   *     variations: variationsFileBufferOrStream,
+   *     item_groups: itemGroupsFileBufferOrStream,
+   * });
    */
   async replaceCatalog(parameters = {}, networkParameters = {}) {
     try {
@@ -1995,6 +2055,14 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.updateCatalog({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     items: itemsFileBufferOrStream,
+   *     variations: variationsFileBufferOrStream,
+   *     item_groups: itemGroupsFileBufferOrStream,
+   * });
    */
   async updateCatalog(parameters = {}, networkParameters = {}) {
     try {
@@ -2039,6 +2107,14 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.patchCatalog({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     items: itemsFileBufferOrStream,
+   *     variations: variationsFileBufferOrStream,
+   *     item_groups: itemGroupsFileBufferOrStream,
+   * });
    */
   async patchCatalog(parameters = {}, networkParameters = {}) {
     try {
