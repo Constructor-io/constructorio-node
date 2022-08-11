@@ -149,7 +149,26 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/add_an_item
+   * @see https://docs.constructor.io/rest_api/items/v1/add_an_item
+   * @example
+   * constructorio.catalog.addItem({
+   *     item_name: 'black pullover hoodie',
+   *     section: 'Products',
+   *     keywords: ['black', 'hoodie', 'tops', 'outerwear'],
+   *     url: '/products/blk_pllvr_hd_001'
+   *     image_url: '/products/images/blk_pllvr_hd_001'
+   *     description: 'a short description about the black pullover hoodie',
+   *     id: 'blk_pllvr_hd_001',
+   *     facets: {
+   *         size: 'medium',
+   *         color: 'black',
+   *     },
+   *     metadata: {
+   *         swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+   *         on_sale: true,
+   *     },
+   *     group_ids: ['cat_49203', 'subcat_12891'],
+   * });
    */
   addItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -203,7 +222,26 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/add_or_update_an_item
+   * @see https://docs.constructor.io/rest_api/items/v1/add_or_update_an_item
+   * @example
+   * constructorio.catalog.addItem({
+   *     item_name: 'black pullover hoodie',
+   *     section: 'Products',
+   *     keywords: ['black', 'hoodie', 'tops', 'outerwear'],
+   *     url: '/products/blk_pllvr_hd_001'
+   *     image_url: '/products/images/blk_pllvr_hd_001'
+   *     description: 'a short description about the black pullover hoodie',
+   *     id: 'blk_pllvr_hd_001',
+   *     facets: {
+   *         size: 'medium',
+   *         color: 'black',
+   *     },
+   *     metadata: {
+   *         swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+   *         on_sale: true,
+   *     },
+   *     group_ids: ['cat_49203', 'subcat_12891'],
+   * });
    */
   addOrUpdateItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -248,7 +286,12 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/remove_an_item
+   * @see https://docs.constructor.io/rest_api/items/v1/remove_an_item
+   * @example
+   * constructorio.catalog.removeItem({
+   *     id: 'blk_pllvr_hd_001',
+   *     section: 'Products',
+   * });
    */
   removeItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -303,7 +346,26 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/modify_an_item
+   * @see https://docs.constructor.io/rest_api/items/v1/modify_an_item
+   * @example
+   * constructorio.catalog.modifyItem({
+   *     item_name: 'midnight black pullover hoodie',
+   *     section: 'Products',
+   *     keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+   *     url: '/products/blk_pllvr_hd_001'
+   *     image_url: '/products/images/blk_pllvr_hd_001'
+   *     description: 'a modified short description about the black pullover hoodie',
+   *     id: 'blk_pllvr_hd_001',
+   *     facets: {
+   *         size: 'large',
+   *         color: 'midnight black',
+   *     },
+   *     metadata: {
+   *         swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+   *         on_sale: true,
+   *     },
+   *     group_ids: ['cat_49203', 'subcat_12891'],
+   * });
    */
   modifyItem(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -347,7 +409,23 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_add_items
+   * @see https://docs.constructor.io/rest_api/items/v1/batch_add_items
+   * @example
+   * constructorio.catalog.addItemsBatch({
+   *     items: [
+   *         {
+   *             item_name: 'midnight black pullover hoodie',
+   *             section: 'Products',
+   *             keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+   *             url: '/products/blk_pllvr_hd_001'
+   *             image_url: '/products/images/blk_pllvr_hd_001'
+   *             description: 'a modified short description about the black pullover hoodie',
+   *             id: 'blk_pllvr_hd_001',
+   *         },
+   *         . . .
+   *     ],
+   *     section: 'Products',
+   * });
    */
   addItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -391,7 +469,23 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_add_or_update_items
+   * @see https://docs.constructor.io/rest_api/items/v1/batch_add_or_update_items
+   * @example
+   * constructorio.catalog.addOrUpdateItemsBatch({
+   *     items: [
+   *         {
+   *             item_name: 'midnight black pullover hoodie',
+   *             section: 'Products',
+   *             keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+   *             url: '/products/blk_pllvr_hd_001'
+   *             image_url: '/products/images/blk_pllvr_hd_001'
+   *             description: 'a modified short description about the black pullover hoodie',
+   *             id: 'blk_pllvr_hd_001',
+   *         },
+   *         . . .
+   *     ],
+   *     section: 'Products',
+   * });
    */
   addOrUpdateItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -435,7 +529,15 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/batch_remove_items
+   * @see https://docs.constructor.io/rest_api/items/v1/batch_remove_items
+   * @example
+   * constructorio.catalog.removeItemsBatch({
+   *     items: [
+   *         { id: 'blk_pllvr_hd_001' },
+   *         { id: 'red_pllvr_hd_02' },
+   *     ],
+   *     section: 'Products',
+   * });
    */
   removeItemsBatch(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -478,7 +580,11 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/get_items
+   * @see https://docs.constructor.io/rest_api/items/v1/get_items
+   * @example
+   * constructorio.catalog.getItem({
+   *     id: 'blk_pllvr_hd_001',
+   * });
    */
   getItem(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -536,7 +642,13 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/get_items
+   * @see https://docs.constructor.io/rest_api/items/v1/get_items
+   * @example
+   * constructorio.catalog.getItems({
+   *     section: 'Products',
+   *     num_results_per_page: 50,
+   *     page: 2,
+   * });
    */
   getItems(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -601,6 +713,12 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.addItemGroup({
+   *     id: 'subcat_12891',
+   *     name: 'Hoodies & Sweaters',
+   *     parent_id: 'cat_49203',
+   * });
    */
   addItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -645,6 +763,20 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.addItemGroups({
+   *     item_groups: [
+   *         {
+   *             id: 'subcat_12891',
+   *             name: 'Hoodies & Sweaters',
+   *             parent_id: 'cat_49203',
+   *         },
+   *         {
+   *             id: 'cat49203',
+   *             name: 'Outerwear',
+   *         },
+   *     ],
+   * });
    */
   addItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -688,6 +820,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.getItemGroup({
+   *     id: 'subcat_12891',
+   * });
    */
   getItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -728,6 +864,8 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.getItemGroups();
    */
   getItemGroups(networkParameters = {}) {
     let requestUrl;
@@ -770,6 +908,20 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+  * @example
+   * constructorio.catalog.addOrUpdateItemGroups({
+   *     item_groups: [
+   *         {
+   *             id: 'subcat_12891',
+   *             name: 'Hoodies, Sweaters, & Jackets',
+   *             parent_id: 'cat_49203',
+   *         },
+   *         {
+   *             id: 'cat49203',
+   *             name: 'Outerwear',
+   *         },
+   *     ],
+   * });
    */
   addOrUpdateItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -816,6 +968,15 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.modifyItemGroup({
+   *     id: 'subcat_12891',
+   *     name: 'Hoodies, Sweaters & Jackets',
+   *     parent_id: 'cat_49203',
+   *     data: {
+   *         landing_image_url: '/images/hd_swtrs_jckts.jpg',
+   *     },
+   * });
    */
   modifyItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -858,6 +1019,8 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
+   * @example
+   * constructorio.catalog.removeItemGroups();
    */
   removeItemGroups(networkParameters = {}) {
     let requestUrl;
@@ -898,6 +1061,14 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/add_synonyms
+   * @example
+   * constructorio.catalog.addOneWaySynonym({
+   *     phrase: 'spices',
+   *     child_phrases: [
+   *         { phrase: 'pepper' },
+   *         { phrase: 'cinnamon' },
+   *     ],
+   * });
    */
   addOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -943,6 +1114,15 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/modify_synonyms
+   * @example
+   * constructorio.catalog.modifyOneWaySynonym({
+   *     phrase: 'spices',
+   *     child_phrases: [
+   *         { phrase: 'pepper' },
+   *         { phrase: 'cinnamon' },
+   *         { phrase: 'paprika' },
+   *     ],
+   * });
    */
   modifyOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -987,6 +1167,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
+   * @example
+   * constructorio.catalog.getOneWaySynonym({
+   *     phrase: 'spices',
+   * });
    */
   getOneWaySynonym(parameters = {}, networkParameters = {}) {
     const { phrase } = parameters;
@@ -1032,6 +1216,11 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
+   * @example
+   * constructorio.catalog.getOneWaySynonyms({
+   *     num_results_per_page: 50,
+   *     page: 2,
+   * });
    */
   getOneWaySynonyms(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -1089,6 +1278,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
+   * @example
+   * constructorio.catalog.removeOneWaySynonym({
+   *     phrase: 'spices',
+   * });
    */
   removeOneWaySynonym(parameters = {}, networkParameters = {}) {
     const { phrase } = parameters;
@@ -1130,6 +1323,8 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
+   * @example
+   * constructorio.catalog.removeOneWaySynonyms();
    */
   removeOneWaySynonyms(networkParameters = {}) {
     let requestUrl;
@@ -1172,6 +1367,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.addSynonymGroup({
+   *     synonyms: ['0% milk', 'skim milk'],
+   * });
    */
   addSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1216,6 +1415,11 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.modifySynonymGroup({
+   *     id: 32,
+   *     synonyms: ['0% milk', 'skim milk', 'fat free milk'],
+   * });
    */
   modifySynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1260,6 +1464,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.modifySynonymGroup({
+   *     id: 32,
+   * });
    */
   getSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1301,6 +1509,12 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.modifySynonymGroup({
+   *     phrase: '0% milk',
+   *     num_results_per_page: 50,
+   *     page: 3,
+   * });
    */
   getSynonymGroups(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -1356,6 +1570,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.removeSynonymGroup({
+   *     id: 32,
+   * });
    */
   removeSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -1394,6 +1612,8 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/synonyms/
+   * @example
+   * constructorio.catalog.modifySynonymGroup();
    */
   removeSynonymGroups(networkParameters = {}) {
     let requestUrl;
