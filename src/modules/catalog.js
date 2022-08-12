@@ -2170,6 +2170,15 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#create-a-facet-config
+   * @example
+   * constructorio.catalog.addFacetConfiguration({
+   *     name: 'color',
+   *     type: 'multiple',
+   *     display_name: 'Color',
+   *     sort_order: 'value',
+   *     sort_descending: false,
+   *     position: 1,
+   * });
    */
   addFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2219,6 +2228,11 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#get-all-facet-configs
+   * @example
+   * constructorio.catalog.getFacetConfigurations({
+   *     page: 2,
+   *     num_results_per_page: 50,
+   * });
    */
   getFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2259,12 +2273,16 @@ class Catalog {
    *
    * @function getFacetConfiguration
    * @param {object} parameters - Aditional paramaters for retrieving a facet configuration.
-   * @param {number} [parameters.name] - Page number you'd like to request. Defaults to 1.
+   * @param {number} [parameters.name] - Unique facet name used to refer to the facet in your catalog
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#get-a-single-facets-config
+   * @example
+   * constructorio.catalog.getFacetConfiguration({
+   *     name: 'color',
+   * });
    */
   getFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2311,6 +2329,23 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-facet-configs-partial
+   * @example
+   * constructorio.catalog.modifyFacetConfigurations(
+   *     facetConfigurations: [
+   *         {
+   *             name: 'color',
+   *             type: 'multiple',
+   *             display_name: 'Color',
+   *             sort_order: 'value',
+   *             sort_descending: false,
+   *             position: 1,
+   *         },
+   *         {
+   *             name: 'size',
+   *             ...
+   *         }
+   *     ],
+   * });
    */
   modifyFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2376,6 +2411,15 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-total
+   * @example
+   * constructorio.catalog.replaceFacetConfiguration({
+   *     name: 'color',
+   *     type: 'multiple',
+   *     display_name: 'Color',
+   *     sort_order: 'value',
+   *     sort_descending: false,
+   *     position: 1,
+   * });
    */
   replaceFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2439,6 +2483,15 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-partial
+   * @example
+   * constructorio.catalog.modifyFacetConfiguration({
+   *     name: 'color',
+   *     type: 'multiple',
+   *     display_name: 'Color',
+   *     sort_order: 'num_matches',
+   *     sort_descending: true,
+   *     position: 1,
+   * });
    */
   modifyFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2489,6 +2542,10 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
+   * @example
+   * constructorio.catalog.removeFacetConfiguration({
+   *     name: 'color',
+   * });
    */
   removeFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2540,6 +2597,13 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
+   * @example
+   * constructorio.catalog.addFacetOptionConfiguration({
+   *     facetGroupName: 'color',
+   *     value: 'blue',
+   *     display_name: 'Blue',
+   *     position: 5,
+   * });
    */
   addFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2589,6 +2653,22 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#batch-update-or-create-facet-options-configs
+   * @example
+   * constructorio.catalog.addOrModifyFacetOptionConfigurations({
+   *     facetGroupName: 'color',
+   *     facetOptionConfigurations: [
+   *         {
+   *             value: 'blue',
+   *             display_name: 'Blue',
+   *             position: 5,
+   *         },
+   *         {
+   *             value: 'red',
+   *             display_name: 'Red',
+   *             position: 3,
+   *         },
+   *     ],
+   * });
    */
   addOrModifyFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2639,6 +2719,12 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
+   * @example
+   * constructorio.catalog.getFacetOptionConfigurations({
+   *     facetGroupName: 'color',
+   *     page: 3,
+   *     num_results_per_page: 50
+   * });
    */
   getFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2687,6 +2773,11 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
+   * @example
+   * constructorio.catalog.getFacetOptionConfiguration({
+   *     facetGroupName: 'color',
+   *     value: 'blue',
+   * });
    */
   getFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2739,6 +2830,13 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
+   * @example
+   * constructorio.catalog.replaceFacetOptionConfiguration({
+   *     facetGroupName: 'color',
+   *     value: 'blue',
+   *     display_name: 'Midnight Blue',
+   *     position: 9,
+   * });
    */
   replaceFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2792,6 +2890,13 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-partial
+   * @example
+   * constructorio.catalog.modifyFacetOptionConfiguration({
+   *     facetGroupName: 'color',
+   *     value: 'blue',
+   *     display_name: 'Midnight Blue',
+   *     position: 9,
+   * });
    */
   modifyFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2841,6 +2946,11 @@ class Catalog {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
+   * @example
+   * constructorio.removeFacetOptionConfiguration({
+   *     facetGroupName: 'color',
+   *     value: 'red',
+   * });
    */
   removeFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
