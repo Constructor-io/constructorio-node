@@ -404,7 +404,7 @@ class Catalog {
    *
    * @function addItemsBatch
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the [addItem]{@link module:catalog~addItem} resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -464,7 +464,7 @@ class Catalog {
    *
    * @function addOrUpdateItemsBatch
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the [addItem]{@link module:catalog~addItem} resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -524,7 +524,7 @@ class Catalog {
    *
    * @function removeItemsBatch
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the [addItem]{@link module:catalog~addItem} resource
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
