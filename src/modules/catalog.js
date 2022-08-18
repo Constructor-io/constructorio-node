@@ -224,7 +224,7 @@ class Catalog {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/v1/add_or_update_an_item
    * @example
-   * constructorio.catalog.addItem({
+   * constructorio.catalog.addOrUpdateItem({
    *     item_name: 'black pullover hoodie',
    *     section: 'Products',
    *     keywords: ['black', 'hoodie', 'tops', 'outerwear'],
