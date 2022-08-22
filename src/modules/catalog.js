@@ -131,7 +131,7 @@ class Catalog {
   }
 
   /**
-   * Adds multiple items to your index whilst updating existing ones (limit of 1,000)
+   * Adds multiple items to your index whilst replacing existing ones (limit of 1,000)
    *
    * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
@@ -150,10 +150,9 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, key, force = false, notification_email, ...rest } = parameters;
+    const { section, force = false, notification_email, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
-      key,
       force,
       ...(notification_email && { notification_email }),
     };
@@ -185,7 +184,7 @@ class Catalog {
   }
 
   /**
-   * update multiple items to (limit of 1,000)
+   * Update multiple items to (limit of 1,000)
    *
    * @function updateItems
    * @param {object} parameters - Additional parameters for item details
@@ -204,10 +203,9 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, key, force, notification_email, ...rest } = parameters;
+    const { section, force, notification_email, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
-      key,
       force,
       ...(notification_email && { notification_email }),
     };
@@ -244,7 +242,7 @@ class Catalog {
    * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
    * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource. Only IDs are required for the delete operation.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -292,31 +290,30 @@ class Catalog {
   /**
    * Retrieves item(s) from index for the given section or specific item ID
    *
-   * @function getItems
+   * @function retrieveItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.id - Id(s) of items to return. Maximum number of ids to request is 1000.
+   * @param {string[]} parameters.ids - Id(s) of items to return. Maximum number of ids to request is 1000.
    * @param {string} parameters.key - The API key of the index that you'd like to retrieve results from.
    * @param {string} parameters.section - The index section you'd like to retrieve results from.
-   * @param {number} parameters.num_results_per_page - The number of items to return. Defaults to 100. Maximum value 100.
+   * @param {number} parameters.numResultsPerPage - The number of items to return. Defaults to 100. Maximum value 100.
    * @param {number} parameters.page -The page of results to return. Defaults to 1.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/items/items#retrieve-items
    */
-  getItems(parameters = {}, networkParameters = {}) {
+  retrieveItems(parameters = {}, networkParameters = {}) {
     let queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { id, key, section, num_results_per_page, page } = parameters;
+    const { ids, section, numResultsPerPage, page } = parameters;
     queryParams = {
-      key,
       section,
-      ...(num_results_per_page && { num_results_per_page }),
+      ...(numResultsPerPage && { numResultsPerPage }),
       ...(page && { page }),
-      ...(id && { id }),
+      ...(ids && { id: ids }),
     };
 
     try {
