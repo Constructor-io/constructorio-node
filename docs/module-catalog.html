@@ -216,7 +216,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1851">line 1851</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2147">line 2147</a>
     </li></ul></dd>
     
 
@@ -1073,6 +1073,20 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addFacetConfiguration({
+    name: 'color',
+    type: 'multiple',
+    display_name: 'Color',
+    sort_order: 'value',
+    sort_descending: false,
+    position: 1,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -1123,7 +1137,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2231">line 2231</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2584">line 2584</a>
     </li></ul></dd>
     
 
@@ -1660,6 +1674,18 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addFacetOptionConfiguration({
+    facetGroupName: 'color',
+    value: 'blue',
+    display_name: 'Blue',
+    position: 5,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -1720,7 +1746,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/add_an_item">https://docs.constructor.io/rest_api/items/add_an_item</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/add_an_item">https://docs.constructor.io/rest_api/items/v1/add_an_item</a></li>
         </ul>
     </dd>
     
@@ -2387,6 +2413,30 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addItem({
+    item_name: 'black pullover hoodie',
+    section: 'Products',
+    keywords: ['black', 'hoodie', 'tops', 'outerwear'],
+    url: '/products/blk_pllvr_hd_001'
+    image_url: '/products/images/blk_pllvr_hd_001'
+    description: 'a short description about the black pullover hoodie',
+    id: 'blk_pllvr_hd_001',
+    facets: {
+        size: 'medium',
+        color: 'black',
+    },
+    metadata: {
+        swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+        on_sale: true,
+    },
+    group_ids: ['cat_49203', 'subcat_12891'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -2437,7 +2487,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line592">line 592</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line704">line 704</a>
     </li></ul></dd>
     
 
@@ -2790,6 +2840,17 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addItemGroup({
+    id: 'subcat_12891',
+    name: 'Hoodies &amp; Sweaters',
+    parent_id: 'cat_49203',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -2840,7 +2901,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line638">line 638</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line756">line 756</a>
     </li></ul></dd>
     
 
@@ -3113,6 +3174,25 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addItemGroups({
+    item_groups: [
+        {
+            id: 'subcat_12891',
+            name: 'Hoodies &amp; Sweaters',
+            parent_id: 'cat_49203',
+        },
+        {
+            id: 'cat49203',
+            name: 'Outerwear',
+        },
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -3163,7 +3243,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line340">line 340</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line402">line 402</a>
     </li></ul></dd>
     
 
@@ -3173,7 +3253,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/batch_add_items">https://docs.constructor.io/rest_api/items/batch_add_items</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/batch_add_items">https://docs.constructor.io/rest_api/items/v1/batch_add_items</a></li>
         </ul>
     </dd>
     
@@ -3284,7 +3364,7 @@
             
 
             <td class="description last">
-                A list of items with the same attributes as defined in the `addItem` resource
+                A list of items with the same attributes as defined in the <a href="module-catalog.html#~addItem">addItem</a> resource
                 
             </td>
         </tr>
@@ -3462,6 +3542,27 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addItemsBatch({
+    items: [
+        {
+            item_name: 'midnight black pullover hoodie',
+            section: 'Products',
+            keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+            url: '/products/blk_pllvr_hd_001'
+            image_url: '/products/images/blk_pllvr_hd_001'
+            description: 'a modified short description about the black pullover hoodie',
+            id: 'blk_pllvr_hd_001',
+        },
+        . . .
+    ],
+    section: 'Products',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -3512,7 +3613,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line890">line 890</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1053">line 1053</a>
     </li></ul></dd>
     
 
@@ -3811,6 +3912,19 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addOneWaySynonym({
+    phrase: 'spices',
+    child_phrases: [
+        { phrase: 'pepper' },
+        { phrase: 'cinnamon' },
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -3861,7 +3975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2284">line 2284</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2644">line 2644</a>
     </li></ul></dd>
     
 
@@ -4230,6 +4344,27 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addOrModifyFacetOptionConfigurations({
+    facetGroupName: 'color',
+    facetOptionConfigurations: [
+        {
+            value: 'blue',
+            display_name: 'Blue',
+            position: 5,
+        },
+        {
+            value: 'red',
+            display_name: 'Red',
+            position: 3,
+        },
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -4280,7 +4415,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line186">line 186</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line205">line 205</a>
     </li></ul></dd>
     
 
@@ -4290,7 +4425,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/add_or_update_an_item">https://docs.constructor.io/rest_api/items/add_or_update_an_item</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/add_or_update_an_item">https://docs.constructor.io/rest_api/items/v1/add_or_update_an_item</a></li>
         </ul>
     </dd>
     
@@ -4957,6 +5092,30 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addOrUpdateItem({
+    item_name: 'black pullover hoodie',
+    section: 'Products',
+    keywords: ['black', 'hoodie', 'tops', 'outerwear'],
+    url: '/products/blk_pllvr_hd_001'
+    image_url: '/products/images/blk_pllvr_hd_001'
+    description: 'a short description about the black pullover hoodie',
+    id: 'blk_pllvr_hd_001',
+    facets: {
+        size: 'medium',
+        color: 'black',
+    },
+    metadata: {
+        swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+        on_sale: true,
+    },
+    group_ids: ['cat_49203', 'subcat_12891'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -5007,7 +5166,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line763">line 763</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line901">line 901</a>
     </li></ul></dd>
     
 
@@ -5280,6 +5439,25 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addOrUpdateItemGroups({
+    item_groups: [
+        {
+            id: 'subcat_12891',
+            name: 'Hoodies, Sweaters, &amp; Jackets',
+            parent_id: 'cat_49203',
+        },
+        {
+            id: 'cat49203',
+            name: 'Outerwear',
+        },
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -5330,7 +5508,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line384">line 384</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line462">line 462</a>
     </li></ul></dd>
     
 
@@ -5340,7 +5518,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/batch_add_or_update_items">https://docs.constructor.io/rest_api/items/batch_add_or_update_items</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/batch_add_or_update_items">https://docs.constructor.io/rest_api/items/v1/batch_add_or_update_items</a></li>
         </ul>
     </dd>
     
@@ -5451,7 +5629,7 @@
             
 
             <td class="description last">
-                A list of items with the same attributes as defined in the `addItem` resource
+                A list of items with the same attributes as defined in the <a href="module-catalog.html#~addItem">addItem</a> resource
                 
             </td>
         </tr>
@@ -5629,6 +5807,27 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addOrUpdateItemsBatch({
+    items: [
+        {
+            item_name: 'midnight black pullover hoodie',
+            section: 'Products',
+            keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+            url: '/products/blk_pllvr_hd_001'
+            image_url: '/products/images/blk_pllvr_hd_001'
+            description: 'a modified short description about the black pullover hoodie',
+            id: 'blk_pllvr_hd_001',
+        },
+        . . .
+    ],
+    section: 'Products',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -5679,7 +5878,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1426">line 1426</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1646">line 1646</a>
     </li></ul></dd>
     
 
@@ -6140,6 +6339,25 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addRedirectRule({
+    url: '/categories/cat_49203',
+    matches: [{
+        pattern: 'outerwear',
+        match_type: 'EXACT'
+    }],
+    start_time: '2022-08-11T23:41:02.568Z',
+    end_time: '2022-08-20T23:41:02.568Z',
+    user_segments: ['US', 'Mobile'],
+    metadata: {
+        additional_data: 'additional string data',
+    },
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -6190,7 +6408,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1165">line 1165</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1360">line 1360</a>
     </li></ul></dd>
     
 
@@ -6463,6 +6681,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.addSynonymGroup({
+    synonyms: ['0% milk', 'skim milk'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -6513,7 +6740,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1961">line 1961</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2271">line 2271</a>
     </li></ul></dd>
     
 
@@ -6646,7 +6873,7 @@
             
 
             <td class="description last">
-                Page number you'd like to request. Defaults to 1.
+                Unique facet name used to refer to the facet in your catalog
                 
             </td>
         </tr>
@@ -6834,6 +7061,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getFacetConfiguration({
+    name: 'color',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -6884,7 +7120,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1914">line 1914</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2219">line 2219</a>
     </li></ul></dd>
     
 
@@ -7241,6 +7477,16 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getFacetConfigurations({
+    page: 2,
+    num_results_per_page: 50,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -7291,7 +7537,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2382">line 2382</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2764">line 2764</a>
     </li></ul></dd>
     
 
@@ -7660,6 +7906,16 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getFacetOptionConfiguration({
+    facetGroupName: 'color',
+    value: 'blue',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -7710,7 +7966,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2333">line 2333</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2709">line 2709</a>
     </li></ul></dd>
     
 
@@ -8125,6 +8381,17 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getFacetOptionConfigurations({
+    facetGroupName: 'color',
+    page: 3,
+    num_results_per_page: 50
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -8175,7 +8442,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line472">line 472</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line574">line 574</a>
     </li></ul></dd>
     
 
@@ -8185,7 +8452,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/get_items">https://docs.constructor.io/rest_api/items/get_items</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/get_items">https://docs.constructor.io/rest_api/items/v1/get_items</a></li>
         </ul>
     </dd>
     
@@ -8448,6 +8715,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getItem({
+    id: 'blk_pllvr_hd_001',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -8498,7 +8774,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line681">line 681</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line813">line 813</a>
     </li></ul></dd>
     
 
@@ -8771,6 +9047,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getItemGroup({
+    id: 'subcat_12891',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -8821,7 +9106,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line723">line 723</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line859">line 859</a>
     </li></ul></dd>
     
 
@@ -9009,6 +9294,13 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getItemGroups();</code></pre>
+
+</div>
+
 </div>
         
             
@@ -9059,7 +9351,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line528">line 528</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line634">line 634</a>
     </li></ul></dd>
     
 
@@ -9069,7 +9361,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/get_items">https://docs.constructor.io/rest_api/items/get_items</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/get_items">https://docs.constructor.io/rest_api/items/v1/get_items</a></li>
         </ul>
     </dd>
     
@@ -9414,6 +9706,17 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getItems({
+    section: 'Products',
+    num_results_per_page: 50,
+    page: 2,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -9464,7 +9767,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line980">line 980</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1160">line 1160</a>
     </li></ul></dd>
     
 
@@ -9737,6 +10040,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getOneWaySynonym({
+    phrase: 'spices',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -9787,7 +10099,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1024">line 1024</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1208">line 1208</a>
     </li></ul></dd>
     
 
@@ -10110,6 +10422,16 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getOneWaySynonyms({
+    num_results_per_page: 50,
+    page: 2,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -10160,7 +10482,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1574">line 1574</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1831">line 1831</a>
     </li></ul></dd>
     
 
@@ -10433,6 +10755,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getRedirectRule({
+    id: '1',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -10483,7 +10814,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1613">line 1613</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1874">line 1874</a>
     </li></ul></dd>
     
 
@@ -10878,6 +11209,18 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.getRedirectRules({
+    num_results_per_page: 50,
+    page: 2,
+    query: 'outerwear',
+    status: 'active',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -10928,7 +11271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1253">line 1253</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1457">line 1457</a>
     </li></ul></dd>
     
 
@@ -11201,6 +11544,15 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifySynonymGroup({
+    id: 32,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -11251,7 +11603,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1292">line 1292</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1500">line 1500</a>
     </li></ul></dd>
     
 
@@ -11610,6 +11962,17 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifySynonymGroup({
+    phrase: '0% milk',
+    num_results_per_page: 50,
+    page: 3,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -11660,7 +12023,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2120">line 2120</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2460">line 2460</a>
     </li></ul></dd>
     
 
@@ -12517,6 +12880,20 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyFacetConfiguration({
+    name: 'color',
+    type: 'multiple',
+    display_name: 'Color',
+    sort_order: 'num_matches',
+    sort_descending: true,
+    position: 1,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -12567,7 +12944,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2008">line 2008</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2322">line 2322</a>
     </li></ul></dd>
     
 
@@ -12840,6 +13217,28 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyFacetConfigurations(
+    facetConfigurations: [
+        {
+            name: 'color',
+            type: 'multiple',
+            display_name: 'Color',
+            sort_order: 'value',
+            sort_descending: false,
+            position: 1,
+        },
+        {
+            name: 'size',
+            ...
+        }
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -12890,7 +13289,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2483">line 2483</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2877">line 2877</a>
     </li></ul></dd>
     
 
@@ -13427,6 +13826,18 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyFacetOptionConfiguration({
+    facetGroupName: 'color',
+    value: 'blue',
+    display_name: 'Midnight Blue',
+    position: 9,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -13477,7 +13888,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line285">line 285</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line328">line 328</a>
     </li></ul></dd>
     
 
@@ -13487,7 +13898,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/modify_an_item">https://docs.constructor.io/rest_api/items/modify_an_item</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/modify_an_item">https://docs.constructor.io/rest_api/items/v1/modify_an_item</a></li>
         </ul>
     </dd>
     
@@ -14188,6 +14599,30 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyItem({
+    item_name: 'midnight black pullover hoodie',
+    section: 'Products',
+    keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+    url: '/products/blk_pllvr_hd_001'
+    image_url: '/products/images/blk_pllvr_hd_001'
+    description: 'a modified short description about the black pullover hoodie',
+    id: 'blk_pllvr_hd_001',
+    facets: {
+        size: 'large',
+        color: 'midnight black',
+    },
+    metadata: {
+        swatch_image_url: '/products/swatch_images/blk_pllvr_hd_001',
+        on_sale: true,
+    },
+    group_ids: ['cat_49203', 'subcat_12891'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -14238,7 +14673,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line806">line 806</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line958">line 958</a>
     </li></ul></dd>
     
 
@@ -14629,6 +15064,20 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyItemGroup({
+    id: 'subcat_12891',
+    name: 'Hoodies, Sweaters &amp; Jackets',
+    parent_id: 'cat_49203',
+    data: {
+        landing_image_url: '/images/hd_swtrs_jckts.jpg',
+    },
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -14679,7 +15128,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line935">line 935</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1106">line 1106</a>
     </li></ul></dd>
     
 
@@ -14978,6 +15427,20 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyOneWaySynonym({
+    phrase: 'spices',
+    child_phrases: [
+        { phrase: 'pepper' },
+        { phrase: 'cinnamon' },
+        { phrase: 'paprika' },
+    ],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -15028,7 +15491,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1524">line 1524</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1771">line 1771</a>
     </li></ul></dd>
     
 
@@ -15523,6 +15986,21 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifyRedirectRule({
+    id: '1',
+    url: '/categories/cat_49203',
+    matches: [{
+        pattern: 'outerwear',
+        match_type: 'EXACT'
+    }],
+    user_segments: ['US', 'Mobile', 'Web'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -15573,7 +16051,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1208">line 1208</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1407">line 1407</a>
     </li></ul></dd>
     
 
@@ -15872,6 +16350,16 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifySynonymGroup({
+    id: 32,
+    synonyms: ['0% milk', 'skim milk', 'fat free milk'],
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -15922,7 +16410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1807">line 1807</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2095">line 2095</a>
     </li></ul></dd>
     
 
@@ -16413,6 +16901,19 @@
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.patchCatalog({
+    section: 'Products',
+    notification_email: 'notifications@example.com',
+    items: itemsFileBufferOrStream,
+    variations: variationsFileBufferOrStream,
+    item_groups: itemGroupsFileBufferOrStream,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -16465,7 +16966,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2183">line 2183</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2532">line 2532</a>
     </li></ul></dd>
     
 
@@ -16784,6 +17285,15 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeFacetConfiguration({
+    name: 'color',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -16834,7 +17344,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2536">line 2536</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2937">line 2937</a>
     </li></ul></dd>
     
 
@@ -17203,6 +17713,16 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.removeFacetOptionConfiguration({
+    facetGroupName: 'color',
+    value: 'red',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -17253,7 +17773,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line240">line 240</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line278">line 278</a>
     </li></ul></dd>
     
 
@@ -17263,7 +17783,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/remove_an_item">https://docs.constructor.io/rest_api/items/remove_an_item</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/remove_an_item">https://docs.constructor.io/rest_api/items/v1/remove_an_item</a></li>
         </ul>
     </dd>
     
@@ -17578,6 +18098,16 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeItem({
+    id: 'blk_pllvr_hd_001',
+    section: 'Products',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -17628,7 +18158,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line853">line 853</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1014">line 1014</a>
     </li></ul></dd>
     
 
@@ -17816,6 +18346,13 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeItemGroups();</code></pre>
+
+</div>
+
 </div>
         
             
@@ -17866,7 +18403,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line428">line 428</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line522">line 522</a>
     </li></ul></dd>
     
 
@@ -17876,7 +18413,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.io/rest_api/items/batch_remove_items">https://docs.constructor.io/rest_api/items/batch_remove_items</a></li>
+            <li><a href="https://docs.constructor.io/rest_api/items/v1/batch_remove_items">https://docs.constructor.io/rest_api/items/v1/batch_remove_items</a></li>
         </ul>
     </dd>
     
@@ -17987,7 +18524,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
             
 
             <td class="description last">
-                A list of items with the same attributes as defined in the `addItem` resource
+                A list of items with the same attributes as defined in the <a href="module-catalog.html#~addItem">addItem</a> resource
                 
             </td>
         </tr>
@@ -18165,6 +18702,19 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeItemsBatch({
+    items: [
+        { id: 'blk_pllvr_hd_001' },
+        { id: 'red_pllvr_hd_02' },
+    ],
+    section: 'Products',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -18215,7 +18765,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1082">line 1082</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1271">line 1271</a>
     </li></ul></dd>
     
 
@@ -18488,6 +19038,15 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeOneWaySynonym({
+    phrase: 'spices',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -18538,7 +19097,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1125">line 1125</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1318">line 1318</a>
     </li></ul></dd>
     
 
@@ -18726,6 +19285,13 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeOneWaySynonyms();</code></pre>
+
+</div>
+
 </div>
         
             
@@ -18776,7 +19342,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1680">line 1680</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1948">line 1948</a>
     </li></ul></dd>
     
 
@@ -19049,6 +19615,15 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeRedirectRule({
+    id: '1',
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -19099,7 +19674,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1349">line 1349</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1563">line 1563</a>
     </li></ul></dd>
     
 
@@ -19372,6 +19947,15 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.removeSynonymGroup({
+    id: 32,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -19422,7 +20006,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1389">line 1389</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1607">line 1607</a>
     </li></ul></dd>
     
 
@@ -19610,6 +20194,13 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.modifySynonymGroup();</code></pre>
+
+</div>
+
 </div>
         
             
@@ -19660,7 +20251,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1719">line 1719</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1991">line 1991</a>
     </li></ul></dd>
     
 
@@ -20151,6 +20742,19 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.replaceCatalog({
+    section: 'Products',
+    notification_email: 'notifications@example.com',
+    items: itemsFileBufferOrStream,
+    variations: variationsFileBufferOrStream,
+    item_groups: itemGroupsFileBufferOrStream,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -20203,7 +20807,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2055">line 2055</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2386">line 2386</a>
     </li></ul></dd>
     
 
@@ -21060,6 +21664,20 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.replaceFacetConfiguration({
+    name: 'color',
+    type: 'multiple',
+    display_name: 'Color',
+    sort_order: 'value',
+    sort_descending: false,
+    position: 1,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -21110,7 +21728,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2430">line 2430</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2817">line 2817</a>
     </li></ul></dd>
     
 
@@ -21647,6 +22265,18 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.replaceFacetOptionConfiguration({
+    facetGroupName: 'color',
+    value: 'blue',
+    display_name: 'Midnight Blue',
+    position: 9,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -21697,7 +22327,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1763">line 1763</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2043">line 2043</a>
     </li></ul></dd>
     
 
@@ -22188,6 +22818,19 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.updateCatalog({
+    section: 'Products',
+    notification_email: 'notifications@example.com',
+    items: itemsFileBufferOrStream,
+    variations: variationsFileBufferOrStream,
+    item_groups: itemGroupsFileBufferOrStream,
+});</code></pre>
+
+</div>
+
 </div>
         
             
@@ -22238,7 +22881,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1474">line 1474</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1708">line 1708</a>
     </li></ul></dd>
     
 
@@ -22733,6 +23376,24 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
 
 
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>constructorio.catalog.updateRedirectRule({
+    id: 1,
+    url: '/categories/cat_49203',
+    matches: [{
+        pattern: 'outerwear',
+        match_type: 'EXACT'
+    }],
+    user_segments: ['US', 'Mobile', 'Web'],
+    metadata: {
+        additional_data: 'additional string data',
+    },
+});</code></pre>
+
+</div>
+
 </div>
         
     
@@ -22752,7 +23413,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Tue Aug 02 2022 11:19:10 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Thu Aug 18 2022 15:29:28 GMT-0700 (Pacific Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

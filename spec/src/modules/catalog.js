@@ -203,7 +203,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
         catalog.createOrReplaceItems({ items, section: 'Products' }).then((done));
-        catalog.updateItems({ updatedItems, section: 'Products' }).then(done);
+        catalog.updateItems({ items: updatedItems, section: 'Products' }).then(done);
         itemsToCleanup.push(...updatedItems);
       });
 
@@ -217,7 +217,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.updateItems({ updatedItems, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating items with an invalid API token', () => {
@@ -230,13 +230,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.updateItems({ updatedItems, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.updateItems({ updatedItems, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when network global request timeout is provided and reached', () => {
@@ -245,11 +245,11 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.updateItems({ updatedItems, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
-    describe.only('retrieveItems', () => {
+    describe('retrieveItems', () => {
       const mockItems = [createMockItem(), createMockItem(), createMockItem()];
 
       before((done) => {
