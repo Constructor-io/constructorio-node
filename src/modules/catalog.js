@@ -135,11 +135,10 @@ class Catalog {
    *
    * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items. Defaults to False.
    * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -201,15 +200,14 @@ class Catalog {
   }
 
   /**
-   * Update multiple items to (limit of 1,000)
+   * Update multiple items to index (limit of 1,000)
    *
    * @function updateItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items. Defaults to False.
    * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -275,8 +273,7 @@ class Catalog {
    *
    * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string} parameters.key - The API key of the index that you'd like to make changes to.
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the `addItem` resource. Only IDs are required for the delete operation.
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema. Only IDs are required for the delete operation.
    * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -335,7 +332,6 @@ class Catalog {
    * @function retrieveItems
    * @param {object} parameters - Additional parameters for item details
    * @param {string[]} parameters.ids - Id(s) of items to return. Maximum number of ids to request is 1000.
-   * @param {string} parameters.key - The API key of the index that you'd like to retrieve results from.
    * @param {string} parameters.section - The index section you'd like to retrieve results from.
    * @param {number} parameters.numResultsPerPage - The number of items to return. Defaults to 100. Maximum value 100.
    * @param {number} parameters.page -The page of results to return. Defaults to 1.
@@ -346,14 +342,14 @@ class Catalog {
    * @example
    * constructorio.catalog.retrieveItems({
    *     section: 'Products',
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    *     page: 2,
    * });
    * @example
    * constructorio.catalog.retrieveItems({
    *     ids: ['blk_pllvr_hd_001', 'blk_pllvr_hd_002']
    *     section: 'Products',
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    *     page: 2,
    * });
    */
@@ -390,6 +386,273 @@ class Catalog {
     }).then((response) => {
       if (response.ok) {
 
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => json);
+  }
+
+  /**
+   * Adds multiple variations to your index whilst replacing existing ones (limit of 1,000)
+   *
+   * @function createOrReplaceVariations
+   * @param {object} parameters - Additional parameters for variation details
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
+   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/items/variations/#create-or-replace-variations
+   * @example
+   * constructorio.catalog.createOrReplaceVariations({
+   *     variations: [
+   *         {
+   *             name: 'midnight black pullover hoodie',
+   *             id: 'blk_pllvr_hd_001',
+   *             item_id: "nike-shoes-brown",
+   *             data: {
+   *               keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+   *               url: '/products/blk_pllvr_hd_001'
+   *               image_url: '/products/images/blk_pllvr_hd_001'
+   *               description: 'a modified short description about the black pullover hoodie',
+   *             }
+   *         },
+   *         . . .
+   *     ],
+   *     section: 'Products',
+   * });
+   */
+  createOrReplaceVariations(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, force = false, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      force,
+      ...(notification_email && { notification_email }),
+    };
+
+    try {
+      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Update multiple variations to index (limit of 1,000)
+   *
+   * @function updateVariations
+   * @param {object} parameters - Additional parameters for variation details
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
+   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/items/variations/#update-variations
+   * @example
+   * constructorio.catalog.updateVariations({
+   *     variations: [
+   *         {
+   *             name: 'midnight black pullover hoodie',
+   *             id: 'blk_pllvr_hd_001',
+   *             item_id: "nike-shoes-brown",
+   *             data: {
+   *               keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
+   *               url: '/products/blk_pllvr_hd_001'
+   *               image_url: '/products/images/blk_pllvr_hd_001'
+   *               description: 'a modified short description about the black pullover hoodie',
+   *             }
+   *         },
+   *         . . .
+   *     ],
+   *     section: 'Products',
+   * });
+   */
+  updateVariations(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, force, notification_email, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      force,
+      ...(notification_email && { notification_email }),
+    };
+
+    try {
+      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Remove multiple variartions from your index (limit of 1,000)
+   *
+   * @function deleteVariations
+   * @param {object} parameters - Additional parameters for variation details
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
+   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/items/variations/#delete-variations
+   * @example
+   * constructorio.catalog.deleteVariations({
+   *     variations: [
+   *         { id: 'blk_pllvr_hd_001' },
+   *         { id: 'red_pllvr_hd_02' },
+   *     ],
+   *     section: 'Products',
+   * });
+   */
+  deleteVariations(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const { section, key, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+      key,
+    };
+
+    try {
+      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify(rest),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return Promise.resolve();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Retrieves variation(s) from index for the given section or specific variation ID
+   *
+   * @function retrieveVariations
+   * @param {object} parameters - Additional parameters for variation details
+   * @param {string[]} parameters.ids - Id(s) of variations to return. Maximum number of ids to request is 1000.
+   *    * @param {string[]} parameters.itemsIds - items Id(s) of items of variations to return. Maximum number of ids to request is 1000.
+   * @param {string} parameters.section - The index section you'd like to retrieve results from.
+   * @param {number} parameters.numResultsPerPage - The number of variations to return. Defaults to 100. Maximum value 100.
+   * @param {number} parameters.page -The page of results to return. Defaults to 1.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/items/variations/#retrieve-variations
+   * @example
+   * constructorio.catalog.retrieveVariations({
+   *     section: 'Products',
+   *     numResultsPerPage: 50,
+   *     page: 2,
+   * });
+   * @example
+   * constructorio.catalog.retrieveVariations({
+   *     ids: ['blk_pllvr_hd_001', 'blk_pllvr_hd_002']
+   *     section: 'Products',
+   *     numResultsPerPage: 50,
+   *     page: 2,
+   * });
+   */
+  retrieveVariations(parameters = {}, networkParameters = {}) {
+    let queryParams = {};
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { ids, itemsIds, section, numResultsPerPage, page } = parameters;
+    queryParams = {
+      section,
+      ...(numResultsPerPage && { numResultsPerPage }),
+      ...(page && { page }),
+      ...(ids && { id: ids }),
+      ...(itemsIds && { item_id: itemsIds }),
+
+    };
+
+    try {
+      requestUrl = createCatalogUrl('variations', this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
         return response.json();
       }
 
