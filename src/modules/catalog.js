@@ -2148,7 +2148,7 @@ class Catalog {
    * Create a facet configuration
    *
    * @function addFacetConfiguration
-   * @param {object} parameters - Additional paramaters for facet configuration details
+   * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
    * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
@@ -2220,7 +2220,7 @@ class Catalog {
    * Get all facet configurations
    *
    * @function getFacetConfigurations
-   * @param {object} parameters - Additional paramaters for retrieving facet configurations.
+   * @param {object} parameters - Additional parameters for retrieving facet configurations.
    * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
    * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
@@ -2272,7 +2272,7 @@ class Catalog {
    * Get a single facet's configuration
    *
    * @function getFacetConfiguration
-   * @param {object} parameters - Additional paramaters for retrieving a facet configuration.
+   * @param {object} parameters - Additional parameters for retrieving a facet configuration.
    * @param {number} [parameters.name] - Unique facet name used to refer to the facet in your catalog
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2323,7 +2323,7 @@ class Catalog {
    * Modify the configurations of multiple facets (partially) at once.
    *
    * @function modifyFacetConfigurations
-   * @param {object} parameters - Additional paramaters for modifying facet configurations
+   * @param {object} parameters - Additional parameters for modifying facet configurations
    * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update. See [addFacetConfiguration]{@link module:catalog~addFacetConfiguration} for additional details on what parameters you can supply for each facet configuration.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2389,7 +2389,7 @@ class Catalog {
    * Caution: Overwrites all other configurations you may have defined for the facet group, resetting them to their defaults. This includes all facet option configurations you may have defined.
    *
    * @function replaceFacetConfiguration
-   * @param {object} parameters - Additional paramaters for facet configuration details
+   * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
    * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
@@ -2461,7 +2461,7 @@ class Catalog {
    * Modify the configuration of a facet (partially)
    *
    * @function modifyFacetConfiguration
-   * @param {object} parameters - Additional paramaters for facet configuration details
+   * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
    * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
@@ -2535,7 +2535,7 @@ class Catalog {
    * Caution: Once a facet group's configuration is removed, all configurations will return to their default values. This includes all facet option configurations (display name, position, etc) you may have defined for the facet group.
    *
    * @function removeFacetConfiguration
-   * @param {object} parameters - Additional paramaters for facet configuration details
+   * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2585,7 +2585,7 @@ class Catalog {
    * Create a facet option configuration
    *
    * @function addFacetOptionConfiguration
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique value for the facet option
    * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
@@ -2645,7 +2645,7 @@ class Catalog {
    * Create new facet option configurations or modify if they already exist
    *
    * @function addOrModifyFacetOptionConfigurations
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in the catalog
    * @param {object[]} parameters.facetOptionConfigurations - List of facet option configurations to would like to update - refer to [addFacetConfiguration]{@link module:catalog~addFacetOptionConfiguration} for additional details on what parameters can be supplied for each facet option configuration
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
@@ -2710,7 +2710,7 @@ class Catalog {
    * Get all facet option configurations for a given facet
    *
    * @function getFacetOptionConfigurations
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {number} [parameters.page=1] - Page number you'd like to request
    * @param {number} [parameters.num_results_per_page=100] - Number of facets per page in paginated response
@@ -2765,7 +2765,7 @@ class Catalog {
    * Get a single facet option configuration for a given facet
    *
    * @function getFacetOptionConfiguration
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - The facet option value. Unique for a particular facet
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
@@ -2818,7 +2818,7 @@ class Catalog {
    * Replace a facet option configuration
    *
    * @function replaceFacetOptionConfiguration
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique facet option value
    * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
@@ -2878,7 +2878,7 @@ class Catalog {
    * Modify a facet option configuration
    *
    * @function modifyFacetOptionConfiguration
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique facet option value
    * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
@@ -2938,7 +2938,7 @@ class Catalog {
    * Remove a facet option configuration
    *
    * @function removeFacetOptionConfiguration
-   * @param {object} parameters - Additional paramaters for facet option configuration details
+   * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique value for this facet option
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
