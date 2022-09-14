@@ -1,14 +1,11 @@
 {
   "version": "0.2",
   "language": "en",
-  "allowCompoundWords": true,
+  "allowCompoundWords": false,
   "dictionaries": [
     "en_US",
     "html",
-    "css",
-    "npm",
-    "companies",
-    "softwareTerms"
+    "css"
   ],
   "ignorePaths": [
     "docs"
@@ -23,7 +20,12 @@
     "constructorio",
     "dtype",
     "notanapikey",
+    "notanapitoken",
     "uuidv",
+    "subcat",
+    "searchterm",
+    "camelcase",
+    "clonedeep",
     // random string values
     "luistrenker-jacket-K245511299-cream",
     "fyzs7tfF8L161VoAXQ8u",
