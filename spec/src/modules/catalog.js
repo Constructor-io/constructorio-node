@@ -757,8 +757,8 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         variations.push(...variationsToCleanup);
-        catalog.deleteVariations({ variations: variations.map((variartion) => ({ id: variartion.id })), section: 'Products' }).then(() => {
-          catalog.deleteItems({ items: itemsToCleanup.map((variartion) => ({ id: variartion.id })), section: 'Products' }).then(done);
+        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => {
+          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
         });
       });
 

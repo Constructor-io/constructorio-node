@@ -534,7 +534,7 @@ class Catalog {
   }
 
   /**
-   * Remove multiple variartions from your index (limit of 1,000)
+   * Remove multiple variations from your index (limit of 1,000)
    *
    * @function deleteVariations
    * @param {object} parameters - Additional parameters for variation details
