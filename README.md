@@ -13,7 +13,7 @@ Full API documentation is available on [Github Pages](https://constructor-io.git
 
 ## 1. Review the Requirements
 
-Requesting results from your Node.js back-end can be useful in order to control result rendering logic on your server, or augment/hydrate results with data from another system. However, a back-end integration has additional requirements compared to a front-end integration.  Please review [Back End API Integration](https://constructorio.zendesk.com/hc/en-us/articles/360047993194-Back-end-API-Integration) for more detail.
+Requesting results from your Node.js back-end can be useful in order to control result rendering logic on your server, or augment/hydrate results with data from another system. However, a back-end integration has additional requirements compared to a front-end integration. Please review the [Additional Information For Backend Integrations](https://github.com/Constructor-io/constructorio-node/wiki/Additional-Information-For-Backend-Integrations) article within the wiki for more detail.
 
 ## 2. Install
 
