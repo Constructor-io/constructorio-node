@@ -35,7 +35,7 @@ describe('ConstructorIO - Autocomplete', () => {
     fetchSpy = null;
   });
 
-  describe.only('getAutocompleteResults', () => {
+  describe('getAutocompleteResults', () => {
     const query = 'item1';
 
     it('Should return a response with a valid query and client + session identifiers', (done) => {
