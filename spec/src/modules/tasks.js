@@ -21,7 +21,7 @@ const validOptions = {
   apiToken: testApiToken,
 };
 
-describe.only('ConstructorIO - Tasks', function ConstructorIOTasks() {
+describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
   // Ensure Mocha doesn't time out waiting for operation to complete
   this.timeout(10000);
 
