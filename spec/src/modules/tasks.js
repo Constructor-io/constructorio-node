@@ -21,7 +21,7 @@ const validOptions = {
   apiToken: testApiToken,
 };
 
-describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
+describe.only('ConstructorIO - Tasks', function ConstructorIOTasks() {
   // Ensure Mocha doesn't time out waiting for operation to complete
   this.timeout(10000);
 
@@ -94,6 +94,42 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
         expect(res.total_count).to.be.gte(1);
         expect(res.tasks.length).to.be.lte(50);
         expect(requestedUrlParams).to.have.property('key');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given startDate and endDate', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, num_results_per_page: 50, startDate: '2022-09-03', endDate: '2022-09-30' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('start_date').to.equal('2022-09-03');
+        expect(requestedUrlParams).to.have.property('end_date').to.equal('2022-09-30');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given status', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, num_results_per_page: 50, status: 'CANCELED' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('status').to.equal('CANCELED');
         done();
       });
     });

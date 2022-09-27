@@ -46,6 +46,9 @@ class Tasks {
    * @param {object} parameters - Additional parameters for task details
    * @param {number} [parameters.num_results_per_page = 20] - The number of tasks to return - maximum value 100
    * @param {number} [parameters.page = 1] - The page of results to return
+   * @param {string} [parameters.startDate] - The start date of results to return - YYYY-MM-DD
+   * @param {string} [parameters.endDate] - The end date of results to return - YYYY-MM-DD
+   * @param {string} [parameters.status] - The status of tasks to return - 'QUEUED', 'IN_PROGRESS', 'DONE', 'FAILED', 'CANCELED'
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -59,7 +62,7 @@ class Tasks {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page } = parameters;
+      const { num_results_per_page: numResultsPerPage, page, startDate, endDate, status } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPage) {
@@ -69,6 +72,18 @@ class Tasks {
       // Pull page from parameters
       if (page) {
         queryParams.page = page;
+      }
+
+      if (startDate) {
+        queryParams.start_date = startDate;
+      }
+
+      if (endDate) {
+        queryParams.end_date = endDate;
+      }
+
+      if (status) {
+        queryParams.status = status;
       }
     }
 
