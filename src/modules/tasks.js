@@ -62,7 +62,7 @@ class Tasks {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPageOld, numResultsPerPage, page, startDate, endDate, status } = parameters
+      const { num_results_per_page: numResultsPerPageOld, numResultsPerPage, page, startDate, endDate, status } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPageOld || numResultsPerPage) {
