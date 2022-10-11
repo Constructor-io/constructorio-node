@@ -81,13 +81,30 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should retrieve a list of tasks given page and results per page', (done) => {
+    it('Should retrieve a list of tasks given page and results per page (old)', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
       tasks.getAllTasks({ page: 2, num_results_per_page: 50 }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given page and results per page', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, numResultsPerPage: 50 }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
