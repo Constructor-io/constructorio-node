@@ -4,15 +4,35 @@ const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied quizId and parameters
-function createQuizUrl(quizId, parameters, options, path) {
+// eslint-disable-next-line max-params
+function createQuizUrl(quizId, parameters, userParameters, options, path) {
   const {
     apiKey,
+    version,
   } = options;
+  const {
+    sessionId,
+    clientId,
+    userId,
+    segments,
+  } = userParameters;
   const serviceUrl = 'https://quizzes.cnstrc.com';
-  let queryParams = { };
+  let queryParams = { c: version };
   let answersParamString = '';
 
-  queryParams.index_key = apiKey;
+  queryParams.key = apiKey;
+  queryParams.i = clientId;
+  queryParams.s = sessionId;
+
+  // Pull user segments from options
+  if (segments && segments.length) {
+    queryParams.us = segments;
+  }
+
+  // Pull user id from options
+  if (userId) {
+    queryParams.ui = userId;
+  }
 
   // Validate quiz id is provided
   if (!quizId || typeof quizId !== 'string') {
@@ -75,12 +95,16 @@ class Quizzes {
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.version_id] - Specific version id for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://quizzes.cnstrc.com/api/#/quizzes/QuizzesController_getNextQuestion
+   * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#answering-a-quiz
    * @example
    * constructorio.search.getNextQuiz('quizid', {
    *    a: [[1,2],[1]],
@@ -88,7 +112,7 @@ class Quizzes {
    *    version_id: "123"
    * });
    */
-  getNextQuiz(quizId, parameters, userParameters = {}, networkParameters = {}) {
+  getNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -96,7 +120,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(quizId, parameters, this.options, 'next');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'next');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -130,14 +154,14 @@ class Quizzes {
         if (json.version_id) {
           return json;
         }
-        throw new Error('getNextQuiz response data is malformed');
+        throw new Error('getNextQuestion response data is malformed');
       });
   }
 
   /**
    * Retrieves filter expression and recommendation URL from given answers.
    *
-   * @function getFinalizeQuiz
+   * @function getQuizResults
    * @description Retrieve quiz recommendation and filter expression from Constructor.io API
    * @param {string} id - The id of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
@@ -145,12 +169,16 @@ class Quizzes {
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.version_id] - Specific version id for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://quizzes.cnstrc.com/api/#/quizzes/QuizzesController_getQuizResult
+   * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#completing-the-quiz
    * @example
    * constructorio.search.getFinalizeQuiz('quizid', {
    *    a: [[1,2],[1]],
@@ -158,7 +186,7 @@ class Quizzes {
    *    version_id: "123"
    * });
    */
-  getFinalizeQuiz(quizId, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const headers = {};
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -166,7 +194,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(quizId, parameters, this.options, 'finalize');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'finalize');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -202,7 +230,7 @@ class Quizzes {
           return json;
         }
 
-        throw new Error('getFinalizeQuiz response data is malformed');
+        throw new Error('getQuizResults response data is malformed');
       });
   }
 }
