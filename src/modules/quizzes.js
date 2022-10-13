@@ -106,7 +106,7 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#answering-a-quiz
    * @example
-   * constructorio.search.getNextQuiz('quizid', {
+   * constructorio.search.getNextQuiz('quizId', {
    *    a: [[1,2],[1]],
    *    section: "products",
    *    version_id: "123"
@@ -180,7 +180,7 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#completing-the-quiz
    * @example
-   * constructorio.search.getFinalizeQuiz('quizid', {
+   * constructorio.search.getFinalizeQuiz('quizId', {
    *    a: [[1,2],[1]],
    *    section: "products",
    *    version_id: "123"
