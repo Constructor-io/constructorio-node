@@ -597,7 +597,7 @@ class Catalog {
    * @function retrieveVariations
    * @param {object} parameters - Additional parameters for variation details
    * @param {string[]} parameters.ids - Id(s) of variations to return. Maximum number of ids to request is 1000.
-   * @param {string[]} parameters.itemsIds - items Id(s) of items of variations to return. Maximum number of ids to request is 1000.
+   * @param {string[]} parameters.itemId - iItem Id of item to return it's variations.
    * @param {string} parameters.section - The index section you'd like to retrieve results from.
    * @param {number} parameters.numResultsPerPage - The number of variations to return. Defaults to 100. Maximum value 100.
    * @param {number} parameters.page -The page of results to return. Defaults to 1.
@@ -625,13 +625,13 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { ids, itemsIds, section, numResultsPerPage, page } = parameters;
+    const { ids, itemId, section, numResultsPerPage, page } = parameters;
     queryParams = {
       section,
       ...(numResultsPerPage && { numResultsPerPage }),
       ...(page && { page }),
       ...(ids && { id: ids }),
-      ...(itemsIds && { item_id: itemsIds }),
+      ...(itemId && { item_id: itemId }),
 
     };
 
