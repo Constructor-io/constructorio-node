@@ -597,7 +597,7 @@ class Catalog {
    * @function retrieveVariations
    * @param {object} parameters - Additional parameters for variation details
    * @param {string[]} parameters.ids - Id(s) of variations to return. Maximum number of ids to request is 1000.
-   * @param {string[]} parameters.itemId - Item Id of item to return it's variations.
+   * @param {string} parameters.itemId - Item Id of item to return it's variations.
    * @param {string} parameters.section - The index section you'd like to retrieve results from.
    * @param {number} parameters.numResultsPerPage - The number of variations to return. Defaults to 100. Maximum value 100.
    * @param {number} parameters.page -The page of results to return. Defaults to 1.
