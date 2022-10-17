@@ -44,7 +44,7 @@ class Tasks {
    *
    * @function getAllTasks
    * @param {object} parameters - Additional parameters for task details
-   * @param {number} [parameters.num_results_per_page = 20] - The number of tasks to return - maximum value 100
+   * @param {number} [parameters.numResultsPerPage = 20] - The number of tasks to return - maximum value 100
    * @param {number} [parameters.page = 1] - The page of results to return
    * @param {string} [parameters.startDate] - The start date of results to return - YYYY-MM-DD
    * @param {string} [parameters.endDate] - The end date of results to return - YYYY-MM-DD
@@ -62,11 +62,11 @@ class Tasks {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page, startDate, endDate, status } = parameters;
+      const { num_results_per_page: numResultsPerPageOld, numResultsPerPage, page, startDate, endDate, status } = parameters;
 
       // Pull number of results per page from parameters
-      if (numResultsPerPage) {
-        queryParams.num_results_per_page = numResultsPerPage;
+      if (numResultsPerPageOld || numResultsPerPage) {
+        queryParams.num_results_per_page = numResultsPerPageOld || numResultsPerPage;
       }
 
       // Pull page from parameters
