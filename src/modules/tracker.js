@@ -1023,7 +1023,7 @@ class Tracker {
    * @param {string} parameters.pod_id - Pod identifier
    * @param {string} parameters.strategy_id - Strategy identifier
    * @param {string} parameters.item_id - Product item unique identifier
-   * @param {string} parameters.item_name - Product item name (either it or item_id is required)
+   * @param {string} parameters.item_name - Product item name
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
    * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
