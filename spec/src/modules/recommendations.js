@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -25,8 +24,6 @@ const validOptions = {
 describe('ConstructorIO - Recommendations', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = 'cio-mocha';
