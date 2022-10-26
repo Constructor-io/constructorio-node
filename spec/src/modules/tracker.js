@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -24,8 +23,6 @@ describe('ConstructorIO - Tracker', () => {
     clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
     sessionId: 1,
   };
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     fetchSpy = sinon.spy(nodeFetch);
