@@ -56,7 +56,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
       queryParams.version_id = versionId;
     }
 
-    // Pull a from parameters and transform
+    // Pull a (answers) from parameters and transform
     if (a) {
       a.forEach((ans) => {
         answersParamString += `&${qs.stringify({ a: ans }, { arrayFormat: 'comma' })}`;
@@ -85,15 +85,15 @@ class Quizzes {
   }
 
   /**
-   * Retrieve next quiz from api
+   * Retrieve next question from api
    *
-   * @function getNextQuiz
-   * @description Retrieve next quiz from Constructor.io API
+   * @function getNextQuestion
+   * @description Retrieve next question from Constructor.io API
    * @param {string} id - The id of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
-   * @param {string} [parameters.section] - Section for customer's product catalog (optional)
+   * @param {string} [parameters.section] - Product catalog section
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
-   * @param {string} [parameters.version_id] - Specific version id for the quiz.
+   * @param {string} [parameters.versionId] - Version identifier for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -106,10 +106,10 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#answering-a-quiz
    * @example
-   * constructorio.search.getNextQuiz('quizId', {
+   * constructorio.search.getNextQuestion('quizId', {
    *    a: [[1,2],[1]],
-   *    section: "products",
-   *    version_id: "123"
+   *    section: 'Products',
+   *    version_id: '123'
    * });
    */
   getNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
@@ -148,26 +148,28 @@ class Quizzes {
         if (response.ok) {
           return response.json();
         }
+
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
         if (json.version_id) {
           return json;
         }
+
         throw new Error('getNextQuestion response data is malformed');
       });
   }
 
   /**
-   * Retrieves filter expression and recommendation URL from given answers.
+   * Retrieves filter expression and recommendation URL from given answers
    *
    * @function getQuizResults
    * @description Retrieve quiz recommendation and filter expression from Constructor.io API
-   * @param {string} id - The id of the quiz
+   * @param {string} id - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
-   * @param {string} [parameters.section] - Section for customer's product catalog (optional)
-   * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
-   * @param {string} [parameters.version_id] - Specific version id for the quiz.
+   * @param {string} [parameters.section] - Product catalog section
+   * @param {array} [parameters.a] - An array of answers in the format [[1,2],[1]]
+   * @param {string} [parameters.versionId] - Specific version identifier for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -182,8 +184,8 @@ class Quizzes {
    * @example
    * constructorio.search.getFinalizeQuiz('quizId', {
    *    a: [[1,2],[1]],
-   *    section: "products",
-   *    version_id: "123"
+   *    section: 'Products',
+   *    version_id: '123'
    * });
    */
   getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {

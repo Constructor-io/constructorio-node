@@ -31,6 +31,7 @@ class ConstructorIO {
    * @property {object} tracker - Interface to {@link module:tracker}
    * @property {object} catalog - Interface to {@link module:catalog}
    * @property {object} tasks - Interface to {@link module:tasks}
+   * @property {object} quizzes - Interface to {@link module:quizzes}
    * @returns {class}
    */
   constructor(options = {}) {
