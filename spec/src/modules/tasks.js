@@ -151,6 +151,25 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
+    it('Should retrieve a list of tasks given type', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ num_results_per_page: 50, type: 'ingestion' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.tasks.length).to.be.lte(50);
+        expect(res.tasks.length).to.be.gte(1);
+        expect(res.tasks[0].type).to.equal('ingestion');
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('type').to.equal('ingestion');
+        done();
+      });
+    });
+
     it('Should return error when retrieving a list of tasks with an invalid API key', () => {
       const invalidOptions = cloneDeep(validOptions);
       invalidOptions.apiKey = 'notanapikey';
