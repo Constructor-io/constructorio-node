@@ -21,7 +21,7 @@ const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
 
-describe.only('ConstructorIO - Quizzes', () => {
+describe('ConstructorIO - Quizzes', () => {
   const validQuizId = 'test-quiz';
   const validAnswers = [[1], [1, 2], ['seen']];
   let fetchSpy;
