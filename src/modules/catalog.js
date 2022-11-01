@@ -28,8 +28,6 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  console.log(`${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`);
-
   return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
 }
 
@@ -168,22 +166,27 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     const { items, section, force, notificationEmail } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      force,
-    };
+    const queryParams = {};
 
     // Validate items is provided
     if (!items || !Array.isArray(items)) {
       throw new Error('items is a required parameter of type array');
     }
 
+    if (section) {
+      queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
     if (notificationEmail) {
-      additionalQueryParams.notification_email = notificationEmail;
+      queryParams.notification_email = notificationEmail;
     }
 
     try {
-      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('items', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -244,23 +247,28 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notificationEmail, ...rest } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      force,
-    };
+    const { items, section, force, notificationEmail } = parameters;
+    const queryParams = {};
 
     // Validate items is provided
-    if (!rest.items || !Array.isArray(rest.items)) {
+    if (!items || !Array.isArray(items)) {
       throw new Error('items is a required parameter of type array');
     }
 
     if (notificationEmail) {
-      additionalQueryParams.notification_email = notificationEmail;
+      queryParams.notification_email = notificationEmail;
+    }
+
+    if (section) {
+      queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
     }
 
     try {
-      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('items', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -270,7 +278,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ items }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -311,23 +319,28 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notificationEmail, ...rest } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      force,
-    };
+    const { items, section, force, notificationEmail } = parameters;
+    const queryParams = {};
 
     // Validate items is provided
-    if (!rest.items || !Array.isArray(rest.items)) {
+    if (!items || !Array.isArray(items)) {
       throw new Error('items is a required parameter of type array');
     }
 
+    if (section) {
+      queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
     if (notificationEmail) {
-      additionalQueryParams.notification_email = notificationEmail;
+      queryParams.notification_email = notificationEmail;
     }
 
     try {
-      requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('items', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -337,7 +350,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ items }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -357,7 +370,7 @@ class Catalog {
    *
    * @function retrieveItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string[]} parameters.ids - Id(s) of items to return (1,000 maximum)
+   * @param {string[]} [parameters.ids] - Id(s) of items to return (1,000 maximum)
    * @param {string} [parameters.section] - This indicates which section to operate on within the index
    * @param {number} [parameters.numResultsPerPage=100] - The number of items to return
    * @param {number} [parameters.page=1] - The page of results to return
@@ -385,14 +398,15 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     const { ids, section, numResultsPerPage, page } = parameters;
-    const queryParams = { section };
+    const queryParams = {};
 
-    // Validate items is provided
-    if (!ids || !Array.isArray(ids)) {
-      throw new Error('ids is a required parameter of type array');
+    if (ids) {
+      queryParams.id = ids;
     }
 
-    queryParams.id = ids;
+    if (section) {
+      queryParams.section = section;
+    }
 
     if (numResultsPerPage) {
       queryParams.num_results_per_page = numResultsPerPage;

@@ -150,7 +150,7 @@ describe('ConstructorIO - Catalog', () => {
   });
 
   describe.only('Items', () => {
-    describe.only('createOrReplaceItems', () => {
+    describe('createOrReplaceItems', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -287,7 +287,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items, section: 'Products' }).then(done);
+        catalog.createOrReplaceItems({ items }).then(done);
       });
 
       it('Should resolve when removing multiple items', (done) => {
@@ -308,7 +308,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.deleteItems({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.deleteItems({ items: itemsDoNotExist })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing items with an invalid API key', () => {
@@ -321,7 +321,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.deleteItems({ items })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing items with an invalid API token', () => {
