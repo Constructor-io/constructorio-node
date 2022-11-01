@@ -28,6 +28,8 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
+  console.log(`${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`);
+
   return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
 }
 
@@ -56,7 +58,7 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notification_email: notificationEmail, force } = parameters;
+    const { section, notificationEmail, force } = parameters;
     let { items, variations, item_groups: itemGroups } = parameters;
 
     try {
@@ -135,10 +137,10 @@ class Catalog {
    *
    * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items. Defaults to False.
-   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -156,9 +158,8 @@ class Catalog {
    *               description: 'a modified short description about the black pullover hoodie',
    *             }
    *         },
-   *         . . .
+   *         ...
    *     ],
-   *     section: 'Products',
    * });
    */
   createOrReplaceItems(parameters = {}, networkParameters = {}) {
@@ -166,12 +167,20 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force = false, notification_email, ...rest } = parameters;
+    const { items, section, force, notificationEmail } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
       force,
-      ...(notification_email && { notification_email }),
     };
+
+    // Validate items is provided
+    if (!items || !Array.isArray(items)) {
+      throw new Error('items is a required parameter of type array');
+    }
+
+    if (notificationEmail) {
+      additionalQueryParams.notification_email = notificationEmail;
+    }
 
     try {
       requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
@@ -184,7 +193,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ items }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -204,10 +213,10 @@ class Catalog {
    *
    * @function updateItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items. Defaults to False.
-   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -235,12 +244,20 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notification_email, ...rest } = parameters;
+    const { section, force, notificationEmail, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
       force,
-      ...(notification_email && { notification_email }),
     };
+
+    // Validate items is provided
+    if (!rest.items || !Array.isArray(rest.items)) {
+      throw new Error('items is a required parameter of type array');
+    }
+
+    if (notificationEmail) {
+      additionalQueryParams.notification_email = notificationEmail;
+    }
 
     try {
       requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
@@ -273,8 +290,9 @@ class Catalog {
    *
    * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource https://docs.constructor.io/rest_api/items/items/#item-schema. Only IDs are required for the delete operation.
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this item is for
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -293,12 +311,20 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-
-    const { section, key, ...rest } = parameters;
+    const { section, force, notificationEmail, ...rest } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
-      key,
+      force,
     };
+
+    // Validate items is provided
+    if (!rest.items || !Array.isArray(rest.items)) {
+      throw new Error('items is a required parameter of type array');
+    }
+
+    if (notificationEmail) {
+      additionalQueryParams.notification_email = notificationEmail;
+    }
 
     try {
       requestUrl = createCatalogUrl('items', this.options, additionalQueryParams, 'v2');
@@ -331,10 +357,10 @@ class Catalog {
    *
    * @function retrieveItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {string[]} parameters.ids - Id(s) of items to return. Maximum number of ids to request is 1000.
-   * @param {string} parameters.section - The index section you'd like to retrieve results from.
-   * @param {number} parameters.numResultsPerPage - The number of items to return. Defaults to 100. Maximum value 100.
-   * @param {number} parameters.page -The page of results to return. Defaults to 1.
+   * @param {string[]} parameters.ids - Id(s) of items to return (1,000 maximum)
+   * @param {string} [parameters.section] - This indicates which section to operate on within the index
+   * @param {number} [parameters.numResultsPerPage=100] - The number of items to return
+   * @param {number} [parameters.page=1] - The page of results to return
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -354,18 +380,27 @@ class Catalog {
    * });
    */
   retrieveItems(parameters = {}, networkParameters = {}) {
-    let queryParams = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
     const { ids, section, numResultsPerPage, page } = parameters;
-    queryParams = {
-      section,
-      ...(numResultsPerPage && { numResultsPerPage }),
-      ...(page && { page }),
-      ...(ids && { id: ids }),
-    };
+    const queryParams = { section };
+
+    // Validate items is provided
+    if (!ids || !Array.isArray(ids)) {
+      throw new Error('ids is a required parameter of type array');
+    }
+
+    queryParams.id = ids;
+
+    if (numResultsPerPage) {
+      queryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (page) {
+      queryParams.page = page;
+    }
 
     try {
       requestUrl = createCatalogUrl('items', this.options, queryParams, 'v2');

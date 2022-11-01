@@ -149,8 +149,8 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  describe('Items', () => {
-    describe('createOrReplaceItems', () => {
+  describe.only('Items', () => {
+    describe.only('createOrReplaceItems', () => {
       const items = [
         createMockItem(),
         createMockItem(),
@@ -163,7 +163,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items, section: 'Products' }).then((done));
+        catalog.createOrReplaceItems({ items }).then((done));
         itemsToCleanup.push(...items);
       });
 
@@ -177,7 +177,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.createOrReplaceItems({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.createOrReplaceItems({ items })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding multiple items with an invalid API token', () => {
@@ -190,13 +190,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.createOrReplaceItems({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.createOrReplaceItems({ items })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.createOrReplaceItems([createMockItem()], { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.createOrReplaceItems({ items: [createMockItem()] }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -205,7 +205,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.createOrReplaceItems([createMockItem()])).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.createOrReplaceItems({ items: [createMockItem()] })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -220,8 +220,10 @@ describe('ConstructorIO - Catalog', () => {
           ...validOptions,
           fetch: fetchSpy,
         });
-        catalog.createOrReplaceItems({ items, section: 'Products' }).then((done));
-        catalog.updateItems({ items: updatedItems, section: 'Products' }).then(done);
+
+        catalog.createOrReplaceItems({ items }).then(() => {
+          catalog.updateItems({ items: updatedItems, section: 'Products' }).then(done);
+        });
         itemsToCleanup.push(...updatedItems);
       });
 
@@ -235,7 +237,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating items with an invalid API token', () => {
@@ -248,13 +250,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItems({ items: updatedItems }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when network global request timeout is provided and reached', () => {
@@ -263,7 +265,91 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.updateItems({ items: updatedItems, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    });
+
+    describe('deleteItems', () => {
+      const items = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+      const itemsDoNotExist = [
+        createMockItem(),
+        createMockItem(),
+        createMockItem(),
+      ];
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.createOrReplaceItems({ items, section: 'Products' }).then(done);
+      });
+
+      it('Should resolve when removing multiple items', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        items.push(...itemsToCleanup);
+        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })) }).then(done);
+      });
+
+      it('Should return error when removing items that do not exist', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteItems({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing items with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing items with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.deleteItems({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -383,90 +469,6 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.retrieveItems({ section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-    });
-
-    describe('deleteItems', () => {
-      const items = [
-        createMockItem(),
-        createMockItem(),
-        createMockItem(),
-      ];
-      const itemsDoNotExist = [
-        createMockItem(),
-        createMockItem(),
-        createMockItem(),
-      ];
-
-      before((done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.createOrReplaceItems({ items, section: 'Products' }).then(done);
-      });
-
-      it('Should resolve when removing multiple items', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        items.push(...itemsToCleanup);
-        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })), section: 'Products' }).then(done);
-      });
-
-      it('Should return error when removing items that do not exist', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteItems({ itemsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing items with an invalid API key', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiKey = 'abc123';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing items with an invalid API token', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiToken = 'foo987';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
-
-        return expect(catalog.deleteItems({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
-        });
-
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
   });
