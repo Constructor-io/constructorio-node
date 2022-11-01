@@ -81,7 +81,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should retrieve a list of tasks given page and results per page', (done) => {
+    it('Should retrieve a list of tasks given page and results per page (old)', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -94,6 +94,78 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
         expect(res.total_count).to.be.gte(1);
         expect(res.tasks.length).to.be.lte(50);
         expect(requestedUrlParams).to.have.property('key');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given page and results per page', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, numResultsPerPage: 50 }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given startDate and endDate', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, num_results_per_page: 50, startDate: '2022-09-03', endDate: '2022-09-30' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('start_date').to.equal('2022-09-03');
+        expect(requestedUrlParams).to.have.property('end_date').to.equal('2022-09-30');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given status', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ page: 2, num_results_per_page: 50, status: 'CANCELED' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.tasks.length).to.be.lte(50);
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('status').to.equal('CANCELED');
+        done();
+      });
+    });
+
+    it('Should retrieve a list of tasks given type', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({ num_results_per_page: 50, type: 'ingestion' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.tasks.length).to.be.lte(50);
+        expect(res.tasks.length).to.be.gte(1);
+        expect(res.tasks[0].type).to.equal('ingestion');
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('type').to.equal('ingestion');
         done();
       });
     });

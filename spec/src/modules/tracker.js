@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -24,8 +23,6 @@ describe('ConstructorIO - Tracker', () => {
     clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
     sessionId: 1,
   };
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     fetchSpy = sinon.spy(nodeFetch);
@@ -4585,6 +4582,42 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackRecommendationClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when only item_name is provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      const parametersWithItemName = {
+        pod_id: 'test_pod_id',
+        strategy_id: 'strategy-id',
+        item_name: 'product',
+      };
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('pod_id').to.equal(parametersWithItemName.pod_id);
+        expect(requestParams).to.have.property('strategy_id').to.equal(parametersWithItemName.strategy_id);
+        expect(requestParams).to.have.property('item_name').to.equal(parametersWithItemName.item_name);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(parametersWithItemName, userParameters)).to.equal(true);
     });
 
     it('Should respond with a valid response and section should be defaulted when required parameters are provided', (done) => {
