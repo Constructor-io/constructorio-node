@@ -170,7 +170,7 @@ class Catalog {
 
     // Validate items is provided
     if (!items || !Array.isArray(items)) {
-      throw new Error('items is a required parameter of type array');
+      return Promise.reject(new Error('items is a required parameter of type array'));
     }
 
     if (section) {
@@ -252,7 +252,7 @@ class Catalog {
 
     // Validate items is provided
     if (!items || !Array.isArray(items)) {
-      throw new Error('items is a required parameter of type array');
+      return Promise.reject(new Error('items is a required parameter of type array'));
     }
 
     if (notificationEmail) {
@@ -324,7 +324,7 @@ class Catalog {
 
     // Validate items is provided
     if (!items || !Array.isArray(items)) {
-      throw new Error('items is a required parameter of type array');
+      return Promise.reject(new Error('items is a required parameter of type array'));
     }
 
     if (section) {

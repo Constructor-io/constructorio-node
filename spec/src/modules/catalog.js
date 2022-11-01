@@ -149,13 +149,18 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  describe.only('Items', () => {
+  describe('Items', () => {
     describe('createOrReplaceItems', () => {
       const items = [
         createMockItem(),
         createMockItem(),
         createMockItem(),
       ];
+      const optionalParameters = {
+        section: 'Products',
+        force: true,
+        notificationEmail: 'test@constructor.io',
+      };
 
       it('Should resolve when adding multiple items', (done) => {
         const { catalog } = new ConstructorIO({
@@ -163,8 +168,59 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items }).then((done));
+        catalog.createOrReplaceItems({ items }).then((() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        }));
+
         itemsToCleanup.push(...items);
+      });
+
+      it('Should resolve when adding multiple items and supplying optional parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.createOrReplaceItems({ items, ...optionalParameters }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+          expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          done();
+        });
+
+        itemsToCleanup.push(...items);
+      });
+
+      it('Should return error when no items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.createOrReplaceItems()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.createOrReplaceItems({ items: 'foo' })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding multiple items with an invalid API key', () => {
@@ -210,10 +266,23 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('updateItems', () => {
-      const items = [
-        createMockItem(),
-      ];
+      const items = [createMockItem()];
       const updatedItems = [{ ...items[0], name: 'Updated Item Name' }];
+      const optionalParameters = {
+        section: 'Products',
+        force: true,
+        notificationEmail: 'test@constructor.io',
+      };
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.createOrReplaceItems({ items }).then(done);
+        itemsToCleanup.push(...items);
+      });
 
       it('Should resolve when updating multiple items', (done) => {
         const { catalog } = new ConstructorIO({
@@ -221,10 +290,55 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items }).then(() => {
-          catalog.updateItems({ items: updatedItems, section: 'Products' }).then(done);
+        catalog.updateItems({ items: updatedItems, section: 'Products' }).then((() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        }));
+      });
+
+      it('Should resolve when updating multiple items and supplying optional parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
         });
-        itemsToCleanup.push(...updatedItems);
+
+        catalog.updateItems({ items: updatedItems, ...optionalParameters }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+          expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          done();
+        });
+      });
+
+      it('Should return error when no items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.updateItems()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.updateItems({ items: 'foo' })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating items with an invalid API key', () => {
@@ -288,6 +402,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.createOrReplaceItems({ items }).then(done);
+        itemsToCleanup.push(...items);
       });
 
       it('Should resolve when removing multiple items', (done) => {
@@ -296,8 +411,60 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        items.push(...itemsToCleanup);
-        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })) }).then(done);
+        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })) }).then((() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        }));
+      });
+
+      it('Should resolve when removing multiple items and supplying optional parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const optionalParameters = {
+          section: 'Products',
+          force: true,
+          notificationEmail: 'test@constructor.io',
+        };
+
+        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })), ...optionalParameters }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+          expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          done();
+        });
+      });
+
+      it('Should return error when no items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteItems()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid items are provided', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteItems({ items: 'foo' })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing items that do not exist', () => {
@@ -334,13 +501,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.deleteItems({ items })).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.deleteItems({ items, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.deleteItems({ items }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -349,7 +516,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.deleteItems({ items, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.deleteItems({ items })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -362,17 +529,17 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items: mockItems, section: 'Products' }).then((done));
+        catalog.createOrReplaceItems({ items: mockItems }).then((done));
         itemsToCleanup.push(...mockItems);
       });
 
-      it('Should return a response when getting items by section', (done) => {
+      it('Should return a response when getting items', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.retrieveItems({ section: 'Products' }).then((res) => {
+        catalog.retrieveItems().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('items').to.be.an('array');
@@ -382,33 +549,26 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should return a response when getting items by id', (done) => {
+      it('Should return a response when getting items with optional parameters', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
+        const optionalParameters = {
+          section: 'Products',
+          ids: mockItems.map(((item) => item.id)),
+          numResultsPerPage: 10,
+          page: 1,
+        };
 
-        catalog.retrieveItems({ ids: mockItems.map(((item) => item.id)), section: 'Products' }).then((res) => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          expect(res).to.have.property('items').to.be.an('array');
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
-          done();
-        });
-      });
-
-      it('Should return a response when getting items by section with pagination parameters', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.retrieveItems({ section: 'Products', num_results_per_page: 10, page: 1 }).then((res) => {
+        catalog.retrieveItems(optionalParameters).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('items').to.be.an('array');
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('id').to.be.an('array').to.deep.equal(optionalParameters.ids);
+          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+          expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal(optionalParameters.numResultsPerPage.toString());
+          expect(requestedUrlParams).to.have.property('page').to.equal(optionalParameters.page.toString());
           done();
         });
       });
@@ -420,13 +580,8 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.retrieveItems({ ids: [uuidv4()], section: 'Products' }).then((res) => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
           expect(res).to.have.property('items').to.be.an('array').that.is.empty;
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
           done();
-
         });
       });
 
@@ -440,7 +595,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.retrieveItems({ section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.retrieveItems()).to.eventually.be.rejected;
       });
 
       it('Should return error when retrieving an item with an invalid API token', () => {
@@ -453,13 +608,13 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.retrieveItems({ section: 'Products' })).to.eventually.be.rejected;
+        return expect(catalog.retrieveItems()).to.eventually.be.rejected;
       });
 
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.retrieveItems({ section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.retrieveItems({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -468,7 +623,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.retrieveItems({ section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.retrieveItems()).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
   });
@@ -1679,7 +1834,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.getOneWaySynonyms({})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -2147,7 +2302,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.getSynonymGroups({})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.getSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -2789,7 +2944,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.getRedirectRules({})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.getRedirectRules()).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -3586,7 +3741,7 @@ describe('ConstructorIO - Catalog', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(catalog.getFacetConfigurations({})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(catalog.getFacetConfigurations()).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
