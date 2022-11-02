@@ -447,10 +447,10 @@ class Catalog {
    *
    * @function createOrReplaceVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
-   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
    * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails.
+   * @param {string} [parameters.section] - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -469,7 +469,7 @@ class Catalog {
    *               description: 'a modified short description about the black pullover hoodie',
    *             }
    *         },
-   *         . . .
+   *         ...
    *     ],
    *     section: 'Products',
    * });
@@ -479,15 +479,28 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force = false, notification_email, ...rest } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      force,
-      ...(notification_email && { notification_email }),
-    };
+    const { section, force, notificationEmail, variations } = parameters;
+    const queryParams = {};
+
+    // Validate variations are provided
+    if (!variations || !Array.isArray(variations)) {
+      return Promise.reject(new Error('variations is a required parameter of type array'));
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
+
+    if (section) {
+      queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
 
     try {
-      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('variations', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -497,7 +510,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ variations }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -517,10 +530,10 @@ class Catalog {
    *
    * @function updateVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
-   * @param {string} parameters.notification_email - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
    * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails.
+   * @param {string} [parameters.section] - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -539,7 +552,7 @@ class Catalog {
    *               description: 'a modified short description about the black pullover hoodie',
    *             }
    *         },
-   *         . . .
+   *         ...
    *     ],
    *     section: 'Products',
    * });
@@ -549,15 +562,28 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notification_email, ...rest } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      force,
-      ...(notification_email && { notification_email }),
-    };
+    const { section, force, notificationEmail, variations } = parameters;
+    const queryParams = {};
+
+    // Validate variations are provided
+    if (!variations || !Array.isArray(variations)) {
+      return Promise.reject(new Error('variations is a required parameter of type array'));
+    }
+
+    if (section) {
+      queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
 
     try {
-      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('variations', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -567,7 +593,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ variations }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -608,14 +634,25 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
 
-    const { section, key, ...rest } = parameters;
-    const additionalQueryParams = {
-      section: section || 'Products',
-      key,
-    };
+    const { section, variations } = parameters;
+    const queryParams = {};
+
+    // Validate variations are provided
+    if (!variations || !Array.isArray(variations)) {
+      return Promise.reject(new Error('variations is a required parameter of type array'));
+    }
+
+    // Validate section is provided
+    if (!section || !typeof section === 'string') {
+      return Promise.reject(new Error('section is a required parameter of type string'));
+    }
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl('variations', this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl('variations', this.options, queryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -625,7 +662,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'DELETE',
-      body: JSON.stringify(rest),
+      body: JSON.stringify({ variations }),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -645,11 +682,11 @@ class Catalog {
    *
    * @function retrieveVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {string[]} parameters.ids - Id(s) of variations to return. Maximum number of ids to request is 1000.
-   * @param {string} parameters.itemId - Item Id of item to return it's variations.
    * @param {string} parameters.section - The index section you'd like to retrieve results from.
-   * @param {number} parameters.numResultsPerPage - The number of variations to return. Defaults to 100. Maximum value 100.
-   * @param {number} parameters.page -The page of results to return. Defaults to 1.
+   * @param {string[]} [parameters.ids] - Id(s) of variations to return. Maximum number of ids to request is 1000.
+   * @param {string} [parameters.itemId] - Item Id of item to return it's variations.
+   * @param {number} [parameters.numResultsPerPage=100] - The number of variations to return. Defaults to 100. Maximum value 100.
+   * @param {number} [parameters.page=1] -The page of results to return. Defaults to 1.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -675,14 +712,28 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     const { ids, itemId, section, numResultsPerPage, page } = parameters;
-    queryParams = {
-      section,
-      ...(numResultsPerPage && { numResultsPerPage }),
-      ...(page && { page }),
-      ...(ids && { id: ids }),
-      ...(itemId && { item_id: itemId }),
 
-    };
+    queryParams = {};
+
+    if (!section && typeof (section) === 'string') {
+      return Promise.reject(new Error('section is a required parameter of type string'));
+    }
+
+    if (ids) {
+      queryParams.id = ids;
+    }
+
+    if (itemId) {
+      queryParams.item_id = itemId;
+    }
+
+    if (page) {
+      queryParams.page = page;
+    }
+
+    if (numResultsPerPage) {
+      queryParams.num_results_per_page = numResultsPerPage;
+    }
 
     try {
       requestUrl = createCatalogUrl('variations', this.options, queryParams, 'v2');
