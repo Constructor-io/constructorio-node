@@ -447,10 +447,10 @@ class Catalog {
    *
    * @function createOrReplaceVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
-   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} [parameters.section] - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -530,10 +530,10 @@ class Catalog {
    *
    * @function updateVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
-   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations. Defaults to False.
-   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails.
-   * @param {string} [parameters.section] - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -613,8 +613,9 @@ class Catalog {
    *
    * @function deleteVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource https://docs.constructor.io/rest_api/items/variations/#variation-schema
-   * @param {string} parameters.section - Your autosuggest and search results can have multiple sections like "Products" and "Search Suggestions". This indicates which section this variation is for
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -633,18 +634,12 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-
     const { section, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
     if (!variations || !Array.isArray(variations)) {
       return Promise.reject(new Error('variations is a required parameter of type array'));
-    }
-
-    // Validate section is provided
-    if (!section || !typeof section === 'string') {
-      return Promise.reject(new Error('section is a required parameter of type string'));
     }
 
     if (section) {
@@ -682,11 +677,11 @@ class Catalog {
    *
    * @function retrieveVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {string} parameters.section - The index section you'd like to retrieve results from.
-   * @param {string[]} [parameters.ids] - Id(s) of variations to return. Maximum number of ids to request is 1000.
-   * @param {string} [parameters.itemId] - Item Id of item to return it's variations.
-   * @param {number} [parameters.numResultsPerPage=100] - The number of variations to return. Defaults to 100. Maximum value 100.
-   * @param {number} [parameters.page=1] -The page of results to return. Defaults to 1.
+   * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
+   * @param {string[]} [parameters.ids] - Id(s) of variations to return (1,000 maximum)
+   * @param {string} [parameters.itemId] - Parent item id to return descendant variations of
+   * @param {number} [parameters.numResultsPerPage=100] - The number of items to return
+   * @param {number} [parameters.page=1] - The page of results to return
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}

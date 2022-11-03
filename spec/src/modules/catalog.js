@@ -622,13 +622,13 @@ describe('ConstructorIO - Catalog', () => {
 
   describe('Variations', () => {
     const item = createMockItem();
+
     describe('createOrReplaceVariations', () => {
       const variations = [
         createMockVariation(item.id),
         createMockVariation(item.id),
         createMockVariation(item.id),
       ];
-
       const optionalParameters = {
         section: 'Products',
         force: true,
@@ -734,9 +734,7 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('updateVariations', () => {
-      const variations = [
-        createMockVariation(item.id),
-      ];
+      const variations = [createMockVariation(item.id)];
       const updatedVariations = [{ ...variations[0], name: 'Updated Variation Name' }];
       const optionalParameters = {
         section: 'Products',
@@ -842,6 +840,92 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.updateVariations({ variations: updatedVariations })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    });
+
+    describe('deleteVariations', () => {
+      const variations = [
+        createMockVariation(item.id),
+        createMockVariation(item.id),
+        createMockVariation(item.id),
+      ];
+      const variationsDoNotExist = [
+        createMockVariation(item.id),
+        createMockVariation(item.id),
+        createMockVariation(item.id),
+      ];
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then(done);
+      });
+
+      it('Should resolve when removing multiple variations', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        variations.push(...variationsToCleanup);
+        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => {
+          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
+        });
+      });
+
+      it('Should return error when removing variations that do not exist', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteVariations({ variations: variationsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing variations with an invalid API key', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiKey = 'abc123';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when removing variations with an invalid API token', () => {
+        const invalidOptions = cloneDeep(validOptions);
+
+        invalidOptions.apiToken = 'foo987';
+
+        const { catalog } = new ConstructorIO({
+          ...invalidOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        return expect(catalog.deleteVariations({ variations, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
 
@@ -979,113 +1063,6 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.retrieveVariations({ section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-    });
-
-    describe('deleteVariations', () => {
-      const variations = [
-        createMockVariation(item.id),
-        createMockVariation(item.id),
-        createMockVariation(item.id),
-      ];
-      const variationsDoNotExist = [
-        createMockVariation(item.id),
-        createMockVariation(item.id),
-        createMockVariation(item.id),
-      ];
-
-      before((done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then(done);
-      });
-
-      it('Should resolve when removing multiple variations', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        variations.push(...variationsToCleanup);
-        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => {
-          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
-        });
-      });
-
-      it('Should return error when not providing section', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        variations.push(...variationsToCleanup);
-        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })) }).then(() => {
-          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
-        });
-      });
-
-      it('Should return error when section do not exist', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteVariations({ variations: variationsDoNotExist })).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing variations that do not exist', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteVariations({ variations: variationsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing variations with an invalid API key', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiKey = 'abc123';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should return error when removing variations with an invalid API token', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
-        invalidOptions.apiToken = 'foo987';
-
-        const { catalog } = new ConstructorIO({
-          ...invalidOptions,
-          fetch: fetchSpy,
-        });
-
-        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejected;
-      });
-
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
-
-        return expect(catalog.deleteVariations({ variations, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
-        });
-
-        return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
   });
