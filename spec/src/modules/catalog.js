@@ -854,6 +854,10 @@ describe('ConstructorIO - Catalog', () => {
         createMockVariation(item.id),
         createMockVariation(item.id),
       ];
+      const optionalParameters = {
+        force: true,
+        notificationEmail: 'test@constructor.io',
+      };
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -872,15 +876,35 @@ describe('ConstructorIO - Catalog', () => {
 
         variations.push(...variationsToCleanup);
         catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
+        });
+      });
+
+      it('Should resolve when removing multiple variations and supplying optional parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        variations.push(...variationsToCleanup);
+        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products', ...optionalParameters }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          expect(requestedUrlParams).to.have.property('key');
           catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
         });
       });
 
       it('Should return error when removing variations that do not exist', () => {
-        const invalidOptions = cloneDeep(validOptions);
-
         const { catalog } = new ConstructorIO({
-          ...invalidOptions,
+          ...validOptions,
           fetch: fetchSpy,
         });
 
