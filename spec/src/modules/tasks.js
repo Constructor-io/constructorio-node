@@ -120,16 +120,18 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
         ...validOptions,
         fetch: fetchSpy,
       });
+      const startDate = '2022-01-01';
+      const endDate = '2030-12-30';
 
-      tasks.getAllTasks({ page: 2, num_results_per_page: 50, startDate: '2022-09-03', endDate: '2022-09-30' }).then((res) => {
+      tasks.getAllTasks({ page: 1, num_results_per_page: 50, startDate, endDate }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
         expect(res.total_count).to.be.gte(1);
         expect(res.tasks.length).to.be.lte(50);
         expect(requestedUrlParams).to.have.property('key');
-        expect(requestedUrlParams).to.have.property('start_date').to.equal('2022-09-03');
-        expect(requestedUrlParams).to.have.property('end_date').to.equal('2022-09-30');
+        expect(requestedUrlParams).to.have.property('start_date').to.equal(startDate);
+        expect(requestedUrlParams).to.have.property('end_date').to.equal(endDate);
         done();
       });
     });
