@@ -11,6 +11,8 @@ A Node.js client for [Constructor.io](http://constructor.io/). [Constructor.io](
 ## Documentation
 Full API documentation is available on [Github Pages](https://constructor-io.github.io/constructorio-node)
 
+Updating from v3 to v4? Be sure to read the [upgrade guide](https://github.com/Constructor-io/constructorio-node/wiki/Migration-Guide---V3-to-V4) for an explanation of changes made to the Catalog module
+
 ## 1. Review the Requirements
 
 Requesting results from your Node.js back-end can be useful in order to control result rendering logic on your server, or augment/hydrate results with data from another system. However, a back-end integration has additional requirements compared to a front-end integration. Please review the [Additional Information For Backend Integrations](https://github.com/Constructor-io/constructorio-node/wiki/Additional-Information-For-Backend-Integrations) article within the wiki for more detail.

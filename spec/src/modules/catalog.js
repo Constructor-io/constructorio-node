@@ -131,7 +131,7 @@ function createStreamFromBuffer(buffer) {
   return stream;
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -662,7 +662,6 @@ describe('ConstructorIO - Catalog', () => {
         catalog.createOrReplaceVariations({ variations, ...optionalParameters }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
@@ -854,10 +853,6 @@ describe('ConstructorIO - Catalog', () => {
         createMockVariation(item.id),
         createMockVariation(item.id),
       ];
-      const optionalParameters = {
-        force: true,
-        notificationEmail: 'test@constructor.io',
-      };
 
       before((done) => {
         const { catalog } = new ConstructorIO({
@@ -880,6 +875,7 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+
           catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
         });
       });
@@ -889,15 +885,18 @@ describe('ConstructorIO - Catalog', () => {
           ...validOptions,
           fetch: fetchSpy,
         });
+        const optionalParameters = {
+          force: true,
+          notificationEmail: 'test@constructor.io',
+        };
 
         variations.push(...variationsToCleanup);
         catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products', ...optionalParameters }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
-          expect(requestedUrlParams).to.have.property('key');
+
           catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
         });
       });
@@ -909,6 +908,24 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.deleteVariations({ variations: variationsDoNotExist, section: 'Products' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when no variations are provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteVariations()).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid variations are provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteVariations({ variations: 'foo' })).to.eventually.be.rejected;
       });
 
       it('Should return error when removing variations with an invalid API key', () => {
@@ -966,13 +983,13 @@ describe('ConstructorIO - Catalog', () => {
         variationsToCleanup.push(...variations);
       });
 
-      it('Should return a response when getting variations by section', (done) => {
+      it('Should return a response when getting variations', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.retrieveVariations({ section: 'Products' }).then((res) => {
+        catalog.retrieveVariations().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('variations').to.be.an('array');
@@ -989,44 +1006,44 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.retrieveVariations({ ids: variations.map(((variation) => variation.id)) }).then((res) => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           expect(res).to.have.property('variations').to.be.an('array');
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
           done();
         });
       });
 
-      it('Should return a response when getting variations by itemsIds', (done) => {
+      it('Should return a response when getting variations by item id', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.retrieveVariations({ itemsIds: [item.id] }).then((res) => {
+        catalog.retrieveVariations({ itemId: item.id }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
           expect(res).to.have.property('variations').to.be.an('array');
-          expect(requestedUrlParams).to.have.property('id').to.be.an('array').to.deep.equal([item.id]);
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('item_id').to.be.an('string').to.equal(item.id);
           done();
         });
       });
 
-      it('Should return a response when getting variations by section with pagination parameters', (done) => {
+      it('Should return a response when getting variations by section with optional parameters', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
+        const optionalParameters = {
+          section: 'Products',
+          numResultsPerPage: 10,
+          page: 1,
+        };
 
-        catalog.retrieveVariations({ section: 'Products', numResultsPerPage: 10, page: 1 }).then((res) => {
+        catalog.retrieveVariations(optionalParameters).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('variations').to.be.an('array');
-          expect(res).to.have.property('num_results_per_page').to.equal(10);
-          expect(res).to.have.property('page').to.equal(1);
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+          expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal(optionalParameters.numResultsPerPage.toString());
+          expect(requestedUrlParams).to.have.property('page').to.equal(optionalParameters.page.toString());
           done();
         });
       });
@@ -1037,14 +1054,21 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.retrieveVariations({ ids: [uuidv4()], section: 'Products' }).then((res) => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
+        catalog.retrieveVariations({ ids: [uuidv4()] }).then((res) => {
           expect(res).to.have.property('variations').to.be.an('array').that.is.empty;
-          expect(fetchSpy).to.have.been.called;
-          expect(requestedUrlParams).to.have.property('key');
           done();
+        });
+      });
 
+      it('Should return variations of length 0 when getting variations by item id that does not exist', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.retrieveVariations({ itemId: 'abc' }).then((res) => {
+          expect(res).to.have.property('variations').to.be.an('array').that.is.empty;
+          done();
         });
       });
 

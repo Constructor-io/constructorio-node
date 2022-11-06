@@ -614,6 +614,7 @@ class Catalog {
    * @function deleteVariations
    * @param {object} parameters - Additional parameters for variation details
    * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -634,7 +635,7 @@ class Catalog {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, variations } = parameters;
+    const { section, force, notificationEmail, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -644,6 +645,14 @@ class Catalog {
 
     if (section) {
       queryParams.section = section;
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
     }
 
     try {
@@ -710,16 +719,16 @@ class Catalog {
 
     queryParams = {};
 
-    if (!section && typeof (section) === 'string') {
-      return Promise.reject(new Error('section is a required parameter of type string'));
-    }
-
     if (ids) {
       queryParams.id = ids;
     }
 
     if (itemId) {
       queryParams.item_id = itemId;
+    }
+
+    if (section) {
+      queryParams.section = section;
     }
 
     if (page) {
