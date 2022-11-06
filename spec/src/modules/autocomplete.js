@@ -204,7 +204,6 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.filters).to.eql(filters);
-        expect(res.sections.Products.length).to.be.at.least(1);
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('group_id').to.equal(Object.values(filters)[0][0]);
         expect(requestedUrlParams.filters).to.have.property('Brand').to.equal(Object.values(filters)[1][0]);
