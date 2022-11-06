@@ -131,7 +131,7 @@ function createStreamFromBuffer(buffer) {
   return stream;
 }
 
-describe.only('ConstructorIO - Catalog', () => {
+describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
