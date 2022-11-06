@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -24,8 +23,6 @@ describe('ConstructorIO - Tracker', () => {
     clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
     sessionId: 1,
   };
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     fetchSpy = sinon.spy(nodeFetch);
@@ -361,6 +358,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackSessionStart(userParameters)).to.equal(true);
     });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({ ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const nonBreakingSpaces = '   ';
+      const userId = `user-id ${nonBreakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({ ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackInputFocus', () => {
@@ -684,6 +732,57 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackInputFocus(userParameters)).to.equal(true);
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({ ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({ ...userParameters, userId })).to.equal(true);
     });
   });
 
@@ -1044,6 +1143,419 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackAutocompleteSelect(term, requiredParameters, userParameters)).to.equal(true);
     });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const termSpecialCharacters = `apple ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include(encodeURIComponent(termSpecialCharacters));
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(termSpecialCharacters, requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+  });
+
+  describe('trackItemDetailLoad', () => {
+    const requiredParameters = {
+      item_id: 'test1',
+      item_name: 'test name',
+    };
+    const optionalParameters = {
+      variation_id: 'test1-small',
+    };
+    const originReferrer = 'https://localhost';
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        segments,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and userId are provided', (done) => {
+      const userId = 'user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        userId,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and testCells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        testCells,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('variation_id').to.deep.equal(optionalParameters.variation_id);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(Object.assign(requiredParameters, optionalParameters), userParameters))
+        .to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackItemDetailLoad([])).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackItemDetailLoad()).to.be.an('error');
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        originReferrer,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should be rejected when network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        networkParameters: {
+          timeout: 20,
+        },
+      });
+
+      tracker.on('error', () => { done(); });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        userIp,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when term, required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        userAgent,
+        ...userParameters,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with accept language', (done) => {
+      const acceptLanguage = 'en-US';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        ...userParameters,
+        acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with referer', (done) => {
+      const referer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        ...userParameters,
+        referer,
+      })).to.equal(true);
+    });
   });
 
   describe('trackSearchSubmit', () => {
@@ -1395,6 +1907,82 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackSearchSubmit(term, requiredParameters, userParameters, { timeout: 10 })).to.equal(true);
+    });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const termSpecialCharacters = `apple ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include(encodeURIComponent(termSpecialCharacters));
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(termSpecialCharacters, requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
     });
   });
 
@@ -1891,6 +2479,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackSearchResultsLoaded(term, parameters, userParameters)).to.equal(true);
     });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackSearchResultClick', () => {
@@ -2298,6 +2937,82 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackSearchResultClick(term, requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const termSpecialCharacters = `apple ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include(encodeURIComponent(termSpecialCharacters));
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(termSpecialCharacters, requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
     });
   });
 
@@ -2882,6 +3597,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackConversion(term, requiredParameters, userParameters)).to.equal(true);
     });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(term, requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackPurchase', () => {
@@ -3295,6 +4061,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackPurchase(requiredParameters, userParameters)).to.equal(true);
     });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackRecommendationView', () => {
@@ -3667,6 +4484,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackRecommendationView(requiredParameters, userParameters)).to.equal(true);
     });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackRecommendationClick', () => {
@@ -3714,6 +4582,42 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackRecommendationClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when only item_name is provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      const parametersWithItemName = {
+        pod_id: 'test_pod_id',
+        strategy_id: 'strategy-id',
+        item_name: 'product',
+      };
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('pod_id').to.equal(parametersWithItemName.pod_id);
+        expect(requestParams).to.have.property('strategy_id').to.equal(parametersWithItemName.strategy_id);
+        expect(requestParams).to.have.property('item_name').to.equal(parametersWithItemName.item_name);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(parametersWithItemName, userParameters)).to.equal(true);
     });
 
     it('Should respond with a valid response and section should be defaulted when required parameters are provided', (done) => {
@@ -4043,6 +4947,57 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackRecommendationClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
     });
   });
 
@@ -4469,6 +5424,57 @@ describe('ConstructorIO - Tracker', () => {
         userParameters,
       )).to.equal(true);
     });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackBrowseResultClick', () => {
@@ -4882,6 +5888,57 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackBrowseResultClick(requiredParameters, userParameters)).to.equal(true);
     });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
   });
 
   describe('trackGenericResultClick', () => {
@@ -5279,6 +6336,57 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('error', () => { done(); });
 
       expect(tracker.trackGenericResultClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
     });
   });
 

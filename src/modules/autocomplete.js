@@ -47,7 +47,7 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, resultsPerSection, filters, hiddenFields } = parameters;
+    const { numResults, resultsPerSection, filters, hiddenFields, variationsMap } = parameters;
 
     // Pull results number from parameters
     if (numResults) {
@@ -68,7 +68,16 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
 
     // Pull hidden fields from parameters
     if (hiddenFields) {
-      queryParams.hidden_fields = hiddenFields;
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_fields = hiddenFields;
+      } else {
+        queryParams.fmt_options = { hidden_fields: hiddenFields };
+      }
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
@@ -76,8 +85,9 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
+  const cleanedQuery = query.replace(/^\//, '|'); // For compatibility with backend API
 
-  return `${serviceUrl}/autocomplete/${encodeURIComponent(query)}?${queryString}`;
+  return `${serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(cleanedQuery))}?${queryString}`;
 }
 
 /**
@@ -102,12 +112,13 @@ class Autocomplete {
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {object} [parameters.resultsPerSection] - Number of results to return (value) per section (key)
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -123,6 +134,10 @@ class Autocomplete {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         testName: 'cellName',
+   *    },
    * });
    */
   getAutocompleteResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {

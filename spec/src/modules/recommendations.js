@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -25,8 +24,6 @@ const validOptions = {
 describe('ConstructorIO - Recommendations', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = 'cio-mocha';
@@ -319,6 +316,86 @@ describe('ConstructorIO - Recommendations', () => {
         res.response.results.forEach((item) => {
           expect(item).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
         });
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { recommendations } = new ConstructorIO({ apiKey: testApiKey });
+
+      recommendations.getRecommendations(podId, { itemIds, variationsMap }).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        res.response.results.forEach((item) => {
+          expect(item).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
+        });
+        done();
+      });
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const term = `apple ${specialCharacters}`;
+      const { recommendations } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(queryRecommendationsPodId, { term }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.deep.equal(term);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response).to.have.property('pod');
+        expect(res.response.pod).to.have.property('id').to.equal(queryRecommendationsPodId);
+        expect(res.response.pod).to.have.property('display_name');
+        expect(requestedUrlParams).to.have.property('term').to.deep.equal(term);
+        done();
+      });
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const term = `apple ${breakingSpaces} apple`;
+      const termExpected = 'apple     apple';
+      const { recommendations } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(queryRecommendationsPodId, { term }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.deep.equal(termExpected);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response).to.have.property('pod');
+        expect(res.response.pod).to.have.property('id').to.equal(queryRecommendationsPodId);
+        expect(res.response.pod).to.have.property('display_name');
+        expect(requestedUrlParams).to.have.property('term').to.deep.equal(termExpected);
         done();
       });
     });

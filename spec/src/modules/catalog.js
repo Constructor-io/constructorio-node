@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved, no-restricted-syntax, max-nested-callbacks */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -104,8 +103,6 @@ function createStreamFromBuffer(buffer) {
 describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
@@ -648,6 +645,22 @@ describe('ConstructorIO - Catalog', () => {
         mockItem.id = uuidv4();
 
         catalog.addItem(mockItem).then(done);
+      });
+
+      it('Should return a response when no item id is passed', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItem({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('total_count').to.be.a('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
       });
 
       it('Should return a response when getting item by id', (done) => {

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -21,8 +20,6 @@ const validOptions = { apiKey: testApiKey };
 describe('ConstructorIO - Search', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
@@ -143,6 +140,27 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.page).to.equal(page);
         expect(requestedUrlParams).to.have.property('page').to.equal(page.toString());
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and offset', (done) => {
+      const offset = 1;
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+      search.getSearchResults(query, {
+        section,
+        offset,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.offset).to.equal(offset);
+        expect(requestedUrlParams).to.have.property('offset').to.equal(offset.toString());
         done();
       });
     });
@@ -333,20 +351,43 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should return a response with a valid query, section and hiddenFields', (done) => {
-      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const hiddenFields = ['testField', 'testField2'];
       const { search } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      search.getSearchResults(query, { section, hiddenFields }, {}).then((res) => {
+      search.getSearchResults('item1', { section, hiddenFields }, {}).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const resultWithTestField = res.response.results.find((result) => result.data.testField);
 
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.hidden_fields).to.eql(hiddenFields);
-        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(resultWithTestField.data.testField).to.eql('hiddenFieldValue');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and hiddenFacets', (done) => {
+      const hiddenFacets = ['Brand', 'testFacet'];
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults('item1', { section, hiddenFacets }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const facetWithNameBrand = res.response.facets.find((facet) => facet.name === hiddenFacets[0]);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.hidden_facets).to.eql(hiddenFacets);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_facets').to.eql(hiddenFacets);
+        expect(facetWithNameBrand.name).to.eql(hiddenFacets[0]);
         done();
       });
     });
@@ -363,6 +404,100 @@ describe('ConstructorIO - Search', () => {
         expect(res.response.redirect).to.have.property('matched_terms').includes(redirectQuery);
         expect(res.response.redirect).to.have.property('data');
         expect(res.response.redirect.data).to.have.property('url');
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults('Jacket', { variationsMap }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        expect(res.response.results[0]).to.have.property('variations_map');
+        expect(res.response.results[0].variations_map[0]).to.have.property('size');
+        expect(res.response.results[0].variations_map[0]).to.have.property('variation');
+        done();
+      });
+    });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const querySpecialCharacters = `apple ${specialCharacters}`;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(querySpecialCharacters, {}, {}).then((res) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.equal(querySpecialCharacters);
+        expect(requestUrl).to.include(encodeURIComponent(querySpecialCharacters));
+        done();
+      });
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const sortBy = `relevance ${specialCharacters}`;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { sortBy }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.sort_by).to.equal(sortBy);
+        expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortBy);
+        done();
+      });
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const sortBy = `relevance ${breakingSpaces} relevance`;
+      const sortByExpected = 'relevance     relevance';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { sortBy }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.sort_by).to.equal(sortByExpected);
+        expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortByExpected);
         done();
       });
     });
@@ -384,6 +519,27 @@ describe('ConstructorIO - Search', () => {
       const searchParams = {
         section,
         page: 'abc',
+      };
+
+      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid offset parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 'abc',
+      };
+
+      return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when offset and page parameters are provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 1,
+        page: 1,
       };
 
       return expect(search.getSearchResults(query, searchParams)).to.eventually.be.rejected;

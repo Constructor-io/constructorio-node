@@ -192,7 +192,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -205,6 +205,7 @@ class Tracker {
    * constructorio.tracker.trackSessionStart({
    *  sessionId: 1,
    *  clientId: '6c73138f-c27b-49f0-872d-63b00ed0e395',
+   *  testCells: { testName: 'cellName' },
    * });
    */
   trackSessionStart(userParameters, networkParameters = {}) {
@@ -231,7 +232,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -245,6 +246,7 @@ class Tracker {
    * constructorio.tracker.trackInputFocus({
    *     sessionId: 1,
    *     clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *     testCells: { testName: 'cellName' },
    * });
    */
   trackInputFocus(userParameters, networkParameters = {}) {
@@ -263,6 +265,77 @@ class Tracker {
   }
 
   /**
+   * Send item detail load event to API
+   *
+   * @function trackItemDetailLoad
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.item_name - Product item name
+   * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} [parameters.variation_id] - Product item variation unique identifier
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User loaded an item detail page
+   * @example
+   * constructorio.tracker.trackItemDetailLoad(
+   *     {
+   *         item_name: 'Red T-Shirt',
+   *         item_id: 'KMH876',
+   *     },
+   * );
+   */
+  trackItemDetailLoad(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
+      const url = `${this.options.serviceUrl}/behavior?`;
+      const queryParams = { action: 'item_detail_load' };
+      const { item_name, name, item_id, customer_id, variation_id } = parameters;
+
+      // Ensure support for both item_name and name as parameters
+      if (item_name) {
+        queryParams.name = item_name;
+      } else if (name) {
+        queryParams.name = name;
+      }
+
+      // Ensure support for both item_id and customer_id as parameters
+      if (item_id) {
+        queryParams.customer_id = item_id;
+      } else if (customer_id) {
+        queryParams.customer_id = customer_id;
+      }
+
+      if (variation_id) {
+        queryParams.variation_id = variation_id;
+      }
+
+      const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+
+      send.call(
+        this,
+        requestUrl,
+        userParameters,
+        networkParameters,
+      );
+
+      return true;
+    }
+
+    return new Error('parameters are required of type object');
+  }
+
+  /**
    * Send autocomplete select event to API
    *
    * @function trackAutocompleteSelect
@@ -278,7 +351,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -291,17 +364,20 @@ class Tracker {
    * @example
    * constructorio.tracker.trackAutocompleteSelect(
    *     'T-Shirt',
-   *      {
-   *          original_query: 'Shirt',
-   *          section: 'Products',
-   *          tr: 'click',
-   *          group_id: '88JU230',
-   *          display_name: 'apparel',
-   *      },
-   *      {
-   *          sessionId: 1,
-   *          clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *      },
+   *     {
+   *         original_query: 'Shirt',
+   *         section: 'Products',
+   *         tr: 'click',
+   *         group_id: '88JU230',
+   *         display_name: 'apparel',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
    * );
    */
   trackAutocompleteSelect(term, parameters, userParameters, networkParameters = {}) {
@@ -309,7 +385,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.ourEncodeURIComponent(term)}/select?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/select?`;
         const queryParams = {};
         const {
           original_query,
@@ -371,7 +447,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -392,6 +468,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -400,7 +479,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.ourEncodeURIComponent(term)}/search?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/search?`;
         const queryParams = {};
         const { original_query, group_id, display_name } = parameters;
 
@@ -439,14 +518,14 @@ class Tracker {
    * @function trackSearchResultsLoaded
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {number} parameters.num_results - Number of search results in total
+   * @param {number} parameters.num_results - Total number of results
    * @param {string[]} [parameters.item_ids] - List of product item unique identifiers in search results listing
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -466,6 +545,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -527,7 +609,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -548,6 +630,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -556,7 +641,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.ourEncodeURIComponent(term)}/click_through?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/click_through?`;
         const queryParams = {};
         const { item_name, name, item_id, customer_id, variation_id, result_id } = parameters;
 
@@ -620,7 +705,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -646,13 +731,16 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
   trackConversion(term, parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-      const searchTerm = helpers.ourEncodeURIComponent(term) || 'TERM_UNKNOWN';
+      const searchTerm = term || 'TERM_UNKNOWN';
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/conversion?`;
       const queryParams = {};
       const bodyParams = {};
@@ -745,7 +833,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -766,6 +854,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -822,7 +913,7 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} parameters.pod_id - Pod identifier
    * @param {number} parameters.num_results_viewed - Number of results viewed
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
@@ -831,7 +922,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -854,6 +945,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -929,9 +1023,11 @@ class Tracker {
    * @param {string} parameters.pod_id - Pod identifier
    * @param {string} parameters.strategy_id - Strategy identifier
    * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} parameters.item_name - Product item name
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
    * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {number} [parameters.result_position_on_page] - Position of result on page
    * @param {number} [parameters.num_results_per_page] - Number of results on page
@@ -940,7 +1036,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -966,6 +1062,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -985,6 +1084,7 @@ class Tracker {
         pod_id,
         strategy_id,
         item_id,
+        item_name,
       } = parameters;
 
       if (variation_id) {
@@ -1029,6 +1129,10 @@ class Tracker {
         bodyParams.item_id = item_id;
       }
 
+      if (item_name) {
+        bodyParams.item_name = item_name;
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -1057,7 +1161,7 @@ class Tracker {
    * @param {string} parameters.filter_name - Filter name
    * @param {string} parameters.filter_value - Filter value
    * @param {string} [parameters.section="Products"] - Index section
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
    * @param {object} [parameters.selected_filters] - Selected filters
@@ -1069,7 +1173,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1096,6 +1200,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -1194,7 +1301,7 @@ class Tracker {
    * @param {string} [parameters.section="Products"] - Index section
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
-   * @param {number} [parameters.result_count] - Number of results displayed
+   * @param {number} [parameters.result_count] - Total number of results
    * @param {number} [parameters.result_page] - Page number of results
    * @param {number} [parameters.result_position_on_page] - Position of clicked item
    * @param {number} [parameters.num_results_per_page] - Number of results shown
@@ -1204,7 +1311,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1231,6 +1338,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */
@@ -1332,7 +1442,7 @@ class Tracker {
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} userParameters.userId - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
@@ -1352,6 +1462,9 @@ class Tracker {
    *     {
    *         sessionId: 1,
    *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
    *     },
    * );
    */

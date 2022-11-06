@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -5,6 +6,7 @@ const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied query (term) and parameters
+// eslint-disable-next-line complexity
 function createSearchUrl(query, parameters, userParameters, options) {
   const {
     apiKey,
@@ -49,6 +51,7 @@ function createSearchUrl(query, parameters, userParameters, options) {
   if (parameters) {
     const {
       page,
+      offset,
       resultsPerPage,
       filters,
       sortBy,
@@ -56,11 +59,18 @@ function createSearchUrl(query, parameters, userParameters, options) {
       section,
       fmtOptions,
       hiddenFields,
+      hiddenFacets,
+      variationsMap,
     } = parameters;
 
     // Pull page from parameters
     if (!helpers.isNil(page)) {
       queryParams.page = page;
+    }
+
+    // Pull offset from parameters
+    if (!helpers.isNil(offset)) {
+      queryParams.offset = offset;
     }
 
     // Pull results per page from parameters
@@ -95,7 +105,25 @@ function createSearchUrl(query, parameters, userParameters, options) {
 
     // Pull hidden fields from parameters
     if (hiddenFields) {
-      queryParams.hidden_fields = hiddenFields;
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_fields = hiddenFields;
+      } else {
+        queryParams.fmt_options = { hidden_fields: hiddenFields };
+      }
+    }
+
+    // Pull hidden facets from parameters
+    if (hiddenFacets) {
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_facets = hiddenFacets;
+      } else {
+        queryParams.fmt_options = { hidden_facets: hiddenFacets };
+      }
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
@@ -104,7 +132,7 @@ function createSearchUrl(query, parameters, userParameters, options) {
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/search/${encodeURIComponent(query)}?${queryString}`;
+  return `${serviceUrl}/search/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(query))}?${queryString}`;
 }
 
 /**
@@ -125,7 +153,8 @@ class Search {
    * @function getSearchResults
    * @param {string} query - Term to use to perform a search
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine search
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
@@ -133,12 +162,14 @@ class Search {
    * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -151,6 +182,10 @@ class Search {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         testName: 'cellName',
+   *    },
    * });
    */
 

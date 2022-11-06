@@ -39,7 +39,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, itemIds, section, term, filters } = parameters;
+    const { numResults, itemIds, section, term, filters, variationsMap } = parameters;
 
     // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
@@ -65,13 +65,18 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     if (filters) {
       queryParams.filters = filters;
     }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
+    }
   }
 
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/recommendations/v1/pods/${podId}?${queryString}`;
+  return `${serviceUrl}/recommendations/v1/pods/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(podId))}?${queryString}`;
 }
 
 /**
@@ -96,13 +101,14 @@ class Recommendations {
    * @param {number} [parameters.numResults] - The number of results to return
    * @param {string} [parameters.section] - The section to return results from
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)
-   * @param {object} [parameters.filters] - Filters used to refine results (strategy specific)
+   * @param {object} [parameters.filters] - Key / value mapping of filters used to refine results
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -115,6 +121,10 @@ class Recommendations {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         testName: 'cellName',
+   *    },
    * });
    */
   getRecommendations(podId, parameters = {}, userParameters = {}, networkParameters = {}) {

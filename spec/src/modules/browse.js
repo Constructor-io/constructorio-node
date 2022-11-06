@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -24,8 +23,6 @@ const validOptions = { apiKey: testApiKey };
 describe('ConstructorIO - Browse', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
@@ -145,6 +142,25 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.page).to.equal(page);
         expect(requestedUrlParams).to.have.property('page').to.equal(page.toString());
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue and offset', (done) => {
+      const offset = 1;
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { offset }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.offset).to.equal(offset);
+        expect(requestedUrlParams).to.have.property('offset').to.equal(offset.toString());
         done();
       });
     });
@@ -357,20 +373,179 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should return a response with a valid filterName, filterValue and hiddenFields', (done) => {
-      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const hiddenFields = ['testField', 'testField2'];
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
-      browse.getBrowseResults(filterName, filterValue, { hiddenFields }).then((res) => {
+      browse.getBrowseResults('Color', 'yellow', { hiddenFields }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.hidden_fields).to.eql(hiddenFields);
-        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue and hiddenFacets', (done) => {
+      const hiddenFacets = ['Brand', 'testFacet'];
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('Brand', 'XYZ', { hiddenFacets }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.hidden_facets).to.eql(hiddenFacets);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_facets').to.eql(hiddenFacets);
+        expect(res.response.facets[0]).to.have.property('name').to.eql('Brand');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue, and section', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { section: 'Search Suggestions' }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property('browse_filter_name');
+        expect(res.request).to.have.property('browse_filter_value');
+        expect(res.request.browse_filter_name).to.equal(filterName);
+        expect(res.request.browse_filter_value).to.equal(filterValue);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('_dt');
+        expect(requestedUrlParams).to.have.property('section').to.equal('Search Suggestions');
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('Brand', 'XYZ', { variationsMap }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property('browse_filter_name');
+        expect(res.request).to.have.property('browse_filter_value');
+        expect(res.request.browse_filter_name).to.equal('Brand');
+        expect(res.request.browse_filter_value).to.equal('XYZ');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('_dt');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        expect(res.response.results[0]).to.have.property('variations_map');
+        expect(res.response.results[0].variations_map[0]).to.have.property('size');
+        expect(res.response.results[0].variations_map[0]).to.have.property('variation');
+        done();
+      });
+    });
+
+    it('Should properly encode path parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const filterNameSpecialCharacters = `name ${specialCharacters}`;
+      const filterValueSpecialCharacters = `value ${specialCharacters}`;
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(
+        filterNameSpecialCharacters,
+        filterValueSpecialCharacters,
+        {},
+        {},
+      ).then((res) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.browse_filter_name).to.equal(filterNameSpecialCharacters);
+        expect(res.request.browse_filter_value).to.equal(filterValueSpecialCharacters);
+        expect(requestUrl).to.include(encodeURIComponent(filterNameSpecialCharacters));
+        expect(requestUrl).to.include(encodeURIComponent(filterValueSpecialCharacters));
+        done();
+      });
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const sortBy = `relevance ${specialCharacters}`;
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('Brand', 'XYZ', { sortBy }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.sort_by).to.equal(sortBy);
+        expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortBy);
+        done();
+      });
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const sortBy = `relevance ${breakingSpaces} relevance`;
+      const sortByExpected = 'relevance     relevance';
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('Brand', 'XYZ', { sortBy }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.sort_by).to.equal(sortByExpected);
+        expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortByExpected);
         done();
       });
     });
@@ -404,6 +579,23 @@ describe('ConstructorIO - Browse', () => {
 
       return expect(browse.getBrowseResults(filterName, filterValue, {
         page: 'abc',
+      })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid offset parameter is provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(filterName, filterValue, {
+        offset: 'abc',
+      })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when offset and page parameters are provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseResults(filterName, filterValue, {
+        offset: 1,
+        page: 1,
       })).to.eventually.be.rejected;
     });
 
@@ -487,7 +679,7 @@ describe('ConstructorIO - Browse', () => {
   });
 
   describe('getBrowseResultsForItemIds', () => {
-    const ids = ['fc00a355-1e91-49a1-b6c6-c8c74c50259d', '1f32b500-f397-4faa-90e0-4c4625b3e3b5'];
+    const ids = ['10002', '10001'];
 
     it('Should return a response with valid ids', (done) => {
       const { browse } = new ConstructorIO({
@@ -702,7 +894,7 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should return a response with valid ids and hiddenFields', (done) => {
-      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const hiddenFields = ['testField', 'testField2'];
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -714,8 +906,91 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.hidden_fields).to.eql(hiddenFields);
-        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        done();
+      });
+    });
+
+    it('Should return a response with valid ids and hiddenFacets', (done) => {
+      const hiddenFacets = ['Brand', 'testFacet'];
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(ids, { hiddenFacets }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.hidden_facets).to.eql(hiddenFacets);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_facets').to.eql(hiddenFacets);
+        expect(res.response.facets.find((e) => e.name === 'Brand')).to.have.property('name').to.eql('Brand');
+        done();
+      });
+    });
+
+    it('Should return a response with valid ids and section', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(ids, { section: 'Search Suggestions' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('_dt');
+        expect(requestedUrlParams).to.have.property('section').to.equal('Search Suggestions');
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(['luistrenker-jacket-K245511299-cream'], { variationsMap }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('_dt');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        expect(res.response.results[0]).to.have.property('variations_map');
+        expect(res.response.results[0].variations_map[0]).to.have.property('size');
+        expect(res.response.results[0].variations_map[0]).to.have.property('variation');
         done();
       });
     });
@@ -911,6 +1186,27 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a section', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseGroups({ section: 'Search Suggestions' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('groups').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('section').to.equal('Search Suggestions');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid filters parameter is provided', () => {
       const { browse } = new ConstructorIO({ ...validOptions });
 
@@ -984,6 +1280,27 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a section', (done) => {
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacets({ section: 'Search Suggestions' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('facets').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('section').to.equal('Search Suggestions');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid apiKey is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
@@ -1003,6 +1320,110 @@ describe('ConstructorIO - Browse', () => {
       });
 
       return expect(browse.getBrowseFacets({}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+  });
+
+  describe('getBrowseFacetOptions', () => {
+    const facetName = 'Color';
+
+    it('Should return a response with a facet name without any parameters', (done) => {
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacetOptions(facetName).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('facets').to.be.an('array');
+        expect(res.response.facets[0]).to.have.property('name').to.equal(facetName);
+        expect(res.response.facets[0]).to.have.property('options').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        done();
+      });
+    });
+
+    it('Should return a response with valid fmtOptions and authorized token', (done) => {
+      const fmtOptions = { show_hidden_facets: true, show_protected_facets: true };
+      const apiToken = testApiToken;
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        apiToken,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacetOptions(facetName, { fmtOptions }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.show_protected_facets).to.equal(true);
+        expect(res.request.fmt_options.show_hidden_facets).to.equal(true);
+        expect(requestedUrlParams).to.have.property('fmt_options');
+        done();
+      });
+    });
+
+    it('Should return a response with a facet name with a section', (done) => {
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacetOptions(facetName, { section: 'Products' }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('facets').to.be.an('array');
+        expect(res.response.facets[0]).to.have.property('name').to.equal(facetName);
+        expect(res.response.facets[0]).to.have.property('options').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('section').to.equal('Products');
+        done();
+      });
+    });
+
+    it('Should be rejected when no facetName is provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseFacetOptions(null)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid facetName is provided', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseFacetOptions(['foo'])).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid apiKey is provided', () => {
+      const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+
+      return expect(browse.getBrowseFacetOptions(facetName)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when network request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO(validOptions);
+
+      return expect(browse.getBrowseFacetOptions(facetName, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+    });
+
+    it('Should be rejected when global network request timeout is provided and reached', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        networkParameters: { timeout: 20 },
+      });
+
+      return expect(browse.getBrowseFacetOptions(facetName, {}, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });

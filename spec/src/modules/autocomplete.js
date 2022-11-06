@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -22,8 +21,6 @@ describe('ConstructorIO - Autocomplete', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
-  jsdom({ url: 'http://localhost' });
-
   beforeEach(() => {
     global.CLIENT_VERSION = 'cio-mocha';
     fetchSpy = sinon.spy(nodeFetch);
@@ -36,7 +33,7 @@ describe('ConstructorIO - Autocomplete', () => {
   });
 
   describe('getAutocompleteResults', () => {
-    const query = 'item';
+    const query = 'item1';
 
     it('Should return a response with a valid query and client + session identifiers', (done) => {
       const clientSessionIdentifiers = {
@@ -292,7 +289,7 @@ describe('ConstructorIO - Autocomplete', () => {
     });
 
     it('Should return a response with a valid query and hiddenFields', (done) => {
-      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const hiddenFields = ['testField', 'hiddenField2'];
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -304,8 +301,102 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.hidden_fields).to.eql(hiddenFields);
-        expect(requestedUrlParams).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(res.sections.Products[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults('Jacket', { variationsMap }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        expect(res.sections.Products[0]).to.have.property('variations_map');
+        expect(res.sections.Products[0].variations_map[0]).to.have.property('size');
+        expect(res.sections.Products[0].variations_map[0]).to.have.property('variation');
+        done();
+      });
+    });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const querySpecialCharacters = `apple ${specialCharacters}`;
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(querySpecialCharacters, {}, {}).then((res) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.equal(querySpecialCharacters);
+        expect(requestUrl).to.include(encodeURIComponent(querySpecialCharacters));
+        done();
+      });
+    });
+
+    it('Should properly encode query parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const filters = { keywords: [`battery-powered ${specialCharacters}`] };
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, { filters }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.filters).to.deep.equal(filters);
+        expect(requestedUrlParams).to.have.property('filters');
+        expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
+        done();
+      });
+    });
+
+    it('Should return a response with a / query', (done) => {
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults('/').then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.equal('/');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
         done();
       });
     });

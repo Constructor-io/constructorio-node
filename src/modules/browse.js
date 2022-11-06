@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
@@ -26,6 +27,7 @@ function createQueryParams(parameters, userParameters, options) {
   if (parameters) {
     const {
       page,
+      offset,
       resultsPerPage,
       filters,
       sortBy,
@@ -33,11 +35,18 @@ function createQueryParams(parameters, userParameters, options) {
       section,
       fmtOptions,
       hiddenFields,
+      hiddenFacets,
+      variationsMap,
     } = parameters;
 
     // Pull page from parameters
     if (!helpers.isNil(page)) {
       queryParams.page = page;
+    }
+
+    // Pull offset from parameters
+    if (!helpers.isNil(offset)) {
+      queryParams.offset = offset;
     }
 
     // Pull results per page from parameters
@@ -71,7 +80,25 @@ function createQueryParams(parameters, userParameters, options) {
 
     // Pull hidden fields from parameters
     if (hiddenFields) {
-      queryParams.hidden_fields = hiddenFields;
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_fields = hiddenFields;
+      } else {
+        queryParams.fmt_options = { hidden_fields: hiddenFields };
+      }
+    }
+
+    // Pull hidden facets from parameters
+    if (hiddenFacets) {
+      if (queryParams.fmt_options) {
+        queryParams.fmt_options.hidden_facets = hiddenFacets;
+      } else {
+        queryParams.fmt_options = { hidden_facets: hiddenFacets };
+      }
+    }
+
+    // Pull variations map from parameters
+    if (variationsMap) {
+      queryParams.variations_map = JSON.stringify(variationsMap);
     }
   }
 
@@ -115,14 +142,14 @@ function createBrowseUrlFromFilter(filterName, filterValue, parameters, userPara
   const queryParams = createQueryParams(parameters, userParameters, options);
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/browse/${encodeURIComponent(filterName)}/${encodeURIComponent(filterValue)}?${queryString}`;
+  return `${serviceUrl}/browse/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterName))}/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterValue))}?${queryString}`;
 }
 
-// Create URL from supplied ID's
+// Create URL from supplied IDs and parameters
 function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   const { serviceUrl } = options;
 
-  // Validate item ID's are provided
+  // Validate item IDs are provided
   if (!itemIds || !(itemIds instanceof Array) || !itemIds.length) {
     throw new Error('itemIds is a required parameter of type array');
   }
@@ -133,7 +160,7 @@ function createBrowseUrlFromIDs(itemIds, parameters, userParameters, options) {
   return `${serviceUrl}/browse/items?${queryString}`;
 }
 
-// Create URL from supplied ID's
+// Create URL from supplied parameters
 function createBrowseUrlForFacets(parameters, userParameters, options) {
   const { serviceUrl } = options;
   const queryParams = { ...createQueryParams(parameters, userParameters, options) };
@@ -141,7 +168,28 @@ function createBrowseUrlForFacets(parameters, userParameters, options) {
   delete queryParams._dt;
 
   const queryString = qs.stringify(queryParams, { indices: false });
+
   return `${serviceUrl}/browse/facets?${queryString}`;
+}
+
+// Create URL from supplied facet name and parameters
+function createBrowseUrlForFacetOptions(facetName, parameters, userParameters, options) {
+  const { serviceUrl } = options;
+
+  // Validate facet name is provided
+  if (!facetName || typeof facetName !== 'string') {
+    throw new Error('facetName is a required parameter of type string');
+  }
+
+  const queryParams = { ...createQueryParams(parameters, userParameters, options) };
+
+  queryParams.facet_name = facetName;
+
+  delete queryParams._dt;
+
+  const queryString = qs.stringify(queryParams, { indices: false });
+
+  return `${serviceUrl}/browse/facet_options?${queryString}`;
 }
 
 // Create request headers using supplied options and user parameters
@@ -185,19 +233,23 @@ class Browse {
    * @param {string} filterName - Filter name to display results from
    * @param {string} filterValue - Filter value to display results from
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine results
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -210,6 +262,10 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         testName: 'cellName',
+   *    },
    * });
    */
   getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -257,24 +313,28 @@ class Browse {
   }
 
   /**
-   * Retrieve browse results from API using item ID's
+   * Retrieve browse results from API using item IDs
    *
    * @function getBrowseResultsForItemIds
-   * @param {string[]} itemIds - Item ID's of results to fetch
+   * @param {string[]} itemIds - Item IDs of results to fetch
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
    * @param {object} [parameters.filters] - Filters used to refine results
    * @param {string} [parameters.sortBy='relevance'] - The sort method for results
    * @param {string} [parameters.sortOrder='descending'] - The sort order for results
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
+   * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -286,8 +346,12 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
-  */
+   */
   getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -332,13 +396,14 @@ class Browse {
    *
    * @function getBrowseGroups
    * @param {object} [parameters.filters] - Filters used to refine results
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
-   * @param {string} [userParameters.testCells] - User test cells
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -353,6 +418,10 @@ class Browse {
    *     fmtOptions: {
    *         groups_max_depth: 2
    *     }
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
    * });
    */
   getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -385,8 +454,69 @@ class Browse {
    *
    * @function getBrowseFacets
    * @param {object} [parameters] - Additional parameters to refine result set
-   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {number} [parameters.resultsPerPage] - The number of results per page to return
+   * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
+   * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
+   * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
+   * @param {object} [userParameters] - Parameters relevant to the user request
+   * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
+   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.userIp] - Origin user IP, from client
+   * @param {string} [userParameters.userAgent] - Origin user agent, from client
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/browse/facets
+   * @example
+   * constructorio.browse.getBrowseFacets({
+   *     page: 1,
+   *     resultsPerPage: 10,
+   * }, {
+   *     testCells: {
+   *         'testName': 'cellName',
+   *    },
+   * });
+   */
+  getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    try {
+      requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      headers: helpers.createAuthHeader(this.options),
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Retrieve facet options from API
+   *
+   * @function getBrowseFacetOptions
+   * @param {string} facetName - Name of the facet whose options to return
+   * @param {object} [parameters] - Additional parameters to refine result set
+   * @param {string} [parameters.section='Products'] - The section name for results
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {boolean} [parameters.fmtOptions.show_hidden_facets] - Include facets configured as hidden
    * @param {boolean} [parameters.fmtOptions.show_protected_facets] - Include facets configured as protected
@@ -401,21 +531,20 @@ class Browse {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/browse/facets
+   * @see https://docs.constructor.io/rest_api/browse/facet_options
    * @example
-   * constructorio.browse.getBrowseFacets({
-   *     page: 1,
-   *     resultsPerPage: 10,
+   * constructorio.browse.getBrowseFacetOptions('price', {
+   *     fmtOptions: { ... },
    * });
    */
-  getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {
+  getBrowseFacetOptions(facetName, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
 
     try {
-      requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
+      requestUrl = createBrowseUrlForFacetOptions(facetName, parameters, userParameters, this.options);
     } catch (e) {
       return Promise.reject(e);
     }
