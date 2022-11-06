@@ -5,9 +5,7 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
-const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
-const { Duplex } = require('stream');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
 
@@ -15,8 +13,6 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const itemsToCleanup = [];
-const variationsToCleanup = [];
 const sendTimeout = 300;
 const testApiKey = process.env.TEST_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
@@ -24,78 +20,6 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
-
-function createMockItem() {
-  const uuid = uuidv4();
-
-  return {
-    name: `product-${uuid}`,
-    id: uuid,
-    data: {
-      facets: { color: ['blue', 'red'] },
-      brand: 'abc',
-      url: 'https://constructor.io/products/',
-      image_url: 'https://constructor.io/products/',
-      complexMetadataField: {
-        key1: 'val1',
-        key2: 'val2',
-      },
-    },
-  };
-}
-
-function createMockVariation(itemId) {
-  const uuid = uuidv4();
-
-  return {
-    id: uuid,
-    item_id: itemId,
-    name: `product-${uuid}`,
-    data: {
-      facets: { color: ['blue'] },
-      brand: 'abc',
-      url: 'https://constructor.io/products/',
-      image_url: 'https://constructor.io/products/',
-      complexMetadataField: {
-        key1: 'val1',
-        key2: 'val2',
-      },
-    },
-  };
-}
-
-function createMockItemGroup() {
-  const uuid = uuidv4();
-
-  return {
-    id: `group-${uuid}`,
-    name: `Group ${uuid}`,
-  };
-}
-
-function createMockOneWaySynonymPhrase() {
-  const uuid = uuidv4();
-
-  return `phrase-${uuid}`;
-}
-
-function createMockSynonym() {
-  const uuid = uuidv4();
-
-  return `synonym-${uuid}`;
-}
-
-function createMockRedirectRule() {
-  const uuid = uuidv4();
-
-  return {
-    url: `http://www.${uuid}.com`,
-    matches: [{
-      match_type: 'EXACT',
-      pattern: uuid,
-    }],
-  };
-}
 
 function createMockFacetConfiguration() {
   const uuid = uuidv4();
@@ -105,30 +29,6 @@ function createMockFacetConfiguration() {
     display_name: `Facet ${uuid}`,
     type: 'multiple',
   };
-}
-
-function createMockFacetOptionConfiguration(facetGroupName) {
-  const uuid = uuidv4();
-
-  const mockFacetOptionConfiguration = {
-    value: `facet-option-${uuid}`,
-    display_name: `Facet Option ${uuid}`,
-  };
-
-  if (facetGroupName) {
-    mockFacetOptionConfiguration.facetGroupName = facetGroupName;
-  }
-
-  return mockFacetOptionConfiguration;
-}
-
-function createStreamFromBuffer(buffer) {
-  const stream = new Duplex();
-
-  stream.push(buffer);
-  stream.push(null);
-
-  return stream;
 }
 
 describe('ConstructorIO - Catalog', () => {

@@ -7,7 +7,6 @@ const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
-const { Duplex } = require('stream');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
 
@@ -62,73 +61,6 @@ function createMockVariation(itemId) {
       },
     },
   };
-}
-
-function createMockItemGroup() {
-  const uuid = uuidv4();
-
-  return {
-    id: `group-${uuid}`,
-    name: `Group ${uuid}`,
-  };
-}
-
-function createMockOneWaySynonymPhrase() {
-  const uuid = uuidv4();
-
-  return `phrase-${uuid}`;
-}
-
-function createMockSynonym() {
-  const uuid = uuidv4();
-
-  return `synonym-${uuid}`;
-}
-
-function createMockRedirectRule() {
-  const uuid = uuidv4();
-
-  return {
-    url: `http://www.${uuid}.com`,
-    matches: [{
-      match_type: 'EXACT',
-      pattern: uuid,
-    }],
-  };
-}
-
-function createMockFacetConfiguration() {
-  const uuid = uuidv4();
-
-  return {
-    name: `facet-${uuid}`,
-    display_name: `Facet ${uuid}`,
-    type: 'multiple',
-  };
-}
-
-function createMockFacetOptionConfiguration(facetGroupName) {
-  const uuid = uuidv4();
-
-  const mockFacetOptionConfiguration = {
-    value: `facet-option-${uuid}`,
-    display_name: `Facet Option ${uuid}`,
-  };
-
-  if (facetGroupName) {
-    mockFacetOptionConfiguration.facetGroupName = facetGroupName;
-  }
-
-  return mockFacetOptionConfiguration;
-}
-
-function createStreamFromBuffer(buffer) {
-  const stream = new Duplex();
-
-  stream.push(buffer);
-  stream.push(null);
-
-  return stream;
 }
 
 describe('ConstructorIO - Catalog', () => {
