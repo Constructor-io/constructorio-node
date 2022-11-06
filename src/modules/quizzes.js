@@ -85,11 +85,11 @@ class Quizzes {
   }
 
   /**
-   * Retrieve next question from api
+   * Retrieve next question from API
    *
    * @function getNextQuestion
    * @description Retrieve next question from Constructor.io API
-   * @param {string} id - The id of the quiz
+   * @param {string} id - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
    * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
@@ -106,10 +106,10 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#answering-a-quiz
    * @example
-   * constructorio.search.getNextQuestion('quizId', {
+   * constructorio.quizzes.getNextQuestion('quizId', {
    *    a: [[1,2],[1]],
-   *    section: 'Products',
-   *    version_id: '123'
+   *    section: '123',
+   *    versionId: '123'
    * });
    */
   getNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
@@ -169,7 +169,7 @@ class Quizzes {
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
    * @param {array} [parameters.a] - An array of answers in the format [[1,2],[1]]
-   * @param {string} [parameters.versionId] - Specific version identifier for the quiz.
+   * @param {string} [parameters.versionId] - Specific version identifier for the quiz
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -182,10 +182,10 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#completing-the-quiz
    * @example
-   * constructorio.search.getFinalizeQuiz('quizId', {
+   * constructorio.quizzes.getQuizResults('quizId', {
    *    a: [[1,2],[1]],
-   *    section: 'Products',
-   *    version_id: '123'
+   *    section: '123',
+   *    versionId: '123'
    * });
    */
   getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {
