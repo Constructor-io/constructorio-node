@@ -1,16 +1,12 @@
-/* eslint-disable max-len */
 /* eslint-disable no-unused-expressions, import/no-unresolved */
-const jsdom = require('mocha-jsdom');
 const dotenv = require('dotenv');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
-const helpers = require('../../mocha.helpers');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
-
-const { expect } = chai;
+const helpers = require('../../mocha.helpers');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -25,8 +21,6 @@ describe('ConstructorIO - Quizzes', () => {
   const validQuizId = 'test-quiz';
   const validAnswers = [[1], [1, 2], ['seen']];
   let fetchSpy;
-
-  jsdom({ url: 'http://localhost' });
 
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
