@@ -121,7 +121,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
         fetch: fetchSpy,
       });
       const startDate = '2022-01-01';
-      const endDate = '2030-12-30';
+      const endDate = new Date().toISOString().split('T')[0]; // Today
 
       tasks.getAllTasks({ page: 1, num_results_per_page: 50, startDate, endDate }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
