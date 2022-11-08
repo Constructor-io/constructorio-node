@@ -6,8 +6,8 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
 const { v4: uuidv4 } = require('uuid');
-const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
-const helpers = require('../../mocha.helpers');
+const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
+const helpers = require('../../../mocha.helpers');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);

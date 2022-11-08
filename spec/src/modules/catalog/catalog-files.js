@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nodeFetch = require('node-fetch').default;
 const { Duplex } = require('stream');
-const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
+const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
