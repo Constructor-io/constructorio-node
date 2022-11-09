@@ -7,9 +7,10 @@
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "eslint 'src/**/*.js' 'spec/**/*.js'",
+    "test:parallel": "mkdir -p test && cp -rf src/* test && mocha --parallel ./spec/*",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/*",
     "precoverage": "rm -rf ./coverage && rm -rf ./.nyc_output",
-    "coverage": "nyc --all --reporter=html npm run test",
+    "coverage": "nyc --all --reporter=html npm run test:parallel",
     "postcoverage": "open coverage/index.html && rm -rf test",
     "docs": "jsdoc --configure ./.jsdoc.json ./README.md --recurse ./src --destination ./docs",
     "prepare": "husky install"
