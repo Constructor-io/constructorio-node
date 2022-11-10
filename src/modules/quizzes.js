@@ -1,5 +1,4 @@
-/* eslint-disable object-curly-newline, no-underscore-dangle */
-const qs = require('qs');
+/* eslint-disable object-curly-newline, no-underscore-dangle */ const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
@@ -39,12 +38,12 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     throw new Error('quizId is a required parameter of type string');
   }
 
-  if (path === 'finalize' && (typeof parameters.a !== 'object' || !Array.isArray(parameters.a) || parameters.a.length === 0)) {
-    throw new Error('a is a required parameter of type array');
+  if (path === 'finalize' && (typeof parameters.answers !== 'object' || !Array.isArray(parameters.answers) || parameters.answers.length === 0)) {
+    throw new Error('answers is a required parameter of type array');
   }
 
   if (parameters) {
-    const { section, a, versionId } = parameters;
+    const { section, answers, versionId } = parameters;
 
     // Pull section from parameters
     if (section) {
@@ -56,9 +55,9 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
       queryParams.version_id = versionId;
     }
 
-    // Pull a (answers) from parameters and transform
-    if (a) {
-      a.forEach((ans) => {
+    // Pull answers from parameters and transform
+    if (answers) {
+      answers.forEach((ans) => {
         answersParamString += `&${qs.stringify({ a: ans }, { arrayFormat: 'comma' })}`;
       });
     }
@@ -92,7 +91,7 @@ class Quizzes {
    * @param {string} id - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
-   * @param {array} [parameters.a] - An array for answers in the format [[1,2],[1]]
+   * @param {array} [parameters.answers] - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.versionId] - Version identifier for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
@@ -168,7 +167,7 @@ class Quizzes {
    * @param {string} id - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
-   * @param {array} [parameters.a] - An array of answers in the format [[1,2],[1]]
+   * @param {array} [parameters.answers] - An array of answers in the format [[1,2],[1]]
    * @param {string} [parameters.versionId] - Specific version identifier for the quiz
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results

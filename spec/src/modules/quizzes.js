@@ -17,7 +17,7 @@ const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
 
-describe('ConstructorIO - Quizzes', () => {
+describe.only('ConstructorIO - Quizzes', () => {
   const validQuizId = 'test-quiz';
   const validAnswers = [[1], [1, 2], ['seen']];
   let fetchSpy;
@@ -135,7 +135,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuestion(validQuizId, { a: validAnswers }).then((res) => {
+      return quizzes.getNextQuestion(validQuizId, { answers: validAnswers }).then((res) => {
         expect(res).to.have.property('version_id').to.be.an('string');
         expect(res).to.have.property('next_question').to.be.an('object');
         expect(res.next_question.id).to.equal(4);
@@ -205,7 +205,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizResults(validQuizId, { a: validAnswers }, { clientId, sessionId }).then((res) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers }, { clientId, sessionId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('result').to.be.an('object');
@@ -227,7 +227,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizResults(validQuizId, { a: validAnswers, section }).then((res) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('result').to.be.an('object');
@@ -244,7 +244,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizResults(validQuizId, { a: validAnswers, versionId }).then((res) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, versionId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('result').to.be.an('object');
@@ -261,7 +261,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizResults(validQuizId, { a: validAnswers }, { userId }).then((res) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers }, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('result').to.be.an('object');
@@ -278,7 +278,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizResults(validQuizId, { a: validAnswers }, { segments }).then((res) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers }, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('result').to.be.an('object');
@@ -294,7 +294,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(null, { a: validAnswers })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults(null, { answers: validAnswers })).to.eventually.be.rejected;
     });
 
     it('Should be rejected if an invalid quizId is provided', () => {
@@ -303,7 +303,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults('invalidQuizId', { a: validAnswers })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults('invalidQuizId', { answers: validAnswers })).to.eventually.be.rejected;
     });
 
     it('Should be rejected if an invalid versionId is provided', () => {
@@ -312,7 +312,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { a: validAnswers, versionId: 'foo' })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers, versionId: 'foo' })).to.eventually.be.rejected;
     });
 
     it('Should be rejected if an invalid apiKey is provided', () => {
@@ -321,7 +321,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { a: validAnswers })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejected;
     });
 
     it('Should be rejected if answers are not provided', () => {
@@ -339,7 +339,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { a: [] })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults(validQuizId, { answers: [] })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when network request timeout is provided and reached', () => {
@@ -348,7 +348,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { a: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -358,7 +358,7 @@ describe('ConstructorIO - Quizzes', () => {
         networkParameters: { timeout: 20 },
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { a: validAnswers })).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The user aborted a request.');
     });
   });
 });
