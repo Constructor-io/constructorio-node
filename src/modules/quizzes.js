@@ -84,10 +84,10 @@ class Quizzes {
   }
 
   /**
-   * Retrieve next question from API
+   * Retrieve quiz question from API
    *
-   * @function getNextQuestion
-   * @description Retrieve next question from Constructor.io API
+   * @function getNextQuizQuestion
+   * @description Retrieve quiz question from Constructor.io API
    * @param {string} id - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
@@ -105,13 +105,13 @@ class Quizzes {
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#answering-a-quiz
    * @example
-   * constructorio.quizzes.getNextQuestion('quizId', {
-   *    a: [[1,2],[1]],
+   * constructorio.quizzes.getNextQuizQuestion('quizId', {
+   *    answers: [[1,2],[1]],
    *    section: '123',
    *    versionId: '123'
    * });
    */
-  getNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
+  getNextQuizQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -155,7 +155,7 @@ class Quizzes {
           return json;
         }
 
-        throw new Error('getNextQuestion response data is malformed');
+        throw new Error('getNextQuizQuestion response data is malformed');
       });
   }
 
@@ -182,7 +182,7 @@ class Quizzes {
    * @see https://docs.constructor.io/rest_api/quiz/using_quizzes/#completing-the-quiz
    * @example
    * constructorio.quizzes.getQuizResults('quizId', {
-   *    a: [[1,2],[1]],
+   *    answers: [[1,2],[1]],
    *    section: '123',
    *    versionId: '123'
    * });
