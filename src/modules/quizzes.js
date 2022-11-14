@@ -1,4 +1,5 @@
-/* eslint-disable object-curly-newline, no-underscore-dangle */ const qs = require('qs');
+/* eslint-disable object-curly-newline, no-underscore-dangle */
+const qs = require('qs');
 const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
