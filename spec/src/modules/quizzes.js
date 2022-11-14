@@ -34,14 +34,14 @@ describe('ConstructorIO - Quizzes', () => {
     fetchSpy = null;
   });
 
-  describe('getNextQuizQuestion', () => {
+  describe('getQuizNextQuestion', () => {
     it('Should return a result provided a valid apiKey and quizId', () => {
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, {}, { clientId, sessionId }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, {}, { clientId, sessionId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('version_id').to.be.an('string');
@@ -64,7 +64,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, { section }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, { section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('version_id').to.be.an('string');
@@ -82,7 +82,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, { versionId }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, { versionId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('version_id').to.be.an('string').to.equal(versionId);
@@ -100,7 +100,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, {}, { userId }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, {}, { userId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('version_id').to.be.an('string');
@@ -118,7 +118,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, {}, { segments }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, {}, { segments }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         expect(res).to.have.property('version_id').to.be.an('string');
@@ -135,7 +135,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getNextQuizQuestion(validQuizId, { answers: validAnswers }).then((res) => {
+      return quizzes.getQuizNextQuestion(validQuizId, { answers: validAnswers }).then((res) => {
         expect(res).to.have.property('version_id').to.be.an('string');
         expect(res).to.have.property('next_question').to.be.an('object');
         expect(res.next_question.id).to.equal(4);
@@ -148,7 +148,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuizQuestion('invalidQuizId', {})).to.eventually.be.rejected;
+      return expect(quizzes.getQuizNextQuestion('invalidQuizId', {})).to.eventually.be.rejected;
     });
 
     it('Should be rejected if no quizId is provided', () => {
@@ -157,7 +157,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuizQuestion(null, {})).to.eventually.be.rejected;
+      return expect(quizzes.getQuizNextQuestion(null, {})).to.eventually.be.rejected;
     });
 
     it('Should be rejected if an invalid versionId is provided', () => {
@@ -166,7 +166,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuizQuestion(validQuizId, { versionId: 'foo' })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizNextQuestion(validQuizId, { versionId: 'foo' })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when network request timeout is provided and reached', () => {
@@ -175,7 +175,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuizQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getQuizNextQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -185,7 +185,7 @@ describe('ConstructorIO - Quizzes', () => {
         networkParameters: { timeout: 20 },
       });
 
-      return expect(quizzes.getNextQuizQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+      return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The user aborted a request.');
     });
 
     it('Should be rejected if an invalid apiKey is provided', () => {
@@ -194,7 +194,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getNextQuizQuestion(validQuizId, {})).to.eventually.be.rejected;
+      return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejected;
     });
   });
 
