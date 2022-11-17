@@ -340,6 +340,103 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should pass the correct custom headers with method call', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart(userParameters, { headers: { 'X-Constructor-IO-Test': 'test' } })).to.equal(true);
+    });
+
+    it('Should pass the correct custom headers with global parameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart(userParameters)).to.equal(true);
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({ ...userParameters, userAgent: 'test2' })).to.equal(true);
+    });
+
+    it('Should combine custom headers from method parameters and global networkParameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart(userParameters, { headers: { 'X-Constructor-IO-Test': 'test2' } })).to.equal(true);
+    });
+
     it('Should throw an error when network request timeout is provided and reached', (done) => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
@@ -713,6 +810,103 @@ describe('ConstructorIO - Tracker', () => {
         ...userParameters,
         referer,
       })).to.equal(true);
+    });
+
+    it('Should pass the correct custom headers with method call', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus(userParameters, { headers: { 'X-Constructor-IO-Test': 'test' } })).to.equal(true);
+    });
+
+    it('Should pass the correct custom headers with global parameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus(userParameters)).to.equal(true);
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({ ...userParameters, userAgent: 'test2' })).to.equal(true);
+    });
+
+    it('Should combine custom headers from method parameters and global networkParameters', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus(userParameters, { headers: { 'X-Constructor-IO-Test': 'test2' } })).to.equal(true);
     });
 
     it('Should throw an error when network request timeout is provided and reached', (done) => {
