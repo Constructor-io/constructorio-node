@@ -198,10 +198,14 @@ function createHeaders(options, userParameters, networkParameters = {}) {
 
   // Apply networkParameters network headers first
   // Checking for object in method call
-  if ((networkParameters && networkParameters?.headers)) {
-    Object.assign(headers, networkParameters.headers);
-  } else if (this.options?.networkParameters && this.options.networkParameters?.headers) {
-    Object.assign(headers, this.options.networkParameters.headers);
+  if (networkParameters) {
+    if (headers in networkParameters) {
+      Object.assign(headers, networkParameters.headers);
+    }
+  } else if (this.options.networkParameters) {
+    if (headers in this.options.networkParameters) {
+      Object.assign(headers, this.options.networkParameters.headers);
+    }
   }
 
   // Append security token as 'x-cnstrc-token' if available
