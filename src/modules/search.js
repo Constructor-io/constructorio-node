@@ -202,13 +202,7 @@ class Search {
       return Promise.reject(e);
     }
 
-    // Apply networkParameters network headers first
-    // Checking for object in method call
-    if ((networkParameters && networkParameters.headers)) {
-      Object.assign(headers, networkParameters.headers);
-    } else if (this.options.networkParameters && this.options.networkParameters.headers) {
-      Object.assign(headers, this.options.networkParameters.headers);
-    }
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
 
     // Append security token as 'x-cnstrc-token' if available
     if (this.options.securityToken && typeof this.options.securityToken === 'string') {

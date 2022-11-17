@@ -20,7 +20,7 @@ const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
 
-describe.only('ConstructorIO - Browse', () => {
+describe('ConstructorIO - Browse', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 

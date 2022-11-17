@@ -53,6 +53,15 @@ const utils = {
       setTimeout(() => controller.abort(), timeout);
     }
   },
+
+  // Combine headers from options and networkParameters
+  // - method call parameter takes precedence over global options parameter
+  combineCustomHeaders: (options = {}, networkParameters = {}) => {
+    const optionsHeaders = options && options.networkParameters && options.networkParameters.headers;
+    const networkParametersHeaders = networkParameters && networkParameters.headers;
+
+    return { ...optionsHeaders, ...networkParametersHeaders };
+  },
 };
 
 module.exports = utils;
