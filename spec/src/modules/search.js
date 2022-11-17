@@ -32,7 +32,7 @@ describe('ConstructorIO - Search', () => {
     fetchSpy = null;
   });
 
-  describe.only('getSearchResults', () => {
+  describe('getSearchResults', () => {
     const query = 'item';
     const section = 'Products';
 

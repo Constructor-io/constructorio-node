@@ -400,7 +400,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should pass the correct headers with method call', (done) => {
+    it('Should pass the correct custom headers with method call', (done) => {
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -421,7 +421,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should pass the correct headers with global parameters', (done) => {
+    it('Should pass the correct custom headers with global parameters', (done) => {
 
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -446,7 +446,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should override networkParameters with userParameters', (done) => {
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -470,13 +470,14 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should use method parameters over global networkParameters', (done) => {
+    it('Should combine custom headers from method parameters and global networkParameters', (done) => {
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
         networkParameters: {
           headers: {
             'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
           },
         },
       });
@@ -491,6 +492,7 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
 
         expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
 
         done();
       });
