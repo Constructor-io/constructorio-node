@@ -193,8 +193,16 @@ function createBrowseUrlForFacetOptions(facetName, parameters, userParameters, o
 }
 
 // Create request headers using supplied options and user parameters
-function createHeaders(options, userParameters) {
+function createHeaders(options, userParameters, networkParameters = {}) {
   const headers = {};
+
+  // Apply networkParameters network headers first
+  // Checking for object in method call
+  if ((networkParameters && networkParameters?.headers)) {
+    Object.assign(headers, networkParameters.headers);
+  } else if (this.options?.networkParameters && this.options.networkParameters?.headers) {
+    Object.assign(headers, this.options.networkParameters.headers);
+  }
 
   // Append security token as 'x-cnstrc-token' if available
   if (options.securityToken && typeof options.securityToken === 'string') {
@@ -273,7 +281,7 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const headers = createHeaders(this.options, userParameters);
+    const headers = createHeaders(this.options, userParameters, networkParameters);
 
     try {
       requestUrl = createBrowseUrlFromFilter(filterName, filterValue, parameters, userParameters, this.options);
@@ -357,7 +365,7 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const headers = createHeaders(this.options, userParameters);
+    const headers = createHeaders(this.options, userParameters, networkParameters);
 
     try {
       requestUrl = createBrowseUrlFromIDs(itemIds, parameters, userParameters, this.options);
@@ -428,7 +436,7 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
-    const headers = createHeaders(this.options, userParameters);
+    const headers = createHeaders(this.options, userParameters, networkParameters);
     const { serviceUrl } = this.options;
     const queryParams = createQueryParams(parameters, userParameters, this.options);
 
@@ -488,6 +496,7 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const headers = createHeaders(this.options, userParameters, networkParameters);
 
     try {
       requestUrl = createBrowseUrlForFacets(parameters, userParameters, this.options);
@@ -499,7 +508,7 @@ class Browse {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      headers: helpers.createAuthHeader(this.options),
+      headers: { ...headers, ...helpers.createAuthHeader(this.options) },
       signal,
     }).then((response) => {
       if (response.ok) {
@@ -542,6 +551,7 @@ class Browse {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const headers = createHeaders(this.options, userParameters, networkParameters);
 
     try {
       requestUrl = createBrowseUrlForFacetOptions(facetName, parameters, userParameters, this.options);
@@ -553,7 +563,7 @@ class Browse {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
-      headers: helpers.createAuthHeader(this.options),
+      headers: { ...headers, ...helpers.createAuthHeader(this.options) },
       signal,
     }).then((response) => {
       if (response.ok) {
