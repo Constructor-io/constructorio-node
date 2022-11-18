@@ -196,17 +196,7 @@ function createBrowseUrlForFacetOptions(facetName, parameters, userParameters, o
 function createHeaders(options, userParameters, networkParameters = {}) {
   const headers = {};
 
-  // Apply networkParameters network headers first
-  // Checking for object in method call
-  if (networkParameters) {
-    if (headers in networkParameters) {
-      Object.assign(headers, networkParameters.headers);
-    }
-  } else if (this.options.networkParameters) {
-    if (headers in this.options.networkParameters) {
-      Object.assign(headers, this.options.networkParameters.headers);
-    }
-  }
+  Object.assign(headers, helpers.combineCustomHeaders(options, networkParameters));
 
   // Append security token as 'x-cnstrc-token' if available
   if (options.securityToken && typeof options.securityToken === 'string') {
