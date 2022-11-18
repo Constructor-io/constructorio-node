@@ -172,7 +172,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should pass the correct custom headers with method call', (done) => {
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -190,7 +190,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should pass the correct custom headers with global parameters', (done) => {
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -213,7 +213,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should combine custom headers from method parameters and global networkParameters', (done) => {
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -295,7 +295,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should pass the correct custom headers with method call', (done) => {
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -311,7 +311,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should pass the correct custom headers with global parameters', (done) => {
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -332,7 +332,7 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
-    it('Should combine custom headers from method parameters and global networkParameters', (done) => {
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
       const { tasks } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
