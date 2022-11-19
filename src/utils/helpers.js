@@ -43,7 +43,7 @@ const utils = {
   },
 
   // Abort network request based on supplied timeout interval (in milliseconds)
-  // - method call parameter takes precedence over global options parameter
+  // - Method call parameter takes precedence over global options parameter
   applyNetworkTimeout: (options = {}, networkParameters = {}, controller = undefined) => {
     const optionsTimeout = options && options.networkParameters && options.networkParameters.timeout;
     const networkParametersTimeout = networkParameters && networkParameters.timeout;
@@ -55,7 +55,7 @@ const utils = {
   },
 
   // Combine headers from options and networkParameters
-  // - method call parameter takes precedence over global options parameter
+  // - Method call parameter takes precedence over global options parameter
   combineCustomHeaders: (options = {}, networkParameters = {}) => {
     const optionsHeaders = options && options.networkParameters && options.networkParameters.headers;
     const networkParametersHeaders = networkParameters && networkParameters.headers;
