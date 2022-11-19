@@ -202,6 +202,8 @@ class Search {
       return Promise.reject(e);
     }
 
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
+
     // Append security token as 'x-cnstrc-token' if available
     if (this.options.securityToken && typeof this.options.securityToken === 'string') {
       headers['x-cnstrc-token'] = this.options.securityToken;

@@ -61,6 +61,9 @@ class Tasks {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
     if (parameters) {
       const { num_results_per_page: numResultsPerPageOld, numResultsPerPage, page, startDate, endDate, status, type } = parameters;
@@ -98,12 +101,14 @@ class Tasks {
       return Promise.reject(e);
     }
 
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
+
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        ...headers,
         ...helpers.createAuthHeader(this.options),
       },
       signal,
@@ -132,6 +137,9 @@ class Tasks {
     const fetch = (this.options && this.options.fetch) || nodeFetch;
     const controller = new AbortController();
     const { signal } = controller;
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
     try {
       requestUrl = createTaskUrl(`tasks/${parameters.id}`, this.options);
@@ -139,12 +147,14 @@ class Tasks {
       return Promise.reject(e);
     }
 
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
+
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
     return fetch(requestUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        ...headers,
         ...helpers.createAuthHeader(this.options),
       },
       signal,

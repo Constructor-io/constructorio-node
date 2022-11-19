@@ -550,6 +550,95 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResults(filterName, filterValue).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid filterName is provided', () => {
       const { browse } = new ConstructorIO(validOptions);
 
@@ -995,6 +1084,96 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(ids, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResultsForItemIds(ids).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResultsForItemIds(ids, {}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseResultsForItemIds(ids, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid ids are provided', () => {
       const { browse } = new ConstructorIO({ ...validOptions });
 
@@ -1207,6 +1386,96 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseGroups({}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseGroups().then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseGroups({}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseGroups({}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid filters parameter is provided', () => {
       const { browse } = new ConstructorIO({ ...validOptions });
 
@@ -1301,6 +1570,96 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacets({}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacets().then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacets({}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacets({}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid apiKey is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
@@ -1389,6 +1748,96 @@ describe('ConstructorIO - Browse', () => {
         expect(requestedUrlParams).to.have.property('key');
         expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         expect(requestedUrlParams).to.have.property('section').to.equal('Products');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacetOptions(facetName, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacetOptions(facetName).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacetOptions(facetName, {}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      browse.getBrowseFacetOptions(facetName, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
         done();
       });
     });

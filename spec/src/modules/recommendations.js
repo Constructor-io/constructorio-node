@@ -400,6 +400,95 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from global networkParameters with userParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid pod id parameter is provided', () => {
       const { recommendations } = new ConstructorIO(validOptions);
 
@@ -494,6 +583,70 @@ describe('ConstructorIO - Recommendations', () => {
         expect(res).to.be.an('object');
         expect(res).to.have.property('pods');
         expect(res).to.have.property('total_count');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendationPods({ headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      recommendations.getRecommendationPods().then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      recommendations.getRecommendationPods({ headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
         done();
       });
     });

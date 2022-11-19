@@ -400,6 +400,96 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      autocomplete.getAutocompleteResults(query).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid query is provided', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 

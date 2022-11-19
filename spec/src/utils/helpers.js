@@ -7,8 +7,9 @@ const {
   cleanParams,
   throwHttpErrorFromResponse,
   isNil,
-  applyNetworkTimeout,
   createAuthHeader,
+  applyNetworkTimeout,
+  combineCustomHeaders,
 } = require('../../../test/utils/helpers'); // eslint-disable-line import/extensions
 
 chai.use(chaiAsPromised);
@@ -131,6 +132,33 @@ describe('ConstructorIO - Utils - Helpers', () => {
           expect(controller.signal.aborted).to.equal(true);
           done();
         }, 75);
+      });
+    });
+
+    describe('combineCustomHeaders', () => {
+      const globalOptions = {
+        networkParameters: {
+          headers: {
+            foo: 'bar',
+          },
+        },
+      };
+      const methodOptions = {
+        headers: {
+          foo: 'baz',
+        },
+      };
+
+      it('Should return headers when only global options headers are defined', () => {
+        expect(combineCustomHeaders(globalOptions)).to.deep.equal(globalOptions.networkParameters.headers);
+      });
+
+      it('Should return headers when only local method options headers are defined', () => {
+        expect(combineCustomHeaders({}, methodOptions)).to.deep.equal(methodOptions.headers);
+      });
+
+      it('Should prefer local method headers when both global and local method options headers are defined', () => {
+        expect(combineCustomHeaders(globalOptions, methodOptions)).to.deep.equal(methodOptions.headers);
       });
     });
   }

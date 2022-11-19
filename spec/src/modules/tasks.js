@@ -172,6 +172,72 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       });
     });
 
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getAllTasks({}, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const task = res.tasks.find((taskObj) => taskObj.id === taskId);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(task.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      tasks.getAllTasks().then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const task = res.tasks.find((taskObj) => taskObj.id === taskId);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(task.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      tasks.getAllTasks({}, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const task = res.tasks.find((taskObj) => taskObj.id === taskId);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.total_count).to.be.gte(1);
+        expect(task.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
     it('Should return error when retrieving a list of tasks with an invalid API key', () => {
       const invalidOptions = cloneDeep(validOptions);
       invalidOptions.apiKey = 'notanapikey';
@@ -225,6 +291,66 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
         expect(fetchSpy).to.have.been.called;
         expect(res.id).to.eq(taskId);
         expect(requestedUrlParams).to.have.property('key');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      tasks.getTask({ id: taskId }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      tasks.getTask({ id: taskId }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { tasks } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      tasks.getTask({ id: taskId }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(fetchSpy).to.have.been.called;
+        expect(res.id).to.eq(taskId);
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
         done();
       });
     });
