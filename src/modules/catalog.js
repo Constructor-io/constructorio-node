@@ -137,6 +137,7 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
         .replace(/:/g, '-')
         .slice(0, 19);
       const filename = `${apiKey}_${section}_${operation}_${formattedDateTime}.tar.gz`;
+
       formData.append(filename, tarArchive, {
         filename,
       });
