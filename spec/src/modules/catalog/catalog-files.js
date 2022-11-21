@@ -502,7 +502,7 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('updateCatalogUsingTarArchive', () => {
-      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+      it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -520,7 +520,7 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+      it('Should update a catalog of items, variations, and item groups using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -740,7 +740,7 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('patchCatalogUsingTarArchive', () => {
-      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+      it('Should patch a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -758,7 +758,7 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+      it('Should patch a catalog of items, variations, and item groups using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
