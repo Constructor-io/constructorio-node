@@ -58,6 +58,8 @@ describe('ConstructorIO - Catalog', () => {
     let variationsStream = null;
     let itemGroupsBuffer = null;
     let itemGroupsStream = null;
+    let tarArchiveBuffer = null;
+    let tarArchiveStream = null;
 
     before(async () => {
       // Grab catalog files from Integration Examples repo
@@ -69,12 +71,16 @@ describe('ConstructorIO - Catalog', () => {
 
       const itemGroupsResponse = await nodeFetch(`${catalogExamplesBaseUrl}item_groups.csv`);
       itemGroupsBuffer = await itemGroupsResponse.buffer();
+
+      const tarArchiveResponse = await nodeFetch(`${catalogExamplesBaseUrl}catalog.tar.gz`);
+      tarArchiveBuffer = await tarArchiveResponse.buffer();
     });
 
     beforeEach(async () => {
       itemsStream = createStreamFromBuffer(itemsBuffer);
       variationsStream = createStreamFromBuffer(variationsBuffer);
       itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
+      tarArchiveStream = createStreamFromBuffer(tarArchiveBuffer);
     });
 
     afterEach((done) => {
@@ -257,6 +263,69 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
+    describe('replaceCatalogUsingTarArchive', () => {
+      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.replaceCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    });
+
     describe('updateCatalog', () => {
       it('Should update a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
@@ -432,6 +501,69 @@ describe('ConstructorIO - Catalog', () => {
       });
     });
 
+    describe('updateCatalogUsingTarArchive', () => {
+      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.updateCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    });
+
     describe('patchCatalog', () => {
       it('Should patch a catalog of items using streams', (done) => {
         const { catalog } = new ConstructorIO({
@@ -604,6 +736,69 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    });
+
+    describe('patchCatalogUsingTarArchive', () => {
+      it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO(validOptions);
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.patchCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+        };
+
+        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
       });
     });
   });
