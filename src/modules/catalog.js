@@ -34,14 +34,14 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 // Convert a read stream to buffer
 function convertToBuffer(stream) {
   return new Promise((resolve, reject) => {
-    let buffer = '';
+    const chunks = [];
 
     stream.on('data', (chunk) => {
-      buffer += chunk;
+      chunks.push(chunk);
     });
 
     stream.on('end', () => {
-      resolve(buffer);
+      resolve(Buffer.concat(chunks));
     });
 
     stream.on('error', (err) => {
