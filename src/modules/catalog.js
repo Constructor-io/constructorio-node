@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const FormData = require('form-data');
 const fs = require('fs');
@@ -162,7 +161,7 @@ class Catalog {
    */
   createOrReplaceItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { items, section, force, notificationEmail } = parameters;
@@ -244,7 +243,7 @@ class Catalog {
    */
   updateItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { items, section, force, notificationEmail } = parameters;
@@ -316,7 +315,7 @@ class Catalog {
    */
   deleteItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { items, section, force, notificationEmail } = parameters;
@@ -394,7 +393,7 @@ class Catalog {
    */
   retrieveItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { ids, section, numResultsPerPage, page } = parameters;
@@ -476,7 +475,7 @@ class Catalog {
    */
   createOrReplaceVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, force, notificationEmail, variations } = parameters;
@@ -559,7 +558,7 @@ class Catalog {
    */
   updateVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, force, notificationEmail, variations } = parameters;
@@ -632,7 +631,7 @@ class Catalog {
    */
   deleteVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, force, notificationEmail, variations } = parameters;
@@ -712,7 +711,7 @@ class Catalog {
   retrieveVariations(parameters = {}, networkParameters = {}) {
     let queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { ids, itemId, section, numResultsPerPage, page } = parameters;
@@ -785,7 +784,7 @@ class Catalog {
    */
   addItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
@@ -843,7 +842,7 @@ class Catalog {
    */
   addItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -890,7 +889,7 @@ class Catalog {
    */
   getItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -932,7 +931,7 @@ class Catalog {
    */
   getItemGroups(networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -988,7 +987,7 @@ class Catalog {
    */
   addOrUpdateItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1043,7 +1042,7 @@ class Catalog {
    */
   modifyItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
@@ -1087,7 +1086,7 @@ class Catalog {
    */
   removeItemGroups(networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1135,7 +1134,7 @@ class Catalog {
    */
   addOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { phrase, ...rest } = parameters;
@@ -1189,7 +1188,7 @@ class Catalog {
    */
   modifyOneWaySynonym(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { phrase, ...rest } = parameters;
@@ -1239,7 +1238,7 @@ class Catalog {
     const { phrase } = parameters;
     const queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1288,7 +1287,7 @@ class Catalog {
   getOneWaySynonyms(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1349,7 +1348,7 @@ class Catalog {
   removeOneWaySynonym(parameters = {}, networkParameters = {}) {
     const { phrase } = parameters;
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1391,7 +1390,7 @@ class Catalog {
    */
   removeOneWaySynonyms(networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1437,7 +1436,7 @@ class Catalog {
    */
   addSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1486,7 +1485,7 @@ class Catalog {
    */
   modifySynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
@@ -1534,7 +1533,7 @@ class Catalog {
    */
   getSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1583,7 +1582,7 @@ class Catalog {
     const queryParams = {};
     const { phrase } = parameters;
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1640,7 +1639,7 @@ class Catalog {
    */
   removeSynonymGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id } = parameters;
@@ -1680,7 +1679,7 @@ class Catalog {
    */
   removeSynonymGroups(networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1738,7 +1737,7 @@ class Catalog {
    */
   addRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1800,7 +1799,7 @@ class Catalog {
    */
   updateRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
@@ -1860,7 +1859,7 @@ class Catalog {
    */
   modifyRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
@@ -1908,7 +1907,7 @@ class Catalog {
    */
   getRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -1958,7 +1957,7 @@ class Catalog {
   getRedirectRules(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -2025,7 +2024,7 @@ class Catalog {
    */
   removeRedirectRule(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -2077,7 +2076,7 @@ class Catalog {
    */
   async replaceCatalog(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
@@ -2129,7 +2128,7 @@ class Catalog {
    */
   async updateCatalog(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
@@ -2181,7 +2180,7 @@ class Catalog {
    */
   async patchCatalog(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
@@ -2245,7 +2244,7 @@ class Catalog {
    */
   addFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, ...rest } = parameters;
@@ -2299,7 +2298,7 @@ class Catalog {
    */
   getFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const additionalQueryParams = {
@@ -2349,7 +2348,7 @@ class Catalog {
    */
   getFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, name } = parameters;
@@ -2412,7 +2411,7 @@ class Catalog {
    */
   modifyFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, facetConfigurations } = parameters;
@@ -2486,7 +2485,7 @@ class Catalog {
    */
   replaceFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, name, ...rest } = parameters;
@@ -2558,7 +2557,7 @@ class Catalog {
    */
   modifyFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, name, ...rest } = parameters;
@@ -2612,7 +2611,7 @@ class Catalog {
    */
   removeFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { section, name } = parameters;
@@ -2670,7 +2669,7 @@ class Catalog {
    */
   addFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, section, ...rest } = parameters;
@@ -2735,7 +2734,7 @@ class Catalog {
    */
   addOrModifyFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, section, facetOptionConfigurations } = parameters;
@@ -2791,7 +2790,7 @@ class Catalog {
    */
   getFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, section } = parameters;
@@ -2844,7 +2843,7 @@ class Catalog {
    */
   getFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, value, section } = parameters;
@@ -2903,7 +2902,7 @@ class Catalog {
    */
   replaceFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, section, value, ...rest } = parameters;
@@ -2963,7 +2962,7 @@ class Catalog {
    */
   modifyFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, section, value, ...rest } = parameters;
@@ -3017,7 +3016,7 @@ class Catalog {
    */
   removeFacetOptionConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const { facetGroupName, value } = parameters;
