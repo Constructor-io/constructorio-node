@@ -2259,7 +2259,7 @@ class Catalog {
    */
   async replaceCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
@@ -2308,7 +2308,7 @@ class Catalog {
    */
   async updateCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
@@ -2358,7 +2358,7 @@ class Catalog {
    */
   async patchCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
-      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
@@ -2440,7 +2440,6 @@ class Catalog {
 
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
-
     return fetch(requestUrl, {
       method: 'POST',
       body: JSON.stringify(rest),
