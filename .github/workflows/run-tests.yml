@@ -26,4 +26,4 @@ jobs:
         env:
           TEST_API_KEY: ${{ secrets.TEST_API_KEY }}
           TEST_API_TOKEN: ${{ secrets.TEST_API_TOKEN }}
-          SKIP_NETWORK_TIMEOUT_TESTS: false
+          SKIP_NETWORK_TIMEOUT_TESTS: true

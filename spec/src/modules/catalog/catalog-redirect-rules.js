@@ -21,6 +21,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createMockRedirectRule() {
   const uuid = uuidv4();
@@ -103,20 +104,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addRedirectRule(mockRedirectRule)).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addRedirectRule(createMockRedirectRule(), { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.addRedirectRule(createMockRedirectRule(), { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.addRedirectRule(createMockRedirectRule())).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.addRedirectRule(createMockRedirectRule())).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('updateRedirectRule', () => {
@@ -201,26 +204,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.updateRedirectRule({
-          id: redirectRuleId,
-          ...mockRedirectRule,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.updateRedirectRule({
+            id: redirectRuleId,
+            ...mockRedirectRule,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.updateRedirectRule({
-          id: redirectRuleId,
-          ...mockRedirectRule,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.updateRedirectRule({
+            id: redirectRuleId,
+            ...mockRedirectRule,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('modifyRedirectRule', () => {
@@ -306,26 +311,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.modifyRedirectRule({
-          id: redirectRuleId,
-          ...mockRedirectRule,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.modifyRedirectRule({
+            id: redirectRuleId,
+            ...mockRedirectRule,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.modifyRedirectRule({
-          id: redirectRuleId,
-          ...mockRedirectRule,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifyRedirectRule({
+            id: redirectRuleId,
+            ...mockRedirectRule,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getRedirectRule', () => {
@@ -401,20 +408,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getRedirectRule({ id: redirectRuleId })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getRedirectRules', () => {
@@ -537,20 +546,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getRedirectRules()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getRedirectRules({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getRedirectRules({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getRedirectRules()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getRedirectRules()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeRedirectRule', () => {
@@ -626,20 +637,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.removeRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.removeRedirectRule({ id: redirectRuleId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeRedirectRule({ id: redirectRuleId })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });

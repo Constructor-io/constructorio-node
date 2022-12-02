@@ -20,6 +20,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createMockFacetConfiguration() {
   const uuid = uuidv4();
@@ -132,25 +133,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addFacetOptionConfiguration(
-          createMockFacetOptionConfiguration(facetGroupName),
-          { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.addFacetOptionConfiguration(
+            createMockFacetOptionConfiguration(facetGroupName),
+            { timeout: 10 },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.addFacetOptionConfiguration(
-          createMockFacetOptionConfiguration(facetGroupName),
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.addFacetOptionConfiguration(
+            createMockFacetOptionConfiguration(facetGroupName),
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('addOrModifyFacetOptionConfigurations', () => {
@@ -243,26 +246,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addOrModifyFacetOptionConfigurations({
-          facetGroupName,
-          facetOptionConfigurations: mockFacetOptionConfigurations,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.addOrModifyFacetOptionConfigurations({
+            facetGroupName,
+            facetOptionConfigurations: mockFacetOptionConfigurations,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.addOrModifyFacetOptionConfigurations({
-          facetGroupName,
-          facetOptionConfigurations: mockFacetOptionConfigurations,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.addOrModifyFacetOptionConfigurations({
+            facetGroupName,
+            facetOptionConfigurations: mockFacetOptionConfigurations,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getFacetOptionConfigurations', () => {
@@ -320,24 +325,26 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getFacetOptionConfigurations({
-          facetGroupName,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getFacetOptionConfigurations({
+            facetGroupName,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getFacetOptionConfigurations({
-          facetGroupName,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getFacetOptionConfigurations({
+            facetGroupName,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getFacetOptionConfiguration', () => {
@@ -384,28 +391,30 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
-        const { value } = mockFacetOptionConfiguration;
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
+          const { value } = mockFacetOptionConfiguration;
 
-        return expect(catalog.getFacetOptionConfiguration({
-          facetGroupName,
-          value,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getFacetOptionConfiguration({
+            facetGroupName,
+            value,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
-        const { value } = mockFacetOptionConfiguration;
 
-        return expect(catalog.getFacetOptionConfiguration({
-          facetGroupName,
-          value,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+          const { value } = mockFacetOptionConfiguration;
+
+          return expect(catalog.getFacetOptionConfiguration({
+            facetGroupName,
+            value,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('replaceFacetOptionConfiguration', () => {
@@ -487,30 +496,32 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.replaceFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.replaceFacetOptionConfiguration({
-          facetGroupName,
-          value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Option Display Name',
-          position: 5,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.replaceFacetOptionConfiguration({
+            facetGroupName,
+            value: mockFacetOptionConfiguration.value,
+            display_name: 'New Facet Option Display Name',
+            position: 5,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.replaceFacetOptionConfiguration({
-          facetGroupName,
-          value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Option Display Name',
-          position: 5,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.replaceFacetOptionConfiguration({
+            facetGroupName,
+            value: mockFacetOptionConfiguration.value,
+            display_name: 'New Facet Option Display Name',
+            position: 5,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('modifyFacetOptionConfiguration', () => {
@@ -592,30 +603,32 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.modifyFacetOptionConfiguration(facetOptionConfiguration)).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.modifyFacetOptionConfiguration({
-          facetGroupName,
-          value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Display Name',
-          position: 5,
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.modifyFacetOptionConfiguration({
+            facetGroupName,
+            value: mockFacetOptionConfiguration.value,
+            display_name: 'New Facet Display Name',
+            position: 5,
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.modifyFacetOptionConfiguration({
-          facetGroupName,
-          value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Display Name',
-          position: 5,
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifyFacetOptionConfiguration({
+            facetGroupName,
+            value: mockFacetOptionConfiguration.value,
+            display_name: 'New Facet Display Name',
+            position: 5,
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeFacetOptionConfiguration', () => {
@@ -643,25 +656,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
-        const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
+          const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
 
-        expect(catalog.removeFacetOptionConfiguration(
-          mockFacetOptionConfiguration,
-          { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          expect(catalog.removeFacetOptionConfiguration(
+            mockFacetOptionConfiguration,
+            { timeout: 10 },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
         });
-        const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
 
-        expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+          const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
+
+          expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });

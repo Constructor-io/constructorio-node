@@ -20,6 +20,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
   // Ensure Mocha doesn't time out waiting for operation to complete
@@ -262,20 +263,22 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       return expect(tasks.getAllTasks()).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { tasks } = new ConstructorIO(validOptions);
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { tasks } = new ConstructorIO(validOptions);
 
-      return expect(tasks.getAllTasks({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
-
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { tasks } = new ConstructorIO({
-        ...validOptions,
-        networkParameters: { timeout: 20 },
+        return expect(tasks.getAllTasks({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(tasks.getAllTasks()).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { tasks } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(tasks.getAllTasks()).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    }
   });
 
   describe('getTask', () => {
@@ -379,19 +382,21 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       return expect(tasks.getTask()).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { tasks } = new ConstructorIO(validOptions);
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { tasks } = new ConstructorIO(validOptions);
 
-      return expect(tasks.getTask({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
-
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { tasks } = new ConstructorIO({
-        ...validOptions,
-        networkParameters: { timeout: 20 },
+        return expect(tasks.getTask({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(tasks.getTask()).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { tasks } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(tasks.getTask()).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    }
   });
 });
