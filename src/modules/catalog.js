@@ -33,14 +33,14 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 // Convert a read stream to buffer
 function convertToBuffer(stream) {
   return new Promise((resolve, reject) => {
-    let buffer = '';
+    const chunks = [];
 
     stream.on('data', (chunk) => {
-      buffer += chunk;
+      chunks.push(chunk);
     });
 
     stream.on('end', () => {
-      resolve(buffer);
+      resolve(Buffer.concat(chunks));
     });
 
     stream.on('error', (err) => {
@@ -115,6 +115,37 @@ async function createQueryParamsAndFormData(parameters) {
   }
 
   return { queryParams, formData };
+}
+
+async function addTarArchiveToFormData(parameters, formData, operation, apiKey) {
+  try {
+    const { section } = parameters;
+    let { tarArchive } = parameters;
+
+    // Convert tarArchive to buffer if passed as stream
+    if (tarArchive instanceof fs.ReadStream || tarArchive instanceof Duplex) {
+      tarArchive = await convertToBuffer(tarArchive);
+    }
+
+    // Pull tarArchive from parameters
+    if (tarArchive && formData && operation && apiKey && section) {
+      // Convert timestamp to YYYY-MM-DD-HH-MM-SS format
+      const formattedDateTime = new Date()
+        .toISOString()
+        .replace('T', '-')
+        .replace(/:/g, '-')
+        .slice(0, 19);
+      const filename = `${apiKey}_${section}_${operation}_${formattedDateTime}.tar.gz`;
+
+      formData.append(filename, tarArchive, {
+        filename,
+      });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+
+  return formData;
 }
 
 /**
@@ -2192,6 +2223,155 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
+        headers: helpers.createAuthHeader(this.options),
+        signal,
+      });
+
+      if (response.ok) {
+        return Promise.resolve(response.json());
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Send full catalog tar archive to replace the current catalog
+   *
+   * @function replaceCatalogUsingTarArchive
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section to update
+   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.replaceCatalogUsingTarArchive({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     tarArchive: tarArchiveBufferOrStream,
+   * });
+   */
+  async replaceCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
+    try {
+      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const apiKey = this.options && this.options.apiKey;
+      const controller = new AbortController();
+      const { signal } = controller;
+      const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'sync', apiKey);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+      const response = await fetch(requestUrl, {
+        method: 'PUT',
+        body: formDataWithTarArchive,
+        headers: helpers.createAuthHeader(this.options),
+        signal,
+      });
+
+      if (response.ok) {
+        return Promise.resolve(response.json());
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Send delta catalog tar archive to update the current catalog
+   *
+   * @function updateCatalogUsingTarArchive
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section to update
+   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.updateCatalogUsingTarArchive({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     tarArchive: tarArchiveBufferOrStream,
+   * });
+   */
+  async updateCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
+    try {
+      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const apiKey = this.options && this.options.apiKey;
+      const controller = new AbortController();
+      const { signal } = controller;
+      const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'delta', apiKey);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+      const response = await fetch(requestUrl, {
+        method: 'PATCH',
+        body: formDataWithTarArchive,
+        headers: helpers.createAuthHeader(this.options),
+        signal,
+      });
+
+      if (response.ok) {
+        return Promise.resolve(response.json());
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Send patch delta tar archive to patch the current catalog
+   *
+   * @function patchCatalogUsingTarArchive
+   * @param {object} parameters - Additional parameters for catalog details
+   * @param {string} parameters.section - The section to update
+   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @example
+   * constructorio.catalog.patchCatalogUsingTarArchive({
+   *     section: 'Products',
+   *     notification_email: 'notifications@example.com',
+   *     tarArchive: tarArchiveBufferOrStream,
+   * });
+   */
+  async patchCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
+    try {
+      const fetch = (this.options && this.options.fetch) || nodeFetch;
+      const apiKey = this.options && this.options.apiKey;
+      const controller = new AbortController();
+      const { signal } = controller;
+      const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'delta', apiKey);
+      const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
+
+      // Handle network timeout if specified
+      helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+      const response = await fetch(requestUrl, {
+        method: 'PATCH',
+        body: formDataWithTarArchive,
         headers: helpers.createAuthHeader(this.options),
         signal,
       });
