@@ -4,8 +4,8 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const helpers = require('../../mocha.helpers');
 
 const { expect } = chai;
@@ -751,7 +751,7 @@ describe('ConstructorIO - Browse', () => {
           {},
           {},
           { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
+        )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -765,7 +765,7 @@ describe('ConstructorIO - Browse', () => {
           filterValue,
           {},
           {},
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
+        )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1253,7 +1253,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseResultsForItemIds(ids, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseResultsForItemIds(ids, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1262,7 +1262,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseResultsForItemIds(ids, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseResultsForItemIds(ids, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1499,7 +1499,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseGroups({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseGroups({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1508,7 +1508,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseGroups({}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseGroups({}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1677,7 +1677,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseFacets({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacets({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1686,7 +1686,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseFacets({}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacets({}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1873,7 +1873,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1882,7 +1882,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
