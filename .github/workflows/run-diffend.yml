@@ -23,4 +23,3 @@ jobs:
         run: npm install -g https://my.diffend.io/releases/npm/stable.tgz
       - name: Install dependencies with Diffend
         run: diffend npm install
-
