@@ -19,6 +19,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createStreamFromBuffer(buffer) {
   const stream = new Duplex();
@@ -237,30 +238,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.replaceCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.replaceCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('replaceCatalogUsingTarArchive', () => {
@@ -300,30 +303,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.replaceCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.replaceCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('updateCatalog', () => {
@@ -475,30 +480,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.updateCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.updateCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('updateCatalogUsingTarArchive', () => {
@@ -538,30 +545,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.updateCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.updateCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('patchCatalog', () => {
@@ -713,30 +722,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.patchCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.patchCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          items: itemsStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            items: itemsStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('patchCatalogUsingTarArchive', () => {
@@ -776,30 +787,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
 
-        return expect(catalog.patchCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.patchCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        const data = {
-          tarArchive: tarArchiveStream,
-          section: 'Products',
-        };
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
 
-        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+          const data = {
+            tarArchive: tarArchiveStream,
+            section: 'Products',
+          };
+
+          return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });

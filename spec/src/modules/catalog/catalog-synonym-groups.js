@@ -21,6 +21,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createMockSynonym() {
   const uuid = uuidv4();
@@ -92,25 +93,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addSynonymGroup({ synonyms: [mockSynonym] })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addSynonymGroup(
-          { synonyms: [createMockSynonym()] },
-          { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.addSynonymGroup(
+            { synonyms: [createMockSynonym()] },
+            { timeout: 10 },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.addSynonymGroup(
-          { synonyms: [createMockSynonym()] },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.addSynonymGroup(
+            { synonyms: [createMockSynonym()] },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('modifySynonymGroup', () => {
@@ -183,26 +186,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.modifySynonymGroup({
-          id: synonymGroupId,
-          synonyms: [mockSynonym],
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.modifySynonymGroup({
+            id: synonymGroupId,
+            synonyms: [mockSynonym],
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.modifySynonymGroup({
-          id: synonymGroupId,
-          synonyms: [mockSynonym],
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifySynonymGroup({
+            id: synonymGroupId,
+            synonyms: [mockSynonym],
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getSynonymGroup', () => {
@@ -274,20 +279,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getSynonymGroups', () => {
@@ -360,20 +367,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getSynonymGroups()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getSynonymGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getSynonymGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeSynonymGroup', () => {
@@ -437,20 +446,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.removeSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.removeSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeSynonymGroups', () => {
@@ -500,20 +511,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeSynonymGroups()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.removeSynonymGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.removeSynonymGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.removeSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });

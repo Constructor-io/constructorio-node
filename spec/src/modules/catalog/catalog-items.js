@@ -22,6 +22,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createMockItem() {
   const uuid = uuidv4();
@@ -152,20 +153,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.createOrReplaceItems({ items })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.createOrReplaceItems({ items: [createMockItem()] }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.createOrReplaceItems({ items: [createMockItem()] }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.createOrReplaceItems({ items: [createMockItem()] })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.createOrReplaceItems({ items: [createMockItem()] })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('updateItems', () => {
@@ -270,20 +273,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.updateItems({ items: updatedItems }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when network global request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.updateItems({ items: updatedItems }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when network global request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('deleteItems', () => {
@@ -407,20 +412,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.deleteItems({ items })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.deleteItems({ items }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.deleteItems({ items }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.deleteItems({ items })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.deleteItems({ items })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('retrieveItems', () => {
@@ -514,20 +521,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.retrieveItems()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.retrieveItems({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.retrieveItems({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.retrieveItems()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.retrieveItems()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });
