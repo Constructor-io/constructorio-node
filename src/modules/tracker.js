@@ -1,6 +1,5 @@
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
@@ -79,7 +78,7 @@ function applyParamsAsString(parameters, userParameters, options) {
 // Send request to server
 function send(url, userParameters, networkParameters, method = 'GET', body = {}) { // eslint-disable-line max-params
   let request;
-  const fetch = (this.options && this.options.fetch) || nodeFetch;
+  const { fetch } = this.options;
   const controller = new AbortController();
   const { signal } = controller;
   const headers = {};

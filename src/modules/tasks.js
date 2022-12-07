@@ -1,6 +1,5 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-len */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
@@ -58,7 +57,7 @@ class Tasks {
   getAllTasks(parameters = {}, networkParameters = {}) {
     const queryParams = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {
@@ -134,7 +133,7 @@ class Tasks {
    */
   getTask(parameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {

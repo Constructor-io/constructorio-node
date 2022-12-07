@@ -1,4 +1,5 @@
 /* eslint-disable camelcase, no-unneeded-ternary, max-len */
+const nodeFetch = require('node-fetch').default;
 
 // Modules
 const Search = require('./modules/search');
@@ -55,7 +56,7 @@ class ConstructorIO {
       securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: (serviceUrl && serviceUrl.replace(/\/$/, '')) || 'https://ac.cnstrc.com',
-      fetch,
+      fetch: fetch || nodeFetch,
       networkParameters: networkParameters || {},
     };
 
