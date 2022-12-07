@@ -16,6 +16,7 @@ const quizApiKey = process.env.TEST_API_KEY;
 const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Quizzes', () => {
   const validQuizId = 'test-quiz';
@@ -169,24 +170,26 @@ describe('ConstructorIO - Quizzes', () => {
       return expect(quizzes.getQuizNextQuestion(validQuizId, { versionId: 'foo' })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { quizzes } = new ConstructorIO({
-        apiKey: quizApiKey,
-        fetch: fetchSpy,
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { quizzes } = new ConstructorIO({
+          apiKey: quizApiKey,
+          fetch: fetchSpy,
+        });
+
+        return expect(quizzes.getQuizNextQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(quizzes.getQuizNextQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { quizzes } = new ConstructorIO({
+          apiKey: quizApiKey,
+          fetch: fetchSpy,
+          networkParameters: { timeout: 20 },
+        });
 
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { quizzes } = new ConstructorIO({
-        apiKey: quizApiKey,
-        fetch: fetchSpy,
-        networkParameters: { timeout: 20 },
+        return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The user aborted a request.');
       });
-
-      return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+    }
 
     it('Should be rejected if an invalid apiKey is provided', () => {
       const { quizzes } = new ConstructorIO({
@@ -342,23 +345,25 @@ describe('ConstructorIO - Quizzes', () => {
       return expect(quizzes.getQuizResults(validQuizId, { answers: [] })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { quizzes } = new ConstructorIO({
-        apiKey: quizApiKey,
-        fetch: fetchSpy,
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { quizzes } = new ConstructorIO({
+          apiKey: quizApiKey,
+          fetch: fetchSpy,
+        });
+
+        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { quizzes } = new ConstructorIO({
+          apiKey: quizApiKey,
+          fetch: fetchSpy,
+          networkParameters: { timeout: 20 },
+        });
 
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { quizzes } = new ConstructorIO({
-        apiKey: quizApiKey,
-        fetch: fetchSpy,
-        networkParameters: { timeout: 20 },
+        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
-
-      return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+    }
   });
 });

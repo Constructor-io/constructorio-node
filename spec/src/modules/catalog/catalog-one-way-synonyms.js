@@ -21,6 +21,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 function createMockOneWaySynonymPhrase() {
   const uuid = uuidv4();
@@ -106,26 +107,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.addOneWaySynonym({
-          phrase: createMockOneWaySynonymPhrase(),
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.addOneWaySynonym({
+            phrase: createMockOneWaySynonymPhrase(),
+            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.addOneWaySynonym({
-          phrase: createMockOneWaySynonymPhrase(),
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.addOneWaySynonym({
+            phrase: createMockOneWaySynonymPhrase(),
+            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('modifyOneWaySynonym', () => {
@@ -199,26 +202,28 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.modifyOneWaySynonym({
-          phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-        }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.modifyOneWaySynonym({
+            phrase: mockOneWaySynonymPhrase,
+            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.modifyOneWaySynonym({
-          phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-        })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifyOneWaySynonym({
+            phrase: mockOneWaySynonymPhrase,
+            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          })).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getOneWaySynonym', () => {
@@ -295,25 +300,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getOneWaySynonym({ phrase: mockOneWaySynonymPhrase })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getOneWaySynonym(
-          { phrase: mockOneWaySynonymPhrase },
-          { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getOneWaySynonym(
+            { phrase: mockOneWaySynonymPhrase },
+            { timeout: 10 },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getOneWaySynonym(
-          { phrase: mockOneWaySynonymPhrase },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getOneWaySynonym(
+            { phrase: mockOneWaySynonymPhrase },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('getOneWaySynonyms', () => {
@@ -389,20 +396,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.getOneWaySynonyms({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.getOneWaySynonyms({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeOneWaySynonym', () => {
@@ -455,25 +464,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeOneWaySynonym({ phrase: mockOneWaySynonymPhrase })).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.removeOneWaySynonym(
-          { phrase: mockOneWaySynonymPhrase },
-          { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.removeOneWaySynonym(
+            { phrase: mockOneWaySynonymPhrase },
+            { timeout: 10 },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.removeOneWaySynonym(
-          { phrase: mockOneWaySynonymPhrase },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeOneWaySynonym(
+            { phrase: mockOneWaySynonymPhrase },
+          )).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
 
     describe('removeOneWaySynonyms', () => {
@@ -526,20 +537,22 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejected;
       });
 
-      it('Should be rejected when network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO(validOptions);
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
 
-        return expect(catalog.removeOneWaySynonyms({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
-
-      it('Should be rejected when global network request timeout is provided and reached', () => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          networkParameters: { timeout: 20 },
+          return expect(catalog.removeOneWaySynonyms({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
 
-        return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
-      });
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
+        });
+      }
     });
   });
 });

@@ -20,6 +20,7 @@ const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
 };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Recommendations', () => {
   const clientVersion = 'cio-mocha';
@@ -531,29 +532,31 @@ describe('ConstructorIO - Recommendations', () => {
       })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { recommendations } = new ConstructorIO(validOptions);
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { recommendations } = new ConstructorIO(validOptions);
 
-      return expect(recommendations.getRecommendations(
-        podId,
-        { itemIds },
-        {},
-        { timeout: 10 },
-      )).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
-
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { recommendations } = new ConstructorIO({
-        ...validOptions,
-        networkParameters: { timeout: 20 },
+        return expect(recommendations.getRecommendations(
+          podId,
+          { itemIds },
+          {},
+          { timeout: 10 },
+        )).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(recommendations.getRecommendations(
-        podId,
-        { itemIds },
-        {},
-      )).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { recommendations } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(recommendations.getRecommendations(
+          podId,
+          { itemIds },
+          {},
+        )).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    }
   });
 
   describe('getRecommendationPods', () => {
@@ -669,21 +672,23 @@ describe('ConstructorIO - Recommendations', () => {
       return expect(recommendations.getRecommendationPods()).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { recommendations } = new ConstructorIO(validOptions);
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { recommendations } = new ConstructorIO(validOptions);
 
-      return expect(recommendations.getRecommendationPods(
-        { timeout: 10 },
-      )).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
-
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { recommendations } = new ConstructorIO({
-        ...validOptions,
-        networkParameters: { timeout: 20 },
+        return expect(recommendations.getRecommendationPods(
+          { timeout: 10 },
+        )).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(recommendations.getRecommendationPods()).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { recommendations } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(recommendations.getRecommendationPods()).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    }
   });
 });
