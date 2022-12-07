@@ -1424,6 +1424,11 @@ describe('ConstructorIO - Tracker', () => {
     const optionalParameters = {
       variation_id: 'test1-small',
     };
+    const legacyParameters = {
+      customer_id: 'test1',
+      name: 'test name',
+      url: 'http://constructor.io',
+    };
     const originReferrer = 'https://localhost';
 
     it('Should respond with a valid response when required parameters are provided', (done) => {
@@ -1565,6 +1570,30 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackItemDetailLoad(Object.assign(requiredParameters, optionalParameters), userParameters))
         .to.equal(true);
+    });
+
+    it('Should respond with a valid response when legacy parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_id').to.equal(legacyParameters.customer_id);
+        expect(requestParams).to.have.property('item_name').to.equal(legacyParameters.name);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(legacyParameters, userParameters)).to.equal(true);
     });
 
     it('Should throw an error when invalid parameters are provided', () => {
