@@ -5,8 +5,9 @@ const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
-const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const { expect } = chai;
 

@@ -4,9 +4,10 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const { Duplex } = require('stream');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);

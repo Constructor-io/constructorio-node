@@ -1,7 +1,16 @@
 {
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "babelrc": false,
+      "configFile": false
+    }
+  },
   "env": {
     "browser": true,
-    "mocha": true
+    "mocha": true,
+    "es2020": true
   },
   "extends": [
     "airbnb-base",
@@ -50,6 +59,8 @@
       "error",
       20
     ],
-    "@cspell/spellchecker": ["error"]
+    "@cspell/spellchecker": [
+      "error"
+    ]
   }
 }
