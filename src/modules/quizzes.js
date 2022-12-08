@@ -68,7 +68,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/v1/quizzes/${encodeURIComponent(quizId)}/${encodeURIComponent(path)}/?${queryString}${answersParamString}`;
+  return `${serviceUrl}/v1/quizzes/${encodeURIComponent(quizId)}/${encodeURIComponent(path)}/?${queryString}${answersParamString}`; // eslint-disable-line
 }
 
 /**

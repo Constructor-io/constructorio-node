@@ -88,7 +88,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
-        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
         done();
       });
     });
@@ -829,7 +830,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
-        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
         done();
       });
     });
