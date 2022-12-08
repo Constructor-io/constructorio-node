@@ -9,8 +9,7 @@
   },
   "env": {
     "browser": true,
-    "mocha": true,
-    "es2020": true
+    "mocha": true
   },
   "extends": [
     "airbnb-base",
