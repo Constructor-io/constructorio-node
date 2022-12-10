@@ -6,6 +6,7 @@ const FormData = require('form-data');
 const fs = require('fs');
 const { Duplex } = require('stream');
 const helpers = require('../utils/helpers');
+const { toSnakeCaseKeys } = require('../utils/helpers');
 
 // Create URL from supplied path and options
 function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
@@ -24,6 +25,7 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 
   queryParams.key = apiKey;
   queryParams = helpers.cleanParams(queryParams);
+  queryParams = toSnakeCaseKeys(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
@@ -55,8 +57,8 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notificationEmail, force } = parameters;
-    let { items, variations, item_groups: itemGroups } = parameters;
+    const { section, notificationEmail, force, item_groups } = parameters;
+    let { items, variations, itemGroups = item_groups } = parameters;
 
     try {
       // Convert items to buffer if passed as stream
@@ -801,7 +803,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - Item group ID
    * @param {string} parameters.name - Item group name
-   * @param {string} [parameters.parent_id] - Item group parent ID
+   * @param {string} [parameters.parentId] - Item group parent ID
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -810,7 +812,7 @@ class Catalog {
    * constructorio.catalog.addItemGroup({
    *     id: 'subcat_12891',
    *     name: 'Hoodies & Sweaters',
-   *     parent_id: 'cat_49203',
+   *     parentId: 'cat_49203',
    * });
    */
   addItemGroup(parameters = {}, networkParameters = {}) {
@@ -831,7 +833,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -851,18 +853,18 @@ class Catalog {
    *
    * @function addItemGroups
    * @param {object} parameters - Additional parameters for item group details
-   * @param {object[]} parameters.item_groups - A list of item groups
+   * @param {object[]} parameters.itemGroups - A list of item groups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
    * @example
    * constructorio.catalog.addItemGroups({
-   *     item_groups: [
+   *     itemGroups: [
    *         {
    *             id: 'subcat_12891',
    *             name: 'Hoodies & Sweaters',
-   *             parent_id: 'cat_49203',
+   *             parentId: 'cat_49203',
    *         },
    *         {
    *             id: 'cat49203',
@@ -877,6 +879,11 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
 
+    // Backwards Compatibility
+    const { item_groups, itemGroups = item_groups, ...rest } = parameters;
+    const params = { itemGroups, ...rest };
+    params.itemGroups = params.itemGroups.map((itemGrp) => toSnakeCaseKeys(itemGrp));
+
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
@@ -888,7 +895,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(toSnakeCaseKeys(params)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -996,18 +1003,18 @@ class Catalog {
    *
    * @function addOrUpdateItemGroups
    * @param {object} parameters - Additional parameters for item group details
-   * @param {object[]} parameters.item_groups - A list of item groups
+   * @param {object[]} parameters.itemGroups - A list of item groups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.io/rest_api/item_groups
   * @example
    * constructorio.catalog.addOrUpdateItemGroups({
-   *     item_groups: [
+   *     itemGroups: [
    *         {
    *             id: 'subcat_12891',
    *             name: 'Hoodies, Sweaters, & Jackets',
-   *             parent_id: 'cat_49203',
+   *             parentId: 'cat_49203',
    *         },
    *         {
    *             id: 'cat49203',
@@ -1022,6 +1029,11 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
 
+    // Backwards Compatibility
+    const { item_groups, itemGroups = item_groups, ...rest } = parameters;
+    const params = { itemGroups, ...rest };
+    params.itemGroups = params.itemGroups.map((config) => toSnakeCaseKeys(config));
+    console.log(params);
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
@@ -1033,7 +1045,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(toSnakeCaseKeys(params)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1055,7 +1067,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - The group ID to update
    * @param {string} [parameters.name] - Item group display name
-   * @param {string} [parameters.parent_id] - Parent item group customer ID or null for root item groups
+   * @param {string} [parameters.parentId] - Parent item group customer ID or null for root item groups
    * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1065,7 +1077,7 @@ class Catalog {
    * constructorio.catalog.modifyItemGroup({
    *     id: 'subcat_12891',
    *     name: 'Hoodies, Sweaters & Jackets',
-   *     parent_id: 'cat_49203',
+   *     parentId: 'cat_49203',
    *     data: {
    *         landing_image_url: '/images/hd_swtrs_jckts.jpg',
    *     },
@@ -1089,7 +1101,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1149,7 +1161,7 @@ class Catalog {
    * @function addOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
-   * @param {string[]} parameters.child_phrases - Array of synonyms
+   * @param {string[]} parameters.childPhrases - Array of synonyms
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1157,7 +1169,7 @@ class Catalog {
    * @example
    * constructorio.catalog.addOneWaySynonym({
    *     phrase: 'spices',
-   *     child_phrases: [
+   *     childPhrases: [
    *         { phrase: 'pepper' },
    *         { phrase: 'cinnamon' },
    *     ],
@@ -1181,7 +1193,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1202,7 +1214,7 @@ class Catalog {
    * @function modifyOneWaySynonym
    * @param {object} parameters - Additional parameters for synonym details
    * @param {string} parameters.phrase - Parent phrase
-   * @param {string[]} parameters.child_phrases - Array of synonyms
+   * @param {string[]} parameters.childPhrases - Array of synonyms
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1210,7 +1222,7 @@ class Catalog {
    * @example
    * constructorio.catalog.modifyOneWaySynonym({
    *     phrase: 'spices',
-   *     child_phrases: [
+   *     childPhrases: [
    *         { phrase: 'pepper' },
    *         { phrase: 'cinnamon' },
    *         { phrase: 'paprika' },
@@ -1235,7 +1247,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1303,7 +1315,7 @@ class Catalog {
    *
    * @function getOneWaySynonyms
    * @param {object} [parameters] - Additional parameters for synonym details
-   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
+   * @param {number} [parameters.numResultsPerPage] - The number of synonym groups to return. Defaults to 100
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1311,7 +1323,7 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
    * @example
    * constructorio.catalog.getOneWaySynonyms({
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    *     page: 2,
    * });
    */
@@ -1323,7 +1335,7 @@ class Catalog {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page } = parameters;
+      const { num_results_per_page, numResultsPerPage = num_results_per_page, page } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPage) {
@@ -1596,7 +1608,7 @@ class Catalog {
    * @function getSynonymGroups
    * @param {object} [parameters] - Additional parameters for synonym group details
    * @param {string} [parameters.phrase] - The phrase for which all synonym groups containing it will be returned
-   * @param {number} [parameters.num_results_per_page] - The number of synonym groups to return. Defaults to 100
+   * @param {number} [parameters.numResultsPerPage] - The number of synonym groups to return. Defaults to 100
    * @param {number} [parameters.page] - The page of results to return. Defaults to 1
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1605,7 +1617,7 @@ class Catalog {
    * @example
    * constructorio.catalog.modifySynonymGroup({
    *     phrase: '0% milk',
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    *     page: 3,
    * });
    */
@@ -1618,7 +1630,7 @@ class Catalog {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page } = parameters;
+      const { num_results_per_page, numResultsPerPage = num_results_per_page, page } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPage) {
@@ -1743,9 +1755,9 @@ class Catalog {
    * @param {object} parameters - Additional parameters for redirect rule details
    * @param {string} parameters.url - Target URL returned when a match happens
    * @param {object[]} parameters.matches - List of match definitions
-   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
-   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1758,9 +1770,9 @@ class Catalog {
    *         pattern: 'outerwear',
    *         match_type: 'EXACT'
    *     }],
-   *     start_time: '2022-08-11T23:41:02.568Z',
-   *     end_time: '2022-08-20T23:41:02.568Z',
-   *     user_segments: ['US', 'Mobile'],
+   *     startTime: '2022-08-11T23:41:02.568Z',
+   *     endTime: '2022-08-20T23:41:02.568Z',
+   *     userSegments: ['US', 'Mobile'],
    *     metadata: {
    *         additional_data: 'additional string data',
    *     },
@@ -1783,7 +1795,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(parameters),
+      body: JSON.stringify(toSnakeCaseKeys(parameters)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1806,9 +1818,9 @@ class Catalog {
    * @param {string} parameters.id - Redirect rule ID
    * @param {string} parameters.url - Target URL returned when a match happens
    * @param {object[]} parameters.matches - List of match definitions
-   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
-   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1822,7 +1834,7 @@ class Catalog {
    *         pattern: 'outerwear',
    *         match_type: 'EXACT'
    *     }],
-   *     user_segments: ['US', 'Mobile', 'Web'],
+   *     userSegments: ['US', 'Mobile', 'Web'],
    *     metadata: {
    *         additional_data: 'additional string data',
    *     },
@@ -1846,7 +1858,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1869,9 +1881,9 @@ class Catalog {
    * @param {string} parameters.id - Redirect rule ID
    * @param {string} parameters.url - Target URL returned when a match happens
    * @param {object[]} parameters.matches - List of match definitions
-   * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
-   * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
+   * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
+   * @param {object[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1885,7 +1897,7 @@ class Catalog {
    *         pattern: 'outerwear',
    *         match_type: 'EXACT'
    *     }],
-   *     user_segments: ['US', 'Mobile', 'Web'],
+   *     userSegments: ['US', 'Mobile', 'Web'],
    * });
    */
   modifyRedirectRule(parameters = {}, networkParameters = {}) {
@@ -1906,7 +1918,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1969,7 +1981,7 @@ class Catalog {
    *
    * @function getRedirectRules
    * @param {object} [parameters] - Additional parameters for redirect rule details
-   * @param {number} [parameters.num_results_per_page] - The number of rules to return. Defaults to 20
+   * @param {number} [parameters.numResultsPerPage] - The number of rules to return. Defaults to 20
    * @param {number} [parameters.page] - The page of redirect rules to return. Defaults to 1
    * @param {string} [parameters.query] - Return redirect rules whose url or match pattern match the provided query
    * @param {string} [parameters.status] - One of "current" (return redirect rules that are currently active), "pending" (return redirect rules that will become active in the future), and "expired" (return redirect rules that are not active anymore)
@@ -1979,7 +1991,7 @@ class Catalog {
    * @see https://docs.constructor.io/rest_api/redirect_rules
    * @example
    * constructorio.catalog.getRedirectRules({
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    *     page: 2,
    *     query: 'outerwear',
    *     status: 'active',
@@ -1993,7 +2005,7 @@ class Catalog {
     const { signal } = controller;
 
     if (parameters) {
-      const { num_results_per_page: numResultsPerPage, page, query, status } = parameters;
+      const { num_results_per_page, numResultsPerPage = num_results_per_page, page, query, status } = parameters;
 
       // Pull number of results per page from parameters
       if (numResultsPerPage) {
@@ -2087,11 +2099,11 @@ class Catalog {
    * @function replaceCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2099,10 +2111,10 @@ class Catalog {
    * @example
    * constructorio.catalog.replaceCatalog({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
-   *     item_groups: itemGroupsFileBufferOrStream,
+   *     itemGroups: itemGroupsFileBufferOrStream,
    * });
    */
   async replaceCatalog(parameters = {}, networkParameters = {}) {
@@ -2139,11 +2151,11 @@ class Catalog {
    * @function updateCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2151,10 +2163,10 @@ class Catalog {
    * @example
    * constructorio.catalog.updateCatalog({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
-   *     item_groups: itemGroupsFileBufferOrStream,
+   *     itemGroups: itemGroupsFileBufferOrStream,
    * });
    */
   async updateCatalog(parameters = {}, networkParameters = {}) {
@@ -2191,11 +2203,11 @@ class Catalog {
    * @function patchCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.item_groups] - The CSV file with all new item_groups
+   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2203,10 +2215,10 @@ class Catalog {
    * @example
    * constructorio.catalog.patchCatalog({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
-   *     item_groups: itemGroupsFileBufferOrStream,
+   *     itemGroups: itemGroupsFileBufferOrStream,
    * });
    */
   async patchCatalog(parameters = {}, networkParameters = {}) {
@@ -2243,7 +2255,7 @@ class Catalog {
    * @function replaceCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2253,7 +2265,7 @@ class Catalog {
    * @example
    * constructorio.catalog.replaceCatalogUsingTarArchive({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
    * });
    */
@@ -2292,7 +2304,7 @@ class Catalog {
    * @function updateCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2302,7 +2314,7 @@ class Catalog {
    * @example
    * constructorio.catalog.updateCatalogUsingTarArchive({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
    * });
    */
@@ -2342,7 +2354,7 @@ class Catalog {
    * @function patchCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2352,7 +2364,7 @@ class Catalog {
    * @example
    * constructorio.catalog.patchCatalogUsingTarArchive({
    *     section: 'Products',
-   *     notification_email: 'notifications@example.com',
+   *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
    * });
    */
@@ -2393,15 +2405,15 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {string} [parameters.sort_order] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
-   * @param {boolean} [parameters.sort_descending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
-   * @param {string} [parameters.range_type] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
-   * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
-   * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
-   * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
-   * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
+   * @param {string} [parameters.rangeType] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
+   * @param {string} [parameters.rangeFormat] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
+   * @param {number} [parameters.bucketSize] - Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
+   * @param {json} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
    * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users. Setting to true will require authentication to view the facet. Default value is false.
@@ -2416,9 +2428,9 @@ class Catalog {
    * constructorio.catalog.addFacetConfiguration({
    *     name: 'color',
    *     type: 'multiple',
-   *     display_name: 'Color',
-   *     sort_order: 'value',
-   *     sort_descending: false,
+   *     displayName: 'Color',
+   *     sortOrder: 'value',
+   *     sortDescending: false,
    *     position: 1,
    * });
    */
@@ -2442,7 +2454,7 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -2463,7 +2475,7 @@ class Catalog {
    * @function getFacetConfigurations
    * @param {object} parameters - Additional parameters for retrieving facet configurations.
    * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
-   * @param {number} [parameters.num_results_per_page] - Number of facets per page in paginated response. Default value is 100.
+   * @param {number} [parameters.numResultsPerPage] - Number of facets per page in paginated response. Default value is 100.
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2472,7 +2484,7 @@ class Catalog {
    * @example
    * constructorio.catalog.getFacetConfigurations({
    *     page: 2,
-   *     num_results_per_page: 50,
+   *     numResultsPerPage: 50,
    * });
    */
   getFacetConfigurations(parameters = {}, networkParameters = {}) {
@@ -2576,9 +2588,9 @@ class Catalog {
    *         {
    *             name: 'color',
    *             type: 'multiple',
-   *             display_name: 'Color',
-   *             sort_order: 'value',
-   *             sort_descending: false,
+   *             displayName: 'Color',
+   *             sortOrder: 'value',
+   *             sortDescending: false,
    *             position: 1,
    *         },
    *         {
@@ -2593,7 +2605,8 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, facetConfigurations } = parameters;
+    const { section, facetConfigurations: facetConfigurationsRaw } = parameters;
+    const facetConfigurations = facetConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
     const additionalQueryParams = {
       section: section || 'Products',
     };
@@ -2633,15 +2646,15 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {string} [parameters.sort_order] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
-   * @param {boolean} [parameters.sort_descending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
-   * @param {string} [parameters.range_type] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
-   * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
-   * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
-   * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
-   * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
+   * @param {string} [parameters.rangeType] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
+   * @param {string} [parameters.rangeFormat] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
+   * @param {number} [parameters.bucketSize] - Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
+   * @param {json} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
    * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users. Setting to true will require authentication to view the facet. Default value is false.
@@ -2656,9 +2669,9 @@ class Catalog {
    * constructorio.catalog.replaceFacetConfiguration({
    *     name: 'color',
    *     type: 'multiple',
-   *     display_name: 'Color',
-   *     sort_order: 'value',
-   *     sort_descending: false,
+   *     displayName: 'Color',
+   *     sortOrder: 'value',
+   *     sortDescending: false,
    *     position: 1,
    * });
    */
@@ -2683,7 +2696,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify({ name, ...rest }),
+      body: JSON.stringify(toSnakeCaseKeys({ name, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -2705,15 +2718,15 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet configuration details
    * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.type - Type of facet. Must be one of multiple or range (numerical).
-   * @param {string} [parameters.display_name] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
-   * @param {string} [parameters.sort_order] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
-   * @param {boolean} [parameters.sort_descending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
-   * @param {string} [parameters.range_type] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
-   * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
-   * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
-   * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
-   * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users. Defaults to null, in which case the name will be presented.
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
+   * @param {string} [parameters.rangeType] - Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
+   * @param {string} [parameters.rangeFormat] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
+   * @param {number} [parameters.bucketSize] - Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
+   * @param {json} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
    * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users. Setting to true will require authentication to view the facet. Default value is false.
@@ -2728,9 +2741,9 @@ class Catalog {
    * constructorio.catalog.modifyFacetConfiguration({
    *     name: 'color',
    *     type: 'multiple',
-   *     display_name: 'Color',
-   *     sort_order: 'num_matches',
-   *     sort_descending: true,
+   *     displayName: 'Color',
+   *     sortOrder: 'num_matches',
+   *     sortDescending: true,
    *     position: 1,
    * });
    */
@@ -2755,7 +2768,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify({ name, ...rest }),
+      body: JSON.stringify(toSnakeCaseKeys({ name, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -2829,7 +2842,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique value for the facet option
-   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {string} [parameters.displayName=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
    * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
@@ -2842,7 +2855,7 @@ class Catalog {
    * constructorio.catalog.addFacetOptionConfiguration({
    *     facetGroupName: 'color',
    *     value: 'blue',
-   *     display_name: 'Blue',
+   *     displayName: 'Blue',
    *     position: 5,
    * });
    */
@@ -2867,7 +2880,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(rest),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -2900,12 +2913,12 @@ class Catalog {
    *     facetOptionConfigurations: [
    *         {
    *             value: 'blue',
-   *             display_name: 'Blue',
+   *             displayName: 'Blue',
    *             position: 5,
    *         },
    *         {
    *             value: 'red',
-   *             display_name: 'Red',
+   *             displayName: 'Red',
    *             position: 3,
    *         },
    *     ],
@@ -2916,7 +2929,8 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { facetGroupName, section, facetOptionConfigurations } = parameters;
+    const { facetGroupName, section, facetOptionConfigurations: facetOptionConfigurationsRaw } = parameters;
+    const facetOptionConfigurations = facetOptionConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
     const additionalQueryParams = {
       section: section || 'Products',
     };
@@ -2954,7 +2968,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {number} [parameters.page=1] - Page number you'd like to request
-   * @param {number} [parameters.num_results_per_page=100] - Number of facets per page in paginated response
+   * @param {number} [parameters.numResultsPerPage=100] - Number of facets per page in paginated response
    * @param {string} [parameters.section='Products'] - The section in which your facet is defined
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2964,7 +2978,7 @@ class Catalog {
    * constructorio.catalog.getFacetOptionConfigurations({
    *     facetGroupName: 'color',
    *     page: 3,
-   *     num_results_per_page: 50
+   *     numResultsPerPage: 50
    * });
    */
   getFacetOptionConfigurations(parameters = {}, networkParameters = {}) {
@@ -3062,7 +3076,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique facet option value
-   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {string} [parameters.displayName=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
    * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
@@ -3075,7 +3089,7 @@ class Catalog {
    * constructorio.catalog.replaceFacetOptionConfiguration({
    *     facetGroupName: 'color',
    *     value: 'blue',
-   *     display_name: 'Midnight Blue',
+   *     displayName: 'Midnight Blue',
    *     position: 9,
    * });
    */
@@ -3100,7 +3114,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify({ value, ...rest }),
+      body: JSON.stringify(toSnakeCaseKeys({ value, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -3122,7 +3136,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for facet option configuration details
    * @param {string} parameters.facetGroupName - Unique facet name used to refer to the facet in your catalog
    * @param {string} parameters.value - A unique facet option value
-   * @param {string} [parameters.display_name=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
+   * @param {string} [parameters.displayName=null] - The name of the facet presented to the end users - if none is supplied, the value from name will be used
    * @param {number} [parameters.position=null] - Slot facet groups to fixed positions
    * @param {boolean} [parameters.hidden=false] - Specifies whether the facet option is hidden from users
    * @param {object} [parameters.data={}] - Dictionary/Object with any extra facet data
@@ -3135,7 +3149,7 @@ class Catalog {
    * constructorio.catalog.modifyFacetOptionConfiguration({
    *     facetGroupName: 'color',
    *     value: 'blue',
-   *     display_name: 'Midnight Blue',
+   *     displayName: 'Midnight Blue',
    *     position: 9,
    * });
    */
@@ -3160,7 +3174,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify({ value, ...rest }),
+      body: JSON.stringify(toSnakeCaseKeys({ value, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),

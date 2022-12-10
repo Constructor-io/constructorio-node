@@ -170,6 +170,24 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
+          itemGroups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.replaceCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `item_groups` - Should replace a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
         };
@@ -188,7 +206,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -208,7 +226,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -228,7 +246,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsStream,
           variations: variationsStream,
-          item_groups: itemGroupsStream,
+          itemGroups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -412,6 +430,24 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
+          itemGroups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.updateCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `item_groups` - Should update a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
         };
@@ -430,7 +466,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -450,7 +486,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -470,7 +506,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsStream,
           variations: variationsStream,
-          item_groups: itemGroupsStream,
+          itemGroups: itemGroupsStream,
           section: 'Products',
         };
 
@@ -654,6 +690,24 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
+          itemGroups: itemGroupsStream,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `item_groups` - Should patch a catalog of item groups using streams', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
           item_groups: itemGroupsStream,
           section: 'Products',
         };
@@ -672,7 +726,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         const data = {
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -692,7 +746,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsBuffer,
           variations: variationsBuffer,
-          item_groups: itemGroupsBuffer,
+          itemGroups: itemGroupsBuffer,
           section: 'Products',
         };
 
@@ -712,7 +766,7 @@ describe('ConstructorIO - Catalog', () => {
         const data = {
           items: itemsStream,
           variations: variationsStream,
-          item_groups: itemGroupsStream,
+          itemGroups: itemGroupsStream,
           section: 'Products',
         };
 

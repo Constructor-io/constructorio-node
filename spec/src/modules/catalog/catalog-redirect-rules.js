@@ -463,6 +463,22 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
+        catalog.getRedirectRules({ numResultsPerPage: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `num_results_per_page` - Should return a response when getting redirect rules with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
         catalog.getRedirectRules({ num_results_per_page: 10, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 

@@ -28,7 +28,7 @@ function createMockFacetConfiguration() {
 
   return {
     name: `facet-${uuid}`,
-    display_name: `Facet ${uuid}`,
+    displayName: `Facet ${uuid}`,
     type: 'multiple',
   };
 }
@@ -78,6 +78,23 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `display_name` - Should resolve when adding a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        // eslint-disable-next-line camelcase
+        const { displayName: display_name, ...rest } = createMockFacetConfiguration();
+        // eslint-disable-next-line camelcase
+        const newFacetConfiguration = { display_name, ...rest };
+        catalog.addFacetConfiguration(newFacetConfiguration).then(() => {
+          // Push mock facet configuration into saved list to be cleaned up afterwards
+          facetConfigurations.push(newFacetConfiguration);
           done();
         });
       });
@@ -168,6 +185,22 @@ describe('ConstructorIO - Catalog', () => {
       });
 
       it('Should return a response when getting facet configurations with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getFacetConfigurations({ numResultsPerPage: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `num_results_per_page` - Should return a response when getting facet configurations with pagination parameters', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -289,7 +322,7 @@ describe('ConstructorIO - Catalog', () => {
         const newFacetConfigurations = [
           {
             name: mockFacetConfigurations[0].name,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
           },
           {
             name: mockFacetConfigurations[1].name,
@@ -373,7 +406,7 @@ describe('ConstructorIO - Catalog', () => {
           const newFacetConfigurations = [
             {
               name: mockFacetConfigurations[0].name,
-              display_name: 'New Facet Display Name',
+              displayName: 'New Facet Display Name',
             },
             {
               name: mockFacetConfigurations[1].name,
@@ -395,7 +428,7 @@ describe('ConstructorIO - Catalog', () => {
           const newFacetConfigurations = [
             {
               name: mockFacetConfigurations[0].name,
-              display_name: 'New Facet Display Name',
+              displayName: 'New Facet Display Name',
             },
             {
               name: mockFacetConfigurations[1].name,
@@ -434,7 +467,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.replaceFacetConfiguration({
           name: mockFacetConfiguration.name,
-          display_name: 'New Facet Display Name',
+          displayName: 'New Facet Display Name',
           type: 'multiple',
           position: 5,
         }).then((res) => {
@@ -442,6 +475,30 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
           expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('type').to.be.a('string').to.equal('multiple');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `display_name` - Should return a response when replacing a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.replaceFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name2',
+          type: 'multiple',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name2');
           expect(res).to.have.property('type').to.be.a('string').to.equal('multiple');
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
@@ -497,7 +554,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.replaceFacetConfiguration({
             name: mockFacetConfiguration.name,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             type: 'multiple',
             position: 5,
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
@@ -511,7 +568,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.replaceFacetConfiguration({
             name: mockFacetConfiguration.name,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             type: 'multiple',
             position: 5,
           })).to.eventually.be.rejectedWith('The operation was aborted.');
@@ -543,13 +600,35 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.modifyFacetConfiguration({
           name: mockFacetConfiguration.name,
-          display_name: 'New Facet Display Name',
+          displayName: 'New Facet Display Name',
           position: 5,
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
           expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `display_name` - Should return a response when modifying a facet configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifyFacetConfiguration({
+          name: mockFacetConfiguration.name,
+          display_name: 'New Facet Display Name2',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockFacetConfiguration.name);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name2');
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
@@ -604,7 +683,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.modifyFacetConfiguration({
             name: mockFacetConfiguration.name,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             position: 5,
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
@@ -617,7 +696,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.modifyFacetConfiguration({
             name: mockFacetConfiguration.name,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             position: 5,
           })).to.eventually.be.rejectedWith('The operation was aborted.');
         });

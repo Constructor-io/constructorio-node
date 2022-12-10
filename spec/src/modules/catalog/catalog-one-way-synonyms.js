@@ -60,6 +60,18 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }).then(done);
+      });
+
+      it('Checking Backwards Compatibility `child_phrases` - Should resolve when adding a one way synonym', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOneWaySynonym({
+          phrase: createMockOneWaySynonymPhrase(),
           child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
@@ -72,7 +84,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -88,7 +100,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -104,7 +116,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -114,7 +126,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.addOneWaySynonym({
             phrase: createMockOneWaySynonymPhrase(),
-            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+            childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
@@ -126,7 +138,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.addOneWaySynonym({
             phrase: createMockOneWaySynonymPhrase(),
-            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+            childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
           })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
@@ -143,11 +155,23 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
 
       it('Should resolve when modifying a one way synonym', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifyOneWaySynonym({
+          phrase: mockOneWaySynonymPhrase,
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+        }).then(done);
+      });
+
+      it('Checking Backwards Compatibility `child_phrases` - Should resolve when modifying a one way synonym', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -167,7 +191,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyOneWaySynonym({
           phrase: createMockOneWaySynonymPhrase(),
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -183,7 +207,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -199,7 +223,7 @@ describe('ConstructorIO - Catalog', () => {
 
         return expect(catalog.modifyOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         })).to.eventually.be.rejected;
       });
 
@@ -209,7 +233,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.modifyOneWaySynonym({
             phrase: mockOneWaySynonymPhrase,
-            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+            childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
@@ -221,7 +245,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.modifyOneWaySynonym({
             phrase: mockOneWaySynonymPhrase,
-            child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+            childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
           })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
@@ -238,7 +262,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
 
@@ -335,7 +359,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
 
@@ -356,6 +380,22 @@ describe('ConstructorIO - Catalog', () => {
       });
 
       it('Should return a response when getting one way synonyms with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getOneWaySynonyms({ numResultsPerPage: 10, page: 1 }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('one_way_synonym_relations').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `num_results_per_page` - Should return a response when getting one way synonyms with pagination parameters', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -426,7 +466,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
 
@@ -499,7 +539,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addOneWaySynonym({
           phrase: mockOneWaySynonymPhrase,
-          child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
+          childPhrases: [{ phrase: createMockOneWaySynonymPhrase() }],
         }).then(done);
       });
 

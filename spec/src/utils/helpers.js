@@ -10,6 +10,8 @@ const {
   createAuthHeader,
   applyNetworkTimeout,
   combineCustomHeaders,
+  toSnakeCase,
+  toSnakeCaseKeys,
 } = require('../../../test/utils/helpers'); // eslint-disable-line import/extensions
 
 chai.use(chaiAsPromised);
@@ -40,6 +42,64 @@ describe('ConstructorIO - Utils - Helpers', () => {
             color: 'green',
           },
           userId: 'boink doink yoink', // contains non-breaking spaces
+          section: 'Products',
+        });
+      });
+    });
+
+    describe('toSnakeCase', () => {
+      it('Should convert to camel case', () => {
+        const camelCasedStr = 'helloThisIsMyWorld';
+        const snakeCasedStr = toSnakeCase(camelCasedStr);
+
+        expect(snakeCasedStr).to.equal('hello_this_is_my_world');
+      });
+
+      it('Should not modify snake case', () => {
+        const camelCasedStr = 'a_lovely_day';
+        const snakeCasedStr = toSnakeCase(camelCasedStr);
+
+        expect(snakeCasedStr).to.equal('a_lovely_day');
+      });
+    });
+
+    describe('toSnakeCaseKeys', () => {
+      it('Should convert shallow keys', () => {
+        const camelCasedObj = {
+          originReferrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
+          userId: 'boink doink yoink',
+          section: 'Products',
+        };
+        const snakeCasedObj = toSnakeCaseKeys(camelCasedObj);
+
+        expect(snakeCasedObj).to.deep.equal({
+          origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
+          user_id: 'boink doink yoink',
+          section: 'Products',
+        });
+      });
+
+      it('Should convert deeply nested keys', () => {
+        const camelCasedObj = {
+          originReferrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
+          userId: 'boink doink yoink',
+          filters: {
+            colorScheme: {
+              redGreenBlue: 'abc_gef_hij',
+            },
+          },
+          section: 'Products',
+        };
+        const snakeCasedObj = toSnakeCaseKeys(camelCasedObj, true);
+
+        expect(snakeCasedObj).to.deep.equal({
+          origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
+          user_id: 'boink doink yoink',
+          filters: {
+            color_scheme: {
+              red_green_blue: 'abc_gef_hij',
+            },
+          },
           section: 'Products',
         });
       });
