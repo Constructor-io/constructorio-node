@@ -27,7 +27,7 @@ function createMockFacetConfiguration() {
 
   return {
     name: `facet-${uuid}`,
-    display_name: `Facet ${uuid}`,
+    displayName: `Facet ${uuid}`,
     type: 'multiple',
   };
 }
@@ -37,7 +37,7 @@ function createMockFacetOptionConfiguration(facetGroupName) {
 
   const mockFacetOptionConfiguration = {
     value: `facet-option-${uuid}`,
-    display_name: `Facet Option ${uuid}`,
+    displayName: `Facet Option ${uuid}`,
   };
 
   if (facetGroupName) {
@@ -98,6 +98,18 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => done());
+      });
+
+      it('Backwards Compatibility `display_name` - Should resolve when adding a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        // eslint-disable-next-line camelcase
+        const { displayName: display_name, ...rest } = createMockFacetOptionConfiguration(facetGroupName);
+        // eslint-disable-next-line camelcase
+        catalog.addFacetOptionConfiguration({ display_name, ...rest }).then(() => done());
       });
 
       it('Should return error when adding a facet option configuration that already exists', () => {
@@ -183,12 +195,12 @@ describe('ConstructorIO - Catalog', () => {
         const newFacetOptionConfigurations = [
           {
             value: mockFacetOptionConfigurations[0].value,
-            display_name: 'New Facet Option Display Name',
+            displayName: 'New Facet Option Display Name',
             position: 3,
           },
           {
             value: mockFacetOptionConfigurations[1].value,
-            display_name: 'New Facet Option Display Name #2',
+            displayName: 'New Facet Option Display Name #2',
             position: 5,
           },
         ];
@@ -198,10 +210,10 @@ describe('ConstructorIO - Catalog', () => {
           facetOptionConfigurations: newFacetOptionConfigurations,
         }).then((res) => {
           expect(res[0]).to.have.property('value').to.be.a('string').to.be.oneOf([mockFacetOptionConfigurations[0].value, mockFacetOptionConfigurations[1].value]);
-          expect(res[0]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].display_name, newFacetOptionConfigurations[1].display_name]);
+          expect(res[0]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].displayName, newFacetOptionConfigurations[1].displayName]);
           expect(res[0]).to.have.property('position').to.be.a('number').to.be.oneOf([newFacetOptionConfigurations[0].position, newFacetOptionConfigurations[1].position]);
           expect(res[1]).to.have.property('value').to.be.a('string').to.be.oneOf([mockFacetOptionConfigurations[0].value, mockFacetOptionConfigurations[1].value]);
-          expect(res[1]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].display_name, newFacetOptionConfigurations[1].display_name]);
+          expect(res[1]).to.have.property('display_name').to.be.a('string').to.be.oneOf([newFacetOptionConfigurations[0].displayName, newFacetOptionConfigurations[1].displayName]);
           expect(res[1]).to.have.property('position').to.be.a('number').to.be.oneOf([newFacetOptionConfigurations[0].position, newFacetOptionConfigurations[1].position]);
           expect(fetchSpy).to.have.been.called;
           done();
@@ -306,6 +318,26 @@ describe('ConstructorIO - Catalog', () => {
       });
 
       it('Should return a response when getting facet option configurations with pagination parameters', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getFacetOptionConfigurations({
+          facetGroupName,
+          numResultsPerPage: 10,
+          page: 1,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('facet_options').to.be.an('array').length.gte(1);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `num_results_per_page` - Should return a response when getting facet option configurations with pagination parameters', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -438,13 +470,36 @@ describe('ConstructorIO - Catalog', () => {
         catalog.replaceFacetOptionConfiguration({
           facetGroupName,
           value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Option Display Name',
+          displayName: 'New Facet Option Display Name',
           position: 5,
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
           expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Option Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `display_name` - Should return a response when replacing a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.replaceFacetOptionConfiguration({
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Option Display Name2',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Option Display Name2');
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
@@ -503,7 +558,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.replaceFacetOptionConfiguration({
             facetGroupName,
             value: mockFacetOptionConfiguration.value,
-            display_name: 'New Facet Option Display Name',
+            displayName: 'New Facet Option Display Name',
             position: 5,
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
@@ -517,7 +572,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.replaceFacetOptionConfiguration({
             facetGroupName,
             value: mockFacetOptionConfiguration.value,
-            display_name: 'New Facet Option Display Name',
+            displayName: 'New Facet Option Display Name',
             position: 5,
           })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
@@ -545,13 +600,36 @@ describe('ConstructorIO - Catalog', () => {
         catalog.modifyFacetOptionConfiguration({
           facetGroupName,
           value: mockFacetOptionConfiguration.value,
-          display_name: 'New Facet Display Name',
+          displayName: 'New Facet Display Name',
           position: 5,
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
           expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name');
+          expect(res).to.have.property('position').to.be.a('number').to.equal(5);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `display_name` - Should return a response when modifying a facet option configuration', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.modifyFacetOptionConfiguration({
+          facetGroupName,
+          value: mockFacetOptionConfiguration.value,
+          display_name: 'New Facet Display Name2',
+          position: 5,
+        }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('value').to.be.a('string').to.equal(mockFacetOptionConfiguration.value);
+          expect(res).to.have.property('display_name').to.be.a('string').to.equal('New Facet Display Name2');
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
@@ -610,7 +688,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifyFacetOptionConfiguration({
             facetGroupName,
             value: mockFacetOptionConfiguration.value,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             position: 5,
           }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
@@ -624,7 +702,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifyFacetOptionConfiguration({
             facetGroupName,
             value: mockFacetOptionConfiguration.value,
-            display_name: 'New Facet Display Name',
+            displayName: 'New Facet Display Name',
             position: 5,
           })).to.eventually.be.rejectedWith('The user aborted a request.');
         });
