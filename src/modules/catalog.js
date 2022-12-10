@@ -1033,7 +1033,6 @@ class Catalog {
     const { item_groups, itemGroups = item_groups, ...rest } = parameters;
     const params = { itemGroups, ...rest };
     params.itemGroups = params.itemGroups.map((config) => toSnakeCaseKeys(config));
-    console.log(params);
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
     } catch (e) {
