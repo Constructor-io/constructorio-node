@@ -112,7 +112,7 @@ class Quizzes {
    *    versionId: '123'
    * });
    */
-  getQuizNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizNextQuestion(id, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -120,7 +120,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'next');
+      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'next');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -175,6 +175,7 @@ class Quizzes {
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -188,7 +189,7 @@ class Quizzes {
    *    versionId: '123'
    * });
    */
-  getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizResults(id, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const headers = {};
     const fetch = (this.options && this.options.fetch) || nodeFetch;
@@ -196,7 +197,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'finalize');
+      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'finalize');
     } catch (e) {
       return Promise.reject(e);
     }

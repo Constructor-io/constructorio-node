@@ -432,7 +432,6 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.modifyItemGroup(mockItemGroup).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
           expect(res).to.have.property('id').to.be.a('string').to.equal(mockItemGroup.id);
           expect(res).to.have.property('name').to.be.a('string').to.equal(mockItemGroup.name);
           expect(fetchSpy).to.have.been.called;
@@ -507,7 +506,6 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.removeItemGroups().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
           expect(res).to.have.property('message').to.be.a('string');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
