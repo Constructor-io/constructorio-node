@@ -74,8 +74,9 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
+  const encodedPodId = `${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(podId))}`;
 
-  return `${serviceUrl}/recommendations/v1/pods/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(podId))}?${queryString}`; // eslint-disable-line
+  return `${serviceUrl}/recommendations/v1/pods/${encodedPodId}?${queryString}`;
 }
 
 /**
