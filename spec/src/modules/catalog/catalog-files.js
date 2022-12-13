@@ -339,7 +339,6 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         catalog.updateCatalog(data).then((res) => {
-
           expect(res).to.have.property('task_id');
           expect(res).to.have.property('task_status_path');
           done();

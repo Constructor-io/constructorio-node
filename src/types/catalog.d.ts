@@ -449,7 +449,7 @@ declare class Catalog {
 
     getFacetConfiguration(
         parameters: {
-            name?: number;
+            name?: string;
             section?: string;
         },
         networkParameters?: NetworkParameters
