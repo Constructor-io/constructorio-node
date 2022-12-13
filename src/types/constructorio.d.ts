@@ -12,14 +12,14 @@ import { ConstructorClientOptions } from "./types";
 export = ConstructorIO;
 
 declare class ConstructorIO {
-	constructor(options: ConstructorClientOptions); 
-	private options: ConstructorClientOptions;
-	search: Search;
-	browse: Browse;
-	autocomplete: Autocomplete;
-	recommendations: Recommendations;
-	tracker: Tracker;
-	catalog: Catalog;
-	tasks: Tasks;
-	quizzes: Quizzes; 
+  constructor(options: ConstructorClientOptions);
+  private options: ConstructorClientOptions;
+  search: Search;
+  browse: Browse;
+  autocomplete: Autocomplete;
+  recommendations: Recommendations;
+  tracker: Tracker;
+  catalog: Catalog;
+  tasks: Tasks;
+  quizzes: Quizzes;
 }
