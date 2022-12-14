@@ -1,3 +1,12 @@
+export * from './autocomplete'
+export * from './browse'
+export * from './catalog'
+export * from './quizzes'
+export * from './recommendations'
+export * from './search'
+export * from './tasks'
+export * from './tracker'
+
 export interface NetworkParameters extends Record<string, any> {
   timeout?: number;
 }
@@ -76,7 +85,7 @@ export interface FmtOption extends Record<string, any> {
   groups_max_depth: number;
 }
 
-type Facet = RangeFacet | OptionFacet;
+export type Facet = RangeFacet | OptionFacet;
 
 export interface BaseFacet extends Record<string, any> {
   data: Record<string, any>;

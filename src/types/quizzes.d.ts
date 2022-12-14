@@ -2,11 +2,11 @@ import {
   ConstructorClientOptions,
   NetworkParameters,
   UserParameters,
-} from "./types";
+} from ".";
 
-export = Quizzes;
+export default Quizzes;
 
-interface QuizzesParameters {
+export interface QuizzesParameters {
   section?: string;
   answers?: any[];
   versionId?: string;
@@ -21,30 +21,28 @@ declare class Quizzes {
     parameters?: QuizzesParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Quizzes.NextQuestionResponse>;
+  ): Promise<NextQuestionResponse>;
 
   getQuizResults(
     id: string,
     parameters?: QuizzesParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Quizzes.ResultsResponse>;
+  ): Promise<ResultsResponse>;
 }
 
 /* quizzes results returned from server */
-declare namespace Quizzes {
-  export interface NextQuestionResponse extends Record<string, any> {
-    next_question: Partial<NextQuestion>;
-    is_last_question?: boolean;
-    version_id?: string;
-  }
-  export interface ResultsResponse extends Record<string, any> {
-    result: Partial<QuizResult>;
-    version_id?: string;
-  }
+export interface NextQuestionResponse extends Record<string, any> {
+  next_question: Partial<NextQuestion>;
+  is_last_question?: boolean;
+  version_id?: string;
+}
+export interface ResultsResponse extends Record<string, any> {
+  result: Partial<QuizResult>;
+  version_id?: string;
 }
 
-interface NextQuestion extends Record<string, any> {
+export interface NextQuestion extends Record<string, any> {
   id: number;
   title: string;
   description: string;
@@ -55,12 +53,12 @@ interface NextQuestion extends Record<string, any> {
   input_placeholder: string;
 }
 
-interface QuizResult extends Record<string, any> {
+export interface QuizResult extends Record<string, any> {
   filter_expression: Record<string, any>;
   results_url: string;
 }
 
-interface QuestionOption extends Record<string, any> {
+export interface QuestionOption extends Record<string, any> {
   id: number;
   value: string;
   attribute: {
@@ -70,7 +68,7 @@ interface QuestionOption extends Record<string, any> {
   images: Partial<QuestionImages>;
 }
 
-interface QuestionImages extends Record<string, any> {
+export interface QuestionImages extends Record<string, any> {
   primary_url: string;
   primary_alt: string;
   secondary_url: string;

@@ -1,8 +1,8 @@
-import { NetworkParameters } from "./types";
+import { ConstructorClientOptions, NetworkParameters } from ".";
 
-export = Tasks;
+export default Tasks;
 
-interface TasksParameters {
+export interface TasksParameters {
   numResultsPerPage?: number;
   page?: number;
   startDate?: string;
@@ -18,34 +18,32 @@ declare class Tasks {
   getAllTasks(
     parameters?: TasksParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Tasks.Response>;
+  ): Promise<TasksResponseType>;
 
   getTask(
     parameters?: {
       id: string;
     },
     networkParameters?: NetworkParameters
-  ): Promise<Tasks.SingleTaskResponse>;
+  ): Promise<SingleTaskResponse>;
 }
 
 /* tasks results returned from server */
-declare namespace Tasks {
-  export interface Response {
-    total_count: number;
-    tasks: Partial<Task>[];
-    status_counts: {
-      QUEUED: number;
-      DONE: number;
-      IN_PROGRESS: number;
-      FAILED: number;
-    };
-  }
-  export type SingleTaskResponse = Task;
+export interface TasksResponseType {
+  total_count: number;
+  tasks: Partial<Task>[];
+  status_counts: {
+    QUEUED: number;
+    DONE: number;
+    IN_PROGRESS: number;
+    FAILED: number;
+  };
 }
+export type SingleTaskResponse = Task;
 
-type TaskStatus = "QUEUED" | "DONE" | "FAILED" | "IN_PROGRESS";
+export type TaskStatus = "QUEUED" | "DONE" | "FAILED" | "IN_PROGRESS";
 
-interface Task extends Record<string, any> {
+export interface Task extends Record<string, any> {
   id: number;
   type: "ingestion" | "user_data_request";
   status: TaskStatus;
@@ -58,7 +56,7 @@ interface Task extends Record<string, any> {
   };
 }
 
-interface ChangeLog extends Record<string, any> {
+export interface ChangeLog extends Record<string, any> {
   sections?: {
     [key: string]: {
       items_updated: number;
@@ -67,5 +65,5 @@ interface ChangeLog extends Record<string, any> {
       variations_deleted: number;
     };
   };
-  index_built: built;
+  index_built: boolean;
 }

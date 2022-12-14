@@ -7,7 +7,7 @@ import Catalog from "./catalog";
 import Tasks from "./tasks";
 import Quizzes from "./quizzes";
 
-import { ConstructorClientOptions } from "./types";
+import { ConstructorClientOptions } from ".";
 
 export = ConstructorIO;
 

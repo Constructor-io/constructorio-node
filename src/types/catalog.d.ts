@@ -8,9 +8,9 @@ import {
   NetworkParameters,
   FacetOptionConfiguration,
   RedirectRuleResponse,
-} from "./types";
+} from ".";
 
-export = Catalog;
+export default Catalog;
 
 declare class Catalog {
   constructor(options: ConstructorClientOptions);

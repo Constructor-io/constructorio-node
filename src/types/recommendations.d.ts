@@ -2,9 +2,9 @@ import {
   ConstructorClientOptions,
   NetworkParameters,
   UserParameters,
-} from "./types";
+} from ".";
 
-export = Recommendations;
+export default Recommendations;
 
 interface RecommendationsParameters {
   itemIds?: string | string[];
@@ -24,19 +24,17 @@ declare class Recommendations {
     parameters?: RecommendationsParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Recommendations.RecommendationsResponse>;
+  ): Promise<RecommendationsResponse>;
 }
 
 /* Recommendations results returned from server */
-declare namespace Recommendations {
-  export interface RecommendationsResponse extends Record<string, any> {
-    request: Partial<Request>;
-    response: Partial<Response>;
-    result_id: string;
-  }
+export interface RecommendationsResponse extends Record<string, any> {
+  request: Partial<RecommendationsRequestType>;
+  response: Partial<RecommendationsResponseType>;
+  result_id: string;
 }
 
-interface Request extends Record<string, any> {
+export interface RecommendationsRequestType extends Record<string, any> {
   num_results: number;
   item_id: string;
   filters: {
@@ -46,8 +44,8 @@ interface Request extends Record<string, any> {
   pod_id: string;
 }
 
-interface Response extends Record<string, any> {
-  results: Partial<Result>;
+export interface RecommendationsResponseType extends Record<string, any> {
+  results: Partial<RecommendationsResultType>;
   total_num_results: number;
   pod: {
     id: string;
@@ -56,7 +54,7 @@ interface Response extends Record<string, any> {
   };
 }
 
-interface Result extends Record<string, any> {
+export interface RecommendationsResultType extends Record<string, any> {
   matched_terms: string[];
   data: Record<string, any>;
   value: string;

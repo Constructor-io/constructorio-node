@@ -1,9 +1,9 @@
-import { ConstructorClientOptions, NetworkParameters } from "./types";
+import { ConstructorClientOptions, NetworkParameters } from ".";
 import EventEmitter = require("events");
 
-export = Tracker;
+export default Tracker;
 
-interface TrackerUserParameters {
+export interface TrackerUserParameters {
   sessionId: Number;
   clientId: Number;
   userId?: string;

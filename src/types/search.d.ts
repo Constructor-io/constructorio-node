@@ -10,11 +10,11 @@ import {
   ResultSources,
   SortOption,
   UserParameters,
-} from "./types";
+} from ".";
 
-export = Search;
+export default Search;
 
-interface SearchParameters {
+export interface SearchParameters {
   page?: number;
   resultsPerPage?: number;
   filters?: Record<string, any>;
@@ -36,22 +36,28 @@ declare class Search {
     parameters?: SearchParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Search.SearchResponse>;
+  ): Promise<SearchResponse>;
 }
 
 /* search results returned from server */
-interface Response extends Record<string, any> {
+export interface SearchResponse {
+  request: Partial<SearchRequestType>;
+  response: Partial<Response | Redirect>;
+  result_id: string;
+}
+
+export interface Response extends Record<string, any> {
   result_sources: Partial<ResultSources>;
   facets: Partial<Facet>[];
   groups: Partial<Group>[];
-  results: Partial<Result>[];
+  results: Partial<SearchResultType>[];
   sort_options: Partial<SortOption>[];
   refined_content: Record<string, any>[];
   total_num_results: number;
   features: Partial<Feature>[];
 }
 
-interface Request extends Record<string, any> {
+export interface SearchRequestType extends Record<string, any> {
   page: number;
   num_results_per_page: number;
   section: string;
@@ -65,7 +71,7 @@ interface Request extends Record<string, any> {
   searchandized_items: Record<string, any>;
 }
 
-interface Result extends Record<string, any> {
+export interface SearchResultType extends Record<string, any> {
   matched_terms: string[];
   data: {
     id: string;
@@ -77,15 +83,7 @@ interface Result extends Record<string, any> {
   variations: Record<string, any>[];
 }
 
-declare namespace Search {
-  export interface SearchResponse {
-    request: Partial<Request>;
-    response: Partial<Response | Redirect>;
-    result_id: string;
-  }
-}
-
-interface Redirect extends Record<string, any> {
+export interface Redirect extends Record<string, any> {
   redirect: {
     data: {
       match_id: number;

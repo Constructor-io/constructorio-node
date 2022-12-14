@@ -4,11 +4,11 @@ import {
   RequestFeature,
   RequestFeatureVariant,
   UserParameters,
-} from "./types";
+} from ".";
 
-export = Autocomplete;
+export default Autocomplete;
 
-interface IAutocompleteParameters {
+export interface IAutocompleteParameters {
   numResults?: number;
   filters?: Record<string, any>;
   resultsPerSection?: Record<string, number>;
@@ -25,19 +25,17 @@ declare class Autocomplete {
     parameters?: IAutocompleteParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<Autocomplete.AutocompleteResponse>;
+  ): Promise<AutocompleteResponse>;
 }
 
 /* Autocomplete results returned from server **/
-declare namespace Autocomplete {
-  export interface AutocompleteResponse extends Record<string, any> {
-    request: Partial<Request>;
-    sections: Record<string, Section>;
-    result_id: string;
-  }
+export interface AutocompleteResponse extends Record<string, any> {
+  request: Partial<AutocompleteRequestType>;
+  sections: Record<string, Section>;
+  result_id: string;
 }
 
-interface Request extends Record<string, any> {
+export interface AutocompleteRequestType extends Record<string, any> {
   num_results: number;
   term: string;
   query: string;
@@ -46,9 +44,9 @@ interface Request extends Record<string, any> {
   searchandized_items: Record<string, any>;
 }
 
-type Section = Partial<SectionItem>[];
+export type Section = Partial<SectionItem>[];
 
-interface SectionItem extends Record<string, any> {
+export interface SectionItem extends Record<string, any> {
   data: Record<string, any>;
   is_slotted: boolean;
   labels: Record<string, any>;
