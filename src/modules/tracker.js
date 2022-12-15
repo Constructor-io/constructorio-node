@@ -1,6 +1,5 @@
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
@@ -79,7 +78,7 @@ function applyParamsAsString(parameters, userParameters, options) {
 // Send request to server
 function send(url, userParameters, networkParameters, method = 'GET', body = {}) { // eslint-disable-line max-params
   let request;
-  const fetch = (this.options && this.options.fetch) || nodeFetch;
+  const { fetch } = this.options;
   const controller = new AbortController();
   const { signal } = controller;
   const headers = {};
@@ -273,6 +272,7 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.item_name - Product item name
    * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} parameters.url - Current page URL
    * @param {string} [parameters.variation_id] - Product item variation unique identifier
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -294,41 +294,57 @@ class Tracker {
    *     {
    *         item_name: 'Red T-Shirt',
    *         item_id: 'KMH876',
+   *         url: 'https://constructor.io/product/KMH876',
    *     },
    * );
    */
   trackItemDetailLoad(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-      const url = `${this.options.serviceUrl}/behavior?`;
-      const queryParams = { action: 'item_detail_load' };
-      const { item_name, name, item_id, customer_id, variation_id } = parameters;
+      const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/item_detail_load?`;
+      const bodyParams = {};
+      const {
+        item_name,
+        name,
+        item_id,
+        customer_id,
+        variation_id,
+        url,
+      } = parameters;
 
       // Ensure support for both item_name and name as parameters
       if (item_name) {
-        queryParams.name = item_name;
+        bodyParams.item_name = item_name;
       } else if (name) {
-        queryParams.name = name;
+        bodyParams.item_name = name;
       }
 
       // Ensure support for both item_id and customer_id as parameters
       if (item_id) {
-        queryParams.customer_id = item_id;
+        bodyParams.item_id = item_id;
       } else if (customer_id) {
-        queryParams.customer_id = customer_id;
+        bodyParams.item_id = customer_id;
       }
 
       if (variation_id) {
-        queryParams.variation_id = variation_id;
+        bodyParams.variation_id = variation_id;
       }
 
-      const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+      if (url) {
+        bodyParams.url = url;
+      }
+
+      const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
+      const requestMethod = 'POST';
+      const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
       send.call(
         this,
         requestUrl,
         userParameters,
         networkParameters,
+        requestMethod,
+        requestBody,
       );
 
       return true;

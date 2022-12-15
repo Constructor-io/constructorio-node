@@ -1,6 +1,5 @@
 /* eslint-disable object-curly-newline, no-param-reassign */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
@@ -129,7 +128,7 @@ class Recommendations {
    */
   getRecommendations(podId, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
@@ -205,7 +204,7 @@ class Recommendations {
       apiKey,
       serviceUrl,
     } = this.options;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};

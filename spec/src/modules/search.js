@@ -16,6 +16,7 @@ const testApiKey = process.env.TEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
+const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Search', () => {
   const clientVersion = 'cio-mocha';
@@ -687,19 +688,21 @@ describe('ConstructorIO - Search', () => {
       return expect(search.getSearchResults(query, { section })).to.eventually.be.rejected;
     });
 
-    it('Should be rejected when network request timeout is provided and reached', () => {
-      const { search } = new ConstructorIO(validOptions);
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { search } = new ConstructorIO(validOptions);
 
-      return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
-
-    it('Should be rejected when global network request timeout is provided and reached', () => {
-      const { search } = new ConstructorIO({
-        ...validOptions,
-        networkParameters: { timeout: 20 },
+        return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
       });
 
-      return expect(search.getSearchResults(query, { section }, {})).to.eventually.be.rejectedWith('The user aborted a request.');
-    });
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { search } = new ConstructorIO({
+          ...validOptions,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(search.getSearchResults(query, { section }, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+      });
+    }
   });
 });

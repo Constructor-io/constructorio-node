@@ -1,6 +1,6 @@
 {
   "name": "@constructor-io/constructorio-node",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "Constructor.io Node.js client",
   "main": "src/constructorio.js",
   "types": "src/types/constructorio.d.ts",
@@ -57,7 +57,7 @@
     "form-data": "^4.0.0",
     "node-abort-controller": "^3.0.0",
     "node-fetch": "^2.6.2",
-    "qs": "6.7.2"
+    "qs": "6.9.7"
   },
   "tsd": {
     "directory": "src/types/tests"

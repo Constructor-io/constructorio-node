@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable object-curly-newline, no-underscore-dangle, max-params */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
@@ -272,7 +271,7 @@ class Browse {
    */
   getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = createHeaders(this.options, userParameters, networkParameters);
@@ -356,7 +355,7 @@ class Browse {
    */
   getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = createHeaders(this.options, userParameters, networkParameters);
@@ -427,7 +426,7 @@ class Browse {
    * });
    */
   getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = createHeaders(this.options, userParameters, networkParameters);
@@ -487,7 +486,7 @@ class Browse {
    */
   getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = createHeaders(this.options, userParameters, networkParameters);
@@ -542,7 +541,7 @@ class Browse {
    */
   getBrowseFacetOptions(facetName, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = createHeaders(this.options, userParameters, networkParameters);

@@ -1,6 +1,5 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const helpers = require('../utils/helpers');
 
 // Create URL from supplied quizId and parameters
@@ -115,7 +114,7 @@ class Quizzes {
   getQuizNextQuestion(id, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -192,7 +191,7 @@ class Quizzes {
   getQuizResults(id, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const headers = {};
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
 

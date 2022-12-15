@@ -1,6 +1,5 @@
 /* eslint-disable object-curly-newline, no-underscore-dangle */
 const qs = require('qs');
-const nodeFetch = require('node-fetch').default;
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
 
@@ -142,7 +141,7 @@ class Autocomplete {
    */
   getAutocompleteResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {
     let requestUrl;
-    const fetch = (this.options && this.options.fetch) || nodeFetch;
+    const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
