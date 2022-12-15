@@ -89,7 +89,6 @@ declare class Tracker {
   ): true | Error;
 
   trackConversion(
-    term?: string,
     parameters: {
       item_id: string;
       revenue?: number;
@@ -101,6 +100,7 @@ declare class Tracker {
       result_id?: string;
       section?: string;
     },
+    term?: string,
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
   ): true | Error;
