@@ -25,7 +25,7 @@ declare class Tasks {
       id: string;
     },
     networkParameters?: NetworkParameters
-  ): Promise<SingleTaskResponse>;
+  ): Promise<Task>;
 }
 
 /* tasks results returned from server */
@@ -37,9 +37,9 @@ export interface TasksResponseType {
     DONE: number;
     IN_PROGRESS: number;
     FAILED: number;
+    CANCELED: number;
   };
 }
-export type SingleTaskResponse = Task;
 
 export type TaskStatus = "QUEUED" | "DONE" | "FAILED" | "IN_PROGRESS";
 
@@ -48,7 +48,7 @@ export interface Task extends Record<string, any> {
   type: "ingestion" | "user_data_request";
   status: TaskStatus;
   submission_time: string;
-  last_update: null;
+  last_update: string;
   filename: string;
   protocol: "ftp" | "http" | null;
   result?: {

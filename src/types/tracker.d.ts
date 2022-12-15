@@ -1,5 +1,4 @@
 import { ConstructorClientOptions, NetworkParameters } from ".";
-import EventEmitter = require("events");
 
 export default Tracker;
 
@@ -19,7 +18,7 @@ export interface TrackerUserParameters {
 declare class Tracker {
   constructor(options: ConstructorClientOptions);
   private options: ConstructorClientOptions;
-  private eventemitter: EventEmitter;
+  private eventemitter: any;
 
   trackSessionStart(
     userParameters: TrackerUserParameters,

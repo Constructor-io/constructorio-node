@@ -1,11 +1,11 @@
-export * from './autocomplete'
-export * from './browse'
-export * from './catalog'
-export * from './quizzes'
-export * from './recommendations'
-export * from './search'
-export * from './tasks'
-export * from './tracker'
+export * from "./autocomplete";
+export * from "./browse";
+export * from "./catalog";
+export * from "./quizzes";
+export * from "./recommendations";
+export * from "./search";
+export * from "./tasks";
+export * from "./tracker";
 
 export interface NetworkParameters extends Record<string, any> {
   timeout?: number;
@@ -160,12 +160,13 @@ export interface ItemData extends Record<string, any> {
   group_ids?: string[];
   description?: string;
   active?: boolean;
+  deactivated?: boolean;
 }
 
 export interface ItemGroup extends Record<string, any> {
   id: string;
   name?: string;
-  data?: Record<string, any>;
+  data?: Nullable<Record<string, any>>;
   children?: ItemGroup[];
 }
 
@@ -176,12 +177,12 @@ export interface RedirectRuleMatchObject {
 
 export interface RedirectRuleResponse extends Record<string, any> {
   id: number;
-  end_time?: string;
-  last_updated?: string;
-  start_time?: string;
-  metadata?: Record<string, any>;
+  end_time?: Nullable<string>;
+  last_updated?: Nullable<string>;
+  start_time?: Nullable<string>;
+  metadata?: Nullable<Record<string, any>>;
   url?: string;
-  user_segments?: string[];
+  user_segments?: Nullable<string[]>;
   matches: {
     id: number;
     match_type: "EXACT" | "UNORDERED" | "PHRASE";
@@ -232,14 +233,18 @@ export interface BaseFacetConfiguration {
   display_name?: string;
   sort_order?: "relevance" | "value" | "num_matches";
   sort_descending?: boolean;
-  range_inclusive?: string;
+  range_inclusive?: Nullable<string>;
   match_type?: "any" | "all" | "none";
-  position?: number;
+  position?: Nullable<number>;
   hidden?: boolean;
   protected?: boolean;
   data?: object;
   section?: string;
   options?: Record<string, any>[];
+  range_format: "options" | "boundaries" | null;
+  range_type: "static" | "dynamic" | null;
+  bucket_size?: number | null;
+  range_limits?: number[] | null;
 }
 
 export type FacetConfiguration =
@@ -250,9 +255,25 @@ export type FacetConfiguration =
 
 export interface FacetOptionConfiguration {
   value: string;
-  value_alias?: string;
+  value_alias?: Nullable<string>;
   display_name?: string;
-  position?: number;
+  position?: Nullable<number>;
   hidden?: boolean;
-  data?: Record<string, any>;
+  data?: Nullable<Record<string, any>>;
+}
+
+export interface OneWaySynonymRelation extends Record<string, any> {
+  parent_phrase: string;
+  child_phrases: {
+    automatically_generated: boolean;
+    phrase: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: any;
+  }[];
+}
+
+export interface SynonymGroup extends Record<string, any> {
+  synonym_group_id: number;
+  synonyms: string[];
 }

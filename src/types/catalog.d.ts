@@ -8,6 +8,8 @@ import {
   NetworkParameters,
   FacetOptionConfiguration,
   RedirectRuleResponse,
+  OneWaySynonymRelation,
+  SynonymGroup,
 } from ".";
 
 export default Catalog;
@@ -187,18 +189,7 @@ declare class Catalog {
     },
     networkParameters?: NetworkParameters
   ): Promise<{
-    one_way_synonym_relations: {
-      parent_phrase: string;
-      child_phrases: {
-        automatically_generated: boolean;
-        phrase: string;
-        created_at: string;
-        updated_at: string;
-        [key: string]: any;
-      }[];
-      [key: string]: any;
-    }[];
-    [key: string]: any;
+    one_way_synonym_relations: OneWaySynonymRelation[];
   }>;
 
   getOneWaySynonyms(
@@ -208,17 +199,7 @@ declare class Catalog {
     },
     networkParameters?: NetworkParameters
   ): Promise<{
-    one_way_synonym_relations: {
-      parent_phrase: string;
-      child_phrases: {
-        automatically_generated: boolean;
-        phrase: string;
-        created_at: string;
-        updated_at: string;
-        [key: string]: any;
-      }[];
-      [key: string]: any;
-    }[];
+    one_way_synonym_relations: OneWaySynonymRelation[];
     [key: string]: any;
   }>;
 
@@ -252,11 +233,7 @@ declare class Catalog {
     },
     networkParameters?: NetworkParameters
   ): Promise<{
-    synonym_groups: {
-      synonym_group_id: number;
-      synonyms: string[];
-      [key: string]: any;
-    }[];
+    synonym_groups: SynonymGroup[];
     total_count: number;
     [key: string]: any;
   }>;
@@ -269,11 +246,7 @@ declare class Catalog {
     },
     networkParameters?: NetworkParameters
   ): Promise<{
-    synonym_groups: {
-      synonym_group_id: number;
-      synonyms: string[];
-      [key: string]: any;
-    }[];
+    synonym_groups: SynonymGroup[];
     total_count: number;
     [key: string]: any;
   }>;
@@ -458,7 +431,7 @@ declare class Catalog {
   ): Promise<{
     facets: FacetConfiguration[];
     total_count: number;
-    [keu: string]: any;
+    [key: string]: any;
   }>;
 
   getFacetConfiguration(

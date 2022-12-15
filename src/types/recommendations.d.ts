@@ -1,8 +1,4 @@
-import {
-  ConstructorClientOptions,
-  NetworkParameters,
-  UserParameters,
-} from ".";
+import { ConstructorClientOptions, NetworkParameters, UserParameters } from ".";
 
 export default Recommendations;
 

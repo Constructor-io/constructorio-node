@@ -1,8 +1,4 @@
-import {
-  ConstructorClientOptions,
-  NetworkParameters,
-  UserParameters,
-} from ".";
+import { ConstructorClientOptions, NetworkParameters, UserParameters } from ".";
 
 export default Quizzes;
 
@@ -28,7 +24,7 @@ declare class Quizzes {
     parameters?: QuizzesParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
-  ): Promise<ResultsResponse>;
+  ): Promise<QuizResultsResponse>;
 }
 
 /* quizzes results returned from server */
@@ -37,7 +33,7 @@ export interface NextQuestionResponse extends Record<string, any> {
   is_last_question?: boolean;
   version_id?: string;
 }
-export interface ResultsResponse extends Record<string, any> {
+export interface QuizResultsResponse extends Record<string, any> {
   result: Partial<QuizResult>;
   version_id?: string;
 }
