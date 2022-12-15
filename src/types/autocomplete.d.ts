@@ -8,7 +8,7 @@ import {
 
 export default Autocomplete;
 
-export interface IAutocompleteParameters {
+export interface AutocompleteParameters {
   numResults?: number;
   filters?: Record<string, any>;
   resultsPerSection?: Record<string, number>;
@@ -22,7 +22,7 @@ declare class Autocomplete {
 
   getAutocompleteResults(
     query: string,
-    parameters?: IAutocompleteParameters,
+    parameters?: AutocompleteParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<AutocompleteResponse>;

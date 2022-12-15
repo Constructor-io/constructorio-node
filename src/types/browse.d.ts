@@ -15,7 +15,7 @@ import {
 
 export default Browse;
 
-export interface IBrowseParameters {
+export interface BrowseParameters {
   page?: number;
   offset?: number;
   resultsPerPage?: number;
@@ -36,27 +36,27 @@ declare class Browse {
   getBrowseResults(
     filterName: string,
     filterValue: string,
-    parameters?: IBrowseParameters,
+    parameters?: BrowseParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseResultsResponse>;
 
   getBrowseResultsForItemIds(
     itemIds: string[],
-    parameters?: IBrowseParameters,
+    parameters?: BrowseParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseResultsForItemIdsResponse>;
 
   getBrowseGroups(
-    parameters?: Pick<IBrowseParameters, "filters" | "section" | "fmtOptions">,
+    parameters?: Pick<BrowseParameters, "filters" | "section" | "fmtOptions">,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseGroupsResponse>;
 
   getBrowseFacets(
     parameters?: Pick<
-      IBrowseParameters,
+      BrowseParameters,
       "page" | "offset" | "section" | "fmtOptions" | "resultsPerPage"
     >,
     userParameters?: UserParameters,
@@ -65,7 +65,7 @@ declare class Browse {
 
   getBrowseFacetOptions(
     facetName: string,
-    parameters?: Pick<IBrowseParameters, "section" | "fmtOptions">,
+    parameters?: Pick<BrowseParameters, "section" | "fmtOptions">,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseFacetOptionsResponse>;
