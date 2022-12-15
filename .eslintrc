@@ -16,9 +16,9 @@
   "rules": {
     "max-len": [
       "error",
-      120,
-      2,
       {
+        "code": 120,
+        "tabWidth": 2,
         "ignoreUrls": true,
         "ignoreComments": false,
         "ignoreRegExpLiterals": true,
@@ -27,28 +27,6 @@
       }
     ],
     "object-curly-newline": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "style"
-      }
-    ],
-    "max-depth": [
-      "error",
-      4
-    ],
-    "max-nested-callbacks": [
-      "error",
-      5
-    ],
-    "max-params": [
-      "error",
-      4
-    ],
-    "complexity": [
-      "error",
-      20
-    ],
     "@cspell/spellchecker": [
       "error"
     ]
