@@ -523,7 +523,6 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { search } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
