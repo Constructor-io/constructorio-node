@@ -7,7 +7,7 @@
   "scripts": {
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
-    "lint": "eslint 'src/**/*.js' 'spec/**/*.js'",
+    "lint": "eslint 'src/**/*.js' 'spec/**/*.js' 'src/**/*.d.ts'",
     "test:parallel": "mkdir -p test && cp -rf src/* test && mocha --parallel ./spec/*",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/*",
     "test:types": "tsd .",
@@ -35,6 +35,9 @@
   ],
   "devDependencies": {
     "@cspell/eslint-plugin": "^6.8.2",
+    "@types/events": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^8.6.0",

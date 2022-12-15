@@ -4,7 +4,7 @@ import {
   RequestFeature,
   RequestFeatureVariant,
   UserParameters,
-} from ".";
+} from '.';
 
 export default Autocomplete;
 
@@ -18,6 +18,7 @@ export interface AutocompleteParameters {
 
 declare class Autocomplete {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getAutocompleteResults(
@@ -28,7 +29,7 @@ declare class Autocomplete {
   ): Promise<AutocompleteResponse>;
 }
 
-/* Autocomplete results returned from server **/
+/* Autocomplete results returned from server */
 export interface AutocompleteResponse extends Record<string, any> {
   request: Partial<AutocompleteRequestType>;
   sections: Record<string, Section>;

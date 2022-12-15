@@ -10,12 +10,13 @@ import {
   RedirectRuleResponse,
   OneWaySynonymRelation,
   SynonymGroup,
-} from ".";
+} from '.';
 
 export default Catalog;
 
 declare class Catalog {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   createOrReplaceItems(
@@ -40,7 +41,7 @@ declare class Catalog {
 
   deleteItems(
     parameters: {
-      items: Pick<Item, "id">[];
+      items: Pick<Item, 'id'>[];
       section?: string;
       notificationEmail?: string;
     },
@@ -79,7 +80,7 @@ declare class Catalog {
 
   deleteVariations(
     parameters: {
-      variations: Pick<Variation, "id">[];
+      variations: Pick<Variation, 'id'>[];
       force?: boolean;
       notificationEmail?: string;
       section?: string;

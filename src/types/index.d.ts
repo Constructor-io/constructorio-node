@@ -1,11 +1,11 @@
-export * from "./autocomplete";
-export * from "./browse";
-export * from "./catalog";
-export * from "./quizzes";
-export * from "./recommendations";
-export * from "./search";
-export * from "./tasks";
-export * from "./tracker";
+export * from './autocomplete';
+export * from './browse';
+export * from './catalog';
+export * from './quizzes';
+export * from './recommendations';
+export * from './search';
+export * from './tasks';
+export * from './tracker';
 
 export interface NetworkParameters extends Record<string, any> {
   timeout?: number;
@@ -98,12 +98,12 @@ export interface BaseFacet extends Record<string, any> {
 export interface RangeFacet extends BaseFacet, Record<string, any> {
   max: number;
   min: number;
-  type: "range";
+  type: 'range';
 }
 
 export interface OptionFacet extends BaseFacet, Record<string, any> {
   options: FacetOption[];
-  type: "multiple" | "single" | "hierarchical";
+  type: 'multiple' | 'single' | 'hierarchical';
 }
 
 export interface FacetOption extends Record<string, any> {
@@ -111,7 +111,7 @@ export interface FacetOption extends Record<string, any> {
   display_name: string;
   value: string;
   options?: FacetOption[];
-  range?: ["-inf" | number, "inf" | number];
+  range?: ['-inf' | number, 'inf' | number];
   status: string;
 }
 
@@ -132,8 +132,6 @@ export interface BaseGroup extends Record<string, any> {
   display_name: string;
   group_id: string;
 }
-
-export interface FmtOptions extends Record<string, any> {}
 
 export type Nullable<T> = T | null;
 
@@ -185,7 +183,7 @@ export interface RedirectRuleResponse extends Record<string, any> {
   user_segments?: Nullable<string[]>;
   matches: {
     id: number;
-    match_type: "EXACT" | "UNORDERED" | "PHRASE";
+    match_type: 'EXACT' | 'UNORDERED' | 'PHRASE';
     pattern: string;
     [key: string]: any;
   }[];
@@ -199,50 +197,50 @@ export interface RedirectRuleResponse extends Record<string, any> {
 */
 
 export interface MultipleFacetConfiguration extends BaseFacetConfiguration {
-  type: "multiple";
+  type: 'multiple';
 }
 
 export interface RangeSlidersFacetConfiguration
   extends RangeFacetConfiguration {
-  range_format: "boundaries";
+  range_format: 'boundaries';
 }
 
 export interface RangeOptionsStaticFacetConfiguration
   extends RangeOptionsFacetConfiguration {
-  range_type: "static";
+  range_type: 'static';
   bucket_size?: number;
   range_limits?: number[];
 }
 
 export interface RangeOptionsDynamicFacetConfiguration
   extends RangeOptionsFacetConfiguration {
-  range_type: "dynamic";
+  range_type: 'dynamic';
 }
 
 export interface RangeOptionsFacetConfiguration
   extends RangeFacetConfiguration {
-  range_format: "options";
+  range_format: 'options';
 }
 
 export interface RangeFacetConfiguration extends BaseFacetConfiguration {
-  type: "range";
+  type: 'range';
 }
 
 export interface BaseFacetConfiguration {
   name: string;
   display_name?: string;
-  sort_order?: "relevance" | "value" | "num_matches";
+  sort_order?: 'relevance' | 'value' | 'num_matches';
   sort_descending?: boolean;
   range_inclusive?: Nullable<string>;
-  match_type?: "any" | "all" | "none";
+  match_type?: 'any' | 'all' | 'none';
   position?: Nullable<number>;
   hidden?: boolean;
   protected?: boolean;
   data?: object;
   section?: string;
   options?: Record<string, any>[];
-  range_format: "options" | "boundaries" | null;
-  range_type: "static" | "dynamic" | null;
+  range_format: 'options' | 'boundaries' | null;
+  range_type: 'static' | 'dynamic' | null;
   bucket_size?: number | null;
   range_limits?: number[] | null;
 }

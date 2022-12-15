@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters } from ".";
+import { ConstructorClientOptions, NetworkParameters } from '.';
 
 export default Tasks;
 
@@ -13,6 +13,7 @@ export interface TasksParameters {
 
 declare class Tasks {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getAllTasks(
@@ -41,16 +42,16 @@ export interface TasksResponseType {
   };
 }
 
-export type TaskStatus = "QUEUED" | "DONE" | "FAILED" | "IN_PROGRESS";
+export type TaskStatus = 'QUEUED' | 'DONE' | 'FAILED' | 'IN_PROGRESS';
 
 export interface Task extends Record<string, any> {
   id: number;
-  type: "ingestion" | "user_data_request";
+  type: 'ingestion' | 'user_data_request';
   status: TaskStatus;
   submission_time: string;
   last_update: string;
   filename: string;
-  protocol: "ftp" | "http" | null;
+  protocol: 'ftp' | 'http' | null;
   result?: {
     changelog?: Partial<ChangeLog>;
   };

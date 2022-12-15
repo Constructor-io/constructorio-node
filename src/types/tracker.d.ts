@@ -1,4 +1,5 @@
-import { ConstructorClientOptions, NetworkParameters } from ".";
+import { EventEmitter } from 'events';
+import { ConstructorClientOptions, NetworkParameters } from '.';
 
 export default Tracker;
 
@@ -17,8 +18,10 @@ export interface TrackerUserParameters {
 
 declare class Tracker {
   constructor(options: ConstructorClientOptions);
+
   private options: ConstructorClientOptions;
-  private eventemitter: any;
+
+  private eventemitter: EventEmitter;
 
   trackSessionStart(
     userParameters: TrackerUserParameters,
@@ -89,6 +92,7 @@ declare class Tracker {
   ): true | Error;
 
   trackConversion(
+    term?: string,
     parameters: {
       item_id: string;
       revenue?: number;
@@ -100,7 +104,6 @@ declare class Tracker {
       result_id?: string;
       section?: string;
     },
-    term?: string,
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
   ): true | Error;

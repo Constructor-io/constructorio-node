@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters } from ".";
+import { ConstructorClientOptions, NetworkParameters, UserParameters } from '.';
 
 export default Quizzes;
 
@@ -10,6 +10,7 @@ export interface QuizzesParameters {
 
 declare class Quizzes {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getQuizNextQuestion(
@@ -42,7 +43,7 @@ export interface NextQuestion extends Record<string, any> {
   id: number;
   title: string;
   description: string;
-  type: "single" | "multiple" | "open" | "cover";
+  type: 'single' | 'multiple' | 'open' | 'cover';
   cta_text: string;
   images: Partial<QuestionImages>;
   options: Partial<QuestionOption>[];

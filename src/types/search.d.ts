@@ -10,7 +10,7 @@ import {
   ResultSources,
   SortOption,
   UserParameters,
-} from ".";
+} from '.';
 
 export default Search;
 
@@ -29,6 +29,7 @@ export interface SearchParameters {
 
 declare class Search {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getSearchResults(

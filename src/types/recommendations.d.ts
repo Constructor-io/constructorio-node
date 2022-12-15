@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters } from ".";
+import { ConstructorClientOptions, NetworkParameters, UserParameters } from '.';
 
 export default Recommendations;
 
@@ -13,6 +13,7 @@ interface RecommendationsParameters {
 
 declare class Recommendations {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getRecommendations(

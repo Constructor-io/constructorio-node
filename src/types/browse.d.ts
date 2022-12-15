@@ -11,7 +11,7 @@ import {
   ResultSources,
   SortOption,
   FmtOptions,
-} from ".";
+} from '.';
 
 export default Browse;
 
@@ -31,6 +31,7 @@ export interface BrowseParameters {
 
 declare class Browse {
   constructor(options: ConstructorClientOptions);
+
   options: ConstructorClientOptions;
 
   getBrowseResults(
@@ -49,7 +50,7 @@ declare class Browse {
   ): Promise<GetBrowseResultsForItemIdsResponse>;
 
   getBrowseGroups(
-    parameters?: Pick<BrowseParameters, "filters" | "section" | "fmtOptions">,
+    parameters?: Pick<BrowseParameters, 'filters' | 'section' | 'fmtOptions'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseGroupsResponse>;
@@ -57,7 +58,7 @@ declare class Browse {
   getBrowseFacets(
     parameters?: Pick<
       BrowseParameters,
-      "page" | "offset" | "section" | "fmtOptions" | "resultsPerPage"
+      'page' | 'offset' | 'section' | 'fmtOptions' | 'resultsPerPage'
     >,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
@@ -65,7 +66,7 @@ declare class Browse {
 
   getBrowseFacetOptions(
     facetName: string,
-    parameters?: Pick<BrowseParameters, "section" | "fmtOptions">,
+    parameters?: Pick<BrowseParameters, 'section' | 'fmtOptions'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseFacetOptionsResponse>;
@@ -86,14 +87,14 @@ export type GetBrowseResultsForItemIdsResponse =
 export type GetBrowseGroupsResponse = BrowseResponse<
   Pick<
     GetBrowseResultsResponseData,
-    "result_sources" | "groups" | "refined_content"
+    'result_sources' | 'groups' | 'refined_content'
   >
 >;
 export type GetBrowseFacetsResponse = BrowseResponse<
-  Pick<GetBrowseResultsResponseData, "facets" | "total_num_results">
+  Pick<GetBrowseResultsResponseData, 'facets' | 'total_num_results'>
 >;
 export type GetBrowseFacetOptionsResponse = BrowseResponse<
-  Pick<GetBrowseResultsResponseData, "facets">
+  Pick<GetBrowseResultsResponseData, 'facets'>
 >;
 
 export interface GetBrowseResultsResponseData extends Record<string, any> {
