@@ -1,7 +1,7 @@
-import { expectType } from "tsd";
+import { expectAssignable } from "tsd";
 import { Task, TasksResponseType } from "../tasks";
 
-expectType<TasksResponseType>({
+expectAssignable<TasksResponseType>({
   tasks: [
     {
       id: 42386186,
@@ -26,7 +26,7 @@ expectType<TasksResponseType>({
   },
 })
 
-expectType<Task>({
+expectAssignable<Task>({
   id: 42386186,
   status: "IN_PROGRESS",
   submission_time: "2022-12-14T23:16:22Z",

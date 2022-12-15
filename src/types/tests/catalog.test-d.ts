@@ -1,4 +1,4 @@
-import { expectType } from "tsd";
+import { expectAssignable } from "tsd";
 import {
   FacetConfiguration,
   FacetOptionConfiguration,
@@ -9,7 +9,7 @@ import {
   Variation,
 } from "..";
 
-expectType<Item>({
+expectAssignable<Item>({
   id: "itemId",
   name: "Blue Shirt",
   suggested_score: -1,
@@ -25,7 +25,7 @@ expectType<Item>({
   },
 });
 
-expectType<Variation>({
+expectAssignable<Variation>({
   item_id: "728131de-e50a-4c95-adc3-9b8a37a426fb",
   id: "01e17a49-8984-4bee-b137-a0b4e7f84d00",
   name: "product-01e17a49-8984-4bee-b137-a0b4e7f84d00",
@@ -45,14 +45,14 @@ expectType<Variation>({
   },
 });
 
-expectType<ItemGroup>({
+expectAssignable<ItemGroup>({
   name: "Group 433b2ba0-098e-447f-b772-8add363216eb",
   id: "group-433b2ba0-098e-447f-b772-8add363216eb",
   data: null,
   children: [],
 });
 
-expectType<OneWaySynonymRelation>({
+expectAssignable<OneWaySynonymRelation>({
   parent_phrase: "phrase-1ac335a9-9cf4-4f21-b572-2a2aef27a192",
   child_phrases: [
     {
@@ -64,7 +64,7 @@ expectType<OneWaySynonymRelation>({
   ],
 });
 
-expectType<RedirectRuleResponse>({
+expectAssignable<RedirectRuleResponse>({
   id: 42492,
   start_time: null,
   end_time: null,
@@ -81,7 +81,7 @@ expectType<RedirectRuleResponse>({
   ],
 });
 
-expectType<FacetConfiguration>({
+expectAssignable<FacetConfiguration>({
   name: "facet-f664731d-9d84-4e82-bd2b-8528bb12d670",
   display_name: "Facet f664731d-9d84-4e82-bd2b-8528bb12d670",
   sort_order: "relevance",
@@ -99,7 +99,7 @@ expectType<FacetConfiguration>({
   data: {},
 });
 
-expectType<FacetOptionConfiguration>({
+expectAssignable<FacetOptionConfiguration>({
   value: "facet-option-9c8e604b-b780-4264-9be2-c587fdcd8c33",
   value_alias: null,
   display_name: "Facet Option 9c8e604b-b780-4264-9be2-c587fdcd8c33",
