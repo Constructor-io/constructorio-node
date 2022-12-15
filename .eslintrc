@@ -1,18 +1,19 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "env": {
-    "browser": true,
-    "mocha": true
+    "mocha": true,
+    "node": true
   },
   "extends": [
     "airbnb-base",
     "plugin:@cspell/recommended"
   ],
   "globals": {
-    "CLIENT_VERSION": true,
     "expect": true
   },
   "rules": {
-    "global-require": "off",
     "max-len": [
       "error",
       120,
@@ -26,8 +27,6 @@
       }
     ],
     "object-curly-newline": "off",
-    "padded-blocks": "off",
-    "react/prefer-stateless-function": "off",
     "no-unused-vars": [
       "error",
       {
@@ -50,6 +49,8 @@
       "error",
       20
     ],
-    "@cspell/spellchecker": ["error"]
+    "@cspell/spellchecker": [
+      "error"
+    ]
   }
 }
