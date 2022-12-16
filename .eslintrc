@@ -1,26 +1,19 @@
 {
-  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "requireConfigFile": false,
-    "babelOptions": {
-      "babelrc": false,
-      "configFile": false
-    }
+    "ecmaVersion": 2020
   },
   "env": {
-    "browser": true,
-    "mocha": true
+    "mocha": true,
+    "node": true
   },
   "extends": [
     "airbnb-base",
     "plugin:@cspell/recommended"
   ],
   "globals": {
-    "CLIENT_VERSION": true,
     "expect": true
   },
   "rules": {
-    "global-require": "off",
     "max-len": [
       "error",
       {
@@ -34,30 +27,6 @@
       }
     ],
     "object-curly-newline": "off",
-    "padded-blocks": "off",
-    "react/prefer-stateless-function": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "style"
-      }
-    ],
-    "max-depth": [
-      "error",
-      4
-    ],
-    "max-nested-callbacks": [
-      "error",
-      5
-    ],
-    "max-params": [
-      "error",
-      4
-    ],
-    "complexity": [
-      "error",
-      20
-    ],
     "@cspell/spellchecker": [
       "error"
     ]

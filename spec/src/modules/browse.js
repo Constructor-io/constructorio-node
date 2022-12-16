@@ -1110,7 +1110,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1414,7 +1413,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1600,7 +1598,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1784,7 +1781,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,

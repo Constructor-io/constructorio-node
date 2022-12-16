@@ -27,7 +27,6 @@ describe('ConstructorIO - Quizzes', () => {
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
     fetchSpy = sinon.spy(nodeFetch);
-
   });
 
   afterEach(() => {

@@ -423,7 +423,6 @@ describe('ConstructorIO - Autocomplete', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
