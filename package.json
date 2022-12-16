@@ -32,7 +32,6 @@
     "src/**/*"
   ],
   "devDependencies": {
-    "@babel/eslint-parser": "^7.19.1",
     "@cspell/eslint-plugin": "^6.8.2",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
