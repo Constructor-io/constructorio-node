@@ -464,7 +464,6 @@ class Catalog {
       signal,
     }).then((response) => {
       if (response.ok) {
-
         return response.json();
       }
 

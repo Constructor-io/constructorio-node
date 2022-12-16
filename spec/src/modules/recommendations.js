@@ -608,7 +608,6 @@ describe('ConstructorIO - Recommendations', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
