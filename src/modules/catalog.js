@@ -801,6 +801,7 @@ class Catalog {
    * @param {string} parameters.id - Item group ID
    * @param {string} parameters.name - Item group name
    * @param {string} [parameters.parent_id] - Item group parent ID
+   * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1454,7 +1455,7 @@ class Catalog {
    *
    * @function addSynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
-   * @param {object[]} parameters.synonyms - Allows you to add synonyms to the newly created group
+   * @param {string[]} parameters.synonyms - Allows you to add synonyms to the newly created group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1502,7 +1503,7 @@ class Catalog {
    * @function modifySynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {number} parameters.id - Synonym group ID
-   * @param {object[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
+   * @param {string[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1744,7 +1745,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1807,7 +1808,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1870,7 +1871,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.start_time] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.end_time] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.user_segments] - List of user segments
+   * @param {string[]} [parameters.user_segments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2399,7 +2400,7 @@ class Catalog {
    * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
    * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
    * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {number[]} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
    * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
@@ -2639,7 +2640,7 @@ class Catalog {
    * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
    * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
    * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {number[]} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
    * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
@@ -2711,7 +2712,7 @@ class Catalog {
    * @param {string} [parameters.range_format] - Determine wether the range facet is configured to displayed as a slider (with min/max values) or as a list of buckets. Must be one of boundaries (for sliders) or options (for buckets).
    * @param {string} [parameters.range_inclusive] - Used to create inclusive buckets. Must be one of above (options have no upper bound), below (no lower bound), or null (if range options should not be inclusive).
    * @param {number} [parameters.bucket_size] - Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
-   * @param {json} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
+   * @param {number[]} [parameters.range_limits] - Defines the cut-off points for generating static range buckets. Should be a list of sorted numbers (i.e. [10, 25, 40]). Default value is null.
    * @param {string} [parameters.match_type] - Specifies the behavior of filters when multiple options of the same facet group are selected. Must be one of any, all, or none. Default value is any.
    * @param {number} [parameters.position] - Slot facet groups to fixed positions. Default value is null.
    * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users. Used for non-sensitive data that you don't want to show to end users. Default value is false.
