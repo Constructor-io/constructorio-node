@@ -58,7 +58,7 @@
   "dependencies": {
     "form-data": "^4.0.0",
     "node-abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.2",
+    "node-fetch": "^3.3.0",
     "qs": "6.9.7"
   },
   "tsd": {

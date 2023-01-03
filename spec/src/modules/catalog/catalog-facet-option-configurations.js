@@ -4,10 +4,11 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -140,7 +141,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addFacetOptionConfiguration(
             createMockFacetOptionConfiguration(facetGroupName),
             { timeout: 10 },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -151,7 +152,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.addFacetOptionConfiguration(
             createMockFacetOptionConfiguration(facetGroupName),
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -253,7 +254,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addOrModifyFacetOptionConfigurations({
             facetGroupName,
             facetOptionConfigurations: mockFacetOptionConfigurations,
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -265,7 +266,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addOrModifyFacetOptionConfigurations({
             facetGroupName,
             facetOptionConfigurations: mockFacetOptionConfigurations,
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -331,7 +332,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.getFacetOptionConfigurations({
             facetGroupName,
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -342,7 +343,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.getFacetOptionConfigurations({
             facetGroupName,
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -399,7 +400,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.getFacetOptionConfiguration({
             facetGroupName,
             value,
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -412,7 +413,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.getFacetOptionConfiguration({
             facetGroupName,
             value,
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -505,7 +506,7 @@ describe('ConstructorIO - Catalog', () => {
             value: mockFacetOptionConfiguration.value,
             display_name: 'New Facet Option Display Name',
             position: 5,
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -519,7 +520,7 @@ describe('ConstructorIO - Catalog', () => {
             value: mockFacetOptionConfiguration.value,
             display_name: 'New Facet Option Display Name',
             position: 5,
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -612,7 +613,7 @@ describe('ConstructorIO - Catalog', () => {
             value: mockFacetOptionConfiguration.value,
             display_name: 'New Facet Display Name',
             position: 5,
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -626,7 +627,7 @@ describe('ConstructorIO - Catalog', () => {
             value: mockFacetOptionConfiguration.value,
             display_name: 'New Facet Display Name',
             position: 5,
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -664,7 +665,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(catalog.removeFacetOptionConfiguration(
             mockFacetOptionConfiguration,
             { timeout: 10 },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -674,7 +675,7 @@ describe('ConstructorIO - Catalog', () => {
           });
           const mockFacetOptionConfiguration = createMockFacetOptionConfiguration(facetGroupName);
 
-          expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejectedWith('The user aborted a request.');
+          expect(catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });

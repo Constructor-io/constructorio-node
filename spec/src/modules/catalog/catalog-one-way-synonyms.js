@@ -4,11 +4,12 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -114,7 +115,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addOneWaySynonym({
             phrase: createMockOneWaySynonymPhrase(),
             child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -126,7 +127,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addOneWaySynonym({
             phrase: createMockOneWaySynonymPhrase(),
             child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -209,7 +210,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifyOneWaySynonym({
             phrase: mockOneWaySynonymPhrase,
             child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -221,7 +222,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifyOneWaySynonym({
             phrase: mockOneWaySynonymPhrase,
             child_phrases: [{ phrase: createMockOneWaySynonymPhrase() }],
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -307,7 +308,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.getOneWaySynonym(
             { phrase: mockOneWaySynonymPhrase },
             { timeout: 10 },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -318,7 +319,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.getOneWaySynonym(
             { phrase: mockOneWaySynonymPhrase },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -400,7 +401,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getOneWaySynonyms({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getOneWaySynonyms({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -409,7 +410,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getOneWaySynonyms()).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -471,7 +472,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.removeOneWaySynonym(
             { phrase: mockOneWaySynonymPhrase },
             { timeout: 10 },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -482,7 +483,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.removeOneWaySynonym(
             { phrase: mockOneWaySynonymPhrase },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -541,7 +542,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.removeOneWaySynonyms({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeOneWaySynonyms({ timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -550,7 +551,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeOneWaySynonyms()).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });

@@ -4,9 +4,10 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -524,7 +525,7 @@ describe('ConstructorIO - Autocomplete', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { autocomplete } = new ConstructorIO(validOptions);
 
-        return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -533,7 +534,7 @@ describe('ConstructorIO - Autocomplete', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(autocomplete.getAutocompleteResults(query, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(autocomplete.getAutocompleteResults(query, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
