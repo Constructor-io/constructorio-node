@@ -1,5 +1,5 @@
 /* eslint-disable camelcase, no-unneeded-ternary, max-len */
-const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const nodeFetch = require('./nodeFetch');
 
 // Modules
 const Search = require('./modules/search');
