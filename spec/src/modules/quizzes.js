@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const quizApiKey = process.env.TEST_API_KEY;
+const quizApiKey = process.env.TEST_REQUEST_API_KEY;
 const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
