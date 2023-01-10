@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Constructor-io/constructorio-node#readme",
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=12.20.0"
   },
   "files": [
     "src/**/*"
