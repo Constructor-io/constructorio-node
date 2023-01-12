@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const quizApiKey = process.env.TEST_API_KEY;
+const quizApiKey = process.env.TEST_REQUEST_API_KEY;
 const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
@@ -77,7 +77,7 @@ describe('ConstructorIO - Quizzes', () => {
     });
 
     it('Should return a result provided a valid apiKey, quizId and versionId', () => {
-      const versionId = '1237da89-bfef-4b15-80e4-27f306bd7c32';
+      const versionId = '5c2041f6-11f9-47eb-b9c4-39823a74018e';
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
         fetch: fetchSpy,
@@ -241,7 +241,7 @@ describe('ConstructorIO - Quizzes', () => {
     });
 
     it('Should return a result provided a valid apiKey, quizId and versionId', () => {
-      const versionId = '1237da89-bfef-4b15-80e4-27f306bd7c32';
+      const versionId = '5c2041f6-11f9-47eb-b9c4-39823a74018e';
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
         fetch: fetchSpy,

@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';

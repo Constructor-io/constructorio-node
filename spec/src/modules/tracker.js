@@ -15,7 +15,7 @@ chai.use(sinonChai);
 dotenv.config();
 
 const delayBetweenTests = 25;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Tracker', () => {

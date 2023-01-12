@@ -18,7 +18,7 @@ dotenv.config();
 const itemsToCleanup = [];
 const variationsToCleanup = [];
 const sendTimeout = 300;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_CATALOG_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validOptions = {
   apiKey: testApiKey,
