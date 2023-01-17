@@ -483,6 +483,45 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a valid filterName, filterValue, and preFilterExpression', (done) => {
+      const preFilterExpression = {
+        or: [
+          {
+            and: [
+              { name: 'group_id', value: 'BrandXY' },
+              { name: 'Color', value: 'red' },
+            ],
+          },
+          {
+            and: [
+              { name: 'Color', value: 'blue' },
+              { name: 'Brand', value: 'XYZ' },
+            ],
+          },
+        ],
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('group_id', 'All', { preFilterExpression }).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property('browse_filter_name');
+        expect(res.request).to.have.property('browse_filter_value');
+        expect(res.request.browse_filter_name).to.equal('group_id');
+        expect(res.request.browse_filter_value).to.equal('All');
+        expect(JSON.stringify(res.request.pre_filter_expression)).to.eql(JSON.stringify(preFilterExpression));
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response.results.length).to.be.eql(2);
+        expect(res.response.results[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
+        expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
+        done();
+      });
+    });
+
     it('Should properly encode path parameters', (done) => {
       const specialCharacters = '+[]&';
       const filterNameSpecialCharacters = `name ${specialCharacters}`;
