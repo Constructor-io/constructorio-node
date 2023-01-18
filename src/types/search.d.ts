@@ -2,6 +2,7 @@ import {
   ConstructorClientOptions,
   Facet,
   Feature,
+  FilterExpression,
   FmtOption,
   Group,
   NetworkParameters,
@@ -22,6 +23,7 @@ export interface SearchParameters {
   sortOrder?: string;
   section?: string;
   fmtOptions?: Record<string, any>;
+  preFilterExpression?: FilterExpression;
   hiddenFields?: string[];
   hiddenFacets?: string[];
   variationsMap?: Record<string, any>;

@@ -11,6 +11,7 @@ import {
   ResultSources,
   SortOption,
   FmtOptions,
+  FilterExpression,
 } from '.';
 
 export default Browse;
@@ -24,6 +25,7 @@ export interface BrowseParameters {
   sortOrder?: string;
   section?: string;
   fmtOptions?: FmtOptions;
+  preFilterExpression?: FilterExpression;
   hiddenFields?: string[];
   hiddenFacets?: string[];
   variationsMap?: Record<string, any>;
