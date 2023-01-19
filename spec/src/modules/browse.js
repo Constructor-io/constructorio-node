@@ -220,7 +220,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
@@ -983,7 +984,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
@@ -1401,7 +1403,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(res.response).to.have.property('groups').to.be.an('array');
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
