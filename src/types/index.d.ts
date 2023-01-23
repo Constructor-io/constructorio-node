@@ -275,3 +275,31 @@ export interface SynonymGroup extends Record<string, any> {
   synonym_group_id: number;
   synonyms: string[];
 }
+
+export type FilterExpression =
+  | FilterExpressionGroup
+  | FilterExpressionNot
+  | FilterExpressionValue
+  | FilterExpressionRange;
+
+export type FilterExpressionGroup =
+  | FilterExpressionGroupOr
+  | FilterExpressionGroupAnd;
+
+export type FilterExpressionGroupOr = { or: FilterExpression[] };
+export type FilterExpressionGroupAnd = { and: FilterExpression[] };
+export type FilterExpressionCondition = 'or' | 'and';
+
+export type FilterExpressionNot = { not: FilterExpression };
+
+export type FilterExpressionValue = {
+  name: string;
+  value: string;
+};
+
+export type FilterExpressionRange = {
+  name: string;
+  range: FilterExpressionRangeValue;
+};
+
+export type FilterExpressionRangeValue = ['-inf' | number, 'inf' | number];
