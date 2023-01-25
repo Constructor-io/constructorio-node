@@ -195,7 +195,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section = 'Products', force, notificationEmail } = parameters;
+    const { items, section, force, notificationEmail } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -277,7 +277,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section = 'Products', force, notificationEmail } = parameters;
+    const { items, section, force, notificationEmail } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -349,7 +349,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section = 'Products', force, notificationEmail } = parameters;
+    const { items, section, force, notificationEmail } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -427,7 +427,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { ids, section = 'Products', numResultsPerPage, page } = parameters;
+    const { ids, section, numResultsPerPage, page } = parameters;
     const queryParams = {};
 
     if (ids) {
@@ -508,7 +508,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section = 'Products', force, notificationEmail, variations } = parameters;
+    const { section, force, notificationEmail, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -591,7 +591,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section = 'Products', force, notificationEmail, variations } = parameters;
+    const { section, force, notificationEmail, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -664,7 +664,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section = 'Products', force, notificationEmail, variations } = parameters;
+    const { section, force, notificationEmail, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -744,7 +744,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { ids, itemId, section = 'Products', numResultsPerPage, page } = parameters;
+    const { ids, itemId, section, numResultsPerPage, page } = parameters;
 
     queryParams = {};
 
