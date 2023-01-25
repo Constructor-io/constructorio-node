@@ -210,7 +210,6 @@ describe('ConstructorIO - Catalog', () => {
           variations: variationsBuffer,
           item_groups: itemGroupsBuffer,
           section: 'Products',
-          force: true,
         };
 
         catalog.replaceCatalog(data).then((res) => {
