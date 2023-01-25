@@ -390,7 +390,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
-        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
         done();
       });
     });
@@ -1042,7 +1042,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
-        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
         done();
       });
     });
