@@ -32,8 +32,10 @@ export interface UserParameters {
 }
 
 export interface FmtOptions extends Record<string, any> {
-  show_hidden_facets: boolean;
-  show_protected_facets: boolean;
+  groups_max_depth?: number;
+  groups_start?: 'current' | 'top';
+  show_hidden_facets?: boolean;
+  show_protected_facets?: boolean;
 }
 
 export interface RequestFeature extends Record<string, any> {
@@ -78,11 +80,6 @@ export interface Feature extends Record<string, any> {
     display_name: string;
     [key: string]: any;
   };
-}
-
-export interface FmtOption extends Record<string, any> {
-  groups_start: string;
-  groups_max_depth: number;
 }
 
 export type Facet = RangeFacet | OptionFacet;
