@@ -742,7 +742,7 @@ describe('ConstructorIO - Search', () => {
     }
   });
 
-  describe.only('getVoiceSearchResults', () => {
+  describe('getVoiceSearchResults', () => {
     const voiceSearchQuery = 'show me peanut';
     const term = 'peanut';
     const section = 'Products';
