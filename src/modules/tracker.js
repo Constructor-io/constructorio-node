@@ -270,10 +270,10 @@ class Tracker {
    *
    * @function trackItemDetailLoad
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.item_name - Product item name
-   * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} parameters.itemName - Product item name
+   * @param {string} parameters.itemId - Product item unique identifier
    * @param {string} parameters.url - Current page URL
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -308,26 +308,26 @@ class Tracker {
         name,
         item_id,
         customer_id,
+        customerId = customer_id,
         variation_id,
+        itemName = item_name || name,
+        itemId = item_id || customerId,
+        variationId = variationId,
         url,
       } = parameters;
 
       // Ensure support for both item_name and name as parameters
-      if (item_name) {
-        bodyParams.item_name = item_name;
-      } else if (name) {
-        bodyParams.item_name = name;
+      if (itemName) {
+        bodyParams.item_name = itemName;
       }
 
       // Ensure support for both item_id and customer_id as parameters
-      if (item_id) {
-        bodyParams.item_id = item_id;
-      } else if (customer_id) {
-        bodyParams.item_id = customer_id;
+      if (itemId) {
+        bodyParams.item_id = itemId;
       }
 
-      if (variation_id) {
-        bodyParams.variation_id = variation_id;
+      if (variationId) {
+        bodyParams.variation_id = variationId;
       }
 
       if (url) {
@@ -359,11 +359,11 @@ class Tracker {
    * @function trackAutocompleteSelect
    * @param {string} term - Term of selected autocomplete item
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.original_query - The current autocomplete search query
+   * @param {string} parameters.originalQuery - The current autocomplete search query
    * @param {string} parameters.section - Section the selected item resides within
    * @param {string} [parameters.tr] - Trigger used to select the item (click, etc.)
-   * @param {string} [parameters.group_id] - Group identifier of selected item
-   * @param {string} [parameters.display_name] - Display name of group of selected item
+   * @param {string} [parameters.groupId] - Group identifier of selected item
+   * @param {string} [parameters.displayName] - Display name of group of selected item
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -407,29 +407,33 @@ class Tracker {
         const queryParams = {};
         const {
           original_query,
+          originalQuery = original_query,
           section,
           original_section,
+          originalSection = original_section,
           tr,
           group_id,
+          groupId = group_id,
           display_name,
+          displayName = display_name,
         } = parameters;
 
-        if (original_query) {
-          queryParams.original_query = original_query;
+        if (originalQuery) {
+          queryParams.original_query = originalQuery;
         }
 
         if (tr) {
           queryParams.tr = tr;
         }
 
-        if (original_section || section) {
-          queryParams.section = original_section || section;
+        if (originalSection || section) {
+          queryParams.section = originalSection || section;
         }
 
-        if (group_id) {
+        if (groupId) {
           queryParams.group = {
-            group_id,
-            display_name,
+            group_id: groupId,
+            display_name: displayName,
           };
         }
 
@@ -457,9 +461,9 @@ class Tracker {
    * @function trackSearchSubmit
    * @param {string} term - Term of submitted autocomplete event
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.original_query - The current autocomplete search query
-   * @param {string} [parameters.group_id] - Group identifier of selected item
-   * @param {string} [parameters.display_name] - Display name of group of selected item
+   * @param {string} parameters.originalQuery - The current autocomplete search query
+   * @param {string} [parameters.groupId] - Group identifier of selected item
+   * @param {string} [parameters.displayName] - Display name of group of selected item
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -499,16 +503,16 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/search?`; // eslint-disable-line
         const queryParams = {};
-        const { original_query, group_id, display_name } = parameters;
+        const { original_query, originalQuery = original_query, group_id, groupId = group_id, display_name, displayName = display_name } = parameters;
 
-        if (original_query) {
-          queryParams.original_query = original_query;
+        if (originalQuery) {
+          queryParams.original_query = originalQuery;
         }
 
-        if (group_id) {
+        if (groupId) {
           queryParams.group = {
-            group_id,
-            display_name,
+            group_id: groupId,
+            display_name: displayName,
           };
         }
 
@@ -536,8 +540,8 @@ class Tracker {
    * @function trackSearchResultsLoaded
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {number} parameters.num_results - Total number of results
-   * @param {string[]} [parameters.item_ids] - List of product item unique identifiers in search results listing
+   * @param {number} parameters.numResults - Total number of results
+   * @param {string[]} [parameters.itemIds] - List of product item unique identifiers in search results listing
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -576,18 +580,18 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/behavior?`;
         const queryParams = { action: 'search-results', term };
-        const { num_results, customer_ids, item_ids } = parameters;
+        const { num_results, numResults = num_results, customer_ids, customerIds = customer_ids, item_ids, itemIds = item_ids } = parameters;
         let customerIDs;
 
-        if (!helpers.isNil(num_results)) {
-          queryParams.num_results = num_results;
+        if (!helpers.isNil(numResults)) {
+          queryParams.num_results = numResults;
         }
 
         // Ensure support for both item_ids and customer_ids as parameters
-        if (item_ids && Array.isArray(item_ids)) {
-          customerIDs = item_ids;
-        } else if (customer_ids && Array.isArray(customer_ids)) {
-          customerIDs = customer_ids;
+        if (itemIds && Array.isArray(itemIds)) {
+          customerIDs = itemIds;
+        } else if (customerIds && Array.isArray(customerIds)) {
+          customerIDs = customerIds;
         }
 
         if (customerIDs && Array.isArray(customerIDs) && customerIDs.length) {
@@ -618,10 +622,10 @@ class Tracker {
    * @function trackSearchResultClick
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.item_name - Product item name
-   * @param {string} parameters.item_id - Product item unique identifier
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
-   * @param {string} [parameters.result_id] - Search result identifier (returned in response from Constructor)
+   * @param {string} parameters.itemName - Product item name
+   * @param {string} parameters.itemId - Product item unique identifier
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
+   * @param {string} [parameters.resultId] - Search result identifier (returned in response from Constructor)
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -661,28 +665,24 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/click_through?`; // eslint-disable-line
         const queryParams = {};
-        const { item_name, name, item_id, customer_id, variation_id, result_id } = parameters;
+        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id } = parameters;
 
         // Ensure support for both item_name and name as parameters
-        if (item_name) {
-          queryParams.name = item_name;
-        } else if (name) {
-          queryParams.name = name;
+        if (itemName) {
+          queryParams.name = itemName;
         }
 
         // Ensure support for both item_id and customer_id as parameters
-        if (item_id) {
-          queryParams.customer_id = item_id;
-        } else if (customer_id) {
-          queryParams.customer_id = customer_id;
+        if (customerId) {
+          queryParams.customer_id = customerId;
         }
 
-        if (variation_id) {
-          queryParams.variation_id = variation_id;
+        if (variationId) {
+          queryParams.variation_id = variationId;
         }
 
-        if (result_id) {
-          queryParams.result_id = result_id;
+        if (resultId) {
+          queryParams.result_id = resultId;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -709,14 +709,14 @@ class Tracker {
    * @function trackConversion
    * @param {string} [term] - Search results query term that led to conversion event
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} parameters.itemId - Product item unique identifier
    * @param {number} [parameters.revenue] - Sale price if available, otherwise the regular (retail) price of item
-   * @param {string} [parameters.item_name] - Product item name
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
-   * @param {string} [parameters.type='add_to_cart'] - Conversion type
-   * @param {boolean} [parameters.is_custom_type] - Specify if type is custom conversion type
-   * @param {string} [parameters.display_name] - Display name for the custom conversion type
-   * @param {string} [parameters.result_id] - Result identifier (returned in response from Constructor)
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
+   * @param {string} [parameters.type='addToCart'] - Conversion type
+   * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
+   * @param {string} [parameters.displayName] - Display name for the custom conversion type
+   * @param {string} [parameters.resultId] - Result identifier (returned in response from Constructor)
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -765,32 +765,34 @@ class Tracker {
       const {
         name,
         item_name,
+        itemName = item_name,
         item_id,
+        itemId = item_id,
         customer_id,
+        customerId = customer_id || itemId,
         variation_id,
+        variationId = variation_id,
         revenue,
         section = 'Products',
         display_name,
+        displayName = display_name,
         type,
         is_custom_type,
+        isCustomType = is_custom_type,
       } = parameters;
 
       // Ensure support for both item_id and customer_id as parameters
-      if (item_id) {
-        bodyParams.item_id = item_id;
-      } else if (customer_id) {
-        bodyParams.item_id = customer_id;
+      if (customerId) {
+        bodyParams.item_id = customerId;
       }
 
       // Ensure support for both item_name and name as parameters
-      if (item_name) {
-        bodyParams.item_name = item_name;
-      } else if (name) {
-        bodyParams.item_name = name;
+      if (itemName) {
+        bodyParams.item_name = itemName;
       }
 
-      if (variation_id) {
-        bodyParams.variation_id = variation_id;
+      if (variationId) {
+        bodyParams.variation_id = variationId;
       }
 
       if (revenue) {
@@ -810,12 +812,12 @@ class Tracker {
         bodyParams.type = type;
       }
 
-      if (is_custom_type) {
-        bodyParams.is_custom_type = is_custom_type;
+      if (isCustomType) {
+        bodyParams.is_custom_type = isCustomType;
       }
 
-      if (display_name) {
-        bodyParams.display_name = display_name;
+      if (displayName) {
+        bodyParams.display_name = displayName;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -844,7 +846,7 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {object[]} parameters.items - List of product item objects
    * @param {number} parameters.revenue - The subtotal (excluding taxes, shipping, etc.) of the entire order
-   * @param {string} [parameters.order_id] - Unique order identifier
+   * @param {string} [parameters.orderId] - Unique order identifier
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -864,9 +866,9 @@ class Tracker {
    * @example
    * constructorio.tracker.trackPurchase(
    *     {
-   *         items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
+   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
    *         revenue: 12.00,
-   *         order_id: 'OUNXBG2HMA',
+   *         orderId: 'OUNXBG2HMA',
    *         section: 'Products',
    *     },
    *     {
@@ -884,14 +886,14 @@ class Tracker {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/purchase?`;
       const queryParams = {};
       const bodyParams = {};
-      const { items, revenue, order_id, section } = parameters;
+      const { items, revenue, order_id, orderId = order_id, section } = parameters;
 
-      if (order_id) {
-        bodyParams.order_id = order_id;
+      if (orderId) {
+        bodyParams.order_id = orderId;
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = items.slice(0, 100);
+        bodyParams.items = helpers.toSnakeCaseKeys(items.slice(0, 100), true);
       }
 
       if (revenue) {
@@ -924,16 +926,16 @@ class Tracker {
   }
 
   /**
-   * Send recommendation view event to API
+   * Send recommendatVn view event to API
    *
    * @function trackRecommendationView
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.url - Current page URL
-   * @param {string} parameters.pod_id - Pod identifier
-   * @param {number} parameters.num_results_viewed - Number of results viewed
-   * @param {number} [parameters.result_count] - Total number of results
-   * @param {number} [parameters.result_page] - Page number of results
-   * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
+   * @param {string} parameters.podId - Pod identifier
+   * @param {number} parameters.numResultsViewed - Number of results viewed
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Page number of results
+   * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -953,12 +955,12 @@ class Tracker {
    * @example
    * constructorio.tracker.trackRecommendationView(
    *     {
-   *         result_count: 22,
-   *         result_page: 2,
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         resultCount: 22,
+   *         resultPage: 2,
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
    *         url: 'https://demo.constructor.io/sandbox/farmstand',
-   *         pod_id: '019927c2-f955-4020',
-   *         num_results_viewed: 3,
+   *         podId: '019927c2-f955-4020',
+   *         numResultsViewed: 3,
    *     },
    *     {
    *         sessionId: 1,
@@ -976,24 +978,29 @@ class Tracker {
       const bodyParams = {};
       const {
         result_count,
+        resultCount = result_count,
         result_page,
+        resultPage = result_page,
         result_id,
+        resultId = result_id,
         section,
         url,
         pod_id,
+        podId = pod_id,
         num_results_viewed,
+        numResultsViewed = num_results_viewed,
       } = parameters;
 
-      if (!helpers.isNil(result_count)) {
-        bodyParams.result_count = result_count;
+      if (!helpers.isNil(resultCount)) {
+        bodyParams.result_count = resultCount;
       }
 
-      if (!helpers.isNil(result_page)) {
-        bodyParams.result_page = result_page;
+      if (!helpers.isNil(resultPage)) {
+        bodyParams.result_page = resultPage;
       }
 
-      if (result_id) {
-        bodyParams.result_id = result_id;
+      if (resultId) {
+        bodyParams.result_id = resultId;
       }
 
       if (section) {
@@ -1006,12 +1013,12 @@ class Tracker {
         bodyParams.url = url;
       }
 
-      if (pod_id) {
-        bodyParams.pod_id = pod_id;
+      if (podId) {
+        bodyParams.pod_id = podId;
       }
 
-      if (!helpers.isNil(num_results_viewed)) {
-        bodyParams.num_results_viewed = num_results_viewed;
+      if (!helpers.isNil(numResultsViewed)) {
+        bodyParams.num_results_viewed = numResultsViewed;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1038,17 +1045,17 @@ class Tracker {
    *
    * @function trackRecommendationClick
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.pod_id - Pod identifier
-   * @param {string} parameters.strategy_id - Strategy identifier
-   * @param {string} parameters.item_id - Product item unique identifier
-   * @param {string} parameters.item_name - Product item name
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
+   * @param {string} parameters.podId - Pod identifier
+   * @param {string} parameters.strategyId - Strategy identifier
+   * @param {string} parameters.itemId - Product item unique identifier
+   * @param {string} parameters.itemName - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
-   * @param {string} [parameters.result_id] - Recommendation result identifier (returned in response from Constructor)
-   * @param {number} [parameters.result_count] - Total number of results
-   * @param {number} [parameters.result_page] - Page number of results
-   * @param {number} [parameters.result_position_on_page] - Position of result on page
-   * @param {number} [parameters.num_results_per_page] - Number of results on page
+   * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Page number of results
+   * @param {number} [parameters.resultPositionOnPage] - Position of result on page
+   * @param {number} [parameters.numResultsPerPage] - Number of results on page
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -1067,15 +1074,15 @@ class Tracker {
    * @example
    * constructorio.tracker.trackRecommendationClick(
    *     {
-   *         variation_id: 'KMH879-7632',
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         result_count: 22,
-   *         result_page: 2,
-   *         result_position_on_page: 2,
-   *         num_results_per_page: 12,
-   *         pod_id: '019927c2-f955-4020',
-   *         strategy_id: 'complimentary',
-   *         item_id: 'KMH876',
+   *         variationId: 'KMH879-7632',
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         resultCount: 22,
+   *         resultPage: 2,
+   *         resultPositionOnPage: 2,
+   *         numResultsPerPage: 12,
+   *         podId: '019927c2-f955-4020',
+   *         strategyId: 'complimentary',
+   *         itemId: 'KMH876',
    *     },
    *     {
    *         sessionId: 1,
@@ -1093,20 +1100,30 @@ class Tracker {
       const bodyParams = {};
       const {
         variation_id,
+        variationId = variation_id,
         section,
         result_id,
+        resultId = result_id,
         result_count,
+        resultCount = result_count,
         result_page,
+        resultPage = result_page,
         result_position_on_page,
+        resultPositionOnPage = result_position_on_page,
         num_results_per_page,
+        numResultsPerPage = num_results_per_page,
         pod_id,
+        podId = pod_id,
         strategy_id,
+        strategyId = strategy_id,
         item_id,
+        itemId = item_id,
         item_name,
+        itemName = item_name,
       } = parameters;
 
-      if (variation_id) {
-        bodyParams.variation_id = variation_id;
+      if (variationId) {
+        bodyParams.variation_id = variationId;
       }
 
       if (section) {
@@ -1115,40 +1132,40 @@ class Tracker {
         bodyParams.section = 'Products';
       }
 
-      if (result_id) {
-        bodyParams.result_id = result_id;
+      if (resultId) {
+        bodyParams.result_id = resultId;
       }
 
-      if (!helpers.isNil(result_count)) {
-        bodyParams.result_count = result_count;
+      if (!helpers.isNil(resultCount)) {
+        bodyParams.result_count = resultCount;
       }
 
-      if (!helpers.isNil(result_page)) {
-        bodyParams.result_page = result_page;
+      if (!helpers.isNil(resultPage)) {
+        bodyParams.result_page = resultPage;
       }
 
-      if (!helpers.isNil(result_position_on_page)) {
-        bodyParams.result_position_on_page = result_position_on_page;
+      if (!helpers.isNil(resultPositionOnPage)) {
+        bodyParams.result_position_on_page = resultPositionOnPage;
       }
 
-      if (!helpers.isNil(num_results_per_page)) {
-        bodyParams.num_results_per_page = num_results_per_page;
+      if (!helpers.isNil(numResultsPerPage)) {
+        bodyParams.num_results_per_page = numResultsPerPage;
       }
 
-      if (pod_id) {
-        bodyParams.pod_id = pod_id;
+      if (podId) {
+        bodyParams.pod_id = podId;
       }
 
-      if (strategy_id) {
-        bodyParams.strategy_id = strategy_id;
+      if (strategyId) {
+        bodyParams.strategy_id = strategyId;
       }
 
-      if (item_id) {
-        bodyParams.item_id = item_id;
+      if (itemId) {
+        bodyParams.item_id = itemId;
       }
 
-      if (item_name) {
-        bodyParams.item_name = item_name;
+      if (itemName) {
+        bodyParams.item_name = itemName;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1176,15 +1193,15 @@ class Tracker {
    * @function trackBrowseResultsLoaded
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.url - Current page URL
-   * @param {string} parameters.filter_name - Filter name
-   * @param {string} parameters.filter_value - Filter value
+   * @param {string} parameters.filterName - Filter name
+   * @param {string} parameters.filterValue - Filter value
    * @param {string} [parameters.section="Products"] - Index section
-   * @param {number} [parameters.result_count] - Total number of results
-   * @param {number} [parameters.result_page] - Page number of results
-   * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
-   * @param {object} [parameters.selected_filters] - Selected filters
-   * @param {string} [parameters.sort_order] - Sort order ('ascending' or 'descending')
-   * @param {string} [parameters.sort_by] - Sorting method
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Page number of results
+   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+   * @param {object} [parameters.selectedFilters] - Selected filters
+   * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
+   * @param {string} [parameters.sortBy] - Sorting method
    * @param {object[]} [parameters.items] - List of product item objects
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -1204,16 +1221,16 @@ class Tracker {
    * @example
    * constructorio.tracker.trackBrowseResultsLoaded(
    *     {
-   *         result_count: 22,
-   *         result_page: 2,
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         selected_filters: { brand: ['foo'], color: ['black'] },
-   *         sort_order: 'ascending',
-   *         sort_by: 'price',
-   *         items: [{ item_id: 'KMH876' }, { item_id: 'KMH140' }],
+   *         resultCount: 22,
+   *         resultPage: 2,
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         selectedFilters: { brand: ['foo'], color: ['black'] },
+   *         sortOrder: 'ascending',
+   *         sortBy: 'price',
+   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
    *         url: 'https://demo.constructor.io/sandbox/farmstand',
-   *         filter_name: 'brand',
-   *         filter_value: 'XYZ',
+   *         filterName: 'brand',
+   *         filterValue: 'XYZ',
    *     },
    *     {
    *         sessionId: 1,
@@ -1232,14 +1249,22 @@ class Tracker {
       const {
         section,
         result_count,
+        resultCount = result_count,
         result_page,
+        resultPage = result_page,
         result_id,
+        resultId = result_id,
         selected_filters,
+        selectedFilters = selected_filters,
         url,
         sort_order,
+        sortOrder = sort_order,
         sort_by,
+        sortBy = sort_by,
         filter_name,
+        filterName = filter_name,
         filter_value,
+        filterValue = filter_value,
         items,
       } = parameters;
 
@@ -1249,44 +1274,44 @@ class Tracker {
         bodyParams.section = 'Products';
       }
 
-      if (!helpers.isNil(result_count)) {
-        bodyParams.result_count = result_count;
+      if (!helpers.isNil(resultCount)) {
+        bodyParams.result_count = resultCount;
       }
 
-      if (!helpers.isNil(result_page)) {
-        bodyParams.result_page = result_page;
+      if (!helpers.isNil(resultPage)) {
+        bodyParams.result_page = resultPage;
       }
 
-      if (result_id) {
-        bodyParams.result_id = result_id;
+      if (resultId) {
+        bodyParams.result_id = resultId;
       }
 
-      if (selected_filters) {
-        bodyParams.selected_filters = selected_filters;
+      if (selectedFilters) {
+        bodyParams.selected_filters = selectedFilters;
       }
 
       if (url) {
         bodyParams.url = url;
       }
 
-      if (sort_order) {
-        bodyParams.sort_order = sort_order;
+      if (sortOrder) {
+        bodyParams.sort_order = sortOrder;
       }
 
-      if (sort_by) {
-        bodyParams.sort_by = sort_by;
+      if (sortBy) {
+        bodyParams.sort_by = sortBy;
       }
 
-      if (filter_name) {
-        bodyParams.filter_name = filter_name;
+      if (filterName) {
+        bodyParams.filter_name = filterName;
       }
 
-      if (filter_value) {
-        bodyParams.filter_value = filter_value;
+      if (filterValue) {
+        bodyParams.filter_value = filterValue;
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = items.slice(0, 100);
+        bodyParams.items = helpers.toSnakeCaseKeys(items.slice(0, 100), true);
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1313,17 +1338,17 @@ class Tracker {
    *
    * @function trackBrowseResultClick
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.filter_name - Filter name
-   * @param {string} parameters.filter_value - Filter value
-   * @param {string} parameters.item_id - Product item unique identifier
+   * @param {string} parameters.filterName - Filter name
+   * @param {string} parameters.filterValue - Filter value
+   * @param {string} parameters.itemId - Product item unique identifier
    * @param {string} [parameters.section="Products"] - Index section
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
-   * @param {string} [parameters.result_id] - Browse result identifier (returned in response from Constructor)
-   * @param {number} [parameters.result_count] - Total number of results
-   * @param {number} [parameters.result_page] - Page number of results
-   * @param {number} [parameters.result_position_on_page] - Position of clicked item
-   * @param {number} [parameters.num_results_per_page] - Number of results shown
-   * @param {object} [parameters.selected_filters] -  Selected filters
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
+   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Page number of results
+   * @param {number} [parameters.resultPositionOnPage] - Position of clicked item
+   * @param {number} [parameters.numResultsPerPage] - Number of results shown
+   * @param {object} [parameters.selectedFilters] -  Selected filters
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -1342,16 +1367,16 @@ class Tracker {
    * @example
    * constructorio.tracker.trackBrowseResultClick(
    *     {
-   *         variation_id: 'KMH879-7632',
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         result_count: 22,
-   *         result_page: 2,
-   *         result_position_on_page: 2,
-   *         num_results_per_page: 12,
-   *         selected_filters: { brand: ['foo'], color: ['black'] },
-   *         filter_name: 'brand',
-   *         filter_value: 'XYZ',
-   *         item_id: 'KMH876',
+   *         variationId: 'KMH879-7632',
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         resultCount: 22,
+   *         resultPage: 2,
+   *         resultPositionOnPage: 2,
+   *         numResultsPerPage: 12,
+   *         selectedFilters: { brand: ['foo'], color: ['black'] },
+   *         filterName: 'brand',
+   *         filterValue: 'XYZ',
+   *         itemId: 'KMH876',
    *     },
    *     {
    *         sessionId: 1,
@@ -1370,15 +1395,25 @@ class Tracker {
       const {
         section,
         variation_id,
+        variationId = variation_id,
         result_id,
+        resultId = result_id,
         result_count,
+        resultCount = result_count,
         result_page,
+        resultPage = result_page,
         result_position_on_page,
+        resultPositionOnPage = result_position_on_page,
         num_results_per_page,
+        numResultsPerPage = num_results_per_page,
         selected_filters,
+        selectedFilters = selected_filters,
         filter_name,
+        filterName = filter_name,
         filter_value,
+        filterValue = filter_value,
         item_id,
+        itemId = item_id,
       } = parameters;
 
       if (section) {
@@ -1387,44 +1422,44 @@ class Tracker {
         bodyParams.section = 'Products';
       }
 
-      if (variation_id) {
-        bodyParams.variation_id = variation_id;
+      if (variationId) {
+        bodyParams.variation_id = variationId;
       }
 
-      if (result_id) {
-        bodyParams.result_id = result_id;
+      if (resultId) {
+        bodyParams.result_id = resultId;
       }
 
-      if (!helpers.isNil(result_count)) {
-        bodyParams.result_count = result_count;
+      if (!helpers.isNil(resultCount)) {
+        bodyParams.result_count = resultCount;
       }
 
-      if (!helpers.isNil(result_page)) {
-        bodyParams.result_page = result_page;
+      if (!helpers.isNil(resultPage)) {
+        bodyParams.result_page = resultPage;
       }
 
-      if (!helpers.isNil(result_position_on_page)) {
-        bodyParams.result_position_on_page = result_position_on_page;
+      if (!helpers.isNil(resultPositionOnPage)) {
+        bodyParams.result_position_on_page = resultPositionOnPage;
       }
 
-      if (!helpers.isNil(num_results_per_page)) {
-        bodyParams.num_results_per_page = num_results_per_page;
+      if (!helpers.isNil(numResultsPerPage)) {
+        bodyParams.num_results_per_page = numResultsPerPage;
       }
 
-      if (selected_filters) {
-        bodyParams.selected_filters = selected_filters;
+      if (selectedFilters) {
+        bodyParams.selected_filters = selectedFilters;
       }
 
-      if (filter_name) {
-        bodyParams.filter_name = filter_name;
+      if (filterName) {
+        bodyParams.filter_name = filterName;
       }
 
-      if (filter_value) {
-        bodyParams.filter_value = filter_value;
+      if (filterValue) {
+        bodyParams.filter_value = filterValue;
       }
 
-      if (item_id) {
-        bodyParams.item_id = item_id;
+      if (itemId) {
+        bodyParams.item_id = itemId;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1451,9 +1486,9 @@ class Tracker {
    *
    * @function trackGenericResultClick
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.item_id - Product item unique identifier
-   * @param {string} [parameters.item_name] - Product item name
-   * @param {string} [parameters.variation_id] - Product item variation unique identifier
+   * @param {string} parameters.itemId - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -1473,9 +1508,9 @@ class Tracker {
    * @example
    * constructorio.tracker.trackGenericResultClick(
    *     {
-   *         item_id: 'KMH876',
-   *         item_name: 'Red T-Shirt',
-   *         variation_id: 'KMH879-7632',
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
    *     },
    *     {
    *         sessionId: 1,
@@ -1493,20 +1528,23 @@ class Tracker {
       const bodyParams = {};
       const {
         item_id,
+        itemId = item_id,
         item_name,
+        itemName = item_name,
         variation_id,
+        variationId = variation_id,
         section,
       } = parameters;
 
       bodyParams.section = section || 'Products';
-      bodyParams.item_id = item_id;
+      bodyParams.item_id = itemId;
 
-      if (item_name) {
-        bodyParams.item_name = item_name;
+      if (itemName) {
+        bodyParams.item_name = itemName;
       }
 
-      if (variation_id) {
-        bodyParams.variation_id = variation_id;
+      if (variationId) {
+        bodyParams.variation_id = variationId;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1525,7 +1563,7 @@ class Tracker {
       return true;
     }
 
-    return new Error('A parameters object with an "item_id" property is required.');
+    return new Error('A parameters object with an "itemId" property is required.');
   }
 
   /**
