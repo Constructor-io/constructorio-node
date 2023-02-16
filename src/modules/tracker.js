@@ -383,11 +383,11 @@ class Tracker {
    * constructorio.tracker.trackAutocompleteSelect(
    *     'T-Shirt',
    *     {
-   *         original_query: 'Shirt',
+   *         originalQuery: 'Shirt',
    *         section: 'Products',
    *         tr: 'click',
-   *         group_id: '88JU230',
-   *         display_name: 'apparel',
+   *         groupId: '88JU230',
+   *         displayName: 'apparel',
    *     },
    *     {
    *         sessionId: 1,
@@ -483,9 +483,9 @@ class Tracker {
    * constructorio.tracker.trackSearchSubmit(
    *     'T-Shirt',
    *     {
-   *         original_query: 'Shirt',
-   *         group_id: '88JU230',
-   *         display_name: 'apparel',
+   *         originalQuery: 'Shirt',
+   *         groupId: '88JU230',
+   *         displayName: 'apparel',
    *     },
    *     {
    *         sessionId: 1,
@@ -561,8 +561,8 @@ class Tracker {
    * constructorio.tracker.trackSearchResultsLoaded(
    *     'T-Shirt',
    *     {
-   *         num_results: 167,
-   *         item_ids: ['KMH876', 'KMH140', 'KMH437'],
+   *         numResults: 167,
+   *         itemIds: ['KMH876', 'KMH140', 'KMH437'],
    *     },
    *     {
    *         sessionId: 1,
@@ -645,9 +645,9 @@ class Tracker {
    * constructorio.tracker.trackSearchResultClick(
    *     'T-Shirt',
    *     {
-   *         item_name: 'Red T-Shirt',
-   *         item_id: 'KMH876',
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         itemName: 'Red T-Shirt',
+   *         itemId: 'KMH876',
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
    *     },
    *     {
    *         sessionId: 1,
@@ -738,12 +738,12 @@ class Tracker {
    * constructorio.tracker.trackConversion(
    *     'T-Shirt',
    *     {
-   *         item_id: 'KMH876',
+   *         itemId: 'KMH876',
    *         revenue: 12.00,
-   *         item_name: 'Red T-Shirt',
-   *         variation_id: 'KMH879-7632',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
    *         type: 'like',
-   *         result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
    *         section: 'Products',
    *     },
    *     {
