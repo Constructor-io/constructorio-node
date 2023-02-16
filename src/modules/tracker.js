@@ -312,7 +312,7 @@ class Tracker {
         variation_id,
         itemName = item_name || name,
         itemId = item_id || customerId,
-        variationId = variationId,
+        variationId = variation_id,
         url,
       } = parameters;
 
@@ -716,7 +716,6 @@ class Tracker {
    * @param {string} [parameters.type='addToCart'] - Conversion type
    * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
    * @param {string} [parameters.displayName] - Display name for the custom conversion type
-   * @param {string} [parameters.resultId] - Result identifier (returned in response from Constructor)
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -743,7 +742,6 @@ class Tracker {
    *         itemName: 'Red T-Shirt',
    *         variationId: 'KMH879-7632',
    *         type: 'like',
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
    *         section: 'Products',
    *     },
    *     {
@@ -765,11 +763,10 @@ class Tracker {
       const {
         name,
         item_name,
-        itemName = item_name,
+        itemName = item_name || name, 
         item_id,
-        itemId = item_id,
         customer_id,
-        customerId = customer_id || itemId,
+        itemId = item_id || customer_id,
         variation_id,
         variationId = variation_id,
         revenue,
@@ -782,8 +779,8 @@ class Tracker {
       } = parameters;
 
       // Ensure support for both item_id and customer_id as parameters
-      if (customerId) {
-        bodyParams.item_id = customerId;
+      if (itemId) {
+        bodyParams.item_id = itemId;
       }
 
       // Ensure support for both item_name and name as parameters
@@ -893,7 +890,7 @@ class Tracker {
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = helpers.toSnakeCaseKeys(items.slice(0, 100), true);
+        bodyParams.items = items.slice(0,100).map((item) => helpers.toSnakeCaseKeys(item, false));
       }
 
       if (revenue) {
@@ -1311,7 +1308,7 @@ class Tracker {
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = helpers.toSnakeCaseKeys(items.slice(0, 100), true);
+        bodyParams.items = items.slice(0,100).map((item) => helpers.toSnakeCaseKeys(item, false));
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1523,7 +1520,7 @@ class Tracker {
    */
   trackGenericResultClick(parameters, userParameters, networkParameters = {}) {
     // Ensure required parameters are provided
-    if (typeof parameters === 'object' && parameters && parameters.item_id) {
+    if (typeof parameters === 'object' && parameters && (parameters.item_id || parameters.itemId)) {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/result_click?`;
       const bodyParams = {};
       const {
