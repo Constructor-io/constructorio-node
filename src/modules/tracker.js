@@ -934,7 +934,7 @@ class Tracker {
   }
 
   /**
-   * Send recommendatVn view event to API
+   * Send recommendation view event to API
    *
    * @function trackRecommendationView
    * @param {object} parameters - Additional parameters to be sent with request

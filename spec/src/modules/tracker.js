@@ -1486,7 +1486,7 @@ describe('ConstructorIO - Tracker', () => {
     };
     const originReferrer = 'https://localhost';
   
-    it('Backwards Compatibiilty - Should respond with a valid response when snake cased parameters are provided', (done) => {
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
@@ -4967,7 +4967,7 @@ describe('ConstructorIO - Tracker', () => {
     });
 
     it('Should respond with a valid response when term, required parameters and user agent are provided', (done) => {
-      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTPML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
