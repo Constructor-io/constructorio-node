@@ -18,7 +18,7 @@ const delayBetweenTests = 25;
 const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
-describe.only('ConstructorIO - Tracker', () => {
+describe('ConstructorIO - Tracker', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy = null;
   const userParameters = {
