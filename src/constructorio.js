@@ -1,5 +1,5 @@
 /* eslint-disable camelcase, no-unneeded-ternary, max-len */
-const nodeFetch = require('node-fetch').default;
+const nodeFetch = require('./nodeFetch');
 
 // Modules
 const Search = require('./modules/search');

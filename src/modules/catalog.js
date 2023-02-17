@@ -466,7 +466,6 @@ class Catalog {
       signal,
     }).then((response) => {
       if (response.ok) {
-
         return response.json();
       }
 
@@ -804,6 +803,7 @@ class Catalog {
    * @param {string} parameters.id - Item group ID
    * @param {string} parameters.name - Item group name
    * @param {string} [parameters.parentId] - Item group parent ID
+   * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1466,7 +1466,7 @@ class Catalog {
    *
    * @function addSynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
-   * @param {object[]} parameters.synonyms - Allows you to add synonyms to the newly created group
+   * @param {string[]} parameters.synonyms - Allows you to add synonyms to the newly created group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1514,7 +1514,7 @@ class Catalog {
    * @function modifySynonymGroup
    * @param {object} parameters - Additional parameters for synonym group details
    * @param {number} parameters.id - Synonym group ID
-   * @param {object[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
+   * @param {string[]} parameters.synonyms - Determines what phrases will be included in the final synonym group
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}

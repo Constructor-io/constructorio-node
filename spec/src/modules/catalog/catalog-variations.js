@@ -4,11 +4,12 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -17,7 +18,7 @@ dotenv.config();
 const itemsToCleanup = [];
 const variationsToCleanup = [];
 const sendTimeout = 300;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_CATALOG_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validOptions = {
   apiKey: testApiKey,
@@ -182,7 +183,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.createOrReplaceVariations({ variations: [createMockVariation(item.id)] }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.createOrReplaceVariations({ variations: [createMockVariation(item.id)] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -191,7 +192,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.createOrReplaceVariations({ variations: [createMockVariation(item.id)] })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.createOrReplaceVariations({ variations: [createMockVariation(item.id)] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -294,7 +295,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.updateVariations({ variations: updatedVariations }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateVariations({ variations: updatedVariations }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when network global request timeout is provided and reached', () => {
@@ -303,7 +304,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.updateVariations({ variations: updatedVariations })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateVariations({ variations: updatedVariations })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -424,7 +425,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.deleteVariations({ variations, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.deleteVariations({ variations, section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -433,7 +434,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.deleteVariations({ variations, section: 'Products' })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -570,7 +571,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.retrieveVariations({ section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.retrieveVariations({ section: 'Products' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -579,7 +580,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.retrieveVariations({ section: 'Products' })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.retrieveVariations({ section: 'Products' })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });

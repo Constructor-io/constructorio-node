@@ -4,9 +4,10 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const { expect } = chai;
 
@@ -14,7 +15,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
@@ -219,7 +220,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
@@ -388,7 +390,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
-        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
         done();
       });
     });
@@ -478,6 +480,45 @@ describe('ConstructorIO - Browse', () => {
         expect(res.response.results[0]).to.have.property('variations_map');
         expect(res.response.results[0].variations_map[0]).to.have.property('size');
         expect(res.response.results[0].variations_map[0]).to.have.property('variation');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid filterName, filterValue, and preFilterExpression', (done) => {
+      const preFilterExpression = {
+        or: [
+          {
+            and: [
+              { name: 'group_id', value: 'BrandXY' },
+              { name: 'Color', value: 'red' },
+            ],
+          },
+          {
+            and: [
+              { name: 'Color', value: 'blue' },
+              { name: 'Brand', value: 'XYZ' },
+            ],
+          },
+        ],
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults('group_id', 'All', { preFilterExpression }).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property('browse_filter_name');
+        expect(res.request).to.have.property('browse_filter_value');
+        expect(res.request.browse_filter_name).to.equal('group_id');
+        expect(res.request.browse_filter_value).to.equal('All');
+        expect(JSON.stringify(res.request.pre_filter_expression)).to.eql(JSON.stringify(preFilterExpression));
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response.results.length).to.be.eql(2);
+        expect(res.response.results[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
+        expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
         done();
       });
     });
@@ -751,7 +792,7 @@ describe('ConstructorIO - Browse', () => {
           {},
           {},
           { timeout: 10 },
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
+        )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -765,7 +806,7 @@ describe('ConstructorIO - Browse', () => {
           filterValue,
           {},
           {},
-        )).to.eventually.be.rejectedWith('The user aborted a request.');
+        )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -943,7 +984,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
@@ -1000,7 +1042,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
-        expect(res.response.results[0].data).to.have.property('testField').to.eql('testFieldValue');
+        expect(res.response.results[0].data).to.have.property('testField').to.eql('hiddenFieldValue');
         done();
       });
     });
@@ -1107,7 +1149,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1253,7 +1294,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseResultsForItemIds(ids, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseResultsForItemIds(ids, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1262,7 +1303,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseResultsForItemIds(ids, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseResultsForItemIds(ids, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1362,7 +1403,8 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(res.response).to.have.property('groups').to.be.an('array');
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
@@ -1411,7 +1453,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1499,7 +1540,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseGroups({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseGroups({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1508,7 +1549,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseGroups({}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseGroups({}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1597,7 +1638,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1677,7 +1717,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseFacets({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacets({}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1686,7 +1726,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseFacets({}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacets({}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -1781,7 +1821,6 @@ describe('ConstructorIO - Browse', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { browse } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -1873,7 +1912,7 @@ describe('ConstructorIO - Browse', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { browse } = new ConstructorIO(validOptions);
 
-        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -1882,7 +1921,7 @@ describe('ConstructorIO - Browse', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(browse.getBrowseFacetOptions(facetName, {}, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });

@@ -4,18 +4,19 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const { v4: uuidv4 } = require('uuid');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
 const sendTimeout = 300;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_CATALOG_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validOptions = {
   apiKey: testApiKey,
@@ -100,7 +101,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.addSynonymGroup(
             { synonyms: [createMockSynonym()] },
             { timeout: 10 },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -111,7 +112,7 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.addSynonymGroup(
             { synonyms: [createMockSynonym()] },
-          )).to.eventually.be.rejectedWith('The user aborted a request.');
+          )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -193,7 +194,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifySynonymGroup({
             id: synonymGroupId,
             synonyms: [mockSynonym],
-          }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -205,7 +206,7 @@ describe('ConstructorIO - Catalog', () => {
           return expect(catalog.modifySynonymGroup({
             id: synonymGroupId,
             synonyms: [mockSynonym],
-          })).to.eventually.be.rejectedWith('The user aborted a request.');
+          })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -283,7 +284,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -292,7 +293,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -387,7 +388,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getSynonymGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getSynonymGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -396,7 +397,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.getSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.getSynonymGroups()).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -466,7 +467,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.removeSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeSynonymGroup({ id: synonymGroupId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -475,7 +476,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeSynonymGroup({ id: synonymGroupId })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -531,7 +532,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.removeSynonymGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeSynonymGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -540,7 +541,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.removeSynonymGroups()).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.removeSynonymGroups()).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });

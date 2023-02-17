@@ -1,23 +1,26 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "env": {
-    "browser": true,
-    "mocha": true
+    "mocha": true,
+    "node": true
   },
   "extends": [
     "airbnb-base",
-    "plugin:@cspell/recommended"
+    "plugin:@cspell/recommended",
+    "plugin:@typescript-eslint/eslint-recommended"
   ],
+  "parser": "@typescript-eslint/parser",
   "globals": {
-    "CLIENT_VERSION": true,
     "expect": true
   },
   "rules": {
-    "global-require": "off",
     "max-len": [
       "error",
-      120,
-      2,
       {
+        "code": 120,
+        "tabWidth": 2,
         "ignoreUrls": true,
         "ignoreComments": false,
         "ignoreRegExpLiterals": true,
@@ -26,30 +29,19 @@
       }
     ],
     "object-curly-newline": "off",
-    "padded-blocks": "off",
-    "react/prefer-stateless-function": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "style"
-      }
-    ],
-    "max-depth": [
-      "error",
-      4
-    ],
-    "max-nested-callbacks": [
-      "error",
-      5
-    ],
-    "max-params": [
-      "error",
-      4
-    ],
-    "complexity": [
-      "error",
-      20
-    ],
-    "@cspell/spellchecker": ["error"]
-  }
+    "@cspell/spellchecker": [
+      "error"
+    ]
+  },
+  "overrides": [
+    {
+     "files": ["src/**/*.ts"],
+        "rules": {
+          "no-unused-vars": "off",
+          "no-use-before-define": "off",
+          "import/no-unresolved": "off",
+          "import/extensions": "off"
+        }
+    }
+   ]
 }

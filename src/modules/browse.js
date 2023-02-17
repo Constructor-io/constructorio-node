@@ -36,6 +36,7 @@ function createQueryParams(parameters, userParameters, options) {
       hiddenFields,
       hiddenFacets,
       variationsMap,
+      preFilterExpression,
     } = parameters;
 
     // Pull page from parameters
@@ -98,6 +99,11 @@ function createQueryParams(parameters, userParameters, options) {
     // Pull variations map from parameters
     if (variationsMap) {
       queryParams.variations_map = JSON.stringify(variationsMap);
+    }
+
+    // Pull filter expression from parameters
+    if (preFilterExpression) {
+      queryParams.pre_filter_expression = JSON.stringify(preFilterExpression);
     }
   }
 
@@ -245,6 +251,7 @@ class Browse {
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
+   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results

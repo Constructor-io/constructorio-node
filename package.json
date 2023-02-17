@@ -1,14 +1,16 @@
 {
   "name": "@constructor-io/constructorio-node",
-  "version": "4.3.0",
+  "version": "4.4.5",
   "description": "Constructor.io Node.js client",
   "main": "src/constructorio.js",
+  "types": "src/types/constructorio.d.ts",
   "scripts": {
     "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
-    "lint": "eslint 'src/**/*.js' 'spec/**/*.js'",
+    "lint": "eslint 'src/**/*.js' 'spec/**/*.js' 'src/**/*.d.ts'",
     "test:parallel": "mkdir -p test && cp -rf src/* test && mocha --parallel ./spec/*",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/*",
+    "test:types": "tsd .",
     "precoverage": "rm -rf ./coverage && rm -rf ./.nyc_output",
     "coverage": "nyc --all --reporter=html npm run test:parallel",
     "postcoverage": "open coverage/index.html && rm -rf test",
@@ -26,19 +28,21 @@
   },
   "homepage": "https://github.com/Constructor-io/constructorio-node#readme",
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=12.20.0"
   },
   "files": [
     "src/**/*"
   ],
   "devDependencies": {
     "@cspell/eslint-plugin": "^6.8.2",
+    "@types/events": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^8.6.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.24.2",
     "husky": "^7.0.4",
     "jsdoc": "^3.6.7",
     "license-checker": "^25.0.1",
@@ -48,12 +52,16 @@
     "nyc": "^15.1.0",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.7.0",
+    "tsd": "^0.25.0",
     "uuid": "^8.3.2"
   },
   "dependencies": {
     "form-data": "^4.0.0",
     "node-abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.2",
+    "node-fetch": "^3.3.0",
     "qs": "6.9.7"
+  },
+  "tsd": {
+    "directory": "src/types/tests"
   }
 }

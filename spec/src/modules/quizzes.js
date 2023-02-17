@@ -4,15 +4,16 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const quizApiKey = process.env.TEST_API_KEY;
+const quizApiKey = process.env.TEST_REQUEST_API_KEY;
 const clientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const sessionId = '2';
 const clientVersion = 'cio-mocha';
@@ -26,7 +27,6 @@ describe('ConstructorIO - Quizzes', () => {
   beforeEach(() => {
     global.CLIENT_VERSION = clientVersion;
     fetchSpy = sinon.spy(nodeFetch);
-
   });
 
   afterEach(() => {
@@ -77,7 +77,7 @@ describe('ConstructorIO - Quizzes', () => {
     });
 
     it('Should return a result provided a valid apiKey, quizId and versionId', () => {
-      const versionId = '1237da89-bfef-4b15-80e4-27f306bd7c32';
+      const versionId = 'e03210db-0cc6-459c-8f17-bf014c4f554d';
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
         fetch: fetchSpy,
@@ -177,7 +177,7 @@ describe('ConstructorIO - Quizzes', () => {
           fetch: fetchSpy,
         });
 
-        return expect(quizzes.getQuizNextQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(quizzes.getQuizNextQuestion(validQuizId, {}, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -187,7 +187,7 @@ describe('ConstructorIO - Quizzes', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
 
@@ -241,7 +241,7 @@ describe('ConstructorIO - Quizzes', () => {
     });
 
     it('Should return a result provided a valid apiKey, quizId and versionId', () => {
-      const versionId = '1237da89-bfef-4b15-80e4-27f306bd7c32';
+      const versionId = 'e03210db-0cc6-459c-8f17-bf014c4f554d';
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
         fetch: fetchSpy,
@@ -352,7 +352,7 @@ describe('ConstructorIO - Quizzes', () => {
           fetch: fetchSpy,
         });
 
-        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers }, {}, { timeout: 20 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -362,7 +362,7 @@ describe('ConstructorIO - Quizzes', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });

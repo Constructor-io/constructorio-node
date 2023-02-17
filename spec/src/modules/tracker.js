@@ -4,17 +4,18 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const cloneDeep = require('lodash.clonedeep');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
 const delayBetweenTests = 25;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true';
 
 describe('ConstructorIO - Tracker', () => {

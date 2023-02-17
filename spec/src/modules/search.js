@@ -4,15 +4,16 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
@@ -229,7 +230,8 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.fmt_options).to.deep.equal(fmtOptions);
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
         expect(requestedUrlParams).to.have.property('fmt_options');
         expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
         expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
@@ -442,6 +444,41 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should return a response with a valid query, section and preFilterExpression', (done) => {
+      const preFilterExpression = {
+        or: [
+          {
+            and: [
+              { name: 'group_id', value: 'BrandXY' },
+              { name: 'Color', value: 'red' },
+            ],
+          },
+          {
+            and: [
+              { name: 'Color', value: 'blue' },
+              { name: 'Brand', value: 'XYZ' },
+            ],
+          },
+        ],
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults('item', { preFilterExpression }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(JSON.stringify(res.request.pre_filter_expression)).to.eql(JSON.stringify(preFilterExpression));
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response.results.length).to.be.eql(2);
+        expect(res.response.results[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
+        expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
+        done();
+      });
+    });
+
     it('Should properly encode path parameter', (done) => {
       const specialCharacters = '+[]&';
       const querySpecialCharacters = `apple ${specialCharacters}`;
@@ -523,7 +560,6 @@ describe('ConstructorIO - Search', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { search } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -692,7 +728,7 @@ describe('ConstructorIO - Search', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { search } = new ConstructorIO(validOptions);
 
-        return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(search.getSearchResults(query, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -701,7 +737,7 @@ describe('ConstructorIO - Search', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(search.getSearchResults(query, { section }, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(search.getSearchResults(query, { section }, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });

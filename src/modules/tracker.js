@@ -626,6 +626,8 @@ class Tracker {
    * @param {string} parameters.itemId - Product item unique identifier
    * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {string} [parameters.resultId] - Search result identifier (returned in response from Constructor)
+   * @param {string} [parameters.item_is_convertible] - Whether or not an item is available for a conversion
+   * @param {string} [parameters.section] - The section name for the item Ex. "Products"
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
@@ -665,7 +667,8 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/click_through?`;
         const queryParams = {};
-        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id } = parameters;
+        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id, item_is_convertible,
+ } = parameters;
 
         // Ensure support for both item_name and name as parameters
         if (itemName) {
@@ -683,6 +686,14 @@ class Tracker {
 
         if (resultId) {
           queryParams.result_id = resultId;
+        }
+
+        if (typeof item_is_convertible === 'boolean') {
+          queryParams.item_is_convertible = item_is_convertible;
+        }
+
+        if (section) {
+          queryParams.section = section;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -1490,7 +1501,7 @@ class Tracker {
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {number} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} userParameters.userId - User ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)

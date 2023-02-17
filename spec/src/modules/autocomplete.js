@@ -4,15 +4,16 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_REQUEST_API_KEY;
 const validClientId = '2b23dd74-5672-4379-878c-9182938d2710';
 const validSessionId = '2';
 const validOptions = { apiKey: testApiKey };
@@ -421,7 +422,6 @@ describe('ConstructorIO - Autocomplete', () => {
     });
 
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
-
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -525,7 +525,7 @@ describe('ConstructorIO - Autocomplete', () => {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { autocomplete } = new ConstructorIO(validOptions);
 
-        return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(autocomplete.getAutocompleteResults(query, {}, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -534,7 +534,7 @@ describe('ConstructorIO - Autocomplete', () => {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(autocomplete.getAutocompleteResults(query, {}, {})).to.eventually.be.rejectedWith('The user aborted a request.');
+        return expect(autocomplete.getAutocompleteResults(query, {}, {})).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });

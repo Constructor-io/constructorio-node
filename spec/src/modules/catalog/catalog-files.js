@@ -4,16 +4,17 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const nodeFetch = require('node-fetch').default;
 const { Duplex } = require('stream');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
+
+const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 dotenv.config();
 
 const sendTimeout = 300;
-const testApiKey = process.env.TEST_API_KEY;
+const testApiKey = process.env.TEST_CATALOG_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const validOptions = {
   apiKey: testApiKey,
@@ -265,7 +266,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.replaceCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.replaceCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -279,7 +280,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -330,7 +331,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.replaceCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.replaceCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -344,7 +345,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -525,7 +526,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.updateCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -539,7 +540,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -590,7 +591,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.updateCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -604,7 +605,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -785,7 +786,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.patchCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.patchCatalog(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -799,7 +800,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -850,7 +851,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.patchCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.patchCatalogUsingTarArchive(data, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -864,7 +865,7 @@ describe('ConstructorIO - Catalog', () => {
             section: 'Products',
           };
 
-          return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The user aborted a request.');
+          return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
