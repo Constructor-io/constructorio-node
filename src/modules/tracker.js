@@ -667,7 +667,7 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/click_through?`;
         const queryParams = {};
-        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id, item_is_convertible, itemIsConvertible = item_is_convertible,
+        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id, item_is_convertible, itemIsConvertible = item_is_convertible, section
  } = parameters;
 
         // Ensure support for both item_name and name as parameters
