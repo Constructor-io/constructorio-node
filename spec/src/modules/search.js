@@ -741,4 +741,556 @@ describe('ConstructorIO - Search', () => {
       });
     }
   });
+
+  describe('getVoiceSearchResults', () => {
+    const voiceSearchQuery = 'show me peanut';
+    const term = 'peanut';
+    const section = 'Products';
+
+    it('Should return a response with a valid query, section, and client + session identifiers', (done) => {
+      const clientSessionIdentifiers = {
+        clientId: validClientId,
+        sessionId: validSessionId,
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { ...clientSessionIdentifiers }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.equal(term);
+        expect(res.request.original_query).to.equal(voiceSearchQuery);
+        expect(res.request.section).to.equal(section);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('i');
+        expect(requestedUrlParams).to.have.property('s');
+        expect(requestedUrlParams).to.have.property('section').to.equal(section);
+        expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestedUrlParams).to.have.property('_dt');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and testCells', (done) => {
+      const testCells = { foo: 'bar' };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { testCells }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+        expect(requestedUrlParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and segments', (done) => {
+      const segments = ['foo', 'bar'];
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { segments }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.us).to.deep.equal(segments);
+        expect(requestedUrlParams).to.have.property('us').to.deep.equal(segments);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and user id', (done) => {
+      const userId = 'user-id';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { userId }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('ui').to.equal(userId);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and page', (done) => {
+      const page = 1;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {
+        section,
+        page,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.page).to.equal(page);
+        expect(requestedUrlParams).to.have.property('page').to.equal(page.toString());
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and offset', (done) => {
+      const offset = 1;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      search.getVoiceSearchResults(voiceSearchQuery, {
+        section,
+        offset,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.offset).to.equal(offset);
+        expect(requestedUrlParams).to.have.property('offset').to.equal(offset.toString());
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and resultsPerPage', (done) => {
+      const resultsPerPage = 1;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {
+        section,
+        resultsPerPage,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.num_results_per_page).to.equal(resultsPerPage);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response.results.length).to.equal(resultsPerPage);
+        expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal(resultsPerPage.toString());
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and fmtOptions', (done) => {
+      const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {
+        section,
+        fmtOptions,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options).to.have.property('groups_max_depth').to.equal(fmtOptions.groups_max_depth);
+        expect(res.request.fmt_options).to.have.property('groups_start').to.equal(fmtOptions.groups_start);
+        expect(requestedUrlParams).to.have.property('fmt_options');
+        expect(requestedUrlParams.fmt_options).to.have.property('groups_max_depth').to.equal(Object.values(fmtOptions)[0].toString());
+        expect(requestedUrlParams.fmt_options).to.have.property('groups_start').to.equal(Object.values(fmtOptions)[1]);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user ip', (done) => {
+      const userIp = '127.0.0.1';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { userIp }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and security token', (done) => {
+      const securityToken = 'cio-node-test';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        securityToken,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and user agent', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { userAgent }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section with a result_id appended to each result', (done) => {
+      const { search } = new ConstructorIO(validOptions);
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        res.response.results.forEach((result) => {
+          expect(result).to.have.property('result_id').to.be.a('string').to.equal(res.result_id);
+        });
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and hiddenFields', (done) => {
+      const hiddenFields = ['testField', 'testField2'];
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults('item1', { section, hiddenFields }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const resultWithTestField = res.response.results.find((result) => result.data.testField);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.eql(hiddenFields);
+        expect(resultWithTestField.data.testField).to.eql('hiddenFieldValue');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and hiddenFacets', (done) => {
+      const hiddenFacets = ['Brand', 'testFacet'];
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults('item1', { section, hiddenFacets }, {}).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const facetWithNameBrand = res.response.facets.find((facet) => facet.name === hiddenFacets[0]);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options.hidden_facets).to.eql(hiddenFacets);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_facets').to.eql(hiddenFacets);
+        expect(facetWithNameBrand.name).to.eql(hiddenFacets[0]);
+        done();
+      });
+    });
+
+    it('Should return a variations_map object in the response', (done) => {
+      const variationsMap = {
+        group_by: [
+          {
+            name: 'variation',
+            field: 'data.variation_id',
+          },
+        ],
+        values: {
+          size: {
+            aggregation: 'all',
+            field: 'data.facets.size',
+          },
+        },
+        dtype: 'array',
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults('show me Jacket', { variationsMap }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
+        expect(res.response.results[0]).to.have.property('variations_map');
+        expect(res.response.results[0].variations_map[0]).to.have.property('size');
+        expect(res.response.results[0].variations_map[0]).to.have.property('variation');
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section and preFilterExpression', (done) => {
+      const preFilterExpression = {
+        or: [
+          {
+            and: [
+              { name: 'group_id', value: 'BrandXY' },
+              { name: 'Color', value: 'red' },
+            ],
+          },
+          {
+            and: [
+              { name: 'Color', value: 'blue' },
+              { name: 'Brand', value: 'XYZ' },
+            ],
+          },
+        ],
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section, preFilterExpression }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(JSON.stringify(res.request.pre_filter_expression)).to.eql(JSON.stringify(preFilterExpression));
+        done();
+      });
+    });
+
+    it('Should properly encode path parameter', (done) => {
+      const specialCharacters = '+[]&';
+      const querySpecialCharacters = `${voiceSearchQuery} ${specialCharacters}`;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(querySpecialCharacters, {}, {}).then((res) => {
+        const requestUrl = fetchSpy.args[0][0];
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.term).to.equal(`${term} [ ]`);
+        expect(requestUrl).to.include(encodeURIComponent(`${term} ${specialCharacters}`));
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in function networkParameters', (done) => {
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should pass the correct custom headers passed in global networkParameters', (done) => {
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+          },
+        },
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should override the custom headers from networkParameters with userParameters', (done) => {
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'User-Agent': 'test',
+          },
+        },
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {}, { userAgent: 'test2' }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
+        done();
+      });
+    });
+
+    it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        networkParameters: {
+          headers: {
+            'X-Constructor-IO-Test': 'test',
+            'X-Constructor-IO-Test-Another': 'test',
+          },
+        },
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, {}, {}, { headers: {
+        'X-Constructor-IO-Test': 'test2',
+      } }).then((res) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
+        expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
+        done();
+      });
+    });
+
+    it('Should be rejected when invalid query is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+
+      return expect(search.getVoiceSearchResults([], { section })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when no query is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+
+      return expect(search.getVoiceSearchResults(null, { section })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid page parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        page: 'abc',
+      };
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid offset parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 'abc',
+      };
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when offset and page parameters are provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        offset: 1,
+        page: 1,
+      };
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid resultsPerPage parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+      const searchParams = {
+        section,
+        resultsPerPage: 'abc',
+      };
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, searchParams)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid section parameter is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, { section: 123 })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when invalid apiKey is provided', () => {
+      const { search } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
+
+      return expect(search.getVoiceSearchResults(voiceSearchQuery, { section })).to.eventually.be.rejected;
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should be rejected when network request timeout is provided and reached', () => {
+        const { search } = new ConstructorIO(validOptions);
+
+        return expect(search.getVoiceSearchResults(voiceSearchQuery, { section }, {}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+      });
+
+      it('Should be rejected when global network request timeout is provided and reached', () => {
+        const { search } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        return expect(search.getVoiceSearchResults(voiceSearchQuery, { section }, {})).to.eventually.be.rejectedWith('The operation was aborted.');
+      });
+    }
+  });
 });
