@@ -1,11 +1,12 @@
 {
   "name": "@constructor-io/constructorio-node",
-  "version": "4.4.5",
+  "version": "4.4.6",
   "description": "Constructor.io Node.js client",
   "main": "src/constructorio.js",
   "types": "src/types/constructorio.d.ts",
   "scripts": {
-    "version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh && npm run docs && git add ./docs/*",
+    "verify-node-version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh",
+    "version": "npm run verify-node-version && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "eslint 'src/**/*.js' 'spec/**/*.js' 'src/**/*.d.ts'",
     "test:parallel": "mkdir -p test && cp -rf src/* test && mocha --parallel ./spec/*",
