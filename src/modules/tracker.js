@@ -292,8 +292,8 @@ class Tracker {
    * @example
    * constructorio.tracker.trackItemDetailLoad(
    *     {
-   *         item_name: 'Red T-Shirt',
-   *         item_id: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         itemId: 'KMH876',
    *         url: 'https://constructor.io/product/KMH876',
    *     },
    * );
@@ -503,7 +503,14 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/search?`;
         const queryParams = {};
-        const { original_query, originalQuery = original_query, group_id, groupId = group_id, display_name, displayName = display_name } = parameters;
+        const {
+          original_query,
+          originalQuery = original_query,
+          group_id,
+          groupId = group_id,
+          display_name,
+          displayName = display_name,
+        } = parameters;
 
         if (originalQuery) {
           queryParams.original_query = originalQuery;
@@ -580,7 +587,14 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/behavior?`;
         const queryParams = { action: 'search-results', term };
-        const { num_results, numResults = num_results, customer_ids, customerIds = customer_ids, item_ids, itemIds = item_ids } = parameters;
+        const {
+          num_results,
+          numResults = num_results,
+          customer_ids,
+          customerIds = customer_ids,
+          item_ids,
+          itemIds = item_ids,
+        } = parameters;
         let customerIDs;
 
         if (!helpers.isNil(numResults)) {
@@ -626,7 +640,7 @@ class Tracker {
    * @param {string} parameters.itemId - Product item unique identifier
    * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {string} [parameters.resultId] - Search result identifier (returned in response from Constructor)
-   * @param {string} [parameters.item_is_convertible] - Whether or not an item is available for a conversion
+   * @param {string} [parameters.itemIsConvertible] - Whether or not an item is available for a conversion
    * @param {string} [parameters.section] - The section name for the item Ex. "Products"
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
@@ -667,8 +681,22 @@ class Tracker {
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
         const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(term))}/click_through?`;
         const queryParams = {};
-        const { item_name, name, itemName = item_name || name, item_id, itemId = item_id, customer_id, customerId = customer_id || itemId, variation_id, variationId = variation_id, result_id, resultId = result_id, item_is_convertible, itemIsConvertible = item_is_convertible, section
- } = parameters;
+        const {
+          item_name,
+          name,
+          itemName = item_name || name,
+          item_id,
+          itemId = item_id,
+          customer_id,
+          customerId = customer_id || itemId,
+          variation_id,
+          variationId = variation_id,
+          result_id,
+          resultId = result_id,
+          item_is_convertible,
+          itemIsConvertible = item_is_convertible,
+          section,
+        } = parameters;
 
         // Ensure support for both item_name and name as parameters
         if (itemName) {
@@ -724,7 +752,7 @@ class Tracker {
    * @param {number} [parameters.revenue] - Sale price if available, otherwise the regular (retail) price of item
    * @param {string} [parameters.itemName] - Product item name
    * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.type='addToCart'] - Conversion type
+   * @param {string} [parameters.type='add_to_cart'] - Conversion type
    * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
    * @param {string} [parameters.displayName] - Display name for the custom conversion type
    * @param {string} [parameters.section] - Index section
@@ -774,7 +802,7 @@ class Tracker {
       const {
         name,
         item_name,
-        itemName = item_name || name, 
+        itemName = item_name || name,
         item_id,
         customer_id,
         itemId = item_id || customer_id,
@@ -894,14 +922,20 @@ class Tracker {
       const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/purchase?`;
       const queryParams = {};
       const bodyParams = {};
-      const { items, revenue, order_id, orderId = order_id, section } = parameters;
+      const {
+        items,
+        revenue,
+        order_id,
+        orderId = order_id,
+        section,
+      } = parameters;
 
       if (orderId) {
         bodyParams.order_id = orderId;
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = items.slice(0,100).map((item) => helpers.toSnakeCaseKeys(item, false));
+        bodyParams.items = items.slice(0, 100).map((item) => helpers.toSnakeCaseKeys(item, false));
       }
 
       if (revenue) {
@@ -1319,7 +1353,7 @@ class Tracker {
       }
 
       if (items && Array.isArray(items)) {
-        bodyParams.items = items.slice(0,100).map((item) => helpers.toSnakeCaseKeys(item, false));
+        bodyParams.items = items.slice(0, 100).map((item) => helpers.toSnakeCaseKeys(item, false));
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;

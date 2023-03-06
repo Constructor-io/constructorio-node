@@ -463,10 +463,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getRedirectRules({ numResultsPerPage: 10, page: 1 }).then((res) => {
+        catalog.getRedirectRules({ numResultsPerPage: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
+          expect(res).to.have.property('redirect_rules').an('array').of.length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();

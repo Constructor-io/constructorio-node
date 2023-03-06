@@ -998,19 +998,18 @@ describe('ConstructorIO - Tracker', () => {
       displayName: 'display-name',
     };
 
-    
     it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      snakeCaseParameters = {
+      const snakeCaseParameters = {
         original_query: 'original-query',
         section: 'Search Suggestions',
         tr: 'click',
         group_id: 'group-id',
         display_name: 'display-name',
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
@@ -1028,7 +1027,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('group').to.deep.equal({
           display_name: snakeCaseParameters.display_name,
           group_id: snakeCaseParameters.group_id,
-        })
+        });
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -1485,7 +1484,7 @@ describe('ConstructorIO - Tracker', () => {
       url: 'http://constructor.io',
     };
     const originReferrer = 'https://localhost';
-  
+
     it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -1495,8 +1494,8 @@ describe('ConstructorIO - Tracker', () => {
         item_id: 'test1',
         item_name: 'test name',
         url: 'http://constructor.io',
-        variation_id: 'test1-small'
-      }
+        variation_id: 'test1-small',
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -1891,7 +1890,7 @@ describe('ConstructorIO - Tracker', () => {
       groupId: 'group-id',
       displayName: 'display-name',
     };
-    
+
     it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -1901,7 +1900,7 @@ describe('ConstructorIO - Tracker', () => {
         original_query: 'original-query',
         group_id: 'group-id',
         display_name: 'display-name',
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
@@ -1919,8 +1918,8 @@ describe('ConstructorIO - Tracker', () => {
           {
             display_name: snakeCaseParameters.display_name,
             group_id: snakeCaseParameters.group_id,
-          }
-        )
+          },
+        );
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -2370,8 +2369,8 @@ describe('ConstructorIO - Tracker', () => {
       });
       const snakeCaseParameters = {
         num_results: 1337,
-        item_ids: [1, 2, 3]
-      }
+        item_ids: [1, 2, 3],
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
@@ -2961,7 +2960,7 @@ describe('ConstructorIO - Tracker', () => {
         item_id: 'customer-id',
         variation_id: 'foobar',
         result_id: 'result-id',
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
@@ -3493,7 +3492,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'variation-id',
         is_custom_type: true,
         display_name: 'Add To Wishlist',
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -4161,11 +4160,11 @@ describe('ConstructorIO - Tracker', () => {
     };
     const snakeCaseItems = [
       {
-        item_id: "labradoodle",
-        variation_id: "labradoodle-black",
+        item_id: 'labradoodle',
+        variation_id: 'labradoodle-black',
       },
       {
-        item_id: "product55f1b3577fa84947a93ea01b91d52f45",
+        item_id: 'product55f1b3577fa84947a93ea01b91d52f45',
       },
     ];
 
@@ -4178,30 +4177,29 @@ describe('ConstructorIO - Tracker', () => {
         order_id: '123938123',
         revenue: 123.45,
         items: snakeCaseItems,
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
-        
+
         try {
         // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('key');
-        expect(requestParams).to.have.property('i');
-        expect(requestParams).to.have.property('s');
-        expect(requestParams).to.have.property('c').to.equal(clientVersion);
-        expect(requestParams).to.have.property('_dt');
-        expect(requestParams).to.have.property('beacon').to.equal(true);
-        expect(requestParams).to.have.property('items').to.deep.equal(snakeCaseParameters.items);
-        expect(requestParams).to.have.property('revenue').to.equal(snakeCaseParameters.revenue);
-        expect(requestParams).to.have.property('order_id').to.deep.equal(snakeCaseParameters.order_id);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestParams).to.have.property('key');
+          expect(requestParams).to.have.property('i');
+          expect(requestParams).to.have.property('s');
+          expect(requestParams).to.have.property('c').to.equal(clientVersion);
+          expect(requestParams).to.have.property('_dt');
+          expect(requestParams).to.have.property('beacon').to.equal(true);
+          expect(requestParams).to.have.property('items').to.deep.equal(snakeCaseParameters.items);
+          expect(requestParams).to.have.property('revenue').to.equal(snakeCaseParameters.revenue);
+          expect(requestParams).to.have.property('order_id').to.deep.equal(snakeCaseParameters.order_id);
 
+          // Response
+          expect(responseParams).to.have.property('method').to.equal('POST');
+          expect(responseParams).to.have.property('message');
 
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('POST');
-        expect(responseParams).to.have.property('message');
-
-        done();
+          done();
         } catch (e) {
           done(e);
         }
@@ -4221,21 +4219,21 @@ describe('ConstructorIO - Tracker', () => {
 
         try {
         // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('key');
-        expect(requestParams).to.have.property('i');
-        expect(requestParams).to.have.property('s');
-        expect(requestParams).to.have.property('c').to.equal(clientVersion);
-        expect(requestParams).to.have.property('_dt');
-        expect(requestParams).to.have.property('beacon').to.equal(true);
-        expect(requestParams).to.have.property('items').to.deep.equal(snakeCaseItems);
-        expect(requestParams).to.have.property('revenue').to.equal(requiredParameters.revenue);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestParams).to.have.property('key');
+          expect(requestParams).to.have.property('i');
+          expect(requestParams).to.have.property('s');
+          expect(requestParams).to.have.property('c').to.equal(clientVersion);
+          expect(requestParams).to.have.property('_dt');
+          expect(requestParams).to.have.property('beacon').to.equal(true);
+          expect(requestParams).to.have.property('items').to.deep.equal(snakeCaseItems);
+          expect(requestParams).to.have.property('revenue').to.equal(requiredParameters.revenue);
 
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('POST');
-        expect(responseParams).to.have.property('message');
+          // Response
+          expect(responseParams).to.have.property('method').to.equal('POST');
+          expect(responseParams).to.have.property('message');
 
-        done();
+          done();
         } catch (e) {
           done(e);
         }
@@ -4688,7 +4686,7 @@ describe('ConstructorIO - Tracker', () => {
         result_page: 1,
         result_id: 'result_id',
         section: 'Products',
-      }
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -4707,8 +4705,6 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('result_count').to.equal(snakeCaseParameters.result_count);
         expect(requestParams).to.have.property('result_page').to.equal(snakeCaseParameters.result_page);
         expect(requestParams).to.have.property('result_id').to.equal(snakeCaseParameters.result_id);
-
-
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -4967,7 +4963,7 @@ describe('ConstructorIO - Tracker', () => {
     });
 
     it('Should respond with a valid response when term, required parameters and user agent are provided', (done) => {
-      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTPML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (khtml, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
@@ -5671,11 +5667,11 @@ describe('ConstructorIO - Tracker', () => {
     };
     const snakeCaseItems = [
       {
-        item_id: "123",
-        variation_id: "456",
+        item_id: '123',
+        variation_id: '456',
       },
       {
-        item_id: "789",
+        item_id: '789',
       },
     ];
 
@@ -5694,7 +5690,7 @@ describe('ConstructorIO - Tracker', () => {
         result_page: 1,
         result_id: 'result-id',
         selected_filters: { foo: ['bar'] },
-        items: snakeCaseItems
+        items: snakeCaseItems,
       };
 
       tracker.on('success', (responseParams) => {
@@ -7069,7 +7065,7 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackGenericResultClick(
-        {...requiredParameters, ...optionalParameters},
+        { ...requiredParameters, ...optionalParameters },
         userParameters,
       )).to.equal(true);
     });

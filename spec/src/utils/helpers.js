@@ -79,6 +79,21 @@ describe('ConstructorIO - Utils - Helpers', () => {
         });
       });
 
+      it('Should not convert nested arrays', () => {
+        const camelCasedObj = {
+          test: 'a',
+          testArray: ['a', 'v'],
+          testObject: { aC: 'b' },
+        };
+        const snakeCasedObj = toSnakeCaseKeys(camelCasedObj, true);
+
+        expect(snakeCasedObj).to.deep.equal({
+          test: 'a',
+          test_array: ['a', 'v'],
+          test_object: { a_c: 'b' },
+        });
+      });
+
       it('Should convert deeply nested keys', () => {
         const camelCasedObj = {
           originReferrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',

@@ -92,9 +92,11 @@ describe('ConstructorIO - Catalog', () => {
         const { displayName: display_name, ...rest } = createMockFacetConfiguration();
         // eslint-disable-next-line camelcase
         const newFacetConfiguration = { display_name, ...rest };
-        catalog.addFacetConfiguration(newFacetConfiguration).then(() => {
+        catalog.addFacetConfiguration(newFacetConfiguration).then((response) => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(newFacetConfiguration);
+
+          expect(response).to.have.property('display_name').to.be.equal(newFacetConfiguration.display_name);
           done();
         });
       });
@@ -190,10 +192,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getFacetConfigurations({ numResultsPerPage: 10, page: 1 }).then((res) => {
+        catalog.getFacetConfigurations({ numResultsPerPage: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
+          expect(res).to.have.property('facets').to.be.an('array').length.equal(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -206,10 +208,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getFacetConfigurations({ num_results_per_page: 10, page: 1 }).then((res) => {
+        catalog.getFacetConfigurations({ num_results_per_page: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
+          expect(res).to.have.property('facets').to.be.an('array').length.equal(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();

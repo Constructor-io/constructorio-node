@@ -332,10 +332,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getSynonymGroups({ numResultsPerPage: 10, page: 1 }).then((res) => {
+        catalog.getSynonymGroups({ numResultsPerPage: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gte(1);
+          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -348,10 +348,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.getSynonymGroups({ num_results_per_page: 10, page: 1 }).then((res) => {
+        catalog.getSynonymGroups({ num_results_per_page: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gte(1);
+          expect(res).to.have.property('synonym_groups').to.be.an('array').of.length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();

@@ -110,7 +110,10 @@ describe('ConstructorIO - Catalog', () => {
         // eslint-disable-next-line camelcase
         const { displayName: display_name, ...rest } = createMockFacetOptionConfiguration(facetGroupName);
         // eslint-disable-next-line camelcase
-        catalog.addFacetOptionConfiguration({ display_name, ...rest }).then(() => done());
+        catalog.addFacetOptionConfiguration({ display_name, ...rest }).then((response) => {
+          expect(response).to.have.property('display_name').to.be.equal(display_name);
+          done();
+        });
       });
 
       it('Should return error when adding a facet option configuration that already exists', () => {
@@ -326,12 +329,12 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.getFacetOptionConfigurations({
           facetGroupName,
-          numResultsPerPage: 10,
+          numResultsPerPage: 1,
           page: 1,
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facet_options').to.be.an('array').length.gte(1);
+          expect(res).to.have.property('facet_options').to.be.an('array').to.have.length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();

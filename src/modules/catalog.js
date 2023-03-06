@@ -1756,7 +1756,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.userSegments] - List of user segments
+   * @param {string[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1819,7 +1819,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.userSegments] - List of user segments
+   * @param {string[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -1882,7 +1882,7 @@ class Catalog {
    * @param {object[]} parameters.matches - List of match definitions
    * @param {string} [parameters.startTime] - Time at which rule begins to apply (ISO8601 format preferred)
    * @param {string} [parameters.endTime] - Time at which rule stops to apply (ISO8601 format preferred)
-   * @param {object[]} [parameters.userSegments] - List of user segments
+   * @param {string[]} [parameters.userSegments] - List of user segments
    * @param {object} [parameters.metadata] - Object with arbitrary metadata
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2985,10 +2985,22 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { facetGroupName, section } = parameters;
+    const {
+      facetGroupName,
+      section,
+      num_results_per_page,
+      numResultsPerPage = num_results_per_page,
+      page,
+    } = parameters;
     const additionalQueryParams = {
       section: section || 'Products',
     };
+
+    additionalQueryParams.num_results_per_page = numResultsPerPage;
+
+    if (page) {
+      additionalQueryParams.page = page;
+    }
 
     try {
       requestUrl = createCatalogUrl(`facets/${facetGroupName}/options`, this.options, additionalQueryParams);
