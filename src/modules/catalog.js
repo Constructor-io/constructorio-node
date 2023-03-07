@@ -2491,9 +2491,18 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
+    const { num_results_per_page, numResultsPerPage = num_results_per_page, page } = parameters;
     const additionalQueryParams = {
       section: parameters.section || 'Products',
     };
+
+    if (numResultsPerPage) {
+      additionalQueryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (page) {
+      additionalQueryParams.page = page;
+    }
 
     try {
       requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams);

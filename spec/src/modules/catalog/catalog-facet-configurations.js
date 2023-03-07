@@ -195,7 +195,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getFacetConfigurations({ numResultsPerPage: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facets').to.be.an('array').length.equal(1);
+          expect(res).to.have.property('facets').to.be.an('array').length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
@@ -211,7 +211,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getFacetConfigurations({ num_results_per_page: 1, page: 1 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facets').to.be.an('array').length.equal(1);
+          expect(res).to.have.property('facets').to.be.an('array').length(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
