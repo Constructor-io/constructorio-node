@@ -3005,7 +3005,9 @@ class Catalog {
       section: section || 'Products',
     };
 
-    additionalQueryParams.num_results_per_page = numResultsPerPage;
+    if (numResultsPerPage) {
+      additionalQueryParams.num_results_per_page = numResultsPerPage;
+    }
 
     if (page) {
       additionalQueryParams.page = page;
