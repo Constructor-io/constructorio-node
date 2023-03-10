@@ -22,7 +22,7 @@ export interface ConstructorClientOptions {
 }
 
 export interface UserParameters {
-  sessionId?: string;
+  sessionId?: number;
   clientId?: string;
   userId?: string;
   segments?: string;
