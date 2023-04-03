@@ -6,7 +6,7 @@ const FormData = require('form-data');
 const fs = require('fs');
 const { Duplex } = require('stream');
 const helpers = require('../utils/helpers');
-const { toSnakeCaseKeys, toSnakeCase } = require('../utils/helpers');
+const { toSnakeCaseKeys } = require('../utils/helpers');
 
 // Create URL from supplied path and options
 function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
