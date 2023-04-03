@@ -69,6 +69,12 @@ describe('ConstructorIO - Utils - Helpers', () => {
           originReferrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
           userId: 'boink doink yoink',
           section: 'Products',
+          deepKeys: {
+            userId: 'test',
+            deeperKeys: {
+              userName: 'name',
+            },
+          },
         };
         const snakeCasedObj = toSnakeCaseKeys(camelCasedObj);
 
@@ -76,6 +82,12 @@ describe('ConstructorIO - Utils - Helpers', () => {
           origin_referrer: 'https://test.com/search/pizza?a=bread&b=pizza burrito',
           user_id: 'boink doink yoink',
           section: 'Products',
+          deep_keys: {
+            userId: 'test',
+            deeperKeys: {
+              userName: 'name',
+            },
+          },
         });
       });
 
