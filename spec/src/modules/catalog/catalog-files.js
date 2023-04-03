@@ -754,7 +754,7 @@ describe('ConstructorIO - Catalog', () => {
           onMissing: 'invalid',
         };
 
-        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -853,7 +853,7 @@ describe('ConstructorIO - Catalog', () => {
           onMissing: 'invalid',
         };
 
-        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
       });
 
       if (!skipNetworkTimeoutTests) {
