@@ -55,7 +55,7 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notificationEmail, force } = parameters;
+    const { section, notificationEmail, force, onMissing } = parameters;
     let { items, variations, item_groups: itemGroups } = parameters;
 
     try {
@@ -90,6 +90,11 @@ async function createQueryParamsAndFormData(parameters) {
     // Pull force from parameters
     if (force) {
       queryParams.force = force;
+    }
+
+    // Pull onMissing from parameters
+    if (onMissing) {
+      queryParams.on_missing = onMissing;
     }
 
     // Pull items from parameters
@@ -2193,6 +2198,7 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.item_groups] - The CSV file with all new item_groups

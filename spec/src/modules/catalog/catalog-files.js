@@ -723,6 +723,25 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should patch a catalog of items using onMissing', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+          onMissing: 'IGNORE',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
