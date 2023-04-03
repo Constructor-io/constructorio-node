@@ -96,7 +96,7 @@ async function createQueryParamsAndFormData(parameters) {
     if (onMissing) {
       // Validate onMissing parameter
       if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
-        throw new Error('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+        throw new Error('onMissing must be one of FAIL, IGNORE, or CREATE');
       }
 
       queryParams.on_missing = onMissing;
@@ -135,7 +135,7 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
 
     // Validate onMissing parameter
     if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
-      throw new Error('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+      throw new Error('onMissing must be one of FAIL, IGNORE, or CREATE');
     }
 
     // Convert tarArchive to buffer if passed as stream
