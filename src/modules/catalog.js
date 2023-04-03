@@ -2092,7 +2092,7 @@ class Catalog {
    * @function replaceCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
@@ -2144,7 +2144,7 @@ class Catalog {
    * @function updateCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
@@ -2196,7 +2196,7 @@ class Catalog {
    * @function patchCatalog
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {file} [parameters.items] - The CSV file with all new items
@@ -2249,7 +2249,7 @@ class Catalog {
    * @function replaceCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2298,7 +2298,7 @@ class Catalog {
    * @function updateCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2348,7 +2348,7 @@ class Catalog {
    * @function patchCatalogUsingTarArchive
    * @param {object} parameters - Additional parameters for catalog details
    * @param {string} parameters.section - The section to update
-   * @param {string} [parameters.notification_email] - An email address to receive an email notification if the task fails
+   * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
