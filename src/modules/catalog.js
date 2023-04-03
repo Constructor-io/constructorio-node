@@ -94,6 +94,11 @@ async function createQueryParamsAndFormData(parameters) {
 
     // Pull onMissing from parameters
     if (onMissing) {
+      // Validate onMissing parameter
+      if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+        throw new Error('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+      }
+
       queryParams.on_missing = onMissing;
     }
 
@@ -127,6 +132,11 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
     const { section, onMissing } = parameters;
     const onMissingParameter = onMissing && onMissing !== 'FAIL' ? onMissing.toLowerCase() : '';
     let { tarArchive } = parameters;
+
+    // Validate onMissing parameter
+    if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+      throw new Error('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+    }
 
     // Convert tarArchive to buffer if passed as stream
     if (tarArchive instanceof fs.ReadStream || tarArchive instanceof Duplex) {

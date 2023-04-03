@@ -742,6 +742,21 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should patch a catalog of items using onMissing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsStream,
+          section: 'Products',
+          onMissing: 'invalid',
+        };
+
+        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('Valid options for onMissing are FAIL, IGNORE, and CREATE');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -824,6 +839,21 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('task_status_path');
           done();
         });
+      });
+
+      it('Should be rejected when invalid onMissing parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          onMissing: 'invalid',
+        };
+
+        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('Valid options for onMissing are FAIL, IGNORE, and CREATE');
       });
 
       if (!skipNetworkTimeoutTests) {
