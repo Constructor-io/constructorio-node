@@ -40,6 +40,13 @@ declare class Search {
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;
+
+  getVoiceSearchResults(
+    query: string,
+    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder'>,
+    userParameters?: UserParameters,
+    networkParameters?: NetworkParameters
+  ): Promise<SearchResponse>;
 }
 
 /* search results returned from server */
@@ -66,6 +73,7 @@ export interface SearchRequestType extends Record<string, any> {
   section: string;
   blacklist_rules: boolean;
   term: string;
+  original_query?: string;
   fmt_options: Partial<FmtOption>;
   sort_by: string;
   sort_order: string;

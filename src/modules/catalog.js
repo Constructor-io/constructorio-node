@@ -57,7 +57,7 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notification_email, notificationEmail = notification_email, force, item_groups } = parameters;
+    const { section, notification_email, notificationEmail = notification_email, force, item_groups, onMissing } = parameters;
     let { items, variations, itemGroups = item_groups } = parameters;
 
     try {
@@ -94,6 +94,16 @@ async function createQueryParamsAndFormData(parameters) {
       queryParams.force = force;
     }
 
+    // Pull onMissing from parameters
+    if (onMissing) {
+      // Validate onMissing parameter
+      if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+        throw new Error('onMissing must be one of FAIL, IGNORE, or CREATE');
+      }
+
+      queryParams.on_missing = onMissing;
+    }
+
     // Pull items from parameters
     if (items) {
       formData.append('items', items, {
@@ -121,8 +131,14 @@ async function createQueryParamsAndFormData(parameters) {
 
 async function addTarArchiveToFormData(parameters, formData, operation, apiKey) {
   try {
-    const { section } = parameters;
+    const { section, onMissing } = parameters;
+    const onMissingParameter = onMissing && onMissing !== 'FAIL' ? onMissing.toLowerCase() : '';
     let { tarArchive } = parameters;
+
+    // Validate onMissing parameter
+    if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+      throw new Error('onMissing must be one of FAIL, IGNORE, or CREATE');
+    }
 
     // Convert tarArchive to buffer if passed as stream
     if (tarArchive instanceof fs.ReadStream || tarArchive instanceof Duplex) {
@@ -137,7 +153,7 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
         .replace('T', '-')
         .replace(/:/g, '-')
         .slice(0, 19);
-      const filename = `${apiKey}_${section}_${operation}_${formattedDateTime}.tar.gz`;
+      const filename = `${apiKey}_${section}_${operation}${onMissingParameter}_${formattedDateTime}.tar.gz`;
 
       formData.append(filename, tarArchive, {
         filename,
@@ -2216,6 +2232,7 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
@@ -2367,6 +2384,7 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
+   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -2386,7 +2404,7 @@ class Catalog {
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'delta', apiKey);
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'patchdelta', apiKey);
       const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
 
       // Handle network timeout if specified
