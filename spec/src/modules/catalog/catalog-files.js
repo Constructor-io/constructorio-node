@@ -742,7 +742,7 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
-      it('Should patch a catalog of items using onMissing', () => {
+      it('Should be rejected when invalid onMissing parameter is provided', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
