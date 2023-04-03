@@ -125,6 +125,7 @@ async function createQueryParamsAndFormData(parameters) {
 async function addTarArchiveToFormData(parameters, formData, operation, apiKey) {
   try {
     const { section, onMissing } = parameters;
+    const onMissingParameter = onMissing && onMissing !== 'FAIL' ? onMissing.toLowerCase() : '';
     let { tarArchive } = parameters;
 
     // Convert tarArchive to buffer if passed as stream
@@ -132,7 +133,6 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
       tarArchive = await convertToBuffer(tarArchive);
     }
 
-    const onMissingParameter = onMissing && onMissing !== 'FAIL' ? onMissing.toLowerCase() : '';
     // Pull tarArchive from parameters
     if (tarArchive && formData && operation && apiKey && section) {
       // Convert timestamp to YYYY-MM-DD-HH-MM-SS format
