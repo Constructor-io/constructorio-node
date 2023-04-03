@@ -364,6 +364,7 @@ declare class Catalog {
       section: string;
       notification_email?: string;
       force?: boolean;
+      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
       items?: File;
       variations?: File;
       item_groups?: File;
