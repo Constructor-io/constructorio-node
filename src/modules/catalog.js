@@ -6,7 +6,7 @@ const FormData = require('form-data');
 const fs = require('fs');
 const { Duplex } = require('stream');
 const helpers = require('../utils/helpers');
-const { toSnakeCaseKeys } = require('../utils/helpers');
+const { toSnakeCaseKeys, toSnakeCase } = require('../utils/helpers');
 
 // Create URL from supplied path and options
 function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
@@ -57,7 +57,7 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notificationEmail, force, item_groups } = parameters;
+    const { section, notification_email, notificationEmail = notification_email, force, item_groups } = parameters;
     let { items, variations, itemGroups = item_groups } = parameters;
 
     try {
@@ -197,7 +197,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section, force, notificationEmail } = parameters;
+    const { items, section, force, notification_email, notificationEmail = notification_email } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -279,7 +279,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section, force, notificationEmail } = parameters;
+    const { items, section, force, notification_email, notificationEmail = notification_email } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -351,7 +351,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section, force, notificationEmail } = parameters;
+    const { items, section, force, notification_email, notificationEmail = notification_email } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -510,7 +510,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notificationEmail, variations } = parameters;
+    const { section, force, notification_email, notificationEmail = notification_email, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -593,7 +593,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notificationEmail, variations } = parameters;
+    const { section, force, notification_email, notificationEmail = notification_email, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -666,7 +666,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notificationEmail, variations } = parameters;
+    const { section, force, notification_email, notificationEmail = notification_email, variations } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -833,7 +833,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      body: JSON.stringify(toSnakeCaseKeys(rest, false)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -882,7 +882,7 @@ class Catalog {
     // Backwards Compatibility
     const { item_groups, itemGroups = item_groups, ...rest } = parameters;
     const params = { itemGroups, ...rest };
-    params.itemGroups = params.itemGroups.map((itemGrp) => toSnakeCaseKeys(itemGrp));
+    params.itemGroups = params.itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false));
 
     try {
       requestUrl = createCatalogUrl('item_groups', this.options);
@@ -895,7 +895,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(toSnakeCaseKeys(params)),
+      body: JSON.stringify(toSnakeCaseKeys(params, false)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1767,7 +1767,7 @@ class Catalog {
    *     url: '/categories/cat_49203',
    *     matches: [{
    *         pattern: 'outerwear',
-   *         match_type: 'EXACT'
+   *         matchType: 'EXACT'
    *     }],
    *     startTime: '2022-08-11T23:41:02.568Z',
    *     endTime: '2022-08-20T23:41:02.568Z',
@@ -1782,6 +1782,10 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
+    let { matches } = parameters;
+
+    const newParameters = { ...parameters, matches };
+    matches = matches.map((match) => toSnakeCaseKeys(match, false));
 
     try {
       requestUrl = createCatalogUrl('redirect_rules', this.options);
@@ -1794,7 +1798,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(toSnakeCaseKeys(parameters)),
+      body: JSON.stringify(toSnakeCaseKeys(newParameters, false)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1831,7 +1835,7 @@ class Catalog {
    *     url: '/categories/cat_49203',
    *     matches: [{
    *         pattern: 'outerwear',
-   *         match_type: 'EXACT'
+   *         matchType: 'EXACT'
    *     }],
    *     userSegments: ['US', 'Mobile', 'Web'],
    *     metadata: {
@@ -1845,6 +1849,10 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
+    let { matches } = parameters;
+
+    matches = matches.map((match) => toSnakeCaseKeys(match, false));
+    const newParameters = { ...rest, matches };
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
@@ -1857,7 +1865,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      body: JSON.stringify(toSnakeCaseKeys(newParameters, false)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -1894,7 +1902,7 @@ class Catalog {
    *     url: '/categories/cat_49203',
    *     matches: [{
    *         pattern: 'outerwear',
-   *         match_type: 'EXACT'
+   *         matchType: 'EXACT'
    *     }],
    *     userSegments: ['US', 'Mobile', 'Web'],
    * });
@@ -1905,6 +1913,10 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     const { id, ...rest } = parameters;
+    let { matches } = parameters;
+
+    matches = matches.map((match) => toSnakeCaseKeys(match, false));
+    const newParameters = { ...rest, matches };
 
     try {
       requestUrl = createCatalogUrl(`redirect_rules/${id}`, this.options);
@@ -1917,7 +1929,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PATCH',
-      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      body: JSON.stringify(toSnakeCaseKeys(newParameters)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
