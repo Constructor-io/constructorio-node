@@ -1800,8 +1800,8 @@ class Catalog {
     const { signal } = controller;
     let { matches } = parameters;
 
-    const newParameters = { ...parameters, matches };
     matches = matches.map((match) => toSnakeCaseKeys(match, false));
+    const newParameters = { ...parameters, matches };
 
     try {
       requestUrl = createCatalogUrl('redirect_rules', this.options);
