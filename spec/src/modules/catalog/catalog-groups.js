@@ -121,6 +121,15 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
+        catalog.addItemGroups({ itemGroups: groups }).then(done);
+      });
+
+      it('Backwards Compatibility `item_groups` - Should resolve when adding item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
         catalog.addItemGroups({ item_groups: groups }).then(done);
       });
 
@@ -134,7 +143,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+        return expect(catalog.addItemGroups({ itemGroups: groups })).to.eventually.be.rejected;
       });
 
       it('Should return error when adding an item group with an invalid API token', () => {
@@ -147,14 +156,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+        return expect(catalog.addItemGroups({ itemGroups: groups })).to.eventually.be.rejected;
       });
 
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.addItemGroups([createMockItemGroup()], { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.addItemGroups({ itemGroups: [createMockItemGroup()] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -163,7 +172,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.addItemGroups([createMockItemGroup()])).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.addItemGroups({ itemGroups: [createMockItemGroup()] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -177,7 +186,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
+        catalog.addItemGroups({ itemGroups: [mockItemGroup] }).then(done);
       });
 
       it('Should return a response when getting item group', (done) => {
@@ -263,7 +272,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ item_groups: [mockItemGroup, mockItemGroup] }).then(done);
+        catalog.addItemGroups({ itemGroups: [mockItemGroup, mockItemGroup] }).then(done);
       });
 
       it('Should return a response when getting item groups', (done) => {
@@ -339,7 +348,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addOrUpdateItemGroups({ item_groups: groups }).then((res) => {
+        catalog.addOrUpdateItemGroups({ itemGroups: groups }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('item_groups').to.be.an('object');
@@ -354,6 +363,26 @@ describe('ConstructorIO - Catalog', () => {
       });
 
       it('Should return a response when updating multiple item groups', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ itemGroups: groups }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(groups.length);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Backwards Compatibility `item_groups` - Should return a response when updating multiple item groups', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -383,7 +412,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+        return expect(catalog.addOrUpdateItemGroups({ itemGroups: groups })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating multiple item groups with an invalid API token', () => {
@@ -396,7 +425,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.addOrUpdateItemGroups({ item_groups: groups })).to.eventually.be.rejected;
+        return expect(catalog.addOrUpdateItemGroups({ itemGroups: groups })).to.eventually.be.rejected;
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -404,7 +433,7 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.addOrUpdateItemGroups(
-            { item_groups: groups },
+            { itemGroups: groups },
             { timeout: 10 },
           )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
@@ -416,7 +445,7 @@ describe('ConstructorIO - Catalog', () => {
           });
 
           return expect(catalog.addOrUpdateItemGroups(
-            { item_groups: groups },
+            { itemGroups: groups },
           )).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
@@ -431,7 +460,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ item_groups: [mockItemGroup] }).then(done);
+        catalog.addItemGroups({ itemGroups: [mockItemGroup] }).then(done);
       });
 
       it('Should return a response when modifying an item group with updated item group name', (done) => {
@@ -510,7 +539,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ item_groups: groups }).then(done);
+        catalog.addItemGroups({ itemGroups: groups }).then(done);
       });
 
       it('Should return a response when removing multiple item groups', (done) => {
