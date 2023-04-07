@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line167">line 167</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -216,7 +216,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2407">line 2407</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2430">line 2430</a>
     </li></ul></dd>
     
 
@@ -390,7 +390,7 @@
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -426,7 +426,7 @@
 
         <tr>
             
-                <td class="name"><code>sort_order</code></td>
+                <td class="name"><code>sortOrder</code></td>
             
 
             <td class="type">
@@ -453,7 +453,7 @@
             
 
             <td class="description last">
-                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
                 
             </td>
         </tr>
@@ -462,7 +462,7 @@
 
         <tr>
             
-                <td class="name"><code>sort_descending</code></td>
+                <td class="name"><code>sortDescending</code></td>
             
 
             <td class="type">
@@ -489,7 +489,7 @@
             
 
             <td class="description last">
-                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
+                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
                 
             </td>
         </tr>
@@ -498,7 +498,7 @@
 
         <tr>
             
-                <td class="name"><code>range_type</code></td>
+                <td class="name"><code>rangeType</code></td>
             
 
             <td class="type">
@@ -525,7 +525,7 @@
             
 
             <td class="description last">
-                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
+                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
                 
             </td>
         </tr>
@@ -534,7 +534,7 @@
 
         <tr>
             
-                <td class="name"><code>range_format</code></td>
+                <td class="name"><code>rangeFormat</code></td>
             
 
             <td class="type">
@@ -570,7 +570,7 @@
 
         <tr>
             
-                <td class="name"><code>range_inclusive</code></td>
+                <td class="name"><code>rangeInclusive</code></td>
             
 
             <td class="type">
@@ -606,7 +606,7 @@
 
         <tr>
             
-                <td class="name"><code>bucket_size</code></td>
+                <td class="name"><code>bucketSize</code></td>
             
 
             <td class="type">
@@ -633,7 +633,7 @@
             
 
             <td class="description last">
-                Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
+                Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
                 
             </td>
         </tr>
@@ -642,13 +642,13 @@
 
         <tr>
             
-                <td class="name"><code>range_limits</code></td>
+                <td class="name"><code>rangeLimits</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Array.&lt;number></code></span>
+<span class="param-type"><code>json</code></span>
 
 
             
@@ -678,7 +678,7 @@
 
         <tr>
             
-                <td class="name"><code>match_type</code></td>
+                <td class="name"><code>matchType</code></td>
             
 
             <td class="type">
@@ -1079,9 +1079,9 @@
     <pre class="prettyprint"><code>constructorio.catalog.addFacetConfiguration({
     name: 'color',
     type: 'multiple',
-    display_name: 'Color',
-    sort_order: 'value',
-    sort_descending: false,
+    displayName: 'Color',
+    sortOrder: 'value',
+    sortDescending: false,
     position: 1,
 });</code></pre>
 
@@ -1137,7 +1137,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2843">line 2843</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2876">line 2876</a>
     </li></ul></dd>
     
 
@@ -1321,7 +1321,7 @@
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -1680,7 +1680,7 @@
     <pre class="prettyprint"><code>constructorio.catalog.addFacetOptionConfiguration({
     facetGroupName: 'color',
     value: 'blue',
-    display_name: 'Blue',
+    displayName: 'Blue',
     position: 5,
 });</code></pre>
 
@@ -1736,7 +1736,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line812">line 812</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line814">line 814</a>
     </li></ul></dd>
     
 
@@ -1910,7 +1910,7 @@
 
         <tr>
             
-                <td class="name"><code>parent_id</code></td>
+                <td class="name"><code>parentId</code></td>
             
 
             <td class="type">
@@ -2131,7 +2131,7 @@
     <pre class="prettyprint"><code>constructorio.catalog.addItemGroup({
     id: 'subcat_12891',
     name: 'Hoodies &amp; Sweaters',
-    parent_id: 'cat_49203',
+    parentId: 'cat_49203',
 });</code></pre>
 
 </div>
@@ -2186,7 +2186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line865">line 865</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line867">line 867</a>
     </li></ul></dd>
     
 
@@ -2290,7 +2290,7 @@
 
         <tr>
             
-                <td class="name"><code>item_groups</code></td>
+                <td class="name"><code>itemGroups</code></td>
             
 
             <td class="type">
@@ -2463,11 +2463,11 @@
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.catalog.addItemGroups({
-    item_groups: [
+    itemGroups: [
         {
             id: 'subcat_12891',
             name: 'Hoodies &amp; Sweaters',
-            parent_id: 'cat_49203',
+            parentId: 'cat_49203',
         },
         {
             id: 'cat49203',
@@ -2528,7 +2528,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1162">line 1162</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1173">line 1173</a>
     </li></ul></dd>
     
 
@@ -2658,7 +2658,7 @@
 
         <tr>
             
-                <td class="name"><code>child_phrases</code></td>
+                <td class="name"><code>childPhrases</code></td>
             
 
             <td class="type">
@@ -2832,7 +2832,7 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.addOneWaySynonym({
     phrase: 'spices',
-    child_phrases: [
+    childPhrases: [
         { phrase: 'pepper' },
         { phrase: 'cinnamon' },
     ],
@@ -2890,7 +2890,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2903">line 2903</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2936">line 2936</a>
     </li></ul></dd>
     
 
@@ -3267,12 +3267,12 @@
     facetOptionConfigurations: [
         {
             value: 'blue',
-            display_name: 'Blue',
+            displayName: 'Blue',
             position: 5,
         },
         {
             value: 'red',
-            display_name: 'Red',
+            displayName: 'Red',
             position: 3,
         },
     ],
@@ -3330,7 +3330,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1010">line 1010</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1017">line 1017</a>
     </li></ul></dd>
     
 
@@ -3434,7 +3434,7 @@
 
         <tr>
             
-                <td class="name"><code>item_groups</code></td>
+                <td class="name"><code>itemGroups</code></td>
             
 
             <td class="type">
@@ -3607,11 +3607,11 @@
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.catalog.addOrUpdateItemGroups({
-    item_groups: [
+    itemGroups: [
         {
             id: 'subcat_12891',
             name: 'Hoodies, Sweaters, &amp; Jackets',
-            parent_id: 'cat_49203',
+            parentId: 'cat_49203',
         },
         {
             id: 'cat49203',
@@ -3672,7 +3672,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1755">line 1755</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1766">line 1766</a>
     </li></ul></dd>
     
 
@@ -3846,7 +3846,7 @@
 
         <tr>
             
-                <td class="name"><code>start_time</code></td>
+                <td class="name"><code>startTime</code></td>
             
 
             <td class="type">
@@ -3882,7 +3882,7 @@
 
         <tr>
             
-                <td class="name"><code>end_time</code></td>
+                <td class="name"><code>endTime</code></td>
             
 
             <td class="type">
@@ -3918,7 +3918,7 @@
 
         <tr>
             
-                <td class="name"><code>user_segments</code></td>
+                <td class="name"><code>userSegments</code></td>
             
 
             <td class="type">
@@ -4140,11 +4140,11 @@
     url: '/categories/cat_49203',
     matches: [{
         pattern: 'outerwear',
-        match_type: 'EXACT'
+        matchType: 'EXACT'
     }],
-    start_time: '2022-08-11T23:41:02.568Z',
-    end_time: '2022-08-20T23:41:02.568Z',
-    user_segments: ['US', 'Mobile'],
+    startTime: '2022-08-11T23:41:02.568Z',
+    endTime: '2022-08-20T23:41:02.568Z',
+    userSegments: ['US', 'Mobile'],
     metadata: {
         additional_data: 'additional string data',
     },
@@ -4202,7 +4202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1469">line 1469</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1480">line 1480</a>
     </li></ul></dd>
     
 
@@ -4534,7 +4534,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line179">line 179</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line181">line 181</a>
     </li></ul></dd>
     
 
@@ -5018,7 +5018,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line490">line 490</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line492">line 492</a>
     </li></ul></dd>
     
 
@@ -5504,7 +5504,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line342">line 342</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -5938,7 +5938,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line656">line 656</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line658">line 658</a>
     </li></ul></dd>
     
 
@@ -6414,7 +6414,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2530">line 2530</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2562">line 2562</a>
     </li></ul></dd>
     
 
@@ -6794,7 +6794,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2478">line 2478</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2501">line 2501</a>
     </li></ul></dd>
     
 
@@ -6936,7 +6936,7 @@
 
         <tr>
             
-                <td class="name"><code>num_results_per_page</code></td>
+                <td class="name"><code>numResultsPerPage</code></td>
             
 
             <td class="type">
@@ -7156,7 +7156,7 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.getFacetConfigurations({
     page: 2,
-    num_results_per_page: 50,
+    numResultsPerPage: 50,
 });</code></pre>
 
 </div>
@@ -7211,7 +7211,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3023">line 3023</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3071">line 3071</a>
     </li></ul></dd>
     
 
@@ -7640,7 +7640,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2968">line 2968</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3002">line 3002</a>
     </li></ul></dd>
     
 
@@ -7828,7 +7828,7 @@
 
         <tr>
             
-                <td class="name"><code>num_results_per_page</code></td>
+                <td class="name"><code>numResultsPerPage</code></td>
             
 
             <td class="type">
@@ -8061,7 +8061,7 @@
     <pre class="prettyprint"><code>constructorio.catalog.getFacetOptionConfigurations({
     facetGroupName: 'color',
     page: 3,
-    num_results_per_page: 50
+    numResultsPerPage: 50
 });</code></pre>
 
 </div>
@@ -8116,7 +8116,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line922">line 922</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line929">line 929</a>
     </li></ul></dd>
     
 
@@ -8448,7 +8448,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line968">line 968</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line975">line 975</a>
     </li></ul></dd>
     
 
@@ -8693,7 +8693,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1269">line 1269</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1280">line 1280</a>
     </li></ul></dd>
     
 
@@ -9025,7 +9025,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1317">line 1317</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1328">line 1328</a>
     </li></ul></dd>
     
 
@@ -9133,7 +9133,7 @@
 
         <tr>
             
-                <td class="name"><code>num_results_per_page</code></td>
+                <td class="name"><code>numResultsPerPage</code></td>
             
 
             <td class="type">
@@ -9352,7 +9352,7 @@
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.catalog.getOneWaySynonyms({
-    num_results_per_page: 50,
+    numResultsPerPage: 50,
     page: 2,
 });</code></pre>
 
@@ -9408,7 +9408,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1940">line 1940</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1963">line 1963</a>
     </li></ul></dd>
     
 
@@ -9740,7 +9740,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1983">line 1983</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2006">line 2006</a>
     </li></ul></dd>
     
 
@@ -9848,7 +9848,7 @@
 
         <tr>
             
-                <td class="name"><code>num_results_per_page</code></td>
+                <td class="name"><code>numResultsPerPage</code></td>
             
 
             <td class="type">
@@ -10139,7 +10139,7 @@
 <h5>Example</h5>
 
     <pre class="prettyprint"><code>constructorio.catalog.getRedirectRules({
-    num_results_per_page: 50,
+    numResultsPerPage: 50,
     page: 2,
     query: 'outerwear',
     status: 'active',
@@ -10197,7 +10197,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1566">line 1566</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1577">line 1577</a>
     </li></ul></dd>
     
 
@@ -10529,7 +10529,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1609">line 1609</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1620">line 1620</a>
     </li></ul></dd>
     
 
@@ -10673,7 +10673,7 @@
 
         <tr>
             
-                <td class="name"><code>num_results_per_page</code></td>
+                <td class="name"><code>numResultsPerPage</code></td>
             
 
             <td class="type">
@@ -10893,7 +10893,7 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.modifySynonymGroup({
     phrase: '0% milk',
-    num_results_per_page: 50,
+    numResultsPerPage: 50,
     page: 3,
 });</code></pre>
 
@@ -10949,7 +10949,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2719">line 2719</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2752">line 2752</a>
     </li></ul></dd>
     
 
@@ -11123,7 +11123,7 @@
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -11159,7 +11159,7 @@
 
         <tr>
             
-                <td class="name"><code>sort_order</code></td>
+                <td class="name"><code>sortOrder</code></td>
             
 
             <td class="type">
@@ -11186,7 +11186,7 @@
             
 
             <td class="description last">
-                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
                 
             </td>
         </tr>
@@ -11195,7 +11195,7 @@
 
         <tr>
             
-                <td class="name"><code>sort_descending</code></td>
+                <td class="name"><code>sortDescending</code></td>
             
 
             <td class="type">
@@ -11222,7 +11222,7 @@
             
 
             <td class="description last">
-                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
+                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
                 
             </td>
         </tr>
@@ -11231,7 +11231,7 @@
 
         <tr>
             
-                <td class="name"><code>range_type</code></td>
+                <td class="name"><code>rangeType</code></td>
             
 
             <td class="type">
@@ -11258,7 +11258,7 @@
             
 
             <td class="description last">
-                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
+                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
                 
             </td>
         </tr>
@@ -11267,7 +11267,7 @@
 
         <tr>
             
-                <td class="name"><code>range_format</code></td>
+                <td class="name"><code>rangeFormat</code></td>
             
 
             <td class="type">
@@ -11303,7 +11303,7 @@
 
         <tr>
             
-                <td class="name"><code>range_inclusive</code></td>
+                <td class="name"><code>rangeInclusive</code></td>
             
 
             <td class="type">
@@ -11339,7 +11339,7 @@
 
         <tr>
             
-                <td class="name"><code>bucket_size</code></td>
+                <td class="name"><code>bucketSize</code></td>
             
 
             <td class="type">
@@ -11366,7 +11366,7 @@
             
 
             <td class="description last">
-                Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
+                Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
                 
             </td>
         </tr>
@@ -11375,13 +11375,13 @@
 
         <tr>
             
-                <td class="name"><code>range_limits</code></td>
+                <td class="name"><code>rangeLimits</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Array.&lt;number></code></span>
+<span class="param-type"><code>json</code></span>
 
 
             
@@ -11411,7 +11411,7 @@
 
         <tr>
             
-                <td class="name"><code>match_type</code></td>
+                <td class="name"><code>matchType</code></td>
             
 
             <td class="type">
@@ -11812,9 +11812,9 @@
     <pre class="prettyprint"><code>constructorio.catalog.modifyFacetConfiguration({
     name: 'color',
     type: 'multiple',
-    display_name: 'Color',
-    sort_order: 'num_matches',
-    sort_descending: true,
+    displayName: 'Color',
+    sortOrder: 'num_matches',
+    sortDescending: true,
     position: 1,
 });</code></pre>
 
@@ -11870,7 +11870,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2581">line 2581</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2613">line 2613</a>
     </li></ul></dd>
     
 
@@ -12151,9 +12151,9 @@
         {
             name: 'color',
             type: 'multiple',
-            display_name: 'Color',
-            sort_order: 'value',
-            sort_descending: false,
+            displayName: 'Color',
+            sortOrder: 'value',
+            sortDescending: false,
             position: 1,
         },
         {
@@ -12215,7 +12215,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3136">line 3136</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3184">line 3184</a>
     </li></ul></dd>
     
 
@@ -12399,7 +12399,7 @@
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -12758,7 +12758,7 @@
     <pre class="prettyprint"><code>constructorio.catalog.modifyFacetOptionConfiguration({
     facetGroupName: 'color',
     value: 'blue',
-    display_name: 'Midnight Blue',
+    displayName: 'Midnight Blue',
     position: 9,
 });</code></pre>
 
@@ -12814,7 +12814,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1067">line 1067</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1078">line 1078</a>
     </li></ul></dd>
     
 
@@ -12990,7 +12990,7 @@
 
         <tr>
             
-                <td class="name"><code>parent_id</code></td>
+                <td class="name"><code>parentId</code></td>
             
 
             <td class="type">
@@ -13211,7 +13211,7 @@
     <pre class="prettyprint"><code>constructorio.catalog.modifyItemGroup({
     id: 'subcat_12891',
     name: 'Hoodies, Sweaters &amp; Jackets',
-    parent_id: 'cat_49203',
+    parentId: 'cat_49203',
     data: {
         landing_image_url: '/images/hd_swtrs_jckts.jpg',
     },
@@ -13269,7 +13269,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1215">line 1215</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1226">line 1226</a>
     </li></ul></dd>
     
 
@@ -13399,7 +13399,7 @@
 
         <tr>
             
-                <td class="name"><code>child_phrases</code></td>
+                <td class="name"><code>childPhrases</code></td>
             
 
             <td class="type">
@@ -13573,7 +13573,7 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.modifyOneWaySynonym({
     phrase: 'spices',
-    child_phrases: [
+    childPhrases: [
         { phrase: 'pepper' },
         { phrase: 'cinnamon' },
         { phrase: 'paprika' },
@@ -13632,7 +13632,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1880">line 1880</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1899">line 1899</a>
     </li></ul></dd>
     
 
@@ -13840,7 +13840,7 @@
 
         <tr>
             
-                <td class="name"><code>start_time</code></td>
+                <td class="name"><code>startTime</code></td>
             
 
             <td class="type">
@@ -13876,7 +13876,7 @@
 
         <tr>
             
-                <td class="name"><code>end_time</code></td>
+                <td class="name"><code>endTime</code></td>
             
 
             <td class="type">
@@ -13912,7 +13912,7 @@
 
         <tr>
             
-                <td class="name"><code>user_segments</code></td>
+                <td class="name"><code>userSegments</code></td>
             
 
             <td class="type">
@@ -14135,9 +14135,9 @@
     url: '/categories/cat_49203',
     matches: [{
         pattern: 'outerwear',
-        match_type: 'EXACT'
+        matchType: 'EXACT'
     }],
-    user_segments: ['US', 'Mobile', 'Web'],
+    userSegments: ['US', 'Mobile', 'Web'],
 });</code></pre>
 
 </div>
@@ -14192,7 +14192,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1516">line 1516</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1527">line 1527</a>
     </li></ul></dd>
     
 
@@ -14551,7 +14551,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2204">line 2204</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2227">line 2227</a>
     </li></ul></dd>
     
 
@@ -14899,7 +14899,7 @@
 
         <tr>
             
-                <td class="name"><code>item_groups</code></td>
+                <td class="name"><code>itemGroups</code></td>
             
 
             <td class="type">
@@ -14930,7 +14930,7 @@
             
 
             <td class="description last">
-                The CSV file with all new item_groups
+                The CSV file with all new itemGroups
                 
             </td>
         </tr>
@@ -15087,10 +15087,10 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.patchCatalog({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     items: itemsFileBufferOrStream,
     variations: variationsFileBufferOrStream,
-    item_groups: itemGroupsFileBufferOrStream,
+    itemGroups: itemGroupsFileBufferOrStream,
 });</code></pre>
 
 </div>
@@ -15145,7 +15145,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2356">line 2356</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2379">line 2379</a>
     </li></ul></dd>
     
 
@@ -15601,7 +15601,7 @@
 
     <pre class="prettyprint"><code>constructorio.catalog.patchCatalogUsingTarArchive({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     tarArchive: tarArchiveBufferOrStream,
 });</code></pre>
 
@@ -15659,7 +15659,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2791">line 2791</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2824">line 2824</a>
     </li></ul></dd>
     
 
@@ -16037,7 +16037,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3196">line 3196</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3244">line 3244</a>
     </li></ul></dd>
     
 
@@ -16466,7 +16466,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1123">line 1123</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1134">line 1134</a>
     </li></ul></dd>
     
 
@@ -16711,7 +16711,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1380">line 1380</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1391">line 1391</a>
     </li></ul></dd>
     
 
@@ -17043,7 +17043,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1427">line 1427</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1438">line 1438</a>
     </li></ul></dd>
     
 
@@ -17288,7 +17288,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2057">line 2057</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2080">line 2080</a>
     </li></ul></dd>
     
 
@@ -17620,7 +17620,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1672">line 1672</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1683">line 1683</a>
     </li></ul></dd>
     
 
@@ -17952,7 +17952,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1716">line 1716</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1727">line 1727</a>
     </li></ul></dd>
     
 
@@ -18197,7 +18197,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2100">line 2100</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2123">line 2123</a>
     </li></ul></dd>
     
 
@@ -18505,7 +18505,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
         <tr>
             
-                <td class="name"><code>item_groups</code></td>
+                <td class="name"><code>itemGroups</code></td>
             
 
             <td class="type">
@@ -18536,7 +18536,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
             
 
             <td class="description last">
-                The CSV file with all new item_groups
+                The CSV file with all new itemGroups
                 
             </td>
         </tr>
@@ -18693,10 +18693,10 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
     <pre class="prettyprint"><code>constructorio.catalog.replaceCatalog({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     items: itemsFileBufferOrStream,
     variations: variationsFileBufferOrStream,
-    item_groups: itemGroupsFileBufferOrStream,
+    itemGroups: itemGroupsFileBufferOrStream,
 });</code></pre>
 
 </div>
@@ -18751,7 +18751,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2257">line 2257</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2280">line 2280</a>
     </li></ul></dd>
     
 
@@ -19167,7 +19167,7 @@ Caution: Once a facet group's configuration is removed, all configurations will 
 
     <pre class="prettyprint"><code>constructorio.catalog.replaceCatalogUsingTarArchive({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     tarArchive: tarArchiveBufferOrStream,
 });</code></pre>
 
@@ -19225,7 +19225,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2645">line 2645</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2678">line 2678</a>
     </li></ul></dd>
     
 
@@ -19399,7 +19399,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -19435,7 +19435,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>sort_order</code></td>
+                <td class="name"><code>sortOrder</code></td>
             
 
             <td class="type">
@@ -19462,7 +19462,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
             
 
             <td class="description last">
-                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, num_matches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
+                Defines the criterion by which the options of this facet group are sorted. Must be one of relevance, value, numMatches. Defaults to relevance. Can be overridden by setting position attribute on facet options.
                 
             </td>
         </tr>
@@ -19471,7 +19471,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>sort_descending</code></td>
+                <td class="name"><code>sortDescending</code></td>
             
 
             <td class="type">
@@ -19498,7 +19498,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
             
 
             <td class="description last">
-                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sort_order is relevance and false for others.
+                Set to true if the options should be sorted in descending order, false to sort ascending. Default value is true if sortOrder is relevance and false for others.
                 
             </td>
         </tr>
@@ -19507,7 +19507,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>range_type</code></td>
+                <td class="name"><code>rangeType</code></td>
             
 
             <td class="type">
@@ -19534,7 +19534,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
             
 
             <td class="description last">
-                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and range_format is options.
+                Specifies how the range buckets are determined. Must be one of dynamic or static. Default value is null. Required if facet type is range and rangeFormat is options.
                 
             </td>
         </tr>
@@ -19543,7 +19543,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>range_format</code></td>
+                <td class="name"><code>rangeFormat</code></td>
             
 
             <td class="type">
@@ -19579,7 +19579,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>range_inclusive</code></td>
+                <td class="name"><code>rangeInclusive</code></td>
             
 
             <td class="type">
@@ -19615,7 +19615,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>bucket_size</code></td>
+                <td class="name"><code>bucketSize</code></td>
             
 
             <td class="type">
@@ -19642,7 +19642,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
             
 
             <td class="description last">
-                Specifies the size of generated buckets. Default is null. Either this or range_limits are required for facet type range, format options, and range_type static
+                Specifies the size of generated buckets. Default is null. Either this or rangeLimits are required for facet type range, format options, and rangeType static
                 
             </td>
         </tr>
@@ -19651,13 +19651,13 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>range_limits</code></td>
+                <td class="name"><code>rangeLimits</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Array.&lt;number></code></span>
+<span class="param-type"><code>json</code></span>
 
 
             
@@ -19687,7 +19687,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>match_type</code></td>
+                <td class="name"><code>matchType</code></td>
             
 
             <td class="type">
@@ -20088,9 +20088,9 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     <pre class="prettyprint"><code>constructorio.catalog.replaceFacetConfiguration({
     name: 'color',
     type: 'multiple',
-    display_name: 'Color',
-    sort_order: 'value',
-    sort_descending: false,
+    displayName: 'Color',
+    sortOrder: 'value',
+    sortDescending: false,
     position: 1,
 });</code></pre>
 
@@ -20146,7 +20146,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3076">line 3076</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line3124">line 3124</a>
     </li></ul></dd>
     
 
@@ -20330,7 +20330,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>display_name</code></td>
+                <td class="name"><code>displayName</code></td>
             
 
             <td class="type">
@@ -20689,7 +20689,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     <pre class="prettyprint"><code>constructorio.catalog.replaceFacetOptionConfiguration({
     facetGroupName: 'color',
     value: 'blue',
-    display_name: 'Midnight Blue',
+    displayName: 'Midnight Blue',
     position: 9,
 });</code></pre>
 
@@ -20745,7 +20745,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line414">line 414</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line416">line 416</a>
     </li></ul></dd>
     
 
@@ -21228,7 +21228,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line729">line 729</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line731">line 731</a>
     </li></ul></dd>
     
 
@@ -21753,7 +21753,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2152">line 2152</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2175">line 2175</a>
     </li></ul></dd>
     
 
@@ -22061,7 +22061,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>item_groups</code></td>
+                <td class="name"><code>itemGroups</code></td>
             
 
             <td class="type">
@@ -22092,7 +22092,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
             
 
             <td class="description last">
-                The CSV file with all new item_groups
+                The CSV file with all new itemGroups
                 
             </td>
         </tr>
@@ -22249,10 +22249,10 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
     <pre class="prettyprint"><code>constructorio.catalog.updateCatalog({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     items: itemsFileBufferOrStream,
     variations: variationsFileBufferOrStream,
-    item_groups: itemGroupsFileBufferOrStream,
+    itemGroups: itemGroupsFileBufferOrStream,
 });</code></pre>
 
 </div>
@@ -22307,7 +22307,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2306">line 2306</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line2329">line 2329</a>
     </li></ul></dd>
     
 
@@ -22723,7 +22723,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
     <pre class="prettyprint"><code>constructorio.catalog.updateCatalogUsingTarArchive({
     section: 'Products',
-    notification_email: 'notifications@example.com',
+    notificationEmail: 'notifications@example.com',
     tarArchive: tarArchiveBufferOrStream,
 });</code></pre>
 
@@ -22779,7 +22779,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line260">line 260</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -23264,7 +23264,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1817">line 1817</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line1832">line 1832</a>
     </li></ul></dd>
     
 
@@ -23472,7 +23472,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>start_time</code></td>
+                <td class="name"><code>startTime</code></td>
             
 
             <td class="type">
@@ -23508,7 +23508,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>end_time</code></td>
+                <td class="name"><code>endTime</code></td>
             
 
             <td class="type">
@@ -23544,7 +23544,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 
         <tr>
             
-                <td class="name"><code>user_segments</code></td>
+                <td class="name"><code>userSegments</code></td>
             
 
             <td class="type">
@@ -23767,9 +23767,9 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     url: '/categories/cat_49203',
     matches: [{
         pattern: 'outerwear',
-        match_type: 'EXACT'
+        matchType: 'EXACT'
     }],
-    user_segments: ['US', 'Mobile', 'Web'],
+    userSegments: ['US', 'Mobile', 'Web'],
     metadata: {
         additional_data: 'additional string data',
     },
@@ -23827,7 +23827,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line573">line 573</a>
+        <a href="modules_catalog.js.html">modules/catalog.js</a>, <a href="modules_catalog.js.html#line575">line 575</a>
     </li></ul></dd>
     
 
@@ -24282,7 +24282,7 @@ Caution: Overwrites all other configurations you may have defined for the facet 
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Mon Apr 03 2023 15:33:31 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Fri Apr 07 2023 13:58:25 GMT-0700 (Pacific Daylight Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
