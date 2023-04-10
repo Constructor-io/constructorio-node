@@ -222,6 +222,21 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should resolve when updating multiple items and supplying onMissing parameter', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const onMissing = 'IGNORE';
+
+        catalog.updateItems({ items: updatedItems, onMissing }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('on_missing').to.equal(onMissing);
+          done();
+        });
+      });
+
       it('Should return error when no items are provided', () => {
         const invalidOptions = cloneDeep(validOptions);
 
@@ -272,6 +287,16 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.updateItems({ items: updatedItems })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid onMissing parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const onMissing = 'invalid';
+
+        return expect(catalog.updateItems({ items: updatedItems, onMissing })).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
       });
 
       if (!skipNetworkTimeoutTests) {
