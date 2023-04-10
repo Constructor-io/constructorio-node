@@ -266,6 +266,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
+   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -295,7 +296,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { items, section, force, notification_email, notificationEmail = notification_email } = parameters;
+    const { items, section, force, notification_email, notificationEmail = notification_email, onMissing } = parameters;
     const queryParams = {};
 
     // Validate items is provided
@@ -313,6 +314,15 @@ class Catalog {
 
     if (force) {
       queryParams.force = force;
+    }
+
+    if (onMissing) {
+      // Validate onMissing parameter
+      if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+        return Promise.reject(new Error('onMissing must be one of FAIL, IGNORE, or CREATE'));
+      }
+
+      queryParams.on_missing = onMissing;
     }
 
     try {
@@ -579,6 +589,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for variation details
    * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
+   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -609,7 +620,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, force, notification_email, notificationEmail = notification_email, variations } = parameters;
+    const { section, force, notification_email, notificationEmail = notification_email, variations, onMissing } = parameters;
     const queryParams = {};
 
     // Validate variations are provided
@@ -627,6 +638,15 @@ class Catalog {
 
     if (notificationEmail) {
       queryParams.notification_email = notificationEmail;
+    }
+
+    if (onMissing) {
+      // Validate onMissing parameter
+      if (onMissing && !['FAIL', 'IGNORE', 'CREATE'].includes(onMissing)) {
+        return Promise.reject(new Error('onMissing must be one of FAIL, IGNORE, or CREATE'));
+      }
+
+      queryParams.on_missing = onMissing;
     }
 
     try {
