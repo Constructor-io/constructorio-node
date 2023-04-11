@@ -479,7 +479,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it.only('Should return a response with a valid query, section, and qs param', (done) => {
+    it('Should return a response with a valid query, section, and qs param', (done) => {
       const qsParam = {
         num_results_per_page: '10',
         filters: {
