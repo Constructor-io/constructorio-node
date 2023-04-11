@@ -266,7 +266,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item details
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
-   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
+   * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -589,7 +589,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for variation details
    * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
-   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
+   * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -2252,7 +2252,7 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
+   * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {file} [parameters.items] - The CSV file with all new items
    * @param {file} [parameters.variations] - The CSV file with all new variations
    * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
@@ -2404,7 +2404,7 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {string} [parameters.onMissing] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence. Defaults to FAIL
+   * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {file} [parameters.tarArchive] - The tar file that includes csv files
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
