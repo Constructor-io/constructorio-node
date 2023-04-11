@@ -6,6 +6,7 @@
   "types": "src/types/constructorio.d.ts",
   "scripts": {
     "verify-node-version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh",
+    "use-jsdocs-salty": "chmod +x ./scripts/use-jsdocs-salty.sh && ./scripts/use-jsdocs-salty.sh",
     "version": "npm run verify-node-version && npm run docs && git add ./docs/*",
     "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
     "lint": "eslint 'src/**/*.js' 'spec/**/*.js' 'src/**/*.d.ts'",
@@ -15,7 +16,7 @@
     "precoverage": "rm -rf ./coverage && rm -rf ./.nyc_output",
     "coverage": "nyc --all --reporter=html npm run test:parallel",
     "postcoverage": "open coverage/index.html && rm -rf test",
-    "docs": "jsdoc --configure ./.jsdoc.json ./README.md --recurse ./src --destination ./docs",
+    "docs": "npm run use-jsdocs-salty && jsdoc --configure ./.jsdoc.json ./README.md --recurse ./src --destination ./docs",
     "prepare": "husky install"
   },
   "repository": {
@@ -45,7 +46,7 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "husky": "^7.0.4",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^4.0.2",
     "license-checker": "^25.0.1",
     "lodash.clonedeep": "^4.5.0",
     "minami": "^1.2.3",
