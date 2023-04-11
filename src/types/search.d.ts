@@ -27,6 +27,7 @@ export interface SearchParameters {
   hiddenFields?: string[];
   hiddenFacets?: string[];
   variationsMap?: Record<string, any>;
+  qsParam?: Record<string, any>;
 }
 
 declare class Search {
@@ -36,7 +37,7 @@ declare class Search {
 
   getSearchResults(
     query: string,
-    parameters?: SearchParameters,
+    parameters?: Omit<SearchParameters, 'preFilterExpression' | 'qsParam'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;

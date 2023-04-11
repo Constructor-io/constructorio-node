@@ -479,6 +479,29 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it.only('Should return a response with a valid query, section, and qs param', (done) => {
+      const qsParam = {
+        num_results_per_page: '10',
+        filters: {
+          keywords: ['battery-powered'],
+        },
+      };
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults('item', { qsParam }, {}).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.request.num_results_per_page).to.equal(parseInt(qsParam.num_results_per_page, 10));
+        expect(res.request.filters.keywords[0]).to.equal(qsParam.filters.keywords[0]);
+        done();
+      });
+    });
+
     it('Should properly encode path parameter', (done) => {
       const specialCharacters = '+[]&';
       const querySpecialCharacters = `apple ${specialCharacters}`;

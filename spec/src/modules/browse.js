@@ -523,6 +523,30 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a valid filterName, filterValue, and qs param', (done) => {
+      const qsParam = {
+        num_results_per_page: '10',
+        filters: {
+          keywords: ['battery-powered'],
+        },
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { qsParam }).then((res) => {
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request).to.have.property('browse_filter_name');
+        expect(res.request).to.have.property('browse_filter_value');
+        expect(res.request.num_results_per_page).to.equal(parseInt(qsParam.num_results_per_page, 10));
+        expect(res.request.filters.keywords[0]).to.equal(qsParam.filters.keywords[0]);
+        done();
+      });
+    });
+
     it('Should properly encode path parameters', (done) => {
       const specialCharacters = '+[]&';
       const filterNameSpecialCharacters = `name ${specialCharacters}`;
