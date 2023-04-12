@@ -22,6 +22,10 @@ declare class Recommendations {
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<RecommendationsResponse>;
+
+  getRecommendationPods(
+    networkParameters?: NetworkParameters
+  ): Promise<RecommendationPodsResponse>;
 }
 
 /* Recommendations results returned from server */
@@ -61,4 +65,23 @@ export interface RecommendationsResultType extends Record<string, any> {
     id: string;
     [key: string]: any;
   };
+}
+
+export interface RecommendationPodsResponse extends Record<string, any> {
+  pods: RecommendationPod[];
+  total_count: number;
+}
+
+export interface PodStrategy extends Record<string, any> {
+  id: string;
+  display_name: string;
+}
+export interface RecommendationPod extends Record<string, any> {
+  strategy: PodStrategy;
+  id: string;
+  display_name: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  metadata_json: Record<string, any>;
 }
