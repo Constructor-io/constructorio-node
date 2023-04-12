@@ -56,7 +56,7 @@ expectAssignable<RecommendationPodsResponse>({
       name: 'Recently viewed',
       created_at: '2023-03-24T20:00:12',
       updated_at: '2023-03-24T20:00:12',
-      metadata_json: [],
+      metadata_json: {},
     },
     {
       strategy: {
@@ -67,7 +67,7 @@ expectAssignable<RecommendationPodsResponse>({
       name: 'You may also like',
       created_at: '2023-03-23T15:25:59',
       updated_at: '2023-03-23T15:32:48',
-      metadata_json: [],
+      metadata_json: {},
     },
   ],
   total_count: 2,
