@@ -4,8 +4,8 @@ import { ConstructorClientOptions, NetworkParameters } from '.';
 export default Tracker;
 
 export interface TrackerUserParameters {
-  sessionId: Number;
-  clientId: Number;
+  sessionId: number;
+  clientId: string;
   userId?: string;
   segments?: string;
   testCells?: Record<string, any>;

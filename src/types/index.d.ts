@@ -22,8 +22,8 @@ export interface ConstructorClientOptions {
 }
 
 export interface UserParameters {
-  sessionId?: Number;
-  clientId?: Number;
+  sessionId?: number;
+  clientId?: string;
   userId?: string;
   segments?: string;
   testCells?: Record<string, any>;
