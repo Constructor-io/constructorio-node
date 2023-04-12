@@ -247,6 +247,21 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should resolve when updating multiple variations and supplying onMissing parameter', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        const onMissing = 'IGNORE';
+
+        catalog.updateVariations({ variations: updatedVariations, onMissing }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('on_missing').to.equal(onMissing);
+          done();
+        });
+      });
+
       it('Should return error when no variations are provided', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -289,6 +304,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.updateVariations({ variations: updatedVariations })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when invalid onMissing parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.updateVariations({ items: updatedVariations, onMissing: 'invalid' })).to.eventually.be.rejected;
       });
 
       if (!skipNetworkTimeoutTests) {

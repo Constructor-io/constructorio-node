@@ -35,6 +35,7 @@ declare class Catalog {
       force?: boolean;
       notificationEmail?: string;
       section?: string;
+      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
     },
     networkParameters?: NetworkParameters
   ): Promise<void>;
@@ -74,6 +75,7 @@ declare class Catalog {
       force?: boolean;
       notificationEmail?: string;
       section?: string;
+      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
     },
     networkParameters?: NetworkParameters
   ): Promise<void>;
