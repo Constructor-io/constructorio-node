@@ -37,7 +37,7 @@ declare class Search {
 
   getSearchResults(
     query: string,
-    parameters?: Omit<SearchParameters, 'preFilterExpression' | 'qsParam'>,
+    parameters?: SearchParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;
