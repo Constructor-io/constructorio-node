@@ -29,6 +29,7 @@ export interface BrowseParameters {
   hiddenFields?: string[];
   hiddenFacets?: string[];
   variationsMap?: Record<string, any>;
+  qsParam?: Record<string, any>;
 }
 
 declare class Browse {
@@ -46,7 +47,7 @@ declare class Browse {
 
   getBrowseResultsForItemIds(
     itemIds: string[],
-    parameters?: BrowseParameters,
+    parameters?: Omit<BrowseParameters, 'preFilterExpression' | 'qsParam'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<GetBrowseResultsForItemIdsResponse>;
