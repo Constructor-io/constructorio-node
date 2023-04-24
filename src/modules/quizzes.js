@@ -38,21 +38,26 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     throw new Error('quizId is a required parameter of type string');
   }
 
-  if (path === 'finalize' && (typeof parameters.answers !== 'object' || !Array.isArray(parameters.answers) || parameters.answers.length === 0)) {
+  if (path === 'results' && (typeof parameters.answers !== 'object' || !Array.isArray(parameters.answers) || parameters.answers.length === 0)) {
     throw new Error('answers is a required parameter of type array');
   }
 
   if (parameters) {
-    const { section, answers, versionId } = parameters;
+    const { section, answers, quizVersionId, quizSessionId } = parameters;
 
     // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
 
-    // Pull version_id from parameters
-    if (versionId) {
-      queryParams.version_id = versionId;
+    // Pull quiz_version_id from parameters
+    if (quizVersionId) {
+      queryParams.quiz_version_id = quizVersionId;
+    }
+
+    // Pull quiz_session_id from parameters
+    if (quizSessionId) {
+      queryParams.quiz_session_id = quizSessionId;
     }
 
     // Pull answers from parameters and transform
@@ -88,11 +93,12 @@ class Quizzes {
    *
    * @function getQuizNextQuestion
    * @description Retrieve quiz question from Constructor.io API
-   * @param {string} id - The identifier of the quiz
+   * @param {string} quizId - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
    * @param {array} [parameters.answers] - An array for answers in the format [[1,2],[1]]
-   * @param {string} [parameters.versionId] - Version identifier for the quiz.
+   * @param {string} [parameters.quizVersionId] - Version identifier for the quiz.
+   * @param {string} [parameters.quizSessionId] - Session identifier for the quiz.
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -111,7 +117,7 @@ class Quizzes {
    *    versionId: '123'
    * });
    */
-  getQuizNextQuestion(id, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
     const { fetch } = this.options;
@@ -119,7 +125,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'next');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'next');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -151,7 +157,7 @@ class Quizzes {
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
-        if (json.version_id) {
+        if (json.quiz_version_id) {
           return json;
         }
 
@@ -164,11 +170,12 @@ class Quizzes {
    *
    * @function getQuizResults
    * @description Retrieve quiz recommendation and filter expression from Constructor.io API
-   * @param {string} id - The identifier of the quiz
+   * @param {string} quizId - The identifier of the quiz
    * @param {string} [parameters] - Additional parameters to refine result set
    * @param {string} [parameters.section] - Product catalog section
    * @param {array} [parameters.answers] - An array of answers in the format [[1,2],[1]]
-   * @param {string} [parameters.versionId] - Specific version identifier for the quiz
+   * @param {string} [parameters.quizVersionId] - Specific version identifier for the quiz
+   * @param {string} [parameters.quizSessionId] - Specific session identifier for the quiz
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -188,7 +195,7 @@ class Quizzes {
    *    versionId: '123'
    * });
    */
-  getQuizResults(id, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const headers = {};
     const { fetch } = this.options;
@@ -196,7 +203,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'finalize');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'results');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -228,7 +235,7 @@ class Quizzes {
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
-        if (json.version_id) {
+        if (json.quiz_version_id) {
           return json;
         }
 
