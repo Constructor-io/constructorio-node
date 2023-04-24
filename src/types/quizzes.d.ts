@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters, SortOption, ResultSources, Group } from '.';
+import { ConstructorClientOptions, NetworkParameters, UserParameters, SortOption, ResultSources, Group, Facet, Feature } from '.';
 
 export default Quizzes;
 
