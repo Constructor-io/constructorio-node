@@ -19,7 +19,7 @@ class ConstructorIO {
   /**
    * @param {object} parameters - Parameters for client instantiation
    * @param {string} parameters.apiKey - Constructor.io API key
-   * @param {string} [parameters.apiToken] - Constructor.io API token (required for catalog methods)
+   * @param {string} [parameters.apiToken] - Constructor.io API token - Should only be supplied when utilizing the `catalog` module and should be treated as sensitive information
    * @param {string} [parameters.securityToken] - Constructor security token
    * @param {string} [parameters.serviceUrl='https://ac.cnstrc.com'] - API URL endpoint
    * @param {function} [parameters.fetch] - If supplied, will be utilized for requests rather than default Fetch API
