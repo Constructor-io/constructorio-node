@@ -77,7 +77,7 @@ export interface Feature extends Record<string, any> {
     name: string;
     display_name: string;
     [key: string]: any;
-  };
+  } | null;
 }
 
 export type Facet = RangeFacet | OptionFacet;
