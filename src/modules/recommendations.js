@@ -32,9 +32,9 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     queryParams.us = segments;
   }
 
-  // Pull user id from options
+  // Pull user id from options and ensure string
   if (userId) {
-    queryParams.ui = userId;
+    queryParams.ui = String(userId);
   }
 
   if (parameters) {
