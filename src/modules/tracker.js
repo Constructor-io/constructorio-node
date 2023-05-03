@@ -42,7 +42,7 @@ function applyParams(parameters, userParameters, options) {
   }
 
   if (userId) {
-    aggregateParams.ui = userId;
+    aggregateParams.ui = String(userId);
   }
 
   if (segments && segments.length) {
