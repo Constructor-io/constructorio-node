@@ -92,7 +92,7 @@ declare class Tracker {
   ): true | Error;
 
   trackConversion(
-    term?: string,
+    term : string | null | undefined,
     parameters: {
       item_id: string;
       revenue?: number;
