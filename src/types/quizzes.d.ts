@@ -1,4 +1,4 @@
-import { Nullable } from './index.d';
+import { Nullable, UserParameters } from './index.d';
 import {
   ConstructorClientOptions,
   Facet,
@@ -15,8 +15,8 @@ import {
 export default Quizzes;
 
 export interface QuizzesParameters {
+  answers: any[];
   section?: string;
-  answers?: any[];
   quizVersionId?: string;
   quizSessionId?: string;
 }
@@ -34,14 +34,16 @@ declare class Quizzes {
   options: ConstructorClientOptions;
 
   getQuizNextQuestion(
-    id: string,
+    quizId: string,
     parameters?: QuizzesParameters,
+    userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<NextQuestionResponse>;
 
   getQuizResults(
-    id: string,
+    quizId: string,
     parameters?: QuizzesResultsParameters,
+    userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<QuizResultsResponse>;
 }
