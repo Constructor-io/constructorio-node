@@ -52,9 +52,9 @@ declare class Quizzes {
 export interface NextQuestionResponse extends Record<string, any> {
   next_question: Question;
   is_last_question?: boolean;
-  quiz_version_id?: string;
-  quiz_id?: string;
-  quiz_session_id?: string;
+  quiz_version_id: string;
+  quiz_id: string;
+  quiz_session_id: string;
 }
 
 export interface QuizResultsResponse extends Record<string, any> {
