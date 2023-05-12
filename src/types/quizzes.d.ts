@@ -1,11 +1,31 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters } from '.';
+import { Nullable, UserParameters } from './index.d';
+import {
+  ConstructorClientOptions,
+  Facet,
+  Feature,
+  Group,
+  NetworkParameters,
+  RequestFeature,
+  RequestFeatureVariant,
+  SortOption,
+  FilterExpression,
+  ResultSources,
+} from '.';
 
 export default Quizzes;
 
 export interface QuizzesParameters {
+  answers: any[];
   section?: string;
-  answers?: any[];
-  versionId?: string;
+  quizVersionId?: string;
+  quizSessionId?: string;
+}
+
+export interface QuizzesResultsParameters extends QuizzesParameters {
+  answers: any[];
+  page?: number;
+  resultsPerPage?: number;
+  filters?: Record<string, any>;
 }
 
 declare class Quizzes {
@@ -14,15 +34,15 @@ declare class Quizzes {
   options: ConstructorClientOptions;
 
   getQuizNextQuestion(
-    id: string,
+    quizId: string,
     parameters?: QuizzesParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<NextQuestionResponse>;
 
   getQuizResults(
-    id: string,
-    parameters?: QuizzesParameters,
+    quizId: string,
+    parameters?: QuizzesResultsParameters,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<QuizResultsResponse>;
@@ -30,24 +50,77 @@ declare class Quizzes {
 
 /* quizzes results returned from server */
 export interface NextQuestionResponse extends Record<string, any> {
-  next_question: Partial<NextQuestion>;
+  next_question: Question;
   is_last_question?: boolean;
-  version_id?: string;
-}
-export interface QuizResultsResponse extends Record<string, any> {
-  result: Partial<QuizResult>;
-  version_id?: string;
+  quiz_version_id: string;
+  quiz_id: string;
+  quiz_session_id: string;
 }
 
-export interface NextQuestion extends Record<string, any> {
+export interface QuizResultsResponse extends Record<string, any> {
+  request?: {
+    filters?: Record<string, any>;
+    fmt_options: Record<string, any>;
+    num_results_per_page: number;
+    page: number;
+    section: string;
+    sort_by: string;
+    sort_order: string;
+    features: Partial<RequestFeature>;
+    feature_variants: Partial<RequestFeatureVariant>;
+    collection_filter_expression: FilterExpression;
+    term: string;
+  };
+  response?: {
+    result_sources: Partial<ResultSources>;
+    facets: Partial<Facet>[];
+    groups: Partial<Group>[];
+    results: Partial<QuizResultData>[];
+    sort_options: Partial<SortOption>[];
+    refined_content: Record<string, any>[];
+    total_num_results: number;
+    features: Partial<Feature>[];
+  };
+  result_id?: string;
+  quiz_version_id: string;
+  quiz_session_id: string;
+  quiz_id: string;
+}
+
+export interface QuizResultData extends Record<string, any> {
+  matched_terms: string[];
+  data: {
+    id: string;
+    [key: string]: any;
+  };
+  value: string;
+  is_slotted: false;
+  labels: Record<string, any>;
+  variations: Record<string, any>[];
+}
+
+export type Question = SelectQuestion | OpenQuestion | CoverQuestion
+
+export interface BaseQuestion extends Record<string, any> {
   id: number;
   title: string;
   description: string;
-  type: 'single' | 'multiple' | 'open' | 'cover';
-  cta_text: string;
-  images: Partial<QuestionImages>;
-  options: Partial<QuestionOption>[];
-  input_placeholder: string;
+  cta_text: Nullable<string>;
+  images?: Nullable<QuestionImages>;
+}
+
+export interface SelectQuestion extends BaseQuestion {
+  type: 'single' | 'multiple'
+  options: QuestionOption[];
+}
+
+export interface OpenQuestion extends BaseQuestion {
+  type: 'open'
+  inputPlaceholder?: Nullable<string>;
+}
+
+export interface CoverQuestion extends BaseQuestion {
+  type: 'cover'
 }
 
 export interface QuizResult extends Record<string, any> {
@@ -58,16 +131,16 @@ export interface QuizResult extends Record<string, any> {
 export interface QuestionOption extends Record<string, any> {
   id: number;
   value: string;
-  attribute: {
+  attribute: Nullable<{
     name: string;
     value: string;
-  };
-  images: Partial<QuestionImages>;
+  }>;
+  images?: Nullable<QuestionImages>;
 }
 
 export interface QuestionImages extends Record<string, any> {
-  primary_url: string;
-  primary_alt: string;
-  secondary_url: string;
-  secondary_alt: string;
+  primary_url?: Nullable<string>;
+  primary_alt?: Nullable<string>;
+  secondary_url?: Nullable<string>;
+  secondary_alt?: Nullable<string>;
 }
