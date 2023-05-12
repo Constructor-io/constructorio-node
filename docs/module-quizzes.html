@@ -66,7 +66,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line74">line 74</a>
+        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -135,7 +135,7 @@
 
     
 
-    <h4 class="name" id="~getQuizNextQuestion"><span class="type-signature type-signature-inner">(inner) </span>getQuizNextQuestion<span class="signature">(id, parameters<span class="signature-attributes">opt</span>, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="~getQuizNextQuestion"><span class="type-signature type-signature-inner">(inner) </span>getQuizNextQuestion<span class="signature">(quizId, parameters, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -151,7 +151,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line86">line 86</a>
+        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -208,7 +208,7 @@
     <pre class="prettyprint"><code>constructorio.quizzes.getQuizNextQuestion('quizId', {
    answers: [[1,2],[1]],
    section: '123',
-   versionId: '123'
+   quizVersionId: '123'
 });</code></pre>
 
 
@@ -241,7 +241,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>quizId</code></td>
             
 
             <td class="type">
@@ -289,8 +289,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -324,6 +322,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>answers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An array for answers in the format [[1,2],[1]]</td>
+        </tr>
+
     
 
         <tr>
@@ -362,41 +392,7 @@
 
         <tr>
             
-                <td class="name"><code>answers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">An array for answers in the format [[1,2],[1]]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>versionId</code></td>
+                <td class="name"><code>quizVersionId</code></td>
             
 
             <td class="type">
@@ -423,7 +419,41 @@
 
             
 
-            <td class="description last">Version identifier for the quiz.</td>
+            <td class="description last">Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found <a href="https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning">here</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>quizSessionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found <a href="https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions">here</a></td>
         </tr>
 
     
@@ -841,7 +871,7 @@
 
     
 
-    <h4 class="name" id="~getQuizResults"><span class="type-signature type-signature-inner">(inner) </span>getQuizResults<span class="signature">(id, parameters<span class="signature-attributes">opt</span>, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="~getQuizResults"><span class="type-signature type-signature-inner">(inner) </span>getQuizResults<span class="signature">(quizId, parameters, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -857,7 +887,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line162">line 162</a>
+        <a href="modules_quizzes.js.html">modules/quizzes.js</a>, <a href="modules_quizzes.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -914,7 +944,7 @@
     <pre class="prettyprint"><code>constructorio.quizzes.getQuizResults('quizId', {
    answers: [[1,2],[1]],
    section: '123',
-   versionId: '123'
+   quizVersionId: '123'
 });</code></pre>
 
 
@@ -947,7 +977,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>quizId</code></td>
             
 
             <td class="type">
@@ -995,8 +1025,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -1030,6 +1058,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>answers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An array of answers in the format [[1,2],[1]]</td>
+        </tr>
+
     
 
         <tr>
@@ -1068,41 +1128,7 @@
 
         <tr>
             
-                <td class="name"><code>answers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">An array of answers in the format [[1,2],[1]]</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>versionId</code></td>
+                <td class="name"><code>quizVersionId</code></td>
             
 
             <td class="type">
@@ -1129,7 +1155,41 @@
 
             
 
-            <td class="description last">Specific version identifier for the quiz</td>
+            <td class="description last">Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found <a href="https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning">here</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>quizSessionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found <a href="https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions">here</a></td>
         </tr>
 
     
@@ -1596,7 +1656,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 19:50:32 GMT-0600 (Mountain Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri May 12 2023 16:23:20 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

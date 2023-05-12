@@ -87,21 +87,26 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     throw new Error('quizId is a required parameter of type string');
   }
 
-  if (path === 'finalize' &amp;&amp; (typeof parameters.answers !== 'object' || !Array.isArray(parameters.answers) || parameters.answers.length === 0)) {
+  if (path === 'results' &amp;&amp; (typeof parameters.answers !== 'object' || !Array.isArray(parameters.answers) || parameters.answers.length === 0)) {
     throw new Error('answers is a required parameter of type array');
   }
 
   if (parameters) {
-    const { section, answers, versionId } = parameters;
+    const { section, answers, quizVersionId, quizSessionId } = parameters;
 
     // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
 
-    // Pull version_id from parameters
-    if (versionId) {
-      queryParams.version_id = versionId;
+    // Pull quiz_version_id from parameters
+    if (quizVersionId) {
+      queryParams.quiz_version_id = quizVersionId;
+    }
+
+    // Pull quiz_session_id from parameters
+    if (quizSessionId) {
+      queryParams.quiz_session_id = quizSessionId;
     }
 
     // Pull answers from parameters and transform
@@ -137,11 +142,12 @@ class Quizzes {
    *
    * @function getQuizNextQuestion
    * @description Retrieve quiz question from Constructor.io API
-   * @param {string} id - The identifier of the quiz
-   * @param {string} [parameters] - Additional parameters to refine result set
+   * @param {string} quizId - The identifier of the quiz
+   * @param {string} parameters - Additional parameters to refine result set
+   * @param {array} parameters.answers - An array for answers in the format [[1,2],[1]]
    * @param {string} [parameters.section] - Product catalog section
-   * @param {array} [parameters.answers] - An array for answers in the format [[1,2],[1]]
-   * @param {string} [parameters.versionId] - Version identifier for the quiz.
+   * @param {string} [parameters.quizVersionId] - Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning}
+   * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions}
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -157,10 +163,10 @@ class Quizzes {
    * constructorio.quizzes.getQuizNextQuestion('quizId', {
    *    answers: [[1,2],[1]],
    *    section: '123',
-   *    versionId: '123'
+   *    quizVersionId: '123'
    * });
    */
-  getQuizNextQuestion(id, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizNextQuestion(quizId, parameters, userParameters = {}, networkParameters = {}) {
     const headers = {};
     let requestUrl;
     const { fetch } = this.options;
@@ -168,7 +174,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'next');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'next');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -200,7 +206,7 @@ class Quizzes {
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
-        if (json.version_id) {
+        if (json.quiz_version_id) {
           return json;
         }
 
@@ -213,11 +219,12 @@ class Quizzes {
    *
    * @function getQuizResults
    * @description Retrieve quiz recommendation and filter expression from Constructor.io API
-   * @param {string} id - The identifier of the quiz
-   * @param {string} [parameters] - Additional parameters to refine result set
+   * @param {string} quizId - The identifier of the quiz
+   * @param {string} parameters - Additional parameters to refine result set
+   * @param {array} parameters.answers - An array of answers in the format [[1,2],[1]]
    * @param {string} [parameters.section] - Product catalog section
-   * @param {array} [parameters.answers] - An array of answers in the format [[1,2],[1]]
-   * @param {string} [parameters.versionId] - Specific version identifier for the quiz
+   * @param {string} [parameters.quizVersionId] - Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning}
+   * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions}
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -234,10 +241,10 @@ class Quizzes {
    * constructorio.quizzes.getQuizResults('quizId', {
    *    answers: [[1,2],[1]],
    *    section: '123',
-   *    versionId: '123'
+   *    quizVersionId: '123'
    * });
    */
-  getQuizResults(id, parameters, userParameters = {}, networkParameters = {}) {
+  getQuizResults(quizId, parameters, userParameters = {}, networkParameters = {}) {
     let requestUrl;
     const headers = {};
     const { fetch } = this.options;
@@ -245,7 +252,7 @@ class Quizzes {
     const { signal } = controller;
 
     try {
-      requestUrl = createQuizUrl(id, parameters, userParameters, this.options, 'finalize');
+      requestUrl = createQuizUrl(quizId, parameters, userParameters, this.options, 'results');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -277,7 +284,7 @@ class Quizzes {
         return helpers.throwHttpErrorFromResponse(new Error(), response);
       })
       .then((json) => {
-        if (json.version_id) {
+        if (json.quiz_version_id) {
           return json;
         }
 
@@ -301,7 +308,7 @@ module.exports = Quizzes;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Tue May 02 2023 19:50:32 GMT-0600 (Mountain Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri May 12 2023 16:23:20 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
