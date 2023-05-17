@@ -14,6 +14,236 @@ import {
 
 export default Catalog;
 
+export interface CreateOrReplaceItemsParameters {
+  items: Item[];
+  force?: boolean;
+  notificationEmail?: string;
+  section?: string;
+}
+
+export interface UpdateItemParameters extends CreateOrReplaceItemsParameters {}
+
+export interface DeleteItemsParameters {
+  items: Pick<Item, 'id'>[];
+  section?: string;
+  notificationEmail?: string;
+}
+
+export interface RetrieveItemsParameters {
+  ids?: string[];
+  section?: string;
+  numResultsPerPage?: number;
+  page?: number;
+}
+
+export interface CreateOrReplaceVariationsParameters {
+  variations: Variation[];
+  force?: boolean;
+  notificationEmail?: string;
+  section?: string;
+}
+
+export interface UpdateVariationsParameters
+  extends CreateOrReplaceVariationsParameters {}
+
+export interface DeleteVariationsParameters {
+  variations: Pick<Variation, 'id'>[];
+  force?: boolean;
+  notificationEmail?: string;
+  section?: string;
+}
+
+export interface RetrieveVariationsParameters {
+  section?: string;
+  ids?: string[];
+  itemId?: string;
+  numResultsPerPage?: number;
+  page?: number;
+}
+
+export interface AddItemGroupParameters {
+  id: string;
+  name: string;
+  parent_id?: string;
+  data?: Record<string, any>;
+}
+
+export interface AddItemGroupsParameters {
+  item_groups: ItemGroup[];
+}
+
+export interface GetItemGroupParameters {
+  id: string;
+}
+
+export interface AddOrUpdateItemGroupsParameters
+  extends AddItemGroupsParameters {}
+
+export interface AddOneWaySynonymParameters {
+  phrase: string;
+  child_phrases: string[];
+}
+
+export interface ModifyOneWaySynonymParameters
+  extends AddOneWaySynonymParameters {}
+
+export interface GetOneWaySynonymParameters {
+  phrase: string;
+}
+
+export interface GetOneWaySynonymsParameters {
+  num_results_per_page?: number;
+  page?: number;
+}
+
+export interface RemoveOneWaySynonymParameters {
+  phrase: string;
+}
+
+export interface AddSynonymGroupParameters {
+  synonyms: string[];
+}
+
+export interface ModifySynonymGroupParameters {
+  id: number;
+  synonyms: string[];
+}
+
+export interface GetSynonymGroupParameters {
+  id: number;
+}
+
+export interface GetSynonymGroupsParameters {
+  phrase?: string;
+  num_results_per_page?: number;
+  page?: number;
+}
+
+export interface RemoveSynonymGroupParameters {
+  id: number;
+}
+
+export interface AddRedirectRuleParameters {
+  url: string;
+  matches: RedirectRuleMatchObject[];
+  start_time?: string;
+  end_time?: string;
+  user_segments?: string[];
+  metadata?: Record<string, any>;
+}
+
+export interface UpdateRedirectRuleParameters
+  extends AddRedirectRuleParameters {
+  id: string;
+}
+
+export interface ModifyRedirectRuleParameters
+  extends AddRedirectRuleParameters {
+  id: string;
+}
+
+export interface GetRedirectRuleParameters {
+  id: string;
+}
+
+export interface GetRedirectRulesParameters {
+  num_results_per_page?: number;
+  page?: number;
+  query?: string;
+  status?: string;
+}
+
+export interface RemoveRedirectRuleParameters {
+  id: string;
+}
+
+export interface ReplaceCatalogParameters {
+  section: string;
+  notification_email?: string;
+  force?: boolean;
+  items?: File;
+  variations?: File;
+  item_groups?: File;
+}
+
+export interface UpdateCatalogParameters extends ReplaceCatalogParameters {}
+
+export interface PatchCatalogParameters {
+  section: string;
+  notification_email?: string;
+  force?: boolean;
+  onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
+  items?: File;
+  variations?: File;
+  item_groups?: File;
+}
+
+export interface ReplaceCatalogUsingTarArchiveParameters {
+  section: string;
+  notification_email?: string;
+  force?: boolean;
+  tarArchive?: File;
+}
+
+export interface UpdateCatalogUsingTarArchiveParameters
+  extends ReplaceCatalogUsingTarArchiveParameters {}
+
+export interface PatchCatalogUsingTarArchiveParameters
+  extends ReplaceCatalogUsingTarArchiveParameters {}
+
+export interface GetFacetConfigurationsParameters {
+  page?: number;
+  num_results_per_page?: number;
+  section?: string;
+}
+
+export interface GetFacetConfigurationParameters {
+  name?: string;
+  section?: string;
+}
+
+export interface ModifyFacetConfigurationsParameters {
+  facetConfigurations: FacetConfiguration[];
+}
+
+export interface RemoveFacetConfigurationParameters {
+  name: string;
+  section?: string;
+}
+
+export type AddFacetOptionConfigurationParameters = FacetOptionConfiguration & {
+  facetGroupName: string;
+  section?: string;
+};
+
+export interface AddOrModifyFacetOptionConfigurationsParameters {
+  facetGroupName: string;
+  facetOptionConfigurations: FacetOptionConfiguration[];
+  section?: string;
+}
+
+export interface GetFacetOptionConfigurationsParameters {
+  facetGroupName: string;
+  page?: number;
+  num_results_per_page?: number;
+  section?: string;
+}
+
+export interface GetFacetOptionConfigurationParameters {
+  facetGroupName: string;
+  value: string;
+  section?: string;
+}
+
+export type ReplaceFacetOptionConfigurationParameters = {
+  facetGroupName: string;
+  section?: string;
+} & FacetOptionConfiguration;
+
+export type ModifyFacetOptionConfigurationParameters = ReplaceFacetOptionConfigurationParameters
+
+export interface RemoveFacetOptionConfiguration extends GetFacetOptionConfigurationParameters {}
+
 declare class Catalog {
   constructor(options: ConstructorClientOptions);
 
