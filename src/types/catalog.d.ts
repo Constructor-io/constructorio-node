@@ -21,7 +21,7 @@ export interface CreateOrReplaceItemsParameters {
   section?: string;
 }
 
-export interface UpdateItemParameters extends CreateOrReplaceItemsParameters {}
+export interface UpdateItemsParameters extends CreateOrReplaceItemsParameters {}
 
 export interface DeleteItemsParameters {
   items: Pick<Item, 'id'>[];
@@ -250,84 +250,42 @@ declare class Catalog {
   options: ConstructorClientOptions;
 
   createOrReplaceItems(
-    parameters: {
-      items: Item[];
-      force?: boolean;
-      notificationEmail?: string;
-      section?: string;
-    },
+    parameters: CreateOrReplaceItemsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   updateItems(
-    parameters: {
-      items: Item[];
-      force?: boolean;
-      notificationEmail?: string;
-      section?: string;
-      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
-    },
+    parameters: UpdateItemsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   deleteItems(
-    parameters: {
-      items: Pick<Item, 'id'>[];
-      section?: string;
-      notificationEmail?: string;
-    },
+    parameters: DeleteItemsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   retrieveItems(
-    parameters: {
-      ids?: string[];
-      section?: string;
-      numResultsPerPage?: number;
-      page?: number;
-    },
+    parameters: RetrieveItemsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{ items: Item[]; total_count: number; [key: string]: any }>;
 
   createOrReplaceVariations(
-    parameters: {
-      variations: Variation[];
-      force?: boolean;
-      notificationEmail?: string;
-      section?: string;
-    },
+    parameters: CreateOrReplaceVariationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   updateVariations(
-    parameters: {
-      variations: Variation[];
-      force?: boolean;
-      notificationEmail?: string;
-      section?: string;
-      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
-    },
+    parameters: UpdateVariationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   deleteVariations(
-    parameters: {
-      variations: Pick<Variation, 'id'>[];
-      force?: boolean;
-      notificationEmail?: string;
-      section?: string;
-    },
+    parameters: DeleteVariationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   retrieveVariations(
-    parameters: {
-      section?: string;
-      ids?: string[];
-      itemId?: string;
-      numResultsPerPage?: number;
-      page?: number;
-    },
+    parameters: RetrieveVariationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     variations: Variation[];
@@ -336,26 +294,17 @@ declare class Catalog {
   }>;
 
   addItemGroup(
-    parameters: {
-      id: string;
-      name: string;
-      parent_id?: string;
-      data?: Record<string, any>;
-    },
+    parameters: AddItemGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   addItemGroups(
-    parameters: {
-      item_groups: ItemGroup[];
-    },
+    parameters: AddItemGroupsParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   getItemGroup(
-    parameters: {
-      id: string;
-    },
+    parameters: GetItemGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     item_groups: ItemGroup[];
@@ -370,9 +319,7 @@ declare class Catalog {
   }>;
 
   addOrUpdateItemGroups(
-    parameters: {
-      item_groups: ItemGroup[];
-    },
+    parameters: AddOrUpdateItemGroupsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     item_groups: {
@@ -401,35 +348,24 @@ declare class Catalog {
   ): Promise<{ message: string }>;
 
   addOneWaySynonym(
-    parameters: {
-      phrase: string;
-      child_phrases: string[];
-    },
+    parameters: AddOneWaySynonymParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   modifyOneWaySynonym(
-    parameters: {
-      phrase: string;
-      child_phrases: string[];
-    },
+    parameters: ModifyOneWaySynonymParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   getOneWaySynonym(
-    parameters: {
-      phrase: string;
-    },
+    parameters: GetOneWaySynonymParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     one_way_synonym_relations: OneWaySynonymRelation[];
   }>;
 
   getOneWaySynonyms(
-    parameters?: {
-      num_results_per_page?: number;
-      page?: number;
-    },
+    parameters?: GetOneWaySynonymsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     one_way_synonym_relations: OneWaySynonymRelation[];
@@ -437,33 +373,24 @@ declare class Catalog {
   }>;
 
   removeOneWaySynonym(
-    parameters: {
-      phrase: string;
-    },
+    parameters: RemoveOneWaySynonymParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   removeOneWaySynonyms(networkParameters?: NetworkParameters): Promise<void>;
 
   addSynonymGroup(
-    parameters: {
-      synonyms: string[];
-    },
+    parameters: AddSynonymGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<{ group_id: number; [key: string]: any }>;
 
   modifySynonymGroup(
-    parameters: {
-      id: number;
-      synonyms: string[];
-    },
+    parameters: ModifySynonymGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   getSynonymGroup(
-    parameters: {
-      id: number;
-    },
+    parameters: GetSynonymGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     synonym_groups: SynonymGroup[];
@@ -472,11 +399,7 @@ declare class Catalog {
   }>;
 
   getSynonymGroups(
-    parameters?: {
-      phrase?: string;
-      num_results_per_page?: number;
-      page?: number;
-    },
+    parameters?: GetSynonymGroupsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     synonym_groups: SynonymGroup[];
@@ -485,66 +408,34 @@ declare class Catalog {
   }>;
 
   removeSynonymGroup(
-    parameters: {
-      id: number;
-    },
+    parameters:RemoveSynonymGroupParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
 
   removeSynonymGroups(networkParameters?: NetworkParameters): Promise<void>;
 
   addRedirectRule(
-    parameters: {
-      url: string;
-      matches: RedirectRuleMatchObject[];
-      start_time?: string;
-      end_time?: string;
-      user_segments?: string[];
-      metadata?: Record<string, any>;
-    },
+    parameters: AddRedirectRuleParameters,
     networkParameters?: NetworkParameters
   ): Promise<RedirectRuleResponse>;
 
   updateRedirectRule(
-    parameters: {
-      id: string;
-      url: string;
-      matches: RedirectRuleMatchObject[];
-      start_time?: string;
-      end_time?: string;
-      user_segments?: string[];
-      metadata?: Record<string, any>;
-    },
+    parameters: UpdateRedirectRuleParameters,
     networkParameters?: NetworkParameters
   ): Promise<RedirectRuleResponse>;
 
   modifyRedirectRule(
-    parameters: {
-      id: string;
-      url: string;
-      matches: RedirectRuleMatchObject[];
-      start_time?: string;
-      end_time?: string;
-      user_segments?: string[];
-      metadata?: Record<string, any>;
-    },
+    parameters: ModifyRedirectRuleParameters,
     networkParameters?: NetworkParameters
   ): Promise<RedirectRuleResponse>;
 
   getRedirectRule(
-    parameters: {
-      id: string;
-    },
+    parameters: GetRedirectRuleParameters,
     networkParameters?: NetworkParameters
   ): Promise<RedirectRuleResponse>;
 
   getRedirectRules(
-    parameters?: {
-      num_results_per_page?: number;
-      page?: number;
-      query?: string;
-      status?: string;
-    },
+    parameters?: GetRedirectRulesParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     redirect_rules: RedirectRuleResponse[];
@@ -553,21 +444,12 @@ declare class Catalog {
   }>;
 
   removeRedirectRule(
-    parameters: {
-      id: string;
-    },
+    parameters: RemoveRedirectRuleParameters,
     networkParameters?: NetworkParameters
   ): Promise<RedirectRuleResponse>;
 
   replaceCatalog(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      items?: File;
-      variations?: File;
-      item_groups?: File;
-    },
+    parameters: ReplaceCatalogParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -576,14 +458,7 @@ declare class Catalog {
   }>;
 
   updateCatalog(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      items?: File;
-      variations?: File;
-      item_groups?: File;
-    },
+    parameters: UpdateCatalogParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -592,15 +467,7 @@ declare class Catalog {
   }>;
 
   patchCatalog(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
-      items?: File;
-      variations?: File;
-      item_groups?: File;
-    },
+    parameters: PatchCatalogParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -609,12 +476,7 @@ declare class Catalog {
   }>;
 
   replaceCatalogUsingTarArchive(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      tarArchive?: File;
-    },
+    parameters: ReplaceCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -623,12 +485,7 @@ declare class Catalog {
   }>;
 
   updateCatalogUsingTarArchive(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      tarArchive?: File;
-    },
+    parameters: UpdateCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -637,12 +494,7 @@ declare class Catalog {
   }>;
 
   patchCatalogUsingTarArchive(
-    parameters: {
-      section: string;
-      notification_email?: string;
-      force?: boolean;
-      tarArchive?: File;
-    },
+    parameters: PatchCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     task_id: string;
@@ -656,11 +508,7 @@ declare class Catalog {
   ): Promise<FacetConfiguration>;
 
   getFacetConfigurations(
-    parameters: {
-      page?: number;
-      num_results_per_page?: number;
-      section?: string;
-    },
+    parameters: GetFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     facets: FacetConfiguration[];
@@ -669,17 +517,12 @@ declare class Catalog {
   }>;
 
   getFacetConfiguration(
-    parameters: {
-      name?: string;
-      section?: string;
-    },
+    parameters: GetFacetConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
   modifyFacetConfigurations(
-    parameters?: {
-      facetConfigurations: FacetConfiguration[];
-    },
+    parameters?: ModifyFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration[]>;
 
@@ -694,37 +537,22 @@ declare class Catalog {
   ): Promise<FacetConfiguration>;
 
   removeFacetConfiguration(
-    parameters?: {
-      name: string;
-      section?: string;
-    },
+    parameters?: RemoveFacetConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
   addFacetOptionConfiguration(
-    parameters: FacetOptionConfiguration & {
-      facetGroupName: string;
-      section?: string;
-    },
+    parameters: AddFacetOptionConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
   addOrModifyFacetOptionConfigurations(
-    parameters: {
-      facetGroupName: string;
-      facetOptionConfigurations: FacetOptionConfiguration[];
-      section?: string;
-    },
+    parameters: AddOrModifyFacetOptionConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration[]>;
 
   getFacetOptionConfigurations(
-    parameters: {
-      facetGroupName: string;
-      page?: number;
-      num_results_per_page?: number;
-      section?: string;
-    },
+    parameters: GetFacetOptionConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     facet_options: FacetOptionConfiguration[];
@@ -733,36 +561,22 @@ declare class Catalog {
   }>;
 
   getFacetOptionConfiguration(
-    parameters: {
-      facetGroupName: string;
-      value: string;
-      section?: string;
-    },
+    parameters: GetFacetOptionConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
   replaceFacetOptionConfiguration(
-    parameters: {
-      facetGroupName: string;
-      section?: string;
-    } & FacetOptionConfiguration,
+    parameters: ReplaceFacetOptionConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
   modifyFacetOptionConfiguration(
-    parameters?: {
-      facetGroupName: string;
-      section?: string;
-    } & FacetOptionConfiguration,
+    parameters?: ModifyFacetOptionConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
   removeFacetOptionConfiguration(
-    parameters: {
-      facetGroupName: string;
-      value: string;
-      section?: string;
-    },
+    parameters: RemoveFacetOptionConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 }
