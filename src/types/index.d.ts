@@ -298,3 +298,14 @@ export type FilterExpressionRange = {
 };
 
 export type FilterExpressionRangeValue = ['-inf' | number, 'inf' | number];
+
+export interface SearchabilityConfiguration {
+  name: string;
+  fuzzy_searchable: boolean,
+  exact_searchable: boolean,
+  type: string,
+  displayable: boolean,
+  hidden: boolean,
+  created_at: string,
+  updated_at: string
+}
