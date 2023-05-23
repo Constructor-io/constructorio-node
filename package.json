@@ -7,7 +7,7 @@
   "scripts": {
     "verify-node-version": "chmod +x ./scripts/verify-node-version.sh && ./scripts/verify-node-version.sh",
     "version": "npm run verify-node-version && npm run docs && git add ./docs/*",
-    "check-lisc": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT'",
+    "check-license": "license-checker --production --onlyAllow 'Apache-2.0;BSD-3-Clause;MIT;0BSD;BSD-2-Clause'",
     "lint": "eslint 'src/**/*.js' 'spec/**/*.js' 'src/**/*.d.ts'",
     "test:parallel": "mkdir -p test && cp -rf src/* test && mocha --parallel ./spec/*",
     "test": "mkdir -p test && cp -rf src/* test && mocha ./spec/*",
