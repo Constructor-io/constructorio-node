@@ -3323,7 +3323,7 @@ class Catalog {
    * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.numResultsPerPage] - The number of searchability configurations to return. Defaults to 100
    * @param {object} [parameters.filters] - Filters the results based on name, exactSearchable or fuzzySearchable
-   * @param {boolean} [parameters.searchable] - Retrieve only results which are either exact_searchable or fuzzy_searchable
+   * @param {boolean} [parameters.searchable] - Retrieve only results which are either exactSearchable or fuzzySearchable
    * @param {string} [parameters.sortBy] - The criteria by which searchability configurations should be sorted. Defaults to no sorting. Valid criteria is name
    * @param {string} [parameters.sortOrder] - Either descending or ascending. The sort order by which searchability configurations should be sorted. Only valid in conjunction with sortBy
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
@@ -3335,7 +3335,7 @@ class Catalog {
    * constructorio.catalog.retrieveSearchabilities({
    *     page: 2,
    *     numResultsPerPage: 50,
-   *     filters: { exact_searchable: true }
+   *     filters: { exactSearchable: true }
    * });
    */
   retrieveSearchabilities(parameters = {}, networkParameters = {}) {
