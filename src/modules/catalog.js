@@ -3414,6 +3414,68 @@ class Catalog {
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
+
+  /**
+   * Patch metadata searchabilities
+   *
+   * @function patchSearchabilities
+   * @param {object} parameters - Additional parameters for patching metadata searchabilities
+   * @param {object[]} [parameters.searchabilities] - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities}
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities
+   * @example
+   * constructorio.catalog.patchSearchabilities({
+   *   searchabilities: [
+   *     {
+   *       name: 'style_id',
+   *       exactSearchable: true,
+   *     },
+   *     {
+   *       name: 'keywords',
+   *       fuzzySearchable: true,
+   *     },
+   *   ],
+   * });
+   */
+  patchSearchabilities(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+    const searchabilities = searchabilitiesRaw?.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section,
+    };
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ searchabilities }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
 }
 
 module.exports = Catalog;

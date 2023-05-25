@@ -299,7 +299,7 @@ export type FilterExpressionRange = {
 
 export type FilterExpressionRangeValue = ['-inf' | number, 'inf' | number];
 
-export interface SearchabilityConfiguration {
+export interface SearchabilityConfigurationResponse {
   name: string;
   fuzzy_searchable: boolean,
   exact_searchable: boolean,
@@ -308,4 +308,13 @@ export interface SearchabilityConfiguration {
   hidden: boolean,
   created_at: string,
   updated_at: string
+}
+
+export interface SearchabilityConfiguration {
+  name: string;
+  fuzzySearchable: boolean,
+  exactSearchable: boolean,
+  type: string,
+  displayable: boolean,
+  hidden: boolean,
 }

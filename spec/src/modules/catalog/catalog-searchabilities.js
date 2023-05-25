@@ -140,5 +140,75 @@ describe('ConstructorIO - Catalog', () => {
         });
       }
     });
+
+    describe('patchSearchabilities', () => {
+      it('Should return a response when patching searchabilities', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const searchabilityConfigurations = [
+          {
+            name: 'keywords',
+            exactSearchable: false,
+          },
+          {
+            name: 'testField',
+            exactSearchable: false,
+          },
+        ];
+
+        catalog.patchSearchabilities({ searchabilities: searchabilityConfigurations }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('searchabilities').to.be.an('array').length.gte(1);
+
+          const searchabilitiesResponse = res.searchabilities;
+
+          expect(searchabilitiesResponse[0]).to.have.property('name').to.equal(searchabilityConfigurations[0].name);
+          expect(searchabilitiesResponse[0]).to.have.property('exact_searchable').to.equal(searchabilityConfigurations[0].exactSearchable);
+          expect(searchabilitiesResponse[0]).to.have.property('created_at');
+          expect(searchabilitiesResponse[0]).to.have.property('updated_at');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('section');
+          done();
+        });
+      });
+
+      it('Should return error when patching searchabilities with unsupported values', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const badSearchabilityConfigurations = [
+          {
+            name: 'keywords',
+            nonExistentField: false,
+          },
+        ];
+
+        return expect(catalog.patchSearchabilities({ searchabilities: badSearchabilityConfigurations })).to.eventually.be.rejected; // eslint-disable-line max-len
+      });
+
+      if (!skipNetworkTimeoutTests) {
+        it('Should be rejected when network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO(validOptions);
+
+          return expect(catalog.patchSearchabilities({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.patchSearchabilities()).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+      }
+    });
   });
 });

@@ -11,6 +11,7 @@ import {
   OneWaySynonymRelation,
   SynonymGroup,
   SearchabilityConfiguration,
+  SearchabilityConfigurationResponse,
 } from '.';
 
 export default Catalog;
@@ -106,7 +107,6 @@ export interface AddSynonymGroupParameters {
 }
 
 export interface ModifySynonymGroupParameters {
-  id: number;
   synonyms: string[];
 }
 
@@ -245,7 +245,7 @@ export type ModifyFacetOptionConfigurationParameters = ReplaceFacetOptionConfigu
 
 export interface RemoveFacetOptionConfiguration extends GetFacetOptionConfigurationParameters {}
 
-export interface retrieveSearchabilitiesParameters {
+export interface RetrieveSearchabilitiesParameters {
   name?: string;
   page?: number;
   offset?: number;
@@ -255,6 +255,10 @@ export interface retrieveSearchabilitiesParameters {
   sortBy?: string;
   sortOrder?: string;
   section?: string;
+}
+
+export interface PatchSearchabilitiesParameters {
+  searchabilities: SearchabilityConfiguration[],
 }
 
 declare class Catalog {
@@ -594,10 +598,17 @@ declare class Catalog {
   ): Promise<FacetOptionConfiguration>;
 
   retrieveSearchabilities(
-    parameters: retrieveSearchabilitiesParameters,
+    parameters: RetrieveSearchabilitiesParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
-    searchabilities: SearchabilityConfiguration[];
+    searchabilities: SearchabilityConfigurationResponse[];
     total_count: number;
+  }>;
+
+  patchSearchabilities(
+    parameters: PatchSearchabilitiesParameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationResponse[];
   }>;
 }
