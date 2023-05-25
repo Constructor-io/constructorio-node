@@ -101,7 +101,7 @@ describe('ConstructorIO - Catalog', () => {
         const additionalParameters = {
           offset: 1,
           numResultsPerPage: 50,
-          filters: { exact_searchable: true },
+          filters: { exactSearchable: true },
           searchable: true,
           sortBy: 'name',
           sortOrder: 'descending',
@@ -118,7 +118,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('searchable').to.equal(String(additionalParameters.searchable));
           expect(requestedUrlParams).to.have.property('sort_by').to.equal(additionalParameters.sortBy);
           expect(requestedUrlParams).to.have.property('sort_order').to.equal(additionalParameters.sortOrder);
-          expect(requestedUrlParams).to.have.property('filters').to.have.property('exact_searchable').to.equal(String(additionalParameters.filters.exact_searchable));
+          expect(requestedUrlParams).to.have.property('filters').to.have.property('exact_searchable').to.equal(String(additionalParameters.filters.exactSearchable));
           done();
         });
       });

@@ -3322,7 +3322,7 @@ class Catalog {
    * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
    * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
    * @param {number} [parameters.numResultsPerPage] - The number of searchability configurations to return. Defaults to 100
-   * @param {object} [parameters.filters] - Filters the results based on name, exact_searchable or fuzzy_searchable
+   * @param {object} [parameters.filters] - Filters the results based on name, exactSearchable or fuzzySearchable
    * @param {boolean} [parameters.searchable] - Retrieve only results which are either exact_searchable or fuzzy_searchable
    * @param {string} [parameters.sortBy] - The criteria by which searchability configurations should be sorted. Defaults to no sorting. Valid criteria is name
    * @param {string} [parameters.sortOrder] - Either descending or ascending. The sort order by which searchability configurations should be sorted. Only valid in conjunction with sortBy
@@ -3359,7 +3359,7 @@ class Catalog {
     }
 
     if (filters) {
-      additionalQueryParams.filters = filters;
+      additionalQueryParams.filters = toSnakeCaseKeys(filters);
     }
 
     if (searchable) {
