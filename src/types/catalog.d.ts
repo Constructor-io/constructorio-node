@@ -21,7 +21,9 @@ export interface CreateOrReplaceItemsParameters {
   section?: string;
 }
 
-export interface UpdateItemsParameters extends CreateOrReplaceItemsParameters {}
+export interface UpdateItemsParameters extends CreateOrReplaceItemsParameters {
+  onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
+}
 
 export interface DeleteItemsParameters {
   items: Pick<Item, 'id'>[];
@@ -44,7 +46,9 @@ export interface CreateOrReplaceVariationsParameters {
 }
 
 export interface UpdateVariationsParameters
-  extends CreateOrReplaceVariationsParameters {}
+  extends CreateOrReplaceVariationsParameters {
+    onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
+  }
 
 export interface DeleteVariationsParameters {
   variations: Pick<Variation, 'id'>[];
@@ -189,7 +193,9 @@ export interface UpdateCatalogUsingTarArchiveParameters
   extends ReplaceCatalogUsingTarArchiveParameters {}
 
 export interface PatchCatalogUsingTarArchiveParameters
-  extends ReplaceCatalogUsingTarArchiveParameters {}
+  extends ReplaceCatalogUsingTarArchiveParameters {
+    onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
+  }
 
 export interface GetFacetConfigurationsParameters {
   page?: number;
