@@ -598,7 +598,7 @@ declare class Catalog {
   ): Promise<FacetOptionConfiguration>;
 
   retrieveSearchabilities(
-    parameters: RetrieveSearchabilitiesParameters,
+    parameters?: RetrieveSearchabilitiesParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     searchabilities: SearchabilityConfigurationResponse[];
