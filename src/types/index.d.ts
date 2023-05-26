@@ -312,9 +312,9 @@ export interface SearchabilityConfigurationResponse {
 
 export interface SearchabilityConfiguration {
   name: string;
-  fuzzySearchable: boolean,
-  exactSearchable: boolean,
-  type: string,
-  displayable: boolean,
-  hidden: boolean,
+  fuzzySearchable?: boolean,
+  exactSearchable?: boolean,
+  type?: string,
+  displayable?: boolean,
+  hidden?: boolean,
 }

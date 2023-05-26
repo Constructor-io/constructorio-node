@@ -3317,7 +3317,7 @@ class Catalog {
    * Retrieve metadata searchabilities
    *
    * @function retrieveSearchabilities
-   * @param {object} parameters - Additional parameters for retrieving metadata searchabilities
+   * @param {object} [parameters] - Additional parameters for retrieving metadata searchabilities
    * @param {string} [parameters.name] - Name of metadata searchability. Providing this field would filter the results based on name
    * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
    * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
@@ -3420,7 +3420,7 @@ class Catalog {
    *
    * @function patchSearchabilities
    * @param {object} parameters - Additional parameters for patching metadata searchabilities
-   * @param {object[]} [parameters.searchabilities] - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities}
+   * @param {object[]} parameters.searchabilities - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities}
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
