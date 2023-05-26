@@ -7,6 +7,7 @@ import {
   OneWaySynonymRelation,
   RedirectRuleResponse,
   Variation,
+  SearchabilityConfigurationResponse,
 } from '..';
 
 expectAssignable<Item>({
@@ -106,4 +107,15 @@ expectAssignable<FacetOptionConfiguration>({
   position: null,
   data: null,
   hidden: false,
+});
+
+expectAssignable<SearchabilityConfigurationResponse>({
+  name: 'groups',
+  fuzzy_searchable: false,
+  exact_searchable: false,
+  type: 'string',
+  displayable: true,
+  hidden: false,
+  created_at: '2019-04-12T18:15:30',
+  updated_at: '2019-04-12T18:15:30',
 });

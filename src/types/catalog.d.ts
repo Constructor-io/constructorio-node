@@ -10,6 +10,8 @@ import {
   RedirectRuleResponse,
   OneWaySynonymRelation,
   SynonymGroup,
+  SearchabilityConfiguration,
+  SearchabilityConfigurationResponse,
 } from '.';
 
 export default Catalog;
@@ -105,7 +107,6 @@ export interface AddSynonymGroupParameters {
 }
 
 export interface ModifySynonymGroupParameters {
-  id: number;
   synonyms: string[];
 }
 
@@ -243,6 +244,22 @@ export type ReplaceFacetOptionConfigurationParameters = {
 export type ModifyFacetOptionConfigurationParameters = ReplaceFacetOptionConfigurationParameters
 
 export interface RemoveFacetOptionConfiguration extends GetFacetOptionConfigurationParameters {}
+
+export interface RetrieveSearchabilitiesParameters {
+  name?: string;
+  page?: number;
+  offset?: number;
+  numResultsPerPage?: number;
+  filters?: Record<string, any>;
+  searchable?: boolean;
+  sortBy?: string;
+  sortOrder?: string;
+  section?: string;
+}
+
+export interface PatchSearchabilitiesParameters {
+  searchabilities: SearchabilityConfiguration[],
+}
 
 declare class Catalog {
   constructor(options: ConstructorClientOptions);
@@ -579,4 +596,19 @@ declare class Catalog {
     parameters: RemoveFacetOptionConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
+
+  retrieveSearchabilities(
+    parameters?: RetrieveSearchabilitiesParameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationResponse[];
+    total_count: number;
+  }>;
+
+  patchSearchabilities(
+    parameters: PatchSearchabilitiesParameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationResponse[];
+  }>;
 }

@@ -3312,6 +3312,170 @@ class Catalog {
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
+
+  /**
+   * Retrieve metadata searchabilities
+   *
+   * @function retrieveSearchabilities
+   * @param {object} [parameters] - Additional parameters for retrieving metadata searchabilities
+   * @param {string} [parameters.name] - Name of metadata searchability. Providing this field would filter the results based on name
+   * @param {number} [parameters.page] - The page number of the results. Can't be used together with 'offset'
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Can't be used together with 'page'
+   * @param {number} [parameters.numResultsPerPage] - The number of searchability configurations to return. Defaults to 100
+   * @param {object} [parameters.filters] - Filters the results based on name, exactSearchable or fuzzySearchable
+   * @param {boolean} [parameters.searchable] - Retrieve only results which are either exactSearchable or fuzzySearchable
+   * @param {string} [parameters.sortBy] - The criteria by which searchability configurations should be sorted. Defaults to no sorting. Valid criteria is name
+   * @param {string} [parameters.sortOrder] - Either descending or ascending. The sort order by which searchability configurations should be sorted. Only valid in conjunction with sortBy
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/searchabilities/#retrieve-searchabilities
+   * @example
+   * constructorio.catalog.retrieveSearchabilities({
+   *     page: 2,
+   *     numResultsPerPage: 50,
+   *     filters: { exactSearchable: true }
+   * });
+   */
+  retrieveSearchabilities(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { name, page, offset, numResultsPerPage, filters, searchable, sortBy, sortOrder, section = 'Products' } = parameters;
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(page)) {
+      additionalQueryParams.page = page;
+    }
+
+    if (!helpers.isNil(offset)) {
+      additionalQueryParams.offset = offset;
+    }
+
+    if (!helpers.isNil(numResultsPerPage)) {
+      additionalQueryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (filters) {
+      additionalQueryParams.filters = toSnakeCaseKeys(filters);
+    }
+
+    if (searchable) {
+      additionalQueryParams.searchable = searchable;
+    }
+
+    if (sortBy) {
+      additionalQueryParams.sort_by = sortBy;
+    }
+
+    if (sortOrder) {
+      additionalQueryParams.sort_order = sortOrder;
+    }
+
+    if (sortOrder) {
+      additionalQueryParams.sort_order = sortOrder;
+    }
+
+    if (section) {
+      additionalQueryParams.section = section;
+    }
+
+    if (name) {
+      if (additionalQueryParams.filters) {
+        additionalQueryParams.filters.name = name;
+      } else {
+        additionalQueryParams.filters = { name };
+      }
+    }
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Patch metadata searchabilities
+   *
+   * @function patchSearchabilities
+   * @param {object} parameters - Additional parameters for patching metadata searchabilities
+   * @param {object[]} parameters.searchabilities - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities}
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities
+   * @example
+   * constructorio.catalog.patchSearchabilities({
+   *   searchabilities: [
+   *     {
+   *       name: 'style_id',
+   *       exactSearchable: true,
+   *     },
+   *     {
+   *       name: 'keywords',
+   *       fuzzySearchable: true,
+   *     },
+   *   ],
+   * });
+   */
+  patchSearchabilities(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+    const searchabilities = searchabilitiesRaw?.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section,
+    };
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ searchabilities }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
 }
 
 module.exports = Catalog;
