@@ -35,9 +35,10 @@ declare class Tracker {
 
   trackItemDetailLoad(
     parameters: {
-      item_name: string;
-      item_id: string;
-      variation_id?: string;
+      itemName: string;
+      itemId: string;
+      url: string;
+      variationId?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -46,11 +47,11 @@ declare class Tracker {
   trackAutocompleteSelect(
     term: string,
     parameters: {
-      original_query: string;
+      originalQuery: string;
       section: string;
       tr?: string;
-      group_id?: string;
-      display_name?: string;
+      groupId?: string;
+      displayName?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -59,9 +60,9 @@ declare class Tracker {
   trackSearchSubmit(
     term: string,
     parameters: {
-      original_query: string;
-      group_id?: string;
-      display_name?: string;
+      originalQuery: string;
+      groupId?: string;
+      displayName?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -70,8 +71,8 @@ declare class Tracker {
   trackSearchResultsLoaded(
     term: string,
     parameters: {
-      num_results: number;
-      item_ids?: string[];
+      numResults: number;
+      itemIds?: string[];
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -80,11 +81,11 @@ declare class Tracker {
   trackSearchResultClick(
     term: string,
     parameters: {
-      item_name: string;
-      item_id: string;
-      variation_id?: string;
-      result_id?: string;
-      item_is_convertible?: string;
+      itemName: string;
+      itemId: string;
+      variationId?: string;
+      resultId?: string;
+      itemIsConvertible?: string;
       section?: string;
     },
     userParameters?: TrackerUserParameters,
@@ -94,14 +95,14 @@ declare class Tracker {
   trackConversion(
     term : string | null | undefined,
     parameters: {
-      item_id: string;
+      itemId: string;
       revenue?: number;
-      item_name?: string;
-      variation_id?: string;
+      itemName?: string;
+      variationId?: string;
       type?: string;
-      is_custom_type?: boolean;
-      display_name?: string;
-      result_id?: string;
+      isCustomType?: boolean;
+      displayName?: string;
+      resultId?: string;
       section?: string;
     },
     userParameters?: TrackerUserParameters,
@@ -112,7 +113,7 @@ declare class Tracker {
     parameters: {
       items: object[];
       revenue: number;
-      order_id?: string;
+      orderId?: string;
       section?: string;
     },
     userParameters?: TrackerUserParameters,
@@ -122,12 +123,12 @@ declare class Tracker {
   trackRecommendationView(
     parameters: {
       url: string;
-      pod_id: string;
-      num_results_viewed: number;
+      podId: string;
+      numResultsViewed: number;
       items?: object[];
-      result_count?: number;
-      result_page?: number;
-      result_id?: string;
+      resultCount?: number;
+      resultPage?: number;
+      resultId?: string;
       section?: string;
     },
     userParameters?: TrackerUserParameters,
@@ -136,17 +137,17 @@ declare class Tracker {
 
   trackRecommendationClick(
     parameters: {
-      pod_id: string;
-      strategy_id: string;
-      item_id: string;
-      item_name: string;
-      variation_id?: string;
+      podId: string;
+      strategyId: string;
+      itemId: string;
+      itemName: string;
+      variationId?: string;
       section?: string;
-      result_id?: string;
-      result_count?: number;
-      result_page?: number;
-      result_position_on_page?: number;
-      num_results_per_page?: number;
+      resultId?: string;
+      resultCount?: number;
+      resultPage?: number;
+      resultPositionOnPage?: number;
+      numResultsPerPage?: number;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -155,15 +156,15 @@ declare class Tracker {
   trackBrowseResultsLoaded(
     parameters: {
       url: string;
-      filter_name: string;
-      filter_value: string;
+      filterName: string;
+      filterValue: string;
       section?: string;
-      result_count?: number;
-      result_page?: number;
-      result_id?: string;
-      selected_filters?: object;
-      sort_order?: string;
-      sort_by?: string;
+      resultCount?: number;
+      resultPage?: number;
+      resultId?: string;
+      selectedFilters?: object;
+      sortOrder?: string;
+      sortBy?: string;
       items?: object[];
     },
     userParameters?: TrackerUserParameters,
@@ -172,17 +173,17 @@ declare class Tracker {
 
   trackBrowseResultClick(
     parameters: {
-      filter_name: string;
-      filter_value: string;
-      item_id: string;
+      filterName: string;
+      filterValue: string;
+      itemId: string;
       section?: string;
-      variation_id?: string;
-      result_id?: string;
-      result_count?: number;
-      result_page?: number;
-      result_position_on_page?: number;
-      num_results_per_page?: number;
-      selected_filters?: object;
+      variationId?: string;
+      resultId?: string;
+      resultCount?: number;
+      resultPage?: number;
+      resultPositionOnPage?: number;
+      numResultsPerPage?: number;
+      selectedFilters?: object;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -190,9 +191,9 @@ declare class Tracker {
 
   trackGenericResultClick(
     parameters: {
-      item_id: string;
-      item_name?: string;
-      variation_id?: string;
+      itemId: string;
+      itemName?: string;
+      variationId?: string;
       section?: string;
     },
     userParameters?: TrackerUserParameters,
