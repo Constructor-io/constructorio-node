@@ -70,12 +70,12 @@ export interface RetrieveVariationsParameters {
 export interface AddItemGroupParameters {
   id: string;
   name: string;
-  parent_id?: string;
+  parentId?: string;
   data?: Record<string, any>;
 }
 
 export interface AddItemGroupsParameters {
-  item_groups: ItemGroup[];
+  itemGroups: ItemGroup[];
 }
 
 export interface GetItemGroupParameters {
@@ -87,7 +87,7 @@ export interface AddOrUpdateItemGroupsParameters
 
 export interface AddOneWaySynonymParameters {
   phrase: string;
-  child_phrases: string[];
+  childPhrases: string[];
 }
 
 export interface ModifyOneWaySynonymParameters
@@ -98,7 +98,7 @@ export interface GetOneWaySynonymParameters {
 }
 
 export interface GetOneWaySynonymsParameters {
-  num_results_per_page?: number;
+  numResultsPerPage?: number;
   page?: number;
 }
 
@@ -120,7 +120,7 @@ export interface GetSynonymGroupParameters {
 
 export interface GetSynonymGroupsParameters {
   phrase?: string;
-  num_results_per_page?: number;
+  numResultsPerPage?: number;
   page?: number;
 }
 
@@ -131,9 +131,9 @@ export interface RemoveSynonymGroupParameters {
 export interface AddRedirectRuleParameters {
   url: string;
   matches: RedirectRuleMatchObject[];
-  start_time?: string;
-  end_time?: string;
-  user_segments?: string[];
+  startTime?: string;
+  endTime?: string;
+  userSegments?: string[];
   metadata?: Record<string, any>;
 }
 
@@ -152,7 +152,7 @@ export interface GetRedirectRuleParameters {
 }
 
 export interface GetRedirectRulesParameters {
-  num_results_per_page?: number;
+  numResultsPerPage?: number;
   page?: number;
   query?: string;
   status?: string;
@@ -164,28 +164,28 @@ export interface RemoveRedirectRuleParameters {
 
 export interface ReplaceCatalogParameters {
   section: string;
-  notification_email?: string;
+  notificationEmail?: string;
   force?: boolean;
   items?: File;
   variations?: File;
-  item_groups?: File;
+  itemGroups?: File;
 }
 
 export interface UpdateCatalogParameters extends ReplaceCatalogParameters {}
 
 export interface PatchCatalogParameters {
   section: string;
-  notification_email?: string;
+  notificationEmail?: string;
   force?: boolean;
   onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
   items?: File;
   variations?: File;
-  item_groups?: File;
+  itemGroups?: File;
 }
 
 export interface ReplaceCatalogUsingTarArchiveParameters {
   section: string;
-  notification_email?: string;
+  notificationEmail?: string;
   force?: boolean;
   tarArchive?: File;
 }
@@ -200,7 +200,7 @@ export interface PatchCatalogUsingTarArchiveParameters
 
 export interface GetFacetConfigurationsParameters {
   page?: number;
-  num_results_per_page?: number;
+  numResultsPerPage?: number;
   section?: string;
 }
 
@@ -232,7 +232,7 @@ export interface AddOrModifyFacetOptionConfigurationsParameters {
 export interface GetFacetOptionConfigurationsParameters {
   facetGroupName: string;
   page?: number;
-  num_results_per_page?: number;
+  numResultsPerPage?: number;
   section?: string;
 }
 
