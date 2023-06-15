@@ -75,7 +75,7 @@ export interface AddItemGroupParameters {
 }
 
 export interface AddItemGroupsParameters {
-  itemGroups: ItemGroup[];
+  itemGroups: Omit<ItemGroup, 'children'>[];
 }
 
 export interface GetItemGroupParameters {

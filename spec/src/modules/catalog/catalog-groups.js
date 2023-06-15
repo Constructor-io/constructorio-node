@@ -33,6 +33,22 @@ function createMockItemGroup() {
   };
 }
 
+function createMockItemGroupWithChildren() {
+  const uuidParent = uuidv4();
+  const uuidChild = uuidv4();
+
+  return {
+    id: `group-${uuidParent}`,
+    name: `Group ${uuidParent}`,
+    children: [
+      {
+        id: `group-${uuidChild}`,
+        name: `Group ${uuidChild}`,
+      },
+    ],
+  };
+}
+
 describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
@@ -114,6 +130,11 @@ describe('ConstructorIO - Catalog', () => {
         createMockItemGroup(),
         createMockItemGroup(),
       ];
+      const groupsWithChildren = [
+        createMockItemGroupWithChildren(),
+        createMockItemGroupWithChildren(),
+        createMockItemGroupWithChildren(),
+      ];
 
       it('Should resolve when adding item groups', (done) => {
         const { catalog } = new ConstructorIO({
@@ -122,6 +143,25 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.addItemGroups({ itemGroups: groups }).then(done);
+      });
+
+      it('Should resolve when adding item groups with children', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ itemGroups: groupsWithChildren }).then(done);
+      });
+
+      it('Should return error when adding item groups with invalid children', () => {
+        const groupsWithInvalidChildren = groupsWithChildren.map((group) => ({ ...group, children: 'children' }));
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemGroups({ itemGroups: groupsWithInvalidChildren })).to.eventually.be.rejected;
       });
 
       it('Backwards Compatibility `item_groups` - Should resolve when adding item groups', (done) => {
@@ -341,6 +381,11 @@ describe('ConstructorIO - Catalog', () => {
         createMockItemGroup(),
         createMockItemGroup(),
       ];
+      const groupsWithChildren = [
+        createMockItemGroupWithChildren(),
+        createMockItemGroupWithChildren(),
+        createMockItemGroupWithChildren(),
+      ];
 
       it('Should return a response when adding multiple item groups', (done) => {
         const { catalog } = new ConstructorIO({
@@ -360,6 +405,42 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           done();
         });
+      });
+
+      it('Should return a response when adding multiple item groups with children', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ itemGroups: groupsWithChildren }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+          let childrenCount = 0;
+          groupsWithChildren.forEach((group) => {
+            childrenCount += group.children.length;
+          });
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(groupsWithChildren.length + childrenCount);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(groupsWithChildren.length + childrenCount);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return error when adding item groups with invalid children', () => {
+        const groupsWithInvalidChildren = groupsWithChildren.map((group) => ({ ...group, children: 'children' }));
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(
+          catalog.addOrUpdateItemGroups({ itemGroups: groupsWithInvalidChildren }),
+        ).to.eventually.be.rejected;
       });
 
       it('Should return a response when updating multiple item groups', (done) => {

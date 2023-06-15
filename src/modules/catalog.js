@@ -898,12 +898,12 @@ class Catalog {
    * constructorio.catalog.addItemGroups({
    *     itemGroups: [
    *         {
-   *             id: 'subcat_12891',
-   *             name: 'Hoodies & Sweaters',
-   *             parentId: 'cat_49203',
+   *            id: 'cat_49203',
+   *            name: 'Hoodies & Sweaters',
+   *            children: [{ id: 'subcat_12891', name: 'Blazers'}],
    *         },
    *         {
-   *             id: 'cat49203',
+   *             id: 'cat49204',
    *             name: 'Outerwear',
    *         },
    *     ],
@@ -1048,12 +1048,12 @@ class Catalog {
    * constructorio.catalog.addOrUpdateItemGroups({
    *     itemGroups: [
    *         {
-   *             id: 'subcat_12891',
-   *             name: 'Hoodies, Sweaters, & Jackets',
-   *             parentId: 'cat_49203',
+   *            id: 'cat_49203',
+   *            name: 'Hoodies & Sweaters',
+   *            children: [{ id: 'subcat_12891', name: 'Blazers'}],
    *         },
    *         {
-   *             id: 'cat49203',
+   *             id: 'cat49204',
    *             name: 'Outerwear',
    *         },
    *     ],
