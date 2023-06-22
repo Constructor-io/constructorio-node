@@ -149,7 +149,7 @@ export interface ItemData extends Record<string, any> {
   keywords?: string[];
   url?: string;
   image_url?: string;
-  facets?: Record<string, any>;
+  facets?: Record<string, string[] | number[]>;
   group_ids?: string[];
   description?: string;
   active?: boolean;
