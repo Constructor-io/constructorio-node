@@ -17,6 +17,7 @@ export default Search;
 
 export interface SearchParameters {
   page?: number;
+  offset?: number;
   resultsPerPage?: number;
   filters?: Record<string, any>;
   sortBy?: string;
