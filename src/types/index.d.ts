@@ -17,7 +17,7 @@ export interface ConstructorClientOptions {
   securityToken?: string;
   version?: string;
   serviceUrl?: string;
-  fetch?: () => any;
+  fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
   networkParameters?: NetworkParameters;
 }
 
