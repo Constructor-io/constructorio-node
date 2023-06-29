@@ -95,15 +95,16 @@ class Quizzes {
    * @description Retrieve quiz question from Constructor.io API
    * @param {string} quizId - The identifier of the quiz
    * @param {string} parameters - Additional parameters to refine result set
-   * @param {array} parameters.answers - An array for answers in the format [[1,2],[1]]
+   * @param {array} parameters.answers - An array of answers in the format [[1,2],[1]]
    * @param {string} [parameters.section] - Product catalog section
    * @param {string} [parameters.quizVersionId] - Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning}
    * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions}
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
-   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -178,7 +179,7 @@ class Quizzes {
    * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions}
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
-   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
