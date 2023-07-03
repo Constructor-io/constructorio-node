@@ -190,7 +190,7 @@ class Tracker {
    * @function trackSessionStart
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -230,7 +230,7 @@ class Tracker {
    * @function trackInputFocus
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -276,7 +276,7 @@ class Tracker {
    * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -366,7 +366,7 @@ class Tracker {
    * @param {string} [parameters.displayName] - Display name of group of selected item
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -466,7 +466,7 @@ class Tracker {
    * @param {string} [parameters.displayName] - Display name of group of selected item
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -551,7 +551,7 @@ class Tracker {
    * @param {string[]} [parameters.itemIds] - List of product item unique identifiers in search results listing
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -644,7 +644,7 @@ class Tracker {
    * @param {string} [parameters.section] - The section name for the item Ex. "Products"
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -758,7 +758,7 @@ class Tracker {
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -886,7 +886,7 @@ class Tracker {
    * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -981,7 +981,7 @@ class Tracker {
    * @param {string} [parameters.section="Products"] - Results section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -1100,7 +1100,7 @@ class Tracker {
    * @param {number} [parameters.numResultsPerPage] - Number of results on page
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -1247,7 +1247,7 @@ class Tracker {
    * @param {object[]} [parameters.items] - List of product item objects
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -1393,7 +1393,7 @@ class Tracker {
    * @param {object} [parameters.selectedFilters] -  Selected filters
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
@@ -1534,7 +1534,7 @@ class Tracker {
    * @param {string} [parameters.section="Products"] - Index section
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {number} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells

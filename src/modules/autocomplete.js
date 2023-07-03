@@ -114,7 +114,7 @@ class Autocomplete {
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
-   * @param {number} [userParameters.clientId] - Client ID, utilized to personalize results
+   * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
