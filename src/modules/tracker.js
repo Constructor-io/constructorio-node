@@ -548,7 +548,7 @@ class Tracker {
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {number} parameters.numResults - Total number of results
-   * @param {string[]} [parameters.itemIds] - List of product item unique identifiers in search results listing
+   * @param {string[]} parameters.itemIds - List of product item unique identifiers in search results listing
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1237,6 +1237,7 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} parameters.filterName - Filter name
    * @param {string} parameters.filterValue - Filter value
+   * @param {object[]} parameters.items - List of product item objects
    * @param {string} [parameters.section="Products"] - Index section
    * @param {number} [parameters.resultCount] - Total number of results
    * @param {number} [parameters.resultPage] - Page number of results
@@ -1244,7 +1245,6 @@ class Tracker {
    * @param {object} [parameters.selectedFilters] - Selected filters
    * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
    * @param {string} [parameters.sortBy] - Sorting method
-   * @param {object[]} [parameters.items] - List of product item objects
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
