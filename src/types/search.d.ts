@@ -11,6 +11,7 @@ import {
   ResultSources,
   SortOption,
   UserParameters,
+  VariationsMap,
 } from '.';
 
 export default Search;
@@ -27,7 +28,7 @@ export interface SearchParameters {
   preFilterExpression?: FilterExpression;
   hiddenFields?: string[];
   hiddenFacets?: string[];
-  variationsMap?: Record<string, any>;
+  variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
 }
 

@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters } from '.';
+import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap } from '.';
 
 export default Recommendations;
 
@@ -8,7 +8,7 @@ interface RecommendationsParameters {
   section?: string;
   term?: string;
   filters?: Record<string, any>;
-  variationsMap?: Record<string, any>;
+  variationsMap?: VariationsMap;
 }
 
 declare class Recommendations {
