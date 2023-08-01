@@ -145,6 +145,20 @@ export interface Variation extends Record<string, any> {
   data?: ItemData;
 }
 
+export interface VariationsMap {
+  group_by: Array<{
+    name: string,
+    field: string
+  }>;
+  values: {
+    [key: string]: {
+        aggregation: 'first' | 'min' | 'max' | 'all',
+        field: string
+    },
+  },
+  dtype: 'array' | 'object'
+}
+
 export interface ItemData extends Record<string, any> {
   keywords?: string[];
   url?: string;

@@ -12,6 +12,7 @@ import {
   SortOption,
   FmtOptions,
   FilterExpression,
+  VariationsMap,
 } from '.';
 
 export default Browse;
@@ -28,7 +29,7 @@ export interface BrowseParameters {
   preFilterExpression?: FilterExpression;
   hiddenFields?: string[];
   hiddenFacets?: string[];
-  variationsMap?: Record<string, any>;
+  variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
 }
 
@@ -122,6 +123,7 @@ export interface BrowseResultData extends Record<string, any> {
   is_slotted: false;
   labels: Record<string, any>;
   variations: Record<string, any>[];
+  variations_map: Record<string, any> | Record<string, any>[];
 }
 
 export interface BrowseRequestType extends Record<string, any> {

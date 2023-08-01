@@ -11,6 +11,7 @@ import {
   ResultSources,
   SortOption,
   UserParameters,
+  VariationsMap,
 } from '.';
 
 export default Search;
@@ -27,7 +28,7 @@ export interface SearchParameters {
   preFilterExpression?: FilterExpression;
   hiddenFields?: string[];
   hiddenFacets?: string[];
-  variationsMap?: Record<string, any>;
+  variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
 }
 
@@ -94,6 +95,7 @@ export interface SearchResultType extends Record<string, any> {
   is_slotted: false;
   labels: Record<string, any>;
   variations: Record<string, any>[];
+  variations_map: Record<string, any> | Record<string, any>[];
 }
 
 export interface Redirect extends Record<string, any> {

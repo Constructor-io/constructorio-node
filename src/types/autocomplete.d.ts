@@ -4,6 +4,7 @@ import {
   RequestFeature,
   RequestFeatureVariant,
   UserParameters,
+  VariationsMap,
 } from '.';
 
 export default Autocomplete;
@@ -13,7 +14,7 @@ export interface AutocompleteParameters {
   filters?: Record<string, any>;
   resultsPerSection?: Record<string, number>;
   hiddenFields?: string[];
-  variationsMap?: Record<string, any>;
+  variationsMap?: VariationsMap;
 }
 
 declare class Autocomplete {
