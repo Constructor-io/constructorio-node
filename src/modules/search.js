@@ -197,10 +197,6 @@ class Search {
    *     filters: {
    *         size: 'medium'
    *     },
-   * }, {
-   *     testCells: {
-   *         testName: 'cellName',
-   *    },
    * });
    */
 

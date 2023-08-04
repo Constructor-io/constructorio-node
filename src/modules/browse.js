@@ -277,10 +277,6 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
-   * }, {
-   *     testCells: {
-   *         testName: 'cellName',
-   *    },
    * });
    */
   getBrowseResults(filterName, filterValue, parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -361,10 +357,6 @@ class Browse {
    *     filters: {
    *         size: 'medium'
    *     },
-   * }, {
-   *     testCells: {
-   *         'testName': 'cellName',
-   *    },
    * });
    */
   getBrowseResultsForItemIds(itemIds, parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -433,10 +425,6 @@ class Browse {
    *     fmtOptions: {
    *         groups_max_depth: 2
    *     }
-   * }, {
-   *     testCells: {
-   *         'testName': 'cellName',
-   *    },
    * });
    */
   getBrowseGroups(parameters = {}, userParameters = {}, networkParameters = {}) {
@@ -492,10 +480,6 @@ class Browse {
    * constructorio.browse.getBrowseFacets({
    *     page: 1,
    *     resultsPerPage: 10,
-   * }, {
-   *     testCells: {
-   *         'testName': 'cellName',
-   *    },
    * });
    */
   getBrowseFacets(parameters = {}, userParameters = {}, networkParameters = {}) {

@@ -120,10 +120,6 @@ class Recommendations {
    *     filters: {
    *         size: 'medium'
    *     },
-   * }, {
-   *     testCells: {
-   *         testName: 'cellName',
-   *    },
    * });
    */
   getRecommendations(podId, parameters = {}, userParameters = {}, networkParameters = {}) {
