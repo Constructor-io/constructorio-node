@@ -332,3 +332,9 @@ export interface SearchabilityConfiguration {
   displayable?: boolean,
   hidden?: boolean,
 }
+
+export interface ItemTracked {
+  itemName?: string;
+  itemId?: string;
+  variationId?: string;
+}
