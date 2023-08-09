@@ -125,7 +125,6 @@ declare class Tracker {
       url: string;
       podId: string;
       numResultsViewed: number;
-      items?: ItemTracked[];
       resultCount?: number;
       resultPage?: number;
       resultId?: string;
