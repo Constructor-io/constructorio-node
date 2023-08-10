@@ -133,10 +133,6 @@ class Autocomplete {
    *     filters: {
    *         size: 'medium'
    *     },
-   * }, {
-   *     testCells: {
-   *         testName: 'cellName',
-   *    },
    * });
    */
   getAutocompleteResults(query, parameters = {}, userParameters = {}, networkParameters = {}) {
