@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { ConstructorClientOptions, NetworkParameters } from '.';
+import { ConstructorClientOptions, NetworkParameters, ItemTracked } from '.';
 
 export default Tracker;
 
@@ -72,7 +72,7 @@ declare class Tracker {
     term: string,
     parameters: {
       numResults: number;
-      itemIds?: string[];
+      itemIds: string[];
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -111,7 +111,7 @@ declare class Tracker {
 
   trackPurchase(
     parameters: {
-      items: object[];
+      items: ItemTracked & {quantity: number}[];
       revenue: number;
       orderId?: string;
       section?: string;
@@ -125,7 +125,6 @@ declare class Tracker {
       url: string;
       podId: string;
       numResultsViewed: number;
-      items?: object[];
       resultCount?: number;
       resultPage?: number;
       resultId?: string;
@@ -165,7 +164,7 @@ declare class Tracker {
       selectedFilters?: object;
       sortOrder?: string;
       sortBy?: string;
-      items?: object[];
+      items: ItemTracked[];
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
