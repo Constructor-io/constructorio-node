@@ -4829,6 +4829,29 @@ describe('ConstructorIO - Tracker', () => {
       )).to.equal(true);
     });
 
+    it('Should respond with a valid response when required parameters and items are provided', (done) => {
+      const items = [{ item_id: '123', variation_id: '234' }, { item_id: 'abc' }];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('items').to.deep.equal(items);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView({ items, ...requiredParameters }, userParameters)).to.equal(true);
+    });
+
     it('Should respond with a valid response when parameters and user identifier are provided', (done) => {
       const userId = 'bd2d9d1f097614c4b4de';
       const { tracker } = new ConstructorIO({
