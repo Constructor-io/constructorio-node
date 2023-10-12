@@ -7235,6 +7235,32 @@ describe('ConstructorIO - Tracker', () => {
     });
   });
 
+  describe('PII Detection', () => {
+    const requiredParameters = { originalQuery: 'original-query' };
+
+    it('Should not send request if PII detected', () => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      const PIISearchTerm = '5425233430109903'; // MasterCard
+
+      tracker.trackSearchSubmit(PIISearchTerm, requiredParameters, userParameters);
+      expect(fetchSpy).to.have.callCount(0);
+    });
+
+    it('Should send request normally if no PII detected', () => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      const noPIISearchTerm = '1234';
+
+      tracker.trackSearchSubmit(noPIISearchTerm, requiredParameters, userParameters);
+      expect(fetchSpy).to.have.been.called;
+    });
+  });
+
   describe('on', () => {
     it('Should throw an error when providing an invalid messageType parameter', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });

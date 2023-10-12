@@ -83,6 +83,9 @@ function send(url, userParameters, networkParameters, method = 'GET', body = {})
   const { signal } = controller;
   const headers = {};
 
+  // PII Detection
+  if (helpers.requestContainsPii(url)) return;
+
   Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
 
   // Append security token as 'x-cnstrc-token' if available
