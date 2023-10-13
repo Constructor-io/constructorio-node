@@ -94,7 +94,7 @@ const utils = {
   requestContainsPii(urlString) {
     try {
       const url = new URL(urlString);
-      const paths = decodeURI(url?.pathname)?.split('/');
+      const paths = decodeURIComponent(url?.pathname)?.split('/');
       const paramValues = decodeURIComponent(url?.search)?.split('&').map((param) => param?.split('=')?.[1]);
 
       if (paths.some((path) => utils.containsPii(path))) {
