@@ -264,7 +264,8 @@ export interface RetrieveSearchabilitiesParameters {
 }
 
 export interface PatchSearchabilitiesParameters {
-  searchabilities: SearchabilityConfiguration[],
+  searchabilities: SearchabilityConfiguration[];
+  section?: string;
 }
 
 declare class Catalog {
