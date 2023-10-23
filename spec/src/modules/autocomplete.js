@@ -64,7 +64,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and testCells', (done) => {
+    it('Should return a response with a valid query and testCells', (done) => {
       const testCells = { foo: 'bar' };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -83,7 +83,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and segments', (done) => {
+    it('Should return a response with a valid query and segments', (done) => {
       const segments = ['foo', 'bar'];
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -102,7 +102,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and user id', (done) => {
+    it('Should return a response with a valid query and user id', (done) => {
       const userId = 'user-id';
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -120,7 +120,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and numResults', (done) => {
+    it('Should return a response with a valid query and numResults', (done) => {
       const numResults = 2;
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -148,7 +148,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and resultsPerSection', (done) => {
+    it('Should return a response with a valid query and resultsPerSection', (done) => {
       const resultsPerSection = {
         Products: 1,
         'Search Suggestions': 2,
@@ -172,7 +172,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query, and filters', (done) => {
+    it('Should return a response with a valid query and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
