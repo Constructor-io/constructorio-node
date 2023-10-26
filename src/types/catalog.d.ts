@@ -29,6 +29,7 @@ export interface UpdateItemsParameters extends CreateOrReplaceItemsParameters {
 
 export interface DeleteItemsParameters {
   items: Pick<Item, 'id'>[];
+  force?: boolean;
   section?: string;
   notificationEmail?: string;
 }
