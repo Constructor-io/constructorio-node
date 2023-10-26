@@ -172,6 +172,54 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should return a response with a valid query and pagePerSection and resultsPerPagePerSection', (done) => {
+      const pagePerSection = { Products: 1 };
+      const resultsPerPagePerSection = { Products: 5 };
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, { pagePerSection, resultsPerPagePerSection }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.pagePerSection).to.deep.equal(pagePerSection);
+        expect(res.request.resultsPerPagePerSection).to.deep.equal(resultsPerPagePerSection);
+        expect(requestedUrlParams).to.have.property('pagePerSection');
+        expect(requestedUrlParams).to.have.property('resultsPerPagePerSection');
+        expect(requestedUrlParams.pagePerSection).to.have.property('Products').to.equal(Object.values(pagePerSection)[0][0]);
+        expect(requestedUrlParams.resultsPerPagePerSection).to.have.property('Products').to.equal(Object.values(resultsPerPagePerSection)[0][0]);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query and multiple pagePerSection and resultsPerPagePerSection', (done) => {
+      const pagePerSection = { Products: 1, 'Search Suggestions': 2 };
+      const resultsPerPagePerSection = { Products: 5, 'Search Suggestions': 3 };
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, { pagePerSection, resultsPerPagePerSection }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.pagePerSection).to.deep.equal(pagePerSection);
+        expect(res.request.resultsPerPagePerSection).to.deep.equal(resultsPerPagePerSection);
+        expect(requestedUrlParams).to.have.property('pagePerSection');
+        expect(requestedUrlParams).to.have.property('resultsPerPagePerSection');
+        expect(requestedUrlParams.pagePerSection).to.have.property('Products').to.equal(Object.values(pagePerSection)[0][0]);
+        expect(requestedUrlParams.resultsPerPagePerSection).to.have.property('Products').to.equal(Object.values(resultsPerPagePerSection)[0][0]);
+        done();
+      });
+    });
+
     it('Should return a response with a valid query and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { autocomplete } = new ConstructorIO({
