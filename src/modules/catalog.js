@@ -359,6 +359,7 @@ class Catalog {
    * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
+   * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
