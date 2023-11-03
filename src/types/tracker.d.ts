@@ -39,6 +39,7 @@ declare class Tracker {
       itemId: string;
       url: string;
       variationId?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -104,6 +105,7 @@ declare class Tracker {
       displayName?: string;
       resultId?: string;
       section?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -115,6 +117,7 @@ declare class Tracker {
       revenue: number;
       orderId?: string;
       section?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -130,6 +133,7 @@ declare class Tracker {
       resultPage?: number;
       resultId?: string;
       section?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -148,6 +152,7 @@ declare class Tracker {
       resultPage?: number;
       resultPositionOnPage?: number;
       numResultsPerPage?: number;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -166,6 +171,7 @@ declare class Tracker {
       sortOrder?: string;
       sortBy?: string;
       items: ItemTracked[];
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -184,6 +190,7 @@ declare class Tracker {
       resultPositionOnPage?: number;
       numResultsPerPage?: number;
       selectedFilters?: object;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -195,6 +202,7 @@ declare class Tracker {
       itemName?: string;
       variationId?: string;
       section?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
