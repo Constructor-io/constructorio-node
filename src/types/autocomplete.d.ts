@@ -12,6 +12,7 @@ export default Autocomplete;
 export interface AutocompleteParameters {
   numResults?: number;
   filters?: Record<string, any>;
+  filtersPerSection?: Record<string, Record<string, any>>;
   resultsPerSection?: Record<string, number>;
   pagePerSection?: Record<string, number>;
   resultsPerPagePerSection?: Record<string, number>;
