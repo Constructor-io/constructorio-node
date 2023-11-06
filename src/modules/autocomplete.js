@@ -64,12 +64,12 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
 
     // Pull page per section from parameters
     if (pagePerSection) {
-      queryParams.page = pagePerSection;
+      queryParams.page_per_section = pagePerSection;
     }
 
     // Pull results number per page per section from parameters
     if (resultsPerPagePerSection) {
-      queryParams.num_results_per_page = resultsPerPagePerSection;
+      queryParams.num_section_results_per_page = resultsPerPagePerSection;
     }
 
     // Pull results number per section from parameters

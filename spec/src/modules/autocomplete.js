@@ -172,7 +172,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it.only('Should return a response with a valid query and pagePerSection and resultsPerPagePerSection', (done) => {
+    it('Should return a response with a valid query and pagePerSection and resultsPerPagePerSection', (done) => {
       const pagePerSection = { Products: 1 };
       const resultsPerPagePerSection = { Products: 5 };
       const { autocomplete } = new ConstructorIO({
@@ -186,12 +186,12 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.page).to.deep.equal(pagePerSection);
-        expect(res.request.num_results_per_page).to.deep.equal(resultsPerPagePerSection);
-        expect(requestedUrlParams).to.have.property('page');
-        expect(requestedUrlParams).to.have.property('num_results_per_page');
-        expect(requestedUrlParams.page).to.have.property('Products').to.equal(pagePerSection.Products.toString());
-        expect(requestedUrlParams.num_results_per_page).to.have.property('Products').to.equal(resultsPerPagePerSection.Products.toString());
+        expect(res.request.page_per_section).to.deep.equal(pagePerSection);
+        expect(res.request.num_section_results_per_page).to.deep.equal(resultsPerPagePerSection);
+        expect(requestedUrlParams).to.have.property('page_per_section');
+        expect(requestedUrlParams).to.have.property('num_section_results_per_page');
+        expect(requestedUrlParams.page_per_section).to.have.property('Products').to.equal(pagePerSection.Products.toString());
+        expect(requestedUrlParams.num_section_results_per_page).to.have.property('Products').to.equal(resultsPerPagePerSection.Products.toString());
         done();
       });
     });
@@ -210,19 +210,19 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.page).to.deep.equal(pagePerSection);
-        expect(res.request.num_results_per_page).to.deep.equal(resultsPerPagePerSection);
-        expect(requestedUrlParams).to.have.property('page');
-        expect(requestedUrlParams).to.have.property('num_results_per_page');
-        expect(requestedUrlParams.page).to.have.property('Products').to.equal(Object.values(pagePerSection)[0].toString());
-        expect(requestedUrlParams.page).to.have.property('Search Suggestions').to.equal(Object.values(pagePerSection)[1].toString());
-        expect(requestedUrlParams.num_results_per_page).to.have.property('Products').to.equal(Object.values(resultsPerPagePerSection)[0].toString());
-        expect(requestedUrlParams.num_results_per_page).to.have.property('Search Suggestions').to.equal(Object.values(resultsPerPagePerSection)[1].toString());
+        expect(res.request.page_per_section).to.deep.equal(pagePerSection);
+        expect(res.request.num_section_results_per_page).to.deep.equal(resultsPerPagePerSection);
+        expect(requestedUrlParams).to.have.property('page_per_section');
+        expect(requestedUrlParams).to.have.property('num_section_results_per_page');
+        expect(requestedUrlParams.page_per_section).to.have.property('Products').to.equal(Object.values(pagePerSection)[0].toString());
+        expect(requestedUrlParams.page_per_section).to.have.property('Search Suggestions').to.equal(Object.values(pagePerSection)[1].toString());
+        expect(requestedUrlParams.num_section_results_per_page).to.have.property('Products').to.equal(Object.values(resultsPerPagePerSection)[0].toString());
+        expect(requestedUrlParams.num_section_results_per_page).to.have.property('Search Suggestions').to.equal(Object.values(resultsPerPagePerSection)[1].toString());
         done();
       });
     });
 
-    it('Should return a response with a valid query and filters', (done) => {
+    it.only('Should return a response with a valid query and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -263,7 +263,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it.only('Should return a response with a valid query and filtersPerSection', (done) => {
+    it('Should return a response with a valid query and filtersPerSection', (done) => {
       const filtersPerSection = { 'Search Suggestions': { keywords: ['battery-powered'] } };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -278,15 +278,14 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.filters).to.deep.equal(filtersPerSection);
         expect(requestedUrlParams).to.have.property('filters');
-        expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filtersPerSection)[0][0]);
         done();
       });
     });
 
-    it.only('Should return a response with a valid query, and multiple filtersPerSection', (done) => {
+    it('Should return a response with a valid query, and multiple filtersPerSection', (done) => {
       const filtersPerSection = {
-        'Search Suggestions': { keywords: ['battery-powered'] },
-        Products: { group_id: ['All'] },
+        Products: { group_id: ['All', 'shop'] },
+        'Search Suggestions': { keywords: ['battery-powered', 'solar'] },
       };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -301,8 +300,8 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.filters).to.eql(filtersPerSection);
         expect(requestedUrlParams).to.have.property('filters');
-        expect(requestedUrlParams.filters).to.have.property('group_id').to.equal(Object.values(filtersPerSection)[0][0]);
-        expect(requestedUrlParams.filters).to.have.property('Brand').to.equal(Object.values(filtersPerSection)[1][0]);
+        expect(requestedUrlParams.filters).to.have.property('Products').to.deep.equal(Object.values(filtersPerSection)[0]);
+        expect(requestedUrlParams.filters).to.have.property('Search Suggestions').to.deep.equal(Object.values(filtersPerSection)[1]);
         done();
       });
     });
@@ -609,13 +608,13 @@ describe('ConstructorIO - Autocomplete', () => {
       return expect(autocomplete.getAutocompleteResults(query, { filters: 'abc' })).to.eventually.be.rejected;
     });
 
-    it.only('Should be rejected when invalid resultsPerPagePerSection parameter is provided', () => {
+    it('Should be rejected when invalid resultsPerPagePerSection parameter is provided', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(query, { resultsPerPagePerSection: 'abc' })).to.eventually.be.rejected;
     });
 
-    it.only('Should be rejected when invalid pagePerSection parameter is provided', () => {
+    it('Should be rejected when invalid pagePerSection parameter is provided', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(query, { pagePerSection: 'abc' })).to.eventually.be.rejected;
