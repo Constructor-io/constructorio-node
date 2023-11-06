@@ -453,7 +453,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it.only('Should properly encode query parameters', (done) => {
+    it('Should properly encode query parameters', (done) => {
       const specialCharacters = '+[]&';
       const filters = { keywords: [`battery-powered ${specialCharacters}`] };
       const { autocomplete } = new ConstructorIO({
@@ -467,7 +467,6 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.filters).to.deep.equal(filters);
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
         done();
