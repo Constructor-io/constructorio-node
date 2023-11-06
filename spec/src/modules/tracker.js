@@ -1733,6 +1733,33 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it.only('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
+    });
+
     it('Should respond with a valid response when required and optional parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -3825,6 +3852,34 @@ describe('ConstructorIO - Tracker', () => {
         ...userParameters,
         testCells,
       })).to.equal(true);
+    });
+
+    it.only('Should respond with a valid response when term, required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(
+        term,
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
