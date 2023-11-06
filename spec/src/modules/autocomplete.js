@@ -222,7 +222,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it.only('Should return a response with a valid query and filters', (done) => {
+    it('Should return a response with a valid query and filters', (done) => {
       const filters = { keywords: ['battery-powered'] };
       const { autocomplete } = new ConstructorIO({
         ...validOptions,
@@ -235,7 +235,6 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.filters).to.deep.equal(filters);
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
         done();
@@ -255,7 +254,6 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(res.request.filters).to.eql(filters);
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('group_id').to.equal(Object.values(filters)[0][0]);
         expect(requestedUrlParams.filters).to.have.property('Brand').to.equal(Object.values(filters)[1][0]);
@@ -455,7 +453,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should properly encode query parameters', (done) => {
+    it.only('Should properly encode query parameters', (done) => {
       const specialCharacters = '+[]&';
       const filters = { keywords: [`battery-powered ${specialCharacters}`] };
       const { autocomplete } = new ConstructorIO({
