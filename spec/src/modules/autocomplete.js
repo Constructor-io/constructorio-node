@@ -605,6 +605,12 @@ describe('ConstructorIO - Autocomplete', () => {
       return expect(autocomplete.getAutocompleteResults(query, { filters: 'abc' })).to.eventually.be.rejected;
     });
 
+    it('Should be rejected when invalid filtersPerSection parameter is provided', () => {
+      const { autocomplete } = new ConstructorIO(validOptions);
+
+      return expect(autocomplete.getAutocompleteResults(query, { filtersPerSection: ' ' })).to.eventually.be.rejected;
+    });
+
     it('Should be rejected when invalid resultsPerPagePerSection parameter is provided', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
