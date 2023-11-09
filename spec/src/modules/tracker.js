@@ -1733,7 +1733,7 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it.only('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
       const analyticsTags = { foo: 'bar' };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -3854,7 +3854,7 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it.only('Should respond with a valid response when term, required parameters and analyticsTags are provided', (done) => {
+    it('Should respond with a valid response when term, required parameters and analyticsTags are provided', (done) => {
       const analyticsTags = { foo: 'bar' };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -4558,6 +4558,33 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
+    });
+
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
       const originReferrer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -5090,6 +5117,33 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
+    });
+
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
       const originReferrer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -5570,6 +5624,33 @@ describe('ConstructorIO - Tracker', () => {
         ...userParameters,
         testCells,
       })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
@@ -6070,6 +6151,33 @@ describe('ConstructorIO - Tracker', () => {
         ...userParameters,
         testCells,
       })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
@@ -6591,6 +6699,33 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
+    });
+
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
       const originReferrer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -7086,6 +7221,33 @@ describe('ConstructorIO - Tracker', () => {
         ...userParameters,
         testCells,
       })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(
+        { analyticsTags, ...requiredParameters },
+        { ...userParameters },
+      )).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and origin referrer are provided', (done) => {
