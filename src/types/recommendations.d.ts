@@ -9,6 +9,7 @@ export interface RecommendationsParameters {
   term?: string;
   filters?: Record<string, any>;
   variationsMap?: VariationsMap;
+  hiddenFields?: string[];
 }
 
 declare class Recommendations {
