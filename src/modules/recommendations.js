@@ -38,7 +38,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, itemIds, section, term, filters, variationsMap, hiddenFields  } = parameters;
+    const { numResults, itemIds, section, term, filters, variationsMap, hiddenFields } = parameters;
 
     // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
@@ -65,7 +65,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
       queryParams.filters = filters;
     }
 
-        // Pull hidden fields from parameters
+    // Pull hidden fields from parameters
     if (hiddenFields) {
       if (queryParams.fmt_options) {
         queryParams.fmt_options.hidden_fields = hiddenFields;
