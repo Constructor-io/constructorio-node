@@ -277,6 +277,7 @@ class Tracker {
    * @param {string} parameters.itemId - Product item unique identifier
    * @param {string} parameters.url - Current page URL
    * @param {string} [parameters.variationId] - Product item variation unique identifier
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -317,6 +318,7 @@ class Tracker {
         itemId = item_id || customerId,
         variationId = variation_id,
         url,
+        analyticsTags,
       } = parameters;
 
       // Ensure support for both item_name and name as parameters
@@ -335,6 +337,10 @@ class Tracker {
 
       if (url) {
         bodyParams.url = url;
+      }
+
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -759,6 +765,7 @@ class Tracker {
    * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
    * @param {string} [parameters.displayName] - Display name for the custom conversion type
    * @param {string} [parameters.section] - Index section
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -818,6 +825,7 @@ class Tracker {
         type,
         is_custom_type,
         isCustomType = is_custom_type,
+        analyticsTags,
       } = parameters;
 
       // Ensure support for both item_id and customer_id as parameters
@@ -859,6 +867,10 @@ class Tracker {
         bodyParams.display_name = displayName;
       }
 
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -887,6 +899,7 @@ class Tracker {
    * @param {number} parameters.revenue - The subtotal (excluding taxes, shipping, etc.) of the entire order
    * @param {string} [parameters.orderId] - Unique order identifier
    * @param {string} [parameters.section] - Index section
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -931,6 +944,7 @@ class Tracker {
         order_id,
         orderId = order_id,
         section,
+        analyticsTags,
       } = parameters;
 
       if (orderId) {
@@ -943,6 +957,10 @@ class Tracker {
 
       if (revenue) {
         bodyParams.revenue = revenue;
+      }
+
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
       }
 
       if (section) {
@@ -983,6 +1001,7 @@ class Tracker {
    * @param {number} [parameters.resultPage] - Page number of results
    * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1037,6 +1056,7 @@ class Tracker {
         num_results_viewed,
         numResultsViewed = num_results_viewed,
         items,
+        analyticsTags,
       } = parameters;
 
       if (!helpers.isNil(resultCount)) {
@@ -1071,6 +1091,10 @@ class Tracker {
 
       if (items && Array.isArray(items)) {
         bodyParams.items = items.slice(0, 100).map((item) => helpers.toSnakeCaseKeys(item, false));
+      }
+
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1108,6 +1132,7 @@ class Tracker {
    * @param {number} [parameters.resultPage] - Page number of results
    * @param {number} [parameters.resultPositionOnPage] - Position of result on page
    * @param {number} [parameters.numResultsPerPage] - Number of results on page
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1172,6 +1197,7 @@ class Tracker {
         itemId = item_id,
         item_name,
         itemName = item_name,
+        analyticsTags,
       } = parameters;
 
       if (variationId) {
@@ -1220,6 +1246,10 @@ class Tracker {
         bodyParams.item_name = itemName;
       }
 
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -1255,6 +1285,7 @@ class Tracker {
    * @param {object} [parameters.selectedFilters] - Selected filters
    * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
    * @param {string} [parameters.sortBy] - Sorting method
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1318,6 +1349,7 @@ class Tracker {
         filter_value,
         filterValue = filter_value,
         items,
+        analyticsTags,
       } = parameters;
 
       if (section) {
@@ -1366,6 +1398,10 @@ class Tracker {
         bodyParams.items = items.slice(0, 100).map((item) => helpers.toSnakeCaseKeys(item, false));
       }
 
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -1401,6 +1437,7 @@ class Tracker {
    * @param {number} [parameters.resultPositionOnPage] - Position of clicked item
    * @param {number} [parameters.numResultsPerPage] - Number of results shown
    * @param {object} [parameters.selectedFilters] -  Selected filters
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1466,6 +1503,7 @@ class Tracker {
         filterValue = filter_value,
         item_id,
         itemId = item_id,
+        analyticsTags,
       } = parameters;
 
       if (section) {
@@ -1514,6 +1552,10 @@ class Tracker {
         bodyParams.item_id = itemId;
       }
 
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -1542,6 +1584,7 @@ class Tracker {
    * @param {string} [parameters.itemName] - Product item name
    * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {string} [parameters.section="Products"] - Index section
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1586,6 +1629,7 @@ class Tracker {
         variation_id,
         variationId = variation_id,
         section,
+        analyticsTags,
       } = parameters;
 
       bodyParams.section = section || 'Products';
@@ -1597,6 +1641,10 @@ class Tracker {
 
       if (variationId) {
         bodyParams.variation_id = variationId;
+      }
+
+      if (analyticsTags) {
+        bodyParams.analytics_tags = analyticsTags;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
