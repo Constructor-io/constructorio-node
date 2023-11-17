@@ -278,6 +278,7 @@ class Tracker {
    * @param {string} parameters.url - Current page URL
    * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -319,6 +320,7 @@ class Tracker {
         variationId = variation_id,
         url,
         analyticsTags,
+        section,
       } = parameters;
 
       // Ensure support for both item_name and name as parameters
@@ -341,6 +343,10 @@ class Tracker {
 
       if (analyticsTags) {
         bodyParams.analytics_tags = analyticsTags;
+      }
+
+      if (section) {
+        bodyParams.section = section;
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -473,6 +479,7 @@ class Tracker {
    * @param {string} parameters.originalQuery - The current autocomplete search query
    * @param {string} [parameters.groupId] - Group identifier of selected item
    * @param {string} [parameters.displayName] - Display name of group of selected item
+   * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -519,6 +526,7 @@ class Tracker {
           groupId = group_id,
           display_name,
           displayName = display_name,
+          section,
         } = parameters;
 
         if (originalQuery) {
@@ -530,6 +538,10 @@ class Tracker {
             group_id: groupId,
             display_name: displayName,
           };
+        }
+
+        if (section) {
+          queryParams.section = section;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
@@ -558,6 +570,7 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {number} parameters.numResults - Total number of results
    * @param {string[]} parameters.itemIds - List of product item unique identifiers in search results listing
+   * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -603,6 +616,7 @@ class Tracker {
           customerIds = customer_ids,
           item_ids,
           itemIds = item_ids,
+          section,
         } = parameters;
         let customerIDs;
 
@@ -619,6 +633,10 @@ class Tracker {
 
         if (customerIDs && Array.isArray(customerIDs) && customerIDs.length) {
           queryParams.customer_ids = customerIDs.slice(0, 100).join(',');
+        }
+
+        if (section) {
+          queryParams.section = section;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
