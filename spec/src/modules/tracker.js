@@ -2485,7 +2485,7 @@ describe('ConstructorIO - Tracker', () => {
 
   describe('trackSearchResultsLoaded', () => {
     const term = 'Cat in the Hat';
-    const requiredParameters = { numResults: 1337 };
+    const requiredParameters = { numResults: 1337, section: 'Search Suggestions' };
     const optionalParameters = { itemIds: [1, 2, 3] };
     const legacyParameters = {
       ...requiredParameters,

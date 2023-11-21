@@ -479,7 +479,6 @@ class Tracker {
    * @param {string} parameters.originalQuery - The current autocomplete search query
    * @param {string} [parameters.groupId] - Group identifier of selected item
    * @param {string} [parameters.displayName] - Display name of group of selected item
-   * @param {string} [parameters.section] - Index section
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -526,7 +525,6 @@ class Tracker {
           groupId = group_id,
           display_name,
           displayName = display_name,
-          section,
         } = parameters;
 
         if (originalQuery) {
@@ -538,10 +536,6 @@ class Tracker {
             group_id: groupId,
             display_name: displayName,
           };
-        }
-
-        if (section) {
-          queryParams.section = section;
         }
 
         const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;

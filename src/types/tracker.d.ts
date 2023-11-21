@@ -65,7 +65,6 @@ declare class Tracker {
       originalQuery: string;
       groupId?: string;
       displayName?: string;
-      section?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
