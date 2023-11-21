@@ -1580,6 +1580,7 @@ describe('ConstructorIO - Tracker', () => {
     };
     const optionalParameters = {
       variationId: 'test1-small',
+      section: 'Search Suggestions',
     };
     const legacyParameters = {
       customerId: 'test1',
@@ -1780,6 +1781,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
         expect(requestParams).to.have.property('item_name').to.equal(requiredParameters.itemName);
         expect(requestParams).to.have.property('variation_id').to.deep.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('section').to.equal(optionalParameters.section);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -2485,8 +2487,8 @@ describe('ConstructorIO - Tracker', () => {
 
   describe('trackSearchResultsLoaded', () => {
     const term = 'Cat in the Hat';
-    const requiredParameters = { numResults: 1337, section: 'Search Suggestions' };
-    const optionalParameters = { itemIds: [1, 2, 3] };
+    const requiredParameters = { numResults: 1337 };
+    const optionalParameters = { itemIds: [1, 2, 3], section: 'Search Suggestions' };
     const legacyParameters = {
       ...requiredParameters,
       customer_ids: [1, 2, 3],
@@ -2808,6 +2810,7 @@ describe('ConstructorIO - Tracker', () => {
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('customer_ids').to.equal(optionalParameters.itemIds.join(','));
+        expect(requestParams).to.have.property('section').to.equal(optionalParameters.section);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
