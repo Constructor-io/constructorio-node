@@ -40,6 +40,7 @@ declare class Tracker {
       url: string;
       variationId?: string;
       analyticsTags?: Record<string, string>;
+      section?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -74,6 +75,7 @@ declare class Tracker {
     parameters: {
       numResults: number;
       itemIds: string[];
+      section?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
