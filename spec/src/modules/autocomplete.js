@@ -473,7 +473,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should not trim spaces from query', (done) => {
+    it('Should not trim non-breaking spaces from query', (done) => {
       const queryWithSpaces = ` ${query}  `;
       const { autocomplete } = new ConstructorIO({
         apiKey: testApiKey,
