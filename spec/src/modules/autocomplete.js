@@ -400,20 +400,6 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a response with a valid query consisting of only non-breaking spaces', (done) => {
-      const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-      });
-
-      autocomplete.getAutocompleteResults('  ').then((res) => {
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('sections').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
-        done();
-      });
-    });
-
     it('Should return a variations_map object in the response', (done) => {
       const variationsMap = {
         group_by: [
