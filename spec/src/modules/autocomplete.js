@@ -400,6 +400,22 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should return a response with a valid query consisting of only non-breaking spaces', (done) => {
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults('  ').then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        done();
+      });
+    });
+
     it('Should return a variations_map object in the response', (done) => {
       const variationsMap = {
         group_by: [
@@ -469,6 +485,24 @@ describe('ConstructorIO - Autocomplete', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedUrlParams).to.have.property('filters');
         expect(requestedUrlParams.filters).to.have.property('keywords').to.equal(Object.values(filters)[0][0]);
+        done();
+      });
+    });
+
+    it('Should not trim spaces from query', (done) => {
+      const queryWithSpaces = ` ${query}  `;
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(queryWithSpaces).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res.request.term).to.equal(queryWithSpaces);
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
         done();
       });
     });

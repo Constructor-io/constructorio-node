@@ -6,6 +6,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
+const utilsHelpers = require('../../../src/utils/helpers');
 
 const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -563,6 +564,24 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should trim non-breaking spaces from query', (done) => {
+      const queryWithSpaces = ` ${query}  `;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(queryWithSpaces).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res.request.term).to.equal(utilsHelpers.trimNonBreakingSpaces(queryWithSpaces));
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        done();
+      });
+    });
+
     it('Should pass the correct custom headers passed in function networkParameters', (done) => {
       const { search } = new ConstructorIO({
         ...validOptions,
@@ -662,6 +681,12 @@ describe('ConstructorIO - Search', () => {
       const { search } = new ConstructorIO(validOptions);
 
       return expect(search.getSearchResults(null, { section })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when query consisting of only non-breaking spaces is provided', () => {
+      const { search } = new ConstructorIO(validOptions);
+
+      return expect(search.getSearchResults('  ', { section })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
