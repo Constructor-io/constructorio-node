@@ -407,8 +407,6 @@ describe('ConstructorIO - Autocomplete', () => {
       });
 
       autocomplete.getAutocompleteResults('  ').then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
@@ -497,8 +495,6 @@ describe('ConstructorIO - Autocomplete', () => {
       });
 
       autocomplete.getAutocompleteResults(queryWithSpaces).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
         expect(res.request.term).to.equal(queryWithSpaces);
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('sections').to.be.an('object');
@@ -625,6 +621,12 @@ describe('ConstructorIO - Autocomplete', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(null)).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when query consisting of only non-breaking spaces is provided', () => {
+      const { autocomplete } = new ConstructorIO(validOptions);
+
+      return expect(autocomplete.getAutocompleteResults('  ')).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid numResults parameter is provided', () => {

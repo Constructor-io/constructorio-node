@@ -26,10 +26,10 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
   queryParams.s = sessionId;
 
   // Trim non breaking spaces from query
-  query = helpers.trimNonBreakingSpaces(query);
+  const queryTrimmed = helpers.trimNonBreakingSpaces(query);
 
-  // Validate query (term) is provided
-  if (!query || typeof query !== 'string') {
+  // Validate query (term) is provided and consists of more than non-breaking spaces
+  if (!queryTrimmed || typeof queryTrimmed !== 'string') {
     throw new Error('query is a required parameter of type string');
   }
 
@@ -148,7 +148,7 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
 
   const searchUrl = isVoiceSearch ? 'search/natural_language' : 'search';
 
-  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(query)}?${queryString}`;
+  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(queryTrimmed)}?${queryString}`;
 }
 
 /**

@@ -23,8 +23,11 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   queryParams.i = clientId;
   queryParams.s = sessionId;
 
-  // Validate query (term) is provided
-  if (!query || typeof query !== 'string') {
+  // Trim non breaking spaces from query
+  const queryTrimmed = helpers.trimNonBreakingSpaces(query);
+
+  // Validate query (term) is provided and consists of more than non-breaking spaces
+  if (!queryTrimmed || typeof queryTrimmed !== 'string') {
     throw new Error('query is a required parameter of type string');
   }
 
@@ -112,6 +115,7 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   const queryString = qs.stringify(queryParams, { indices: false });
   const cleanedQuery = query.replace(/^\//, '|'); // For compatibility with backend API
 
+  // Note: it is intentional that query is dispatched without being trimmed (`queryTrimmed`)
   return `${serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(cleanedQuery)}?${queryString}`;
 }
 

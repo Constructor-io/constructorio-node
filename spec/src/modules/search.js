@@ -572,8 +572,6 @@ describe('ConstructorIO - Search', () => {
       });
 
       search.getSearchResults(queryWithSpaces).then((res) => {
-        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
         expect(res.request.term).to.equal(utilsHelpers.trimNonBreakingSpaces(queryWithSpaces));
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
