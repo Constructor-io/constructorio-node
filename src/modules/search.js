@@ -25,11 +25,8 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
   queryParams.i = clientId;
   queryParams.s = sessionId;
 
-  // Trim non breaking spaces from query
-  const queryTrimmed = helpers.trimNonBreakingSpaces(query);
-
-  // Validate query (term) is provided and consists of more than non-breaking spaces
-  if (!queryTrimmed || typeof queryTrimmed !== 'string') {
+  // Validate query (term) is provided
+  if (!query || typeof query !== 'string') {
     throw new Error('query is a required parameter of type string');
   }
 
@@ -148,7 +145,8 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
 
   const searchUrl = isVoiceSearch ? 'search/natural_language' : 'search';
 
-  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(queryTrimmed)}?${queryString}`;
+  // Note: it is intentional that query is dispatched without being trimmed
+  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(query)}?${queryString}`;
 }
 
 /**

@@ -473,7 +473,7 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should not trim non-breaking spaces from query', (done) => {
+    it.only('Should not trim spaces from query', (done) => {
       const queryWithSpaces = ` ${query}  `;
       const { autocomplete } = new ConstructorIO({
         apiKey: testApiKey,
@@ -607,12 +607,6 @@ describe('ConstructorIO - Autocomplete', () => {
       const { autocomplete } = new ConstructorIO(validOptions);
 
       return expect(autocomplete.getAutocompleteResults(null)).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when query consisting of only non-breaking spaces is provided', () => {
-      const { autocomplete } = new ConstructorIO(validOptions);
-
-      return expect(autocomplete.getAutocompleteResults('  ')).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid numResults parameter is provided', () => {

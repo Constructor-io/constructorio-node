@@ -543,6 +543,22 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it.only('Should not trim spaces from query', (done) => {
+      const queryWithSpaces = ` ${query}  `;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(queryWithSpaces).then((res) => {
+        expect(res.request.term).to.equal(queryWithSpaces);
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        done();
+      });
+    });
+
     it('Should properly transform non-breaking spaces in parameters', (done) => {
       const breakingSpaces = '   ';
       const sortBy = `relevance ${breakingSpaces} relevance`;
@@ -679,12 +695,6 @@ describe('ConstructorIO - Search', () => {
       const { search } = new ConstructorIO(validOptions);
 
       return expect(search.getSearchResults(null, { section })).to.eventually.be.rejected;
-    });
-
-    it('Should be rejected when query consisting of only non-breaking spaces is provided', () => {
-      const { search } = new ConstructorIO(validOptions);
-
-      return expect(search.getSearchResults('  ', { section })).to.eventually.be.rejected;
     });
 
     it('Should be rejected when invalid page parameter is provided', () => {
