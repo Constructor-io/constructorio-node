@@ -543,7 +543,7 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
-    it.only('Should not trim spaces from query', (done) => {
+    it('Should not trim spaces from query', (done) => {
       const queryWithSpaces = ` ${query}  `;
       const { search } = new ConstructorIO({
         apiKey: testApiKey,
