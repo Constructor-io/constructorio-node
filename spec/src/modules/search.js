@@ -542,6 +542,22 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should not trim spaces from query', (done) => {
+      const queryWithSpaces = ` ${query}  `;
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(queryWithSpaces).then((res) => {
+        expect(res.request.term).to.equal(queryWithSpaces);
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        done();
+      });
+    });
+
     it('Should properly transform non-breaking spaces in parameters', (done) => {
       const breakingSpaces = '   ';
       const sortBy = `relevance ${breakingSpaces} relevance`;

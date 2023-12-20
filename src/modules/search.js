@@ -145,7 +145,8 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
 
   const searchUrl = isVoiceSearch ? 'search/natural_language' : 'search';
 
-  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(query))}?${queryString}`;
+  // Note: it is intentional that query is dispatched without being trimmed
+  return `${serviceUrl}/${searchUrl}/${helpers.encodeURIComponentRFC3986(query)}?${queryString}`;
 }
 
 /**

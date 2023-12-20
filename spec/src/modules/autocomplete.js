@@ -473,6 +473,22 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should not trim spaces from query', (done) => {
+      const queryWithSpaces = ` ${query}  `;
+      const { autocomplete } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(queryWithSpaces).then((res) => {
+        expect(res.request.term).to.equal(queryWithSpaces);
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        done();
+      });
+    });
+
     it('Should return a response with a / query', (done) => {
       const { autocomplete } = new ConstructorIO({
         apiKey: testApiKey,

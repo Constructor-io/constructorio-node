@@ -112,7 +112,8 @@ function createAutocompleteUrl(query, parameters, userParameters, options) {
   const queryString = qs.stringify(queryParams, { indices: false });
   const cleanedQuery = query.replace(/^\//, '|'); // For compatibility with backend API
 
-  return `${serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(cleanedQuery))}?${queryString}`;
+  // Note: it is intentional that query is dispatched without being trimmed
+  return `${serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(cleanedQuery)}?${queryString}`;
 }
 
 /**
