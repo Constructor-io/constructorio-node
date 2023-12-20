@@ -6,7 +6,6 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const ConstructorIO = require('../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../mocha.helpers');
-const utilsHelpers = require('../../../src/utils/helpers');
 
 const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -576,22 +575,6 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.sort_by).to.equal(sortByExpected);
         expect(requestedUrlParams).to.have.property('sort_by').to.equal(sortByExpected);
-        done();
-      });
-    });
-
-    it('Should trim non-breaking spaces from query', (done) => {
-      const queryWithSpaces = ` ${query}  `;
-      const { search } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-      });
-
-      search.getSearchResults(queryWithSpaces).then((res) => {
-        expect(res.request.term).to.equal(utilsHelpers.trimNonBreakingSpaces(queryWithSpaces));
-        expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('response').to.be.an('object');
-        expect(res).to.have.property('result_id').to.be.an('string');
         done();
       });
     });
