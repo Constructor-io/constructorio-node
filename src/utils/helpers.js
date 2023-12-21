@@ -16,9 +16,10 @@ const utils = {
     const cleanedParams = {};
 
     Object.keys(paramsObj).forEach((paramKey) => {
+      const excludeTrimList = ['term', 'originalQuery', 'original_query'];
       const paramValue = paramsObj[paramKey];
 
-      if (typeof paramValue === 'string') {
+      if (typeof paramValue === 'string' && !excludeTrimList.includes(paramKey)) {
         // Replace non-breaking spaces (or any other type of spaces caught by the regex)
         // - with a regular white space
         cleanedParams[paramKey] = utils.trimNonBreakingSpaces(paramValue);

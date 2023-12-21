@@ -40,8 +40,21 @@ const extractHeadersFromFetch = (fetch) => {
   return null;
 };
 
+// Extract request URL as string from request
+const extractUrlFromFetch = (fetch) => {
+  const lastCallArguments = fetch && fetch.args && fetch.args[fetch.args.length - 1];
+  const requestUrl = lastCallArguments[0];
+
+  if (requestUrl) {
+    return requestUrl;
+  }
+
+  return null;
+};
+
 module.exports = {
   extractUrlParamsFromFetch,
   extractBodyParamsFromFetch,
   extractHeadersFromFetch,
+  extractUrlFromFetch,
 };
