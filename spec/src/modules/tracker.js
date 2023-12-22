@@ -1446,7 +1446,7 @@ describe('ConstructorIO - Tracker', () => {
       )).to.equal(true);
     });
 
-    it.only('Should not trim term or original query parameters containing extra spacing', (done) => {
+    it('Should not trim term or original query parameters containing extra spacing', (done) => {
       const spaceTerm = `   ${term}   `;
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -2389,7 +2389,7 @@ describe('ConstructorIO - Tracker', () => {
       )).to.equal(true);
     });
 
-    it.only('Should not trim term or original query parameters containing extra spacing', (done) => {
+    it('Should not trim term or original query parameters containing extra spacing', (done) => {
       const spaceTerm = `   ${term}   `;
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -2400,8 +2400,6 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('success', () => {
         const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        console.dir(requestUrl);
 
         // Request
         expect(requestParams).to.have.property('original_query').to.equal(spaceTerm);
@@ -2926,7 +2924,7 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultsLoaded(term, { num_results: 0 }, userParameters)).to.equal(true);
     });
 
-    it.only('Should not trim term parameter containing extra spacing', (done) => {
+    it('Should not trim term parameter containing extra spacing', (done) => {
       const spaceTerm = `   ${term}   `;
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -3520,6 +3518,26 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackSearchResultClick(term, legacyParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should not trim term parameter containing extra spacing', (done) => {
+      const spaceTerm = `   ${term}   `;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        ...userParameters,
+      });
+
+      tracker.on('success', () => {
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(requestUrl).to.include(`/autocomplete/${encodeURIComponentRFC3986(spaceTerm)}/click_through`);
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(spaceTerm, requiredParameters, userParameters)).to.equal(true);
     });
 
     it('Should throw an error when invalid term is provided', () => {
@@ -4278,7 +4296,7 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackConversion(term, fullParameters, userParameters)).to.equal(true);
     });
 
-    it.only('Should not trim term parameter containing extra spacing', (done) => {
+    it('Should not trim term parameter containing extra spacing', (done) => {
       const spaceTerm = `   ${term}   `;
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -4289,7 +4307,7 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('success', () => {
         const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
-        expect(bodyParams).to.have.property('search_term').to.equal(term);
+        expect(bodyParams).to.have.property('search_term').to.equal(spaceTerm);
 
         done();
       });

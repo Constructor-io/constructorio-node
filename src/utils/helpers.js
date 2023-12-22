@@ -16,7 +16,7 @@ const utils = {
     const cleanedParams = {};
 
     Object.keys(paramsObj).forEach((paramKey) => {
-      const excludeTrimList = ['term', 'originalQuery', 'original_query'];
+      const excludeTrimList = ['term', 'original_query', 'search_term'];
       const paramValue = paramsObj[paramKey];
 
       if (typeof paramValue === 'string' && !excludeTrimList.includes(paramKey)) {
