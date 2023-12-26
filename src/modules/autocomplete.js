@@ -148,7 +148,7 @@ class Autocomplete {
    * @param {object} [parameters.resultsPerSection] - Number of results to return (value) per section (key)
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
-   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details
+   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope autocomplete results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results

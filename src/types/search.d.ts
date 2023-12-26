@@ -83,6 +83,8 @@ export interface SearchRequestType extends Record<string, any> {
   features: Partial<RequestFeature>;
   feature_variants: Partial<RequestFeatureVariant>;
   searchandized_items: Record<string, any>;
+  variations_map?: VariationsMap;
+  pre_filter_expression?: FilterExpression;
 }
 
 export interface SearchResultType extends Record<string, any> {
