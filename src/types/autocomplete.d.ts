@@ -18,6 +18,7 @@ export interface AutocompleteParameters {
   resultsPerPagePerSection?: Record<string, number>;
   hiddenFields?: string[];
   variationsMap?: VariationsMap;
+  preFilterExpression?: FilterExpression;
 }
 
 declare class Autocomplete {
@@ -47,6 +48,8 @@ export interface AutocompleteRequestType extends Record<string, any> {
   features: Partial<RequestFeature>;
   feature_variants: Partial<RequestFeatureVariant>;
   searchandized_items: Record<string, any>;
+  variations_map?: VariationsMap;
+  pre_filter_expression?: FilterExpression;
 }
 
 export type Section = Partial<SectionItem>[];
