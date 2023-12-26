@@ -47,6 +47,7 @@ export interface AutocompleteRequestType extends Record<string, any> {
   features: Partial<RequestFeature>;
   feature_variants: Partial<RequestFeatureVariant>;
   searchandized_items: Record<string, any>;
+  preFilterExpression?: FilterExpression;
 }
 
 export type Section = Partial<SectionItem>[];
