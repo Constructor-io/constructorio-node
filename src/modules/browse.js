@@ -153,7 +153,7 @@ function createBrowseUrlFromFilter(filterName, filterValue, parameters, userPara
   const queryParams = createQueryParams(parameters, userParameters, options);
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/browse/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterName))}/${helpers.encodeURIComponentRFC3986(helpers.trimNonBreakingSpaces(filterValue))}?${queryString}`;
+  return `${serviceUrl}/browse/${helpers.encodeURIComponentRFC3986(helpers.normalizeSpaces(filterName).trim())}/${helpers.encodeURIComponentRFC3986(helpers.normalizeSpaces(filterValue).trim())}?${queryString}`;
 }
 
 // Create URL from supplied IDs and parameters
