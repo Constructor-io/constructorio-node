@@ -7,7 +7,9 @@ const PII_REGEX = {
 };
 
 const utils = {
-  trimNonBreakingSpaces: (string) => string.replace(/\s/g, ' ').trim(),
+  // Replace non-breaking spaces (or any other type of spaces caught by the regex)
+  // - with a regular white space
+  normalizeSpaces: (string) => string.replace(/\s/g, ' '),
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
   encodeURIComponentRFC3986: (string) => encodeURIComponent(string).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`),
@@ -16,12 +18,15 @@ const utils = {
     const cleanedParams = {};
 
     Object.keys(paramsObj).forEach((paramKey) => {
+      const excludeTrimList = ['term', 'original_query', 'search_term'];
       const paramValue = paramsObj[paramKey];
 
       if (typeof paramValue === 'string') {
-        // Replace non-breaking spaces (or any other type of spaces caught by the regex)
-        // - with a regular white space
-        cleanedParams[paramKey] = utils.trimNonBreakingSpaces(paramValue);
+        cleanedParams[paramKey] = utils.normalizeSpaces(paramValue);
+
+        if (!excludeTrimList.includes(paramKey)) {
+          cleanedParams[paramKey] = cleanedParams[paramKey].trim();
+        }
       } else {
         cleanedParams[paramKey] = paramValue;
       }
