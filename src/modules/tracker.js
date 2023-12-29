@@ -418,7 +418,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(term)}/select?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.normalizeSpaces(term))}/select?`;
         const queryParams = {};
         const {
           original_query,
@@ -516,7 +516,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(term)}/search?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.normalizeSpaces(term))}/search?`;
         const queryParams = {};
         const {
           original_query,
@@ -700,7 +700,7 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(term)}/click_through?`;
+        const url = `${this.options.serviceUrl}/autocomplete/${helpers.encodeURIComponentRFC3986(helpers.normalizeSpaces(term))}/click_through?`;
         const queryParams = {};
         const {
           item_name,
