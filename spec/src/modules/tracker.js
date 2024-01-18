@@ -427,11 +427,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -928,11 +928,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -1450,11 +1450,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -2102,11 +2102,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -2448,11 +2450,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -2965,11 +2967,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -3586,11 +3588,11 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('GET');
@@ -4287,11 +4289,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -5017,11 +5021,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -5603,11 +5609,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -6139,11 +6147,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -6693,11 +6703,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -7266,11 +7278,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -7817,11 +7831,13 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestedHeaders).to.have.property('_dt').to.equal(dateTime);
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
