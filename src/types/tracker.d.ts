@@ -14,6 +14,7 @@ export interface TrackerUserParameters {
   userIp?: string;
   userAgent?: string;
   acceptLanguage?: string;
+  dateTime?: number;
 }
 
 declare class Tracker {
