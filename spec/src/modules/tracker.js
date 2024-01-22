@@ -419,6 +419,33 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with referer', (done) => {
       const referer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -890,6 +917,33 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackInputFocus({
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackInputFocus({
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -1385,6 +1439,33 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackAutocompleteSelect(term, requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackAutocompleteSelect(term, requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -2013,6 +2094,35 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackItemDetailLoad(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with referer', (done) => {
       const referer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -2329,6 +2439,33 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchSubmit(term, requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchSubmit(term, requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -2819,6 +2956,33 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -3413,6 +3577,33 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultClick(term, requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackSearchResultClick(term, requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -4087,6 +4278,35 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackConversion(term, requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackConversion(term, requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -4793,6 +5013,35 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackPurchase(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with referer', (done) => {
       const referer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -5352,6 +5601,35 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with referer', (done) => {
       const referer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -5858,6 +6136,35 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackRecommendationClick(requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -6385,6 +6692,35 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackBrowseResultsLoaded(requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultsLoaded(requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
@@ -6934,6 +7270,35 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackBrowseResultClick(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
     it('Should respond with a valid response with referer', (done) => {
       const referer = 'https://localhost';
       const { tracker } = new ConstructorIO({
@@ -7455,6 +7820,35 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackGenericResultClick(requiredParameters, {
         ...userParameters,
         acceptLanguage,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackGenericResultClick(requiredParameters, {
+        ...userParameters,
+        dateTime,
       })).to.equal(true);
     });
 
