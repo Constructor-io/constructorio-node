@@ -65,6 +65,7 @@ function applyParams(parameters, userParameters, options) {
     segments,
     testCells,
     originReferrer,
+    dateTime,
   } = userParameters || {};
   let aggregateParams = Object.assign(parameters);
 
@@ -112,7 +113,7 @@ function applyParams(parameters, userParameters, options) {
     aggregateParams.origin_referrer = originReferrer;
   }
 
-  aggregateParams._dt = Date.now();
+  aggregateParams._dt = dateTime || Date.now();
   aggregateParams.beacon = true;
   aggregateParams = helpers.cleanParams(aggregateParams);
 
@@ -251,6 +252,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -291,6 +293,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -339,6 +342,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -439,6 +443,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -539,6 +544,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -625,6 +631,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -723,6 +730,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -838,6 +846,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -972,6 +981,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1074,6 +1084,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1205,6 +1216,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1358,6 +1370,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1510,6 +1523,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1657,6 +1671,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1774,7 +1789,7 @@ module.exports = Tracker;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri Dec 29 2023 12:50:33 GMT-0700 (Mountain Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Mon Jan 22 2024 14:35:43 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
