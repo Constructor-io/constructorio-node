@@ -87,7 +87,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return quizzes.getQuizNextQuestion(validQuizId, { quizSessionId }).then((initialResponse) => {
+      return quizzes.getQuizNextQuestion(validQuizId).then((initialResponse) => {
         const { quiz_version_id: quizVersionId } = initialResponse;
 
         return quizzes.getQuizNextQuestion(validQuizId, { quizSessionId, quizVersionId }).then((res) => {
@@ -96,7 +96,6 @@ describe('ConstructorIO - Quizzes', () => {
           expect(res).to.have.property('quiz_version_id').to.be.an('string').to.equal(quizVersionId);
           expect(res).to.have.property('quiz_session_id').to.be.an('string');
           expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
-          expect(res).to.have.property('quiz_version_id').to.equal(quizVersionId);
           expect(res).to.have.property('next_question').to.be.an('object');
           expect(res.next_question.id).to.equal(1);
           expect(res.next_question.options[0].id).to.equal(1);
@@ -272,8 +271,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      // eslint-disable-next-line max-len
-      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, quizSessionId }).then((initialResponse) => {
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers }).then((initialResponse) => {
         const { quiz_version_id: quizVersionId } = initialResponse;
 
         // eslint-disable-next-line max-len
