@@ -179,7 +179,7 @@ class Catalog {
   }
 
   /**
-   * Adds multiple items to your index whilst replacing existing ones (limit of 1,000)
+   * Adds multiple items to your index whilst replacing existing ones (limit of 10,000)
    *
    * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
@@ -260,7 +260,7 @@ class Catalog {
   }
 
   /**
-   * Update multiple items to index (limit of 1,000)
+   * Update multiple items to index (limit of 10,000)
    *
    * @function updateItems
    * @param {object} parameters - Additional parameters for item details
@@ -352,7 +352,7 @@ class Catalog {
   }
 
   /**
-   * Remove multiple items from your index (limit of 1,000)
+   * Remove multiple items from your index (limit of 10,000)
    *
    * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
@@ -501,7 +501,7 @@ class Catalog {
   }
 
   /**
-   * Adds multiple variations to your index whilst replacing existing ones (limit of 1,000)
+   * Adds multiple variations to your index whilst replacing existing ones (limit of 10,000)
    *
    * @function createOrReplaceVariations
    * @param {object} parameters - Additional parameters for variation details
@@ -584,7 +584,7 @@ class Catalog {
   }
 
   /**
-   * Update multiple variations to index (limit of 1,000)
+   * Update multiple variations to index (limit of 10,000)
    *
    * @function updateVariations
    * @param {object} parameters - Additional parameters for variation details
@@ -677,7 +677,7 @@ class Catalog {
   }
 
   /**
-   * Remove multiple variations from your index (limit of 1,000)
+   * Remove multiple variations from your index (limit of 10,000)
    *
    * @function deleteVariations
    * @param {object} parameters - Additional parameters for variation details
@@ -886,7 +886,7 @@ class Catalog {
   }
 
   /**
-   * Add item groups to index (limit of 1,000)
+   * Add item groups to index (limit of 10,000)
    *
    * @function addItemGroups
    * @param {object} parameters - Additional parameters for item group details
@@ -1036,7 +1036,7 @@ class Catalog {
   }
 
   /**
-   * Add multiple item groups to index whilst updating existing ones (limit of 1,000)
+   * Add multiple item groups to index whilst updating existing ones (limit of 10,000)
    *
    * @function addOrUpdateItemGroups
    * @param {object} parameters - Additional parameters for item group details
@@ -1119,6 +1119,7 @@ class Catalog {
    *     },
    * });
    */
+
   modifyItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
