@@ -1119,7 +1119,6 @@ class Catalog {
    *     },
    * });
    */
-
   modifyItemGroup(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
