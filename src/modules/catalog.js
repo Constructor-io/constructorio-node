@@ -886,7 +886,7 @@ class Catalog {
   }
 
   /**
-   * Add item groups to index (limit of 10,000)
+   * Add item groups to index (limit of 1,000)
    *
    * @function addItemGroups
    * @param {object} parameters - Additional parameters for item group details
@@ -1036,7 +1036,7 @@ class Catalog {
   }
 
   /**
-   * Add multiple item groups to index whilst updating existing ones (limit of 10,000)
+   * Add multiple item groups to index whilst updating existing ones (limit of 1,000)
    *
    * @function addOrUpdateItemGroups
    * @param {object} parameters - Additional parameters for item group details
