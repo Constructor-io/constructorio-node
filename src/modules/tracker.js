@@ -196,7 +196,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -237,7 +237,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -286,7 +286,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -387,7 +387,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -488,7 +488,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -575,7 +575,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -674,7 +674,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -790,7 +790,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -925,7 +925,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -1028,7 +1028,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -1160,7 +1160,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -1314,7 +1314,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -1467,7 +1467,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
@@ -1615,7 +1615,7 @@ class Tracker {
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string} [userParameters.segments] - User segments
+   * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.referer] - Client page URL (including path)
