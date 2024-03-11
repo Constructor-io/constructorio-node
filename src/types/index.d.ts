@@ -25,7 +25,7 @@ export interface UserParameters {
   sessionId?: number;
   clientId?: string;
   userId?: string;
-  segments?: string;
+  segments?: string[];
   testCells?: Record<string, any>;
   userIp?: string;
   userAgent?: string;
