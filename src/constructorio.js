@@ -11,6 +11,7 @@ const Catalog = require('./modules/catalog');
 const Tasks = require('./modules/tasks');
 const Quizzes = require('./modules/quizzes');
 const { version: packageVersion } = require('../package.json');
+const utils = require('./utils/helpers');
 
 /**
  * Class to instantiate the ConstructorIO client.
@@ -50,12 +51,14 @@ class ConstructorIO {
       throw new Error('API key is a required parameter of type string');
     }
 
+    const normalizedServiceUrl = serviceUrl && serviceUrl.replace(/\/$/, '');
+
     this.options = {
       apiKey,
       apiToken: apiToken || '',
       securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
-      serviceUrl: (serviceUrl && serviceUrl.replace(/\/$/, '')) || 'https://ac.cnstrc.com',
+      serviceUrl: utils.addHTTPSToString(normalizedServiceUrl) || 'https://ac.cnstrc.com',
       fetch: fetch || nodeFetch,
       networkParameters: networkParameters || {},
     };
