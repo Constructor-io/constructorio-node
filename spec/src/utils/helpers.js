@@ -12,6 +12,7 @@ const {
   combineCustomHeaders,
   toSnakeCase,
   toSnakeCaseKeys,
+  addHTTPSToString,
 } = require('../../../test/utils/helpers'); // eslint-disable-line import/extensions
 
 chai.use(chaiAsPromised);
@@ -246,6 +247,32 @@ describe('ConstructorIO - Utils - Helpers', () => {
 
       it('Should prefer local method headers when both global and local method options headers are defined', () => {
         expect(combineCustomHeaders(globalOptions, methodOptions)).to.deep.equal(methodOptions.headers);
+      });
+
+      it('Should return the url without any modification', () => {
+        const testUrl = 'https://www.constructor.io';
+
+        expect(addHTTPSToString(testUrl)).to.equal(testUrl);
+      });
+
+      it('Should return url with no protocol with https at the beginning', () => {
+        const testUrl = 'www.constructor.io';
+        const expectedUrl = 'https://www.constructor.io';
+
+        expect(addHTTPSToString(testUrl)).to.equal(expectedUrl);
+      });
+
+      it('Should return url with an http protocol with https at the beginning', () => {
+        const testUrl = 'http://www.constructor.io';
+        const expectedUrl = 'https://www.constructor.io';
+
+        expect(addHTTPSToString(testUrl)).to.equal(expectedUrl);
+      });
+
+      it('Should return null if param is not a string', () => {
+        const testUrl = {};
+
+        expect(addHTTPSToString(testUrl)).to.equal(null);
       });
     });
   }
