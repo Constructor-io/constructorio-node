@@ -339,7 +339,7 @@ export interface ItemTracked {
   variationId?: string;
 }
 
-export interface ItemTrackedPurchased extends ItemTracked{
+export interface ItemTrackedPurchased extends ItemTracked {
   price: number,
   count: number
 }
