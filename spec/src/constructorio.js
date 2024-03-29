@@ -5,7 +5,7 @@ const ConstructorIO = require('../../test/constructorio'); // eslint-disable-lin
 const validApiKey = 'testing';
 const validOptions = { apiKey: validApiKey };
 
-describe.only('ConstructorIO', () => {
+describe('ConstructorIO', () => {
   beforeEach(() => {
     global.CLIENT_VERSION = 'cio-mocha';
   });
