@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { ConstructorClientOptions, NetworkParameters, ItemTracked } from '.';
+import { ConstructorClientOptions, NetworkParameters, ItemTracked, ItemTrackedPurchased } from '.';
 
 export default Tracker;
 
@@ -116,7 +116,7 @@ declare class Tracker {
 
   trackPurchase(
     parameters: {
-      items: ItemTracked & {quantity: number}[];
+      items: ItemTrackedPurchased[];
       revenue: number;
       orderId?: string;
       section?: string;

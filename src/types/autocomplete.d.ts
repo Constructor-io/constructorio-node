@@ -5,6 +5,7 @@ import {
   RequestFeatureVariant,
   UserParameters,
   VariationsMap,
+  FilterExpression,
 } from '.';
 
 export default Autocomplete;
