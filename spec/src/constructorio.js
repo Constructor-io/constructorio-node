@@ -31,7 +31,7 @@ describe('ConstructorIO', () => {
   });
 
   it('Should return an instance with custom options when valid API key is provided', () => {
-    const serviceUrl = 'http://constructor.io';
+    const serviceUrl = 'https://constructor.io';
     const version = 'custom-version';
     const apiToken = 'token';
     const securityToken = 'security-token';
