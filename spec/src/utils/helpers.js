@@ -248,7 +248,9 @@ describe('ConstructorIO - Utils - Helpers', () => {
       it('Should prefer local method headers when both global and local method options headers are defined', () => {
         expect(combineCustomHeaders(globalOptions, methodOptions)).to.deep.equal(methodOptions.headers);
       });
+    });
 
+    describe('addHTTPSToString', () => {
       it('Should return the url without any modification', () => {
         const testUrl = 'https://www.constructor.io';
 
