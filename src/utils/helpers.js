@@ -114,6 +114,26 @@ const utils = {
 
     return false;
   },
+  addHTTPSToString(url) {
+    if (typeof url !== 'string') {
+      return null;
+    }
+
+    const doesUrlIncludeHTTPS = url.startsWith('https://');
+    const doesUrlStartWithHTTP = url.startsWith('http://');
+
+    if (!doesUrlIncludeHTTPS && doesUrlStartWithHTTP) {
+      return url.replace('http', 'https');
+    }
+
+    if (!doesUrlStartWithHTTP && !doesUrlIncludeHTTPS) {
+      const urlWithHttps = `https://${url}`;
+
+      return urlWithHttps;
+    }
+
+    return url;
+  },
 };
 
 module.exports = utils;

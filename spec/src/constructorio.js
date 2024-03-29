@@ -31,7 +31,7 @@ describe('ConstructorIO', () => {
   });
 
   it('Should return an instance with custom options when valid API key is provided', () => {
-    const serviceUrl = 'http://constructor.io';
+    const serviceUrl = 'https://constructor.io';
     const version = 'custom-version';
     const apiToken = 'token';
     const securityToken = 'security-token';
@@ -51,6 +51,17 @@ describe('ConstructorIO', () => {
     expect(instance.options).to.have.property('version').to.equal(version);
     expect(instance.options).to.have.property('securityToken').to.equal(securityToken);
     expect(instance.options).to.have.property('networkParameters').to.equal(networkParameters);
+  });
+
+  it('Should return an instance with correct serviceUrl when a http serviceUrl is passed', () => {
+    const serviceUrl = 'http://constructor.io';
+    const instance = new ConstructorIO({
+      ...validOptions,
+      serviceUrl,
+    });
+
+    expect(instance).to.be.an('object');
+    expect(instance.options).to.have.property('serviceUrl').to.equal('https://constructor.io');
   });
 
   it('Should remove any trailing slashes from the serviceUrl', () => {
