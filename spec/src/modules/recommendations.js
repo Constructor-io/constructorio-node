@@ -675,6 +675,44 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should add the section query param when section parameter is provided', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+      const parameters = { section: 'Products' };
+
+      recommendations.getRecommendationPods(null, parameters).then((res) => {
+        const url = helpers.extractUrlFromFetch(fetchSpy);
+        const queryParam = '&section=Products';
+
+        expect(url).to.contain(queryParam);
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        done();
+      });
+    });
+
+    it('Should not add the section query param if it is not provided', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+      const parameters = {};
+
+      recommendations.getRecommendationPods(null, parameters).then((res) => {
+        const url = helpers.extractUrlFromFetch(fetchSpy);
+        const queryParam = '&section=Products';
+
+        expect(url).not.to.contain(queryParam);
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+        done();
+      });
+    });
+
     it('Should be rejected when invalid apiKey is provided', () => {
       const { recommendations } = new ConstructorIO({ ...validOptions, apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
