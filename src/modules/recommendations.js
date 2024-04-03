@@ -201,11 +201,12 @@ class Recommendations {
    * @function getRecommendationPods
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @param {string} [section] - The section to return results from. Defaults to an empty string
    * @returns {Promise}
    * @example
    * constructorio.recommendations.getRecommendationPods();
    */
-  getRecommendationPods(networkParameters = {}) {
+  getRecommendationPods(networkParameters = {}, section = '') {
     const {
       apiKey,
       serviceUrl,
@@ -214,7 +215,8 @@ class Recommendations {
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
-    const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}`;
+    const sectionParam = section ? `&section=${section}` : '';
+    const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}${sectionParam}`.trim();
 
     Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
 
