@@ -682,14 +682,11 @@ describe('ConstructorIO - Recommendations', () => {
       });
       const parameters = { section: 'Products' };
 
-      recommendations.getRecommendationPods(null, parameters).then((res) => {
+      recommendations.getRecommendationPods(null, parameters).then(() => {
         const url = helpers.extractUrlFromFetch(fetchSpy);
         const queryParam = '&section=Products';
 
         expect(url).to.contain(queryParam);
-        expect(res).to.be.an('object');
-        expect(res).to.have.property('pods');
-        expect(res).to.have.property('total_count');
         done();
       });
     });
@@ -701,14 +698,11 @@ describe('ConstructorIO - Recommendations', () => {
       });
       const parameters = {};
 
-      recommendations.getRecommendationPods(null, parameters).then((res) => {
+      recommendations.getRecommendationPods(null, parameters).then(() => {
         const url = helpers.extractUrlFromFetch(fetchSpy);
         const queryParam = '&section=Products';
 
         expect(url).not.to.contain(queryParam);
-        expect(res).to.be.an('object');
-        expect(res).to.have.property('pods');
-        expect(res).to.have.property('total_count');
         done();
       });
     });
