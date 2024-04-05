@@ -675,7 +675,7 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
-    it.only('Should add the section query param when section parameter is provided', (done) => {
+    it('Should add the section query param when section parameter is provided', (done) => {
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
@@ -691,7 +691,7 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
-    it.only('Should not add the section query param if it is not provided', (done) => {
+    it('Should not add the section query param if it is not provided', (done) => {
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
