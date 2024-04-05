@@ -216,7 +216,8 @@ class Recommendations {
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
-    const rawQueryParams = qs.stringify(parameters);
+    const { section } = parameters;
+    const rawQueryParams = section ? qs.stringify({ section }) : '';
     const queryParams = rawQueryParams ? `&${rawQueryParams}` : '';
     const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}${queryParams}`.trim();
 
