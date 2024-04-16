@@ -199,13 +199,15 @@ class Recommendations {
    * Get all recommendation pods
    *
    * @function getRecommendationPods
+   * @param {object} [parameters] - Parameters relevant to the network request
+   * @param {string} [parameters.section] - Recommendations section
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @example
    * constructorio.recommendations.getRecommendationPods();
    */
-  getRecommendationPods(networkParameters = {}) {
+  getRecommendationPods(parameters = {}, networkParameters = {}) {
     const {
       apiKey,
       serviceUrl,
@@ -214,9 +216,31 @@ class Recommendations {
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
-    const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}`;
+    const url = `${serviceUrl}/v1/recommendation_pods`;
 
-    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
+    // For backwards compatibility we allow only "networkParameters" to be passed, meaning "parameters" should be
+    // copied to networkParameters. However, since networkParameters is defaulted, in the new implementation it's
+    // possible a customer may pass only parameters and leave networkParams empty. Because of this (this is hacky) but
+    // we will check parameters for timeout before moving params -> network params, since timeout is the only possible
+    // network field. Also, once all customers migrate to using both parameters we should remove this
+    let parsedParameters = parameters;
+    let parsedNetworkParameters = networkParameters;
+    if (!networkParameters && parameters.timeout) {
+      parsedParameters = {};
+      parsedNetworkParameters = parameters;
+    }
+
+    const { section } = parsedParameters;
+
+    let queryParams = {
+      key: apiKey,
+    };
+
+    if (section) {
+      queryParams.section = section;
+    }
+
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, parsedNetworkParameters));
 
     // Append security token as 'x-cnstrc-token' if available
     if (this.options.securityToken && typeof this.options.securityToken === 'string') {
@@ -224,7 +248,11 @@ class Recommendations {
     }
 
     // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+    helpers.applyNetworkTimeout(this.options, parsedNetworkParameters, controller);
+
+    queryParams = helpers.cleanParams(queryParams);
+    const queryString = qs.stringify(queryParams, { indices: false });
+    const requestUrl = `${url}?${queryString}`;
 
     return fetch(requestUrl, { headers: { ...headers, ...helpers.createAuthHeader(this.options) }, signal })
       .then((response) => {
