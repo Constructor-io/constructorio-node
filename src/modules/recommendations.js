@@ -221,11 +221,11 @@ class Recommendations {
     // For backwards compatibility we allow only "networkParameters" to be passed, meaning "parameters" should be
     // copied to networkParameters. However, since networkParameters is defaulted, in the new implementation it's
     // possible a customer may pass only parameters and leave networkParams empty. Because of this (this is hacky) but
-    // we will check parameters for timeout before moving params -> network params, since timeout is the only possible
-    // network field. Also, once all customers migrate to using both parameters we should remove this
+    // we will check parameters for timeout/headers before moving params -> network params, since timeout is the only
+    // possible network field. Also, once all customers migrate to using both parameters we should remove this
     let parsedParameters = parameters;
     let parsedNetworkParameters = networkParameters;
-    if (!networkParameters && parameters.timeout) {
+    if (!networkParameters && (parameters.timeout || parameters.headers)) {
       parsedParameters = {};
       parsedNetworkParameters = parameters;
     }
