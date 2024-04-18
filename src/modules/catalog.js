@@ -1446,6 +1446,7 @@ class Catalog {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
+      body: JSON.stringify({}),
       signal,
     }).then((response) => {
       if (response.ok) {
