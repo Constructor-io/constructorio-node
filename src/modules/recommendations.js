@@ -219,18 +219,13 @@ class Recommendations {
     const url = `${serviceUrl}/v1/recommendation_pods`;
 
     // For backwards compatibility we allow only "networkParameters" to be passed, meaning "parameters" should be
-    // copied to networkParameters. However, since networkParameters is defaulted, in the new implementation it's
-    // possible a customer may pass only parameters and leave networkParams empty. Because of this (this is hacky) but
-    // we will check parameters for timeout/headers before moving params -> network params, since timeout is the only
-    // possible network field. Also, once all customers migrate to using both parameters we should remove this
-    let parsedParameters = parameters;
+    // copied to networkParameters. If both parameters and networkParameters are passed we leave them as is
     let parsedNetworkParameters = networkParameters;
-    if (!networkParameters && (parameters.timeout || parameters.headers)) {
-      parsedParameters = {};
+    if (parameters.timeout || parameters.headers) {
       parsedNetworkParameters = parameters;
     }
 
-    const { section } = parsedParameters;
+    const { section } = parameters;
 
     let queryParams = {
       key: apiKey,
