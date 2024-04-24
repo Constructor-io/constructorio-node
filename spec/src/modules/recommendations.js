@@ -642,7 +642,7 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
-    it.only('Should successfully send request when parameters are passed', (done) => {
+    it('Should successfully send request when parameters are passed', (done) => {
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
