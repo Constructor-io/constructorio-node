@@ -629,6 +629,34 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should build requestURL with query params when parameters are passed', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: async (reqUrl) => ({ ok: true, json: async () => reqUrl }),
+      });
+
+      recommendations.getRecommendationPods({ section: 'test-section' }).then((res) => {
+        expect(res).to.contain('section=test-section');
+
+        done();
+      });
+    });
+
+    it('Should successfully send request when parameters are passed', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendationPods({ section: 'Products' }).then((res) => {
+        expect(res).to.be.an('object');
+        expect(res).to.have.property('pods');
+        expect(res).to.have.property('total_count');
+
+        done();
+      });
+    });
+
     it('Should pass the correct custom headers passed in global networkParameters', (done) => {
       const { recommendations } = new ConstructorIO({
         ...validOptions,

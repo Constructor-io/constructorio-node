@@ -199,13 +199,15 @@ class Recommendations {
    * Get all recommendation pods
    *
    * @function getRecommendationPods
+   * @param {object} [parameters] - Parameters relevant to the network request
+   * @param {string} [parameters.section] - Recommendations section
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @example
    * constructorio.recommendations.getRecommendationPods();
    */
-  getRecommendationPods(networkParameters = {}) {
+  getRecommendationPods(parameters = {}, networkParameters = {}) {
     const {
       apiKey,
       serviceUrl,
@@ -214,9 +216,26 @@ class Recommendations {
     const controller = new AbortController();
     const { signal } = controller;
     const headers = {};
-    const requestUrl = `${serviceUrl}/v1/recommendation_pods?key=${apiKey}`;
+    const url = `${serviceUrl}/v1/recommendation_pods`;
 
-    Object.assign(headers, helpers.combineCustomHeaders(this.options, networkParameters));
+    // For backwards compatibility we allow only "networkParameters" to be passed, meaning "parameters" should be
+    // copied to networkParameters. If both parameters and networkParameters are passed we leave them as is
+    let parsedNetworkParameters = networkParameters;
+    if (parameters.timeout || parameters.headers) {
+      parsedNetworkParameters = parameters;
+    }
+
+    const { section } = parameters;
+
+    let queryParams = {
+      key: apiKey,
+    };
+
+    if (section) {
+      queryParams.section = section;
+    }
+
+    Object.assign(headers, helpers.combineCustomHeaders(this.options, parsedNetworkParameters));
 
     // Append security token as 'x-cnstrc-token' if available
     if (this.options.securityToken && typeof this.options.securityToken === 'string') {
@@ -224,7 +243,11 @@ class Recommendations {
     }
 
     // Handle network timeout if specified
-    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+    helpers.applyNetworkTimeout(this.options, parsedNetworkParameters, controller);
+
+    queryParams = helpers.cleanParams(queryParams);
+    const queryString = qs.stringify(queryParams, { indices: false });
+    const requestUrl = `${url}?${queryString}`;
 
     return fetch(requestUrl, { headers: { ...headers, ...helpers.createAuthHeader(this.options) }, signal })
       .then((response) => {

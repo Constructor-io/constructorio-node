@@ -1443,7 +1443,6 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
       signal,
@@ -1485,7 +1484,6 @@ class Catalog {
     return fetch(requestUrl, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
       },
       signal,
