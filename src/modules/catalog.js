@@ -2318,12 +2318,19 @@ class Catalog {
    */
   async replaceCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
+      const { force, notification_email, notificationEmail = notification_email } = parameters;
       const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'sync', apiKey);
+      const operation = force ? 'forcesync' : 'sync';
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, operation, apiKey);
+
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
@@ -2367,12 +2374,20 @@ class Catalog {
    */
   async updateCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
+      const { force, notification_email, notificationEmail = notification_email } = parameters;
+
       const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'delta', apiKey);
+      const operation = force ? 'forcedelta' : 'delta';
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, operation, apiKey);
+
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
       const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
 
       // Handle network timeout if specified
@@ -2418,12 +2433,18 @@ class Catalog {
    */
   async patchCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
+      const { notification_email, notificationEmail = notification_email } = parameters;
       const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
       const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'patchdelta', apiKey);
+
+      if (notificationEmail) {
+        queryParams.notification_email = notificationEmail;
+      }
+
       const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
 
       // Handle network timeout if specified
