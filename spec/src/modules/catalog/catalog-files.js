@@ -6,6 +6,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { Duplex } = require('stream');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
+const helpers = require('../../../mocha.helpers');
 
 const nodeFetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -286,6 +287,11 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('replaceCatalogUsingTarArchive', () => {
+      const optionalParameters = {
+        force: true,
+        notificationEmail: 'test@constructor.io',
+      };
+
       it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -304,6 +310,29 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should replace a catalog of items, variations, and item groups using buffers and optional parameters (email and force)', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          ...optionalParameters,
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(data.section);
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should replace a catalog of items, variations, and item groups using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -316,6 +345,29 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog of items, variations, and item groups using streams and optional parameters (email and force)', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+          ...optionalParameters,
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(data.section);
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
           expect(res).to.have.property('task_id');
           expect(res).to.have.property('task_status_path');
           done();
@@ -546,6 +598,11 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('updateCatalogUsingTarArchive', () => {
+      const optionalParameters = {
+        force: true,
+        notificationEmail: 'test@constructor.io',
+      };
+
       it('Should update a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -564,6 +621,30 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should update a catalog of items, variations, and item groups using buffers and optional parameters (email and force)', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          ...optionalParameters,
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(data.section);
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should update a catalog of items, variations, and item groups using streams', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -576,6 +657,29 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should update a catalog of items, variations, and item groups using streams and optional parameters (email and force)', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveStream,
+          section: 'Products',
+          ...optionalParameters,
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('section').to.equal(data.section);
+          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
           expect(res).to.have.property('task_id');
           expect(res).to.have.property('task_status_path');
           done();
