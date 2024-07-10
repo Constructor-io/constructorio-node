@@ -34,6 +34,7 @@ export interface UserParameters {
 export interface FmtOptions extends Record<string, any> {
   groups_max_depth?: number;
   groups_start?: 'current' | 'top' | `group_id:${string}`;
+  fields?: string[]; // Array of metadata field to be returned in the data response
 }
 
 export interface RequestFeature extends Record<string, any> {
