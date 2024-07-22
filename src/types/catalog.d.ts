@@ -1,3 +1,6 @@
+import type fs from 'fs';
+import type { Duplex } from 'stream';
+
 import {
   ConstructorClientOptions,
   Item,
@@ -167,9 +170,9 @@ export interface ReplaceCatalogParameters {
   section: string;
   notificationEmail?: string;
   force?: boolean;
-  items?: File;
-  variations?: File;
-  itemGroups?: File;
+  items?: File | fs.ReadStream | Duplex
+  variations?: File | fs.ReadStream | Duplex;
+  itemGroups?: File | fs.ReadStream | Duplex;
 }
 
 export interface UpdateCatalogParameters extends ReplaceCatalogParameters {}
@@ -179,16 +182,16 @@ export interface PatchCatalogParameters {
   notificationEmail?: string;
   force?: boolean;
   onMissing?: 'IGNORE' | 'CREATE' | 'FAIL';
-  items?: File;
-  variations?: File;
-  itemGroups?: File;
+  items?: File | fs.ReadStream | Duplex
+  variations?: File | fs.ReadStream | Duplex;
+  itemGroups?: File | fs.ReadStream | Duplex;
 }
 
 export interface ReplaceCatalogUsingTarArchiveParameters {
   section: string;
   notificationEmail?: string;
   force?: boolean;
-  tarArchive?: File;
+  tarArchive?: File | fs.ReadStream | Duplex;
 }
 
 export interface UpdateCatalogUsingTarArchiveParameters
