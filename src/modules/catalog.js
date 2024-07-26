@@ -9,13 +9,15 @@ const helpers = require('../utils/helpers');
 const { toSnakeCaseKeys } = require('../utils/helpers');
 
 // Create URL from supplied path and options
-function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
+function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1', includeCParam = true) {
   const {
     apiKey,
     serviceUrl,
+    version,
   } = options;
   let queryParams = {
     ...additionalQueryParams,
+    c: includeCParam ? version : undefined,
   };
 
   // Validate path is provided
@@ -2169,7 +2171,7 @@ class Catalog {
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams, undefined, false);
 
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
@@ -2221,7 +2223,7 @@ class Catalog {
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams, undefined, false);
 
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
@@ -2274,7 +2276,7 @@ class Catalog {
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
+      const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true }, undefined, false);
 
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
@@ -2331,7 +2333,7 @@ class Catalog {
         queryParams.notification_email = notificationEmail;
       }
 
-      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams, undefined, false);
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
@@ -2388,7 +2390,7 @@ class Catalog {
         queryParams.notification_email = notificationEmail;
       }
 
-      const requestUrl = createCatalogUrl('catalog', this.options, queryParams);
+      const requestUrl = createCatalogUrl('catalog', this.options, queryParams, undefined, false);
 
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
@@ -2445,7 +2447,7 @@ class Catalog {
         queryParams.notification_email = notificationEmail;
       }
 
-      const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true });
+      const requestUrl = createCatalogUrl('catalog', this.options, { ...queryParams, patch_delta: true }, undefined, false);
 
       // Handle network timeout if specified
       helpers.applyNetworkTimeout(this.options, networkParameters, controller);
