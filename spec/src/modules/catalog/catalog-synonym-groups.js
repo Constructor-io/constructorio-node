@@ -64,6 +64,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('group_id').to.be.a('number');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -140,7 +141,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.modifySynonymGroup({ id: synonymGroupId, synonyms: [mockSynonym] }).then(done);
+        catalog.modifySynonymGroup({ id: synonymGroupId, synonyms: [mockSynonym] }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should return an error when modifying a synonym group that does not exist', () => {
@@ -241,6 +249,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.synonym_groups[0]).to.have.property('synonym_group_id').to.be.a('number').to.equal(synonymGroupId);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -322,6 +331,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('synonym_groups').to.be.an('array').of.length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -425,7 +435,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.removeSynonymGroup({ id: synonymGroupId }).then(done);
+        catalog.removeSynonymGroup({ id: synonymGroupId }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should return error when removing synonyms group with id that does not exist', () => {
@@ -499,7 +516,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.removeSynonymGroups().then(done);
+        catalog.removeSynonymGroups().then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should return error when removing one way synonyms with an invalid API key', () => {
