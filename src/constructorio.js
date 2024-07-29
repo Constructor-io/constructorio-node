@@ -1,17 +1,25 @@
+/* eslint-disable global-require */
 /* eslint-disable camelcase, no-unneeded-ternary, max-len */
-const nodeFetch = require('./nodeFetch');
 
 // Modules
 const Search = require('./modules/search');
 const Browse = require('./modules/browse');
 const Autocomplete = require('./modules/autocomplete');
 const Recommendations = require('./modules/recommendations');
-const Tracker = require('./modules/tracker');
-const Catalog = require('./modules/catalog');
 const Tasks = require('./modules/tasks');
 const Quizzes = require('./modules/quizzes');
 const { version: packageVersion } = require('../package.json');
 const utils = require('./utils/helpers');
+
+let nodeFetch;
+let Catalog;
+let Tracker;
+
+if (typeof process !== 'undefined' && process.env && process.env.NEXT_RUNTIME !== 'edge') {
+  nodeFetch = require('./nodeFetch');
+  Catalog = require('./modules/catalog');
+  Tracker = require('./modules/tracker');
+}
 
 /**
  * Class to instantiate the ConstructorIO client.
@@ -59,17 +67,20 @@ class ConstructorIO {
       securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: utils.addHTTPSToString(normalizedServiceUrl) || 'https://ac.cnstrc.com',
-      fetch: fetch || nodeFetch,
+      fetch: fetch || nodeFetch || global.fetch,
       networkParameters: networkParameters || {},
     };
+
+    if (typeof process !== 'undefined' && process.env && process.env.NEXT_RUNTIME !== 'edge') {
+      this.tracker = new Tracker(this.options);
+      this.catalog = new Catalog(this.options);
+    }
 
     // Expose global modules
     this.search = new Search(this.options);
     this.browse = new Browse(this.options);
     this.autocomplete = new Autocomplete(this.options);
     this.recommendations = new Recommendations(this.options);
-    this.tracker = new Tracker(this.options);
-    this.catalog = new Catalog(this.options);
     this.tasks = new Tasks(this.options);
     this.quizzes = new Quizzes(this.options);
   }
