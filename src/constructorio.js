@@ -67,7 +67,7 @@ class ConstructorIO {
       securityToken: securityToken || '',
       version: version || global.CLIENT_VERSION || `cio-node-${packageVersion}`,
       serviceUrl: utils.addHTTPSToString(normalizedServiceUrl) || 'https://ac.cnstrc.com',
-      fetch: fetch || nodeFetch,
+      fetch: fetch || nodeFetch || global.fetch,
       networkParameters: networkParameters || {},
     };
 
