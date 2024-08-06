@@ -75,6 +75,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -157,6 +158,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -267,6 +269,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -370,6 +373,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -453,6 +457,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('redirect_rules').an('array').of.length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -615,6 +620,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.matches[0]).to.have.property('match_type').to.eq(mockRedirectRule.matches[0].match_type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });

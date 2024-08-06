@@ -77,7 +77,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroup(group).then(done);
+        catalog.addItemGroup(group).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should return error when adding an item group with an invalid API key', () => {
@@ -142,7 +149,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ itemGroups: groups }).then(done);
+        catalog.addItemGroups({ itemGroups: groups }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should resolve when adding item groups with children', (done) => {
@@ -243,6 +257,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -312,7 +327,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ itemGroups: [mockItemGroup, mockItemGroup] }).then(done);
+        catalog.addItemGroups({ itemGroups: [mockItemGroup] }).then(done);
       });
 
       it('Should return a response when getting item groups', (done) => {
@@ -327,6 +342,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('item_groups').to.be.an('array').to.have.length.gt(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -403,6 +419,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res.item_groups).to.have.property('deleted').to.be.an('number');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -559,6 +576,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.be.a('string').to.equal(mockItemGroup.name);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -635,6 +653,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('message').to.be.a('string');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });

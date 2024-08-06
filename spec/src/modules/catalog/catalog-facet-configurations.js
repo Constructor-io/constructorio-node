@@ -78,6 +78,12 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
+
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -182,6 +188,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -265,6 +272,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.be.a('string').to.equal(name);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -341,6 +349,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res[1]).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -481,6 +490,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -612,6 +622,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -715,6 +726,11 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addFacetConfiguration(mockFacetConfiguration).then(() => {
           catalog.removeFacetConfiguration(mockFacetConfiguration).then(() => {
+            const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+            expect(fetchSpy).to.have.been.called;
+            expect(requestedUrlParams).to.have.property('key');
+            expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
             done();
           });
         });

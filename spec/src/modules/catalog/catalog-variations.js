@@ -109,6 +109,7 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
 
@@ -227,6 +228,7 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -366,6 +368,7 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
 
           catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
         });
@@ -488,6 +491,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('variations').to.be.an('array');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });

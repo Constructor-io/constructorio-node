@@ -98,7 +98,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => done());
+        catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Backwards Compatibility `display_name` - Should resolve when adding a facet option configuration', (done) => {
@@ -187,7 +194,14 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addOrModifyFacetOptionConfigurations({
           facetGroupName,
           facetOptionConfigurations: mockFacetOptionConfigurations,
-        }).then(() => done());
+        }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
       });
 
       it('Should return a response when modifying facet configurations', (done) => {
@@ -317,6 +331,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('facet_options').to.be.an('array').length.gte(1);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -411,6 +426,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('value').to.be.a('string').to.equal(value);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -484,6 +500,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -614,6 +631,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('position').to.be.a('number').to.equal(5);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -723,6 +741,11 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => {
           catalog.removeFacetOptionConfiguration(mockFacetOptionConfiguration).then(() => {
+            const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+            expect(fetchSpy).to.have.been.called;
+            expect(requestedUrlParams).to.have.property('key');
+            expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
             done();
           });
         });
