@@ -327,7 +327,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.addItemGroups({ itemGroups: [mockItemGroup, mockItemGroup] }).then(done);
+        catalog.addItemGroups({ itemGroups: [mockItemGroup] }).then(done);
       });
 
       it('Should return a response when getting item groups', (done) => {
