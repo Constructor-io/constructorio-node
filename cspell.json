@@ -42,6 +42,7 @@
     "patchdelta",
     "searchabilities",
     "forcesync",
-    "forcedelta"
+    "forcedelta",
+    "forcepatchdelta"
   ]
 }
