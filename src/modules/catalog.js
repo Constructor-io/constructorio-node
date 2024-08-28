@@ -2435,13 +2435,14 @@ class Catalog {
    */
   async patchCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
     try {
-      const { notification_email, notificationEmail = notification_email } = parameters;
+      const { force, notification_email, notificationEmail = notification_email } = parameters;
       const { fetch } = this.options;
       const apiKey = this.options && this.options.apiKey;
       const controller = new AbortController();
       const { signal } = controller;
       const { queryParams, formData } = await createQueryParamsAndFormData(parameters);
-      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, 'patchdelta', apiKey);
+      const operation = force ? 'forcepatchdelta' : 'patchdelta';
+      const formDataWithTarArchive = await addTarArchiveToFormData(parameters, formData, operation, apiKey);
 
       if (notificationEmail) {
         queryParams.notification_email = notificationEmail;
