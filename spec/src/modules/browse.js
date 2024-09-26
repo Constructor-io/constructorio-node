@@ -410,7 +410,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options.hidden_facets).to.eql(hiddenFacets);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_facets').to.eql(hiddenFacets);
-        expect(res.response.facets[0]).to.have.property('name').to.eql('Brand');
+        expect(res.response.facets[1]).to.have.property('name').to.eql('Brand');
         done();
       });
     });

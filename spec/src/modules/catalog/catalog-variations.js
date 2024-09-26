@@ -83,7 +83,7 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  describe.only('Variations', () => {
+  describe('Variations', () => {
     const item = createMockItem();
 
     describe('createOrReplaceVariations', () => {
