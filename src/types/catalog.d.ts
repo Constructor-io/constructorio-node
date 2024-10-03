@@ -272,6 +272,12 @@ export interface PatchSearchabilitiesParameters {
   section?: string;
 }
 
+interface CatalogMutationResponse {
+  task_id: string;
+  task_status_path: string;
+  [key: string]: any;
+}
+
 declare class Catalog {
   constructor(options: ConstructorClientOptions);
 
@@ -280,17 +286,17 @@ declare class Catalog {
   createOrReplaceItems(
     parameters: CreateOrReplaceItemsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   updateItems(
     parameters: UpdateItemsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   deleteItems(
     parameters: DeleteItemsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   retrieveItems(
     parameters: RetrieveItemsParameters,
@@ -300,17 +306,17 @@ declare class Catalog {
   createOrReplaceVariations(
     parameters: CreateOrReplaceVariationsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   updateVariations(
     parameters: UpdateVariationsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   deleteVariations(
     parameters: DeleteVariationsParameters,
     networkParameters?: NetworkParameters
-  ): Promise<void>;
+  ): Promise<CatalogMutationResponse>;
 
   retrieveVariations(
     parameters: RetrieveVariationsParameters,
@@ -479,56 +485,32 @@ declare class Catalog {
   replaceCatalog(
     parameters: ReplaceCatalogParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   updateCatalog(
     parameters: UpdateCatalogParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   patchCatalog(
     parameters: PatchCatalogParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   replaceCatalogUsingTarArchive(
     parameters: ReplaceCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   updateCatalogUsingTarArchive(
     parameters: UpdateCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   patchCatalogUsingTarArchive(
     parameters: PatchCatalogUsingTarArchiveParameters,
     networkParameters?: NetworkParameters
-  ): Promise<{
-    task_id: string;
-    task_status_path: string;
-    [key: string]: any;
-  }>;
+  ): Promise<CatalogMutationResponse>;
 
   addFacetConfiguration(
     parameters: FacetConfiguration,

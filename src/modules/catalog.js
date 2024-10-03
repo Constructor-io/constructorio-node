@@ -255,9 +255,9 @@ class Catalog {
         signal,
       });
 
-      const body = await response.json();
-
       if (response.ok) {
+        const body = await response.json();
+
         return Promise.resolve(body);
       }
 
