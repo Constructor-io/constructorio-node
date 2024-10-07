@@ -376,7 +376,7 @@ class Tracker {
    * Send autocomplete select event to API
    *
    * @function trackAutocompleteSelect
-   * @param {string} term - Term of selected autocomplete item
+   * @param {string} term - Term of selected autocomplete item (Search Suggestion or Product name)
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.originalQuery - The current autocomplete search query
    * @param {string} parameters.section - Section the selected item resides within
@@ -398,7 +398,8 @@ class Tracker {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
-   * @description User selected (clicked, or navigated to via keyboard) a result that appeared within autocomplete
+   * @description User selected (clicked, or navigated to via keyboard) a result that appeared
+   * within autocomplete (Search Suggestions, Products, or a custom section eg. Brands, Categories)
    * @example
    * constructorio.tracker.trackAutocompleteSelect(
    *     'T-Shirt',
