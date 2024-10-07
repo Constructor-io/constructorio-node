@@ -399,7 +399,7 @@ class Tracker {
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
    * @description User selected (clicked, or navigated to via keyboard) a result that appeared
-   * within autocomplete (Search Suggestions, Products, or a custom section)
+   * within autocomplete (Search Suggestions, Products, or a custom section eg. Brands, Categories)
    * @example
    * constructorio.tracker.trackAutocompleteSelect(
    *     'T-Shirt',
