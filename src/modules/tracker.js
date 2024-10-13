@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
 const { AbortController } = require('node-abort-controller');
@@ -381,8 +382,8 @@ class Tracker {
    * @param {string} parameters.originalQuery - The current autocomplete search query
    * @param {string} parameters.section - Section the selected item resides within
    * @param {string} [parameters.tr] - Trigger used to select the item (click, etc.)
-   * @param {string} [parameters.groupId] - Group identifier of selected item
-   * @param {string} [parameters.displayName] - Display name of group of selected item
+   * @param {string} [parameters.groupId] - Group identifier of the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
+   * @param {string} [parameters.displayName] - Display name of the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -483,8 +484,8 @@ class Tracker {
    * @param {string} term - Term of submitted autocomplete event
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.originalQuery - The current autocomplete search query
-   * @param {string} [parameters.groupId] - Group identifier of selected item
-   * @param {string} [parameters.displayName] - Display name of group of selected item
+   * @param {string} [parameters.groupId] - Group identifier of the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
+   * @param {string} [parameters.displayName] - Display name of the group to search within if a user elected to search in a group, i.e. "Pumpkin in Canned Goods"
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
