@@ -244,6 +244,69 @@ describe('ConstructorIO - Quizzes', () => {
       });
     });
 
+    it('Should return a result given valid API key, answers and page parameters', () => {
+      const page = '2';
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, page }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res).to.have.property('quiz_version_id').to.be.an('string');
+        expect(res).to.have.property('quiz_session_id').to.be.an('string');
+        expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
+        expect(requestedUrlParams).to.have.property('page').to.equal(page);
+      });
+    });
+
+    it('Should return a result given valid API key, answers and resultsPerPage parameters', () => {
+      const resultsPerPage = '2';
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, resultsPerPage }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res).to.have.property('quiz_version_id').to.be.an('string');
+        expect(res).to.have.property('quiz_session_id').to.be.an('string');
+        expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
+        expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal(resultsPerPage);
+      });
+    });
+
+    it('Should return a result given valid API key, answers and filters parameters', () => {
+      const filters = { Color: ['Blue'] };
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      return quizzes.getQuizResults(validQuizId, { answers: validAnswers, filters }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res).to.have.property('quiz_version_id').to.be.an('string');
+        expect(res).to.have.property('quiz_session_id').to.be.an('string');
+        expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
+        expect(requestedUrlParams.filters).to.have.property('Color').to.equal(Object.values(filters)[0][0]);
+      });
+    });
+
     it('Should return a result given valid API key, answers and section parameters', () => {
       const section = 'Products';
       const { quizzes } = new ConstructorIO({
@@ -375,7 +438,7 @@ describe('ConstructorIO - Quizzes', () => {
         fetch: fetchSpy,
       });
 
-      return expect(quizzes.getQuizResults(validQuizId, { })).to.eventually.be.rejected;
+      return expect(quizzes.getQuizResults(validQuizId, {})).to.eventually.be.rejected;
     });
 
     it('Should be rejected if empty answers are provided', () => {

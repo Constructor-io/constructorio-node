@@ -43,7 +43,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
   }
 
   if (parameters) {
-    const { section, answers, quizVersionId, quizSessionId } = parameters;
+    const { section, answers, quizVersionId, quizSessionId, filters, resultsPerPage, page } = parameters;
 
     // Pull section from parameters
     if (section) {
@@ -58,6 +58,18 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     // Pull quiz_session_id from parameters
     if (quizSessionId) {
       queryParams.quiz_session_id = quizSessionId;
+    }
+
+    if (!helpers.isNil(page)) {
+      queryParams.page = page;
+    }
+
+    if (!helpers.isNil(resultsPerPage)) {
+      queryParams.num_results_per_page = resultsPerPage;
+    }
+
+    if (filters) {
+      queryParams.filters = filters;
     }
 
     // Pull answers from parameters and transform
@@ -177,6 +189,9 @@ class Quizzes {
    * @param {string} [parameters.section] - Product catalog section
    * @param {string} [parameters.quizVersionId] - Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-versioning}
    * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.io/rest_api/quiz/using_quizzes/#quiz-sessions}
+   * @param {number} [parameters.page] - The page number of the results
+   * @param {number} [parameters.resultsPerPage] - The number of results per page to return
+   * @param {object} [parameters.filters] - Key / value mapping (dictionary) of filters used to refine results
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
