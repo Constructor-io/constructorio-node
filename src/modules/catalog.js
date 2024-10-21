@@ -210,7 +210,7 @@ class Catalog {
    *     ],
    * });
    */
-  createOrReplaceItems(parameters = {}, networkParameters = {}) {
+  async createOrReplaceItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -244,21 +244,27 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify({ items }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify({ items }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -293,7 +299,7 @@ class Catalog {
    *     section: 'Products',
    * });
    */
-  updateItems(parameters = {}, networkParameters = {}) {
+  async updateItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -336,21 +342,26 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'PATCH',
-      body: JSON.stringify({ items }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'PATCH',
+        body: JSON.stringify({ items }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -375,7 +386,7 @@ class Catalog {
    *     section: 'Products',
    * });
    */
-  deleteItems(parameters = {}, networkParameters = {}) {
+  async deleteItems(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -409,21 +420,26 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'DELETE',
-      body: JSON.stringify({ items }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'DELETE',
+        body: JSON.stringify({ items }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -534,7 +550,7 @@ class Catalog {
    *     section: 'Products',
    * });
    */
-  createOrReplaceVariations(parameters = {}, networkParameters = {}) {
+  async createOrReplaceVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -568,21 +584,26 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'PUT',
-      body: JSON.stringify({ variations }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify({ variations }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -618,7 +639,7 @@ class Catalog {
    *     section: 'Products',
    * });
    */
-  updateVariations(parameters = {}, networkParameters = {}) {
+  async updateVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -661,21 +682,26 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'PATCH',
-      body: JSON.stringify({ variations }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'PATCH',
+        body: JSON.stringify({ variations }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -700,7 +726,7 @@ class Catalog {
    *     section: 'Products',
    * });
    */
-  deleteVariations(parameters = {}, networkParameters = {}) {
+  async deleteVariations(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -734,21 +760,26 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
-      method: 'DELETE',
-      body: JSON.stringify({ variations }),
-      headers: {
-        'Content-Type': 'application/json',
-        ...helpers.createAuthHeader(this.options),
-      },
-      signal,
-    }).then((response) => {
+    try {
+      const response = await fetch(requestUrl, {
+        method: 'DELETE',
+        body: JSON.stringify({ variations }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...helpers.createAuthHeader(this.options),
+        },
+        signal,
+      });
+
       if (response.ok) {
-        return Promise.resolve();
+        const body = await response.json();
+        return Promise.resolve(body);
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   /**

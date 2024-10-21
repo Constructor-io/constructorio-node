@@ -123,9 +123,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceVariations({ variations, ...optionalParameters }).then(() => {
+        catalog.createOrReplaceVariations({ variations, ...optionalParameters }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
@@ -213,7 +214,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceVariations({ variations }).then(done);
+        catalog.createOrReplaceVariations({ variations }).then(() => done());
         variationsToCleanup.push(...updatedVariations);
       });
 
@@ -223,10 +224,11 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.updateVariations({ variations: updatedVariations }).then(() => {
+        catalog.updateVariations({ variations: updatedVariations }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(fetchSpy).to.have.been.called;
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
@@ -239,9 +241,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.updateVariations({ variations: updatedVariations, ...optionalParameters }).then(() => {
+        catalog.updateVariations({ variations: updatedVariations, ...optionalParameters }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
@@ -256,9 +259,10 @@ describe('ConstructorIO - Catalog', () => {
         });
         const onMissing = 'IGNORE';
 
-        catalog.updateVariations({ variations: updatedVariations, onMissing }).then(() => {
+        catalog.updateVariations({ variations: updatedVariations, onMissing }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('on_missing').to.equal(onMissing);
           done();
         });
@@ -353,7 +357,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then(done);
+        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then(() => done());
       });
 
       it('Should resolve when removing multiple variations', (done) => {
@@ -363,14 +367,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         variations.push(...variationsToCleanup);
-        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => {
+        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products' }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(fetchSpy).to.have.been.called;
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
 
-          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
+          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => done());
         });
       });
 
@@ -385,13 +390,14 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         variations.push(...variationsToCleanup);
-        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products', ...optionalParameters }).then(() => {
+        catalog.deleteVariations({ variations: variations.map((variation) => ({ id: variation.id })), section: 'Products', ...optionalParameters }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
 
-          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(done);
+          catalog.deleteItems({ items: itemsToCleanup.map((variation) => ({ id: variation.id })), section: 'Products' }).then(() => done());
         });
       });
 
@@ -475,7 +481,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then((done));
+        catalog.createOrReplaceVariations({ variations, section: 'Products' }).then(() => done());
         variationsToCleanup.push(...variations);
       });
 
