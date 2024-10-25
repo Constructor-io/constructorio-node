@@ -2676,11 +2676,23 @@ describe('ConstructorIO - Tracker', () => {
   describe('trackSearchResultsLoaded', () => {
     const term = 'Cat in the Hat';
     const requiredParameters = { numResults: 1337 };
-    const optionalParameters = { itemIds: [1, 2, 3], section: 'Search Suggestions' };
+    const optionalParameters = {
+      itemIds: [1, 2, 3],
+      section: 'Search Suggestions',
+      url: 'test',
+      resultPage: 3,
+      resultId: 'test',
+      sortOrder: 'descending',
+      sortBy: 'test',
+      selectedFilters: { test: ['test'] },
+      analyticsTags: { param1: 'test', param2: 'test2' },
+    };
     const legacyParameters = {
       ...requiredParameters,
       customer_ids: [1, 2, 3],
     };
+
+    const transformedItems = [{ item_id: '1' }, { item_id: '2' }, { item_id: '3' }];
 
     it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
@@ -2690,10 +2702,18 @@ describe('ConstructorIO - Tracker', () => {
       const snakeCaseParameters = {
         num_results: 1337,
         item_ids: [1, 2, 3],
+        url: 'test',
+        result_page: 3,
+        result_id: 'test',
+        sort_order: 'descending',
+        sort_by: 'test',
+        selected_filters: { test: ['test'] },
+        section: 'Products',
       };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
@@ -2703,11 +2723,20 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('c').to.equal(clientVersion);
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
-        expect(requestParams).to.have.property('num_results').to.equal(snakeCaseParameters.num_results.toString());
-        expect(requestParams).to.have.property('customer_ids').to.equal(snakeCaseParameters.item_ids.join(','));
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(bodyParams).to.have.property('result_count').to.equal(snakeCaseParameters.num_results);
+        expect(bodyParams).to.have.property('url').to.equal(snakeCaseParameters.url);
+        expect(bodyParams).to.have.property('result_page').to.equal(snakeCaseParameters.result_page);
+        expect(bodyParams).to.have.property('result_id').to.equal(snakeCaseParameters.result_id);
+        expect(bodyParams).to.have.property('sort_order').to.equal(snakeCaseParameters.sort_order);
+        expect(bodyParams).to.have.property('sort_by').to.equal(snakeCaseParameters.sort_by);
+        expect(bodyParams).to.have.property('selected_filters').to.deep.equal(snakeCaseParameters.selected_filters);
+        expect(bodyParams).to.have.property('section').to.deep.equal(snakeCaseParameters.section);
+        expect(bodyParams).to.have.property('items').to.deep.equal(transformedItems);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2724,6 +2753,7 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
@@ -2733,16 +2763,29 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('c').to.equal(clientVersion);
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
-        expect(requestParams).to.have.property('num_results').to.equal(requiredParameters.numResults.toString());
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(bodyParams).to.have.property('result_count').to.equal(requiredParameters.numResults);
+        expect(bodyParams).to.have.property('url').to.equal(optionalParameters.url);
+        expect(bodyParams).to.have.property('result_page').to.equal(optionalParameters.resultPage);
+        expect(bodyParams).to.have.property('result_id').to.equal(optionalParameters.resultId);
+        expect(bodyParams).to.have.property('sort_order').to.equal(optionalParameters.sortOrder);
+        expect(bodyParams).to.have.property('sort_by').to.equal(optionalParameters.sortBy);
+        expect(bodyParams).to.have.property('selected_filters').to.deep.equal(optionalParameters.selectedFilters);
+        expect(bodyParams).to.have.property('section').to.deep.equal(optionalParameters.section);
+        expect(bodyParams).to.have.property('analytics_tags').to.deep.equal(optionalParameters.analyticsTags);
+        expect(bodyParams).to.have.property('items').to.deep.equal(transformedItems);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
       });
 
-      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, userParameters)).to.equal(true);
+      expect(tracker.trackSearchResultsLoaded(term, {
+        ...requiredParameters,
+        ...optionalParameters }, userParameters)).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and user identifier are provided', (done) => {
@@ -2754,13 +2797,16 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('ui').to.equal(userId);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(bodyParams).to.have.property('ui').to.equal(userId);
+
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2781,13 +2827,17 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('us').to.deep.equal(segments);
 
+        // Body
+        expect(bodyParams).to.have.property('us').to.deep.equal(segments);
+
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2808,13 +2858,17 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
 
+        // Body
+        expect(bodyParams).to.have.property(`ef-${Object.keys(testCells)[0]}`).to.equal(Object.values(testCells)[0]);
+
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2841,7 +2895,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2869,7 +2923,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2893,7 +2947,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2920,7 +2974,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2947,7 +3001,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestedHeaders).to.have.property('Accept-Language').to.equal(acceptLanguage);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -2968,13 +3022,17 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
 
+        // Body
+        expect(bodyParams).to.have.property('_dt').to.equal(dateTime);
+
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3001,7 +3059,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestedHeaders).to.have.property('Referer').to.equal(referer);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3013,34 +3071,6 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
-    it('Should respond with a valid response when term, required and optional parameters are provided', (done) => {
-      const { tracker } = new ConstructorIO({
-        apiKey: testApiKey,
-        fetch: fetchSpy,
-      });
-
-      tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
-        // Request
-        expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('customer_ids').to.equal(optionalParameters.itemIds.join(','));
-        expect(requestParams).to.have.property('section').to.equal(optionalParameters.section);
-
-        // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
-        expect(responseParams).to.have.property('message').to.equal('ok');
-
-        done();
-      });
-
-      expect(tracker.trackSearchResultsLoaded(
-        term,
-        Object.assign(requiredParameters, optionalParameters),
-        userParameters,
-      )).to.equal(true);
-    });
-
     it('Should respond with a valid response when term and legacy parameters are provided', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -3048,14 +3078,16 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('customer_ids').to.equal(legacyParameters.customer_ids.join(','));
+
+        // Body
+        expect(bodyParams).to.have.property('items').to.deep.equal(transformedItems);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3072,14 +3104,16 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('num_results').to.equal('0');
+
+        // Body
+        expect(bodyParams).to.have.property('result_count').to.equal(0);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3097,9 +3131,9 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       tracker.on('success', () => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
-        expect(requestParams).to.have.property('term').to.equal(spaceTerm);
+        expect(bodyParams).to.have.property('search_term').to.equal(spaceTerm);
 
         done();
       });
@@ -3167,27 +3201,22 @@ describe('ConstructorIO - Tracker', () => {
         fetch: fetchSpy,
       });
       const itemIDs = [...Array(1000).keys()];
+      const formattedItems = itemIDs.slice(0, 100).map((i) => ({ item_id: String(i) }));
       const parameters = {
         ...requiredParameters,
-        itemIds: itemIDs,
+        item_ids: itemIDs,
       };
 
       tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('key');
-        expect(requestParams).to.have.property('num_results').to.equal(requiredParameters.numResults.toString());
-        expect(requestParams).to.have.property('customer_ids');
-
-        const customerIds = requestParams.customer_ids;
-
-        expect(customerIds.split(',')).to.have.length(100);
-        expect(customerIds).to.equal(itemIDs.slice(0, 100).join(','));
+        expect(bodyParams).to.have.property('result_count').to.equal(parameters.numResults);
+        expect(bodyParams).to.have.property('items').to.deep.equal(formattedItems);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3196,33 +3225,28 @@ describe('ConstructorIO - Tracker', () => {
       expect(tracker.trackSearchResultsLoaded(term, parameters, userParameters)).to.equal(true);
     });
 
-    it('Should limit number of customer_ids to 100 when using customer_ids', (done) => {
+    it('Should limit number of customer_ids to 100 when using itemIds', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const customerIDs = [...Array(1000).keys()];
+      const itemIDs = [...Array(1000).keys()];
+      const formattedItems = itemIDs.slice(0, 100).map((i) => ({ item_id: String(i) }));
       const parameters = {
         ...requiredParameters,
-        itemIds: customerIDs,
+        itemIds: itemIDs,
       };
 
       tracker.on('success', (responseParams) => {
-        const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
-        expect(requestParams).to.have.property('key');
-        expect(requestParams).to.have.property('num_results').to.equal(requiredParameters.numResults.toString());
-        expect(requestParams).to.have.property('customer_ids');
-
-        const customerIds = requestParams.customer_ids;
-
-        expect(customerIds.split(',')).to.have.length(100);
-        expect(customerIds).to.equal(customerIDs.slice(0, 100).join(','));
+        expect(bodyParams).to.have.property('result_count').to.equal(parameters.numResults);
+        expect(bodyParams).to.have.property('items').to.deep.equal(formattedItems);
 
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3241,13 +3265,17 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('ui').to.equal(userId);
 
+        // Body
+        expect(bodyParams).to.have.property('ui').to.equal(userId);
+
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();
@@ -3267,13 +3295,17 @@ describe('ConstructorIO - Tracker', () => {
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         // Request
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
 
+        // Body
+        expect(bodyParams).to.have.property('ui').to.equal(userIdExpected);
+
         // Response
-        expect(responseParams).to.have.property('method').to.equal('GET');
+        expect(responseParams).to.have.property('method').to.equal('POST');
         expect(responseParams).to.have.property('message').to.equal('ok');
 
         done();

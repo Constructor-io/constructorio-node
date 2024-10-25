@@ -569,9 +569,16 @@ class Tracker {
    * @function trackSearchResultsLoaded
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {number} parameters.numResults - Total number of results
-   * @param {string[]} parameters.itemIds - List of product item unique identifiers in search results listing
-   * @param {string} [parameters.section] - Index section
+   * @param {object[]} parameters.items - List of product item unique identifiers in search results listing
+   * @param {string} [parameters.url] - URL of the search results page
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Current page of search results
+   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+   * @param {object} [parameters.selectedFilters] - Selected filters
+   * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
+   * @param {string} [parameters.sortBy] - Sorting method
+   * @param {string} [parameters.section] - The section name for the item Ex. "Products"
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -609,45 +616,73 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/behavior?`;
-        const queryParams = { action: 'search-results', term };
+        const baseUrl = `${this.options.serviceUrl}/v2/behavioral_action/search_result_load?`;
         const {
           num_results,
           numResults = num_results,
-          customer_ids,
-          customerIds = customer_ids,
-          item_ids,
-          itemIds = item_ids,
+          result_count,
+          customerIds,
+          customer_ids = customerIds,
+          itemIds,
+          item_ids = itemIds,
+          items = customer_ids || item_ids,
+          result_page,
+          resultPage = result_page,
+          result_id,
+          resultId = result_id,
+          sort_order,
+          sortOrder = sort_order,
+          sort_by,
+          sortBy = sort_by,
+          selected_filters,
+          selectedFilters = selected_filters,
+          url = 'N/A',
           section,
+          analyticsTags,
+          resultCount = numResults || result_count || items?.length || 0,
         } = parameters;
-        let customerIDs;
+        const queryParams = {};
+        let transformedItems;
 
-        if (!helpers.isNil(numResults)) {
-          queryParams.num_results = numResults;
-        }
+        if (items && Array.isArray(items) && items.length !== 0) {
+          const trimmedItems = items.slice(0, 100);
 
-        // Ensure support for both item_ids and customer_ids as parameters
-        if (itemIds && Array.isArray(itemIds)) {
-          customerIDs = itemIds;
-        } else if (customerIds && Array.isArray(customerIds)) {
-          customerIDs = customerIds;
-        }
-
-        if (customerIDs && Array.isArray(customerIDs) && customerIDs.length) {
-          queryParams.customer_ids = customerIDs.slice(0, 100).join(',');
+          if (typeof items[0] === 'string' || typeof items[0] === 'number') {
+            transformedItems = trimmedItems.map((itemId) => ({ item_id: String(itemId) }));
+          } else {
+            transformedItems = trimmedItems.map((item) => helpers.toSnakeCaseKeys(item, false));
+          }
         }
 
         if (section) {
           queryParams.section = section;
         }
 
-        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+        const bodyParams = {
+          search_term: term,
+          result_count: resultCount,
+          items: transformedItems,
+          result_page: resultPage,
+          result_id: resultId,
+          sort_order: sortOrder,
+          sort_by: sortBy,
+          selected_filters: selectedFilters,
+          analytics_tags: analyticsTags,
+          url,
+          section,
+        };
+
+        const requestUrl = `${baseUrl}${applyParamsAsString({}, userParameters, this.options)}`;
+        const requestMethod = 'POST';
+        const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
         send.call(
           this,
           requestUrl,
           userParameters,
           networkParameters,
+          requestMethod,
+          requestBody,
         );
 
         return true;
@@ -660,50 +695,50 @@ class Tracker {
   }
 
   /**
-   * Send click through event to API
-   *
-   * @function trackSearchResultClick
-   * @param {string} term - Search results query term
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.itemName - Product item name
-   * @param {string} parameters.itemId - Product item unique identifier
-   * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.resultId] - Search result identifier (returned in response from Constructor)
-   * @param {string} [parameters.itemIsConvertible] - Whether or not an item is available for a conversion
-   * @param {string} [parameters.section] - The section name for the item Ex. "Products"
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a search product listing page
-   * @example
-   * constructorio.tracker.trackSearchResultClick(
-   *     'T-Shirt',
-   *     {
-   *         itemName: 'Red T-Shirt',
-   *         itemId: 'KMH876',
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send click through event to API
+     *
+     * @function trackSearchResultClick
+     * @param {string} term - Search results query term
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.itemName - Product item name
+     * @param {string} parameters.itemId - Product item unique identifier
+     * @param {string} [parameters.variationId] - Product item variation unique identifier
+     * @param {string} [parameters.resultId] - Search result identifier (returned in response from Constructor)
+     * @param {string} [parameters.itemIsConvertible] - Whether or not an item is available for a conversion
+     * @param {string} [parameters.section] - The section name for the item Ex. "Products"
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User clicked a result that appeared within a search product listing page
+     * @example
+     * constructorio.tracker.trackSearchResultClick(
+     *     'T-Shirt',
+     *     {
+     *         itemName: 'Red T-Shirt',
+     *         itemId: 'KMH876',
+     *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackSearchResultClick(term, parameters, userParameters, networkParameters = {}) {
     // Ensure term is provided (required)
     if (term && typeof term === 'string') {
@@ -773,57 +808,57 @@ class Tracker {
   }
 
   /**
-   * Send conversion event to API
-   *
-   * @function trackConversion
-   * @param {string} [term] - Search results query term that led to conversion event
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.itemId - Product item unique identifier
-   * @param {number} [parameters.revenue] - Sale price if available, otherwise the regular (retail) price of item
-   * @param {string} [parameters.itemName] - Product item name
-   * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.type='add_to_cart'] - Conversion type
-   * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
-   * @param {string} [parameters.displayName] - Display name for the custom conversion type
-   * @param {string} [parameters.section] - Index section
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User performed an action indicating interest in an item (add to cart, add to wishlist, etc.)
-   * @see https://docs.constructor.io/rest_api/behavioral_logging/conversions
-   * @example
-   * constructorio.tracker.trackConversion(
-   *     'T-Shirt',
-   *     {
-   *         itemId: 'KMH876',
-   *         revenue: 12.00,
-   *         itemName: 'Red T-Shirt',
-   *         variationId: 'KMH879-7632',
-   *         type: 'like',
-   *         section: 'Products',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send conversion event to API
+     *
+     * @function trackConversion
+     * @param {string} [term] - Search results query term that led to conversion event
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.itemId - Product item unique identifier
+     * @param {number} [parameters.revenue] - Sale price if available, otherwise the regular (retail) price of item
+     * @param {string} [parameters.itemName] - Product item name
+     * @param {string} [parameters.variationId] - Product item variation unique identifier
+     * @param {string} [parameters.type='add_to_cart'] - Conversion type
+     * @param {boolean} [parameters.isCustomType] - Specify if type is custom conversion type
+     * @param {string} [parameters.displayName] - Display name for the custom conversion type
+     * @param {string} [parameters.section] - Index section
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User performed an action indicating interest in an item (add to cart, add to wishlist, etc.)
+     * @see https://docs.constructor.io/rest_api/behavioral_logging/conversions
+     * @example
+     * constructorio.tracker.trackConversion(
+     *     'T-Shirt',
+     *     {
+     *         itemId: 'KMH876',
+     *         revenue: 12.00,
+     *         itemName: 'Red T-Shirt',
+     *         variationId: 'KMH879-7632',
+     *         type: 'like',
+     *         section: 'Products',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackConversion(term, parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -913,48 +948,48 @@ class Tracker {
   }
 
   /**
-   * Send purchase event to API
-   *
-   * @function trackPurchase
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {object[]} parameters.items - List of product item objects
-   * @param {number} parameters.revenue - The subtotal (excluding taxes, shipping, etc.) of the entire order
-   * @param {string} [parameters.orderId] - Unique order identifier
-   * @param {string} [parameters.section] - Index section
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User completed an order (usually fired on order confirmation page)
-   * @example
-   * constructorio.tracker.trackPurchase(
-   *     {
-   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
-   *         revenue: 12.00,
-   *         orderId: 'OUNXBG2HMA',
-   *         section: 'Products',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send purchase event to API
+     *
+     * @function trackPurchase
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {object[]} parameters.items - List of product item objects
+     * @param {number} parameters.revenue - The subtotal (excluding taxes, shipping, etc.) of the entire order
+     * @param {string} [parameters.orderId] - Unique order identifier
+     * @param {string} [parameters.section] - Index section
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User completed an order (usually fired on order confirmation page)
+     * @example
+     * constructorio.tracker.trackPurchase(
+     *     {
+     *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
+     *         revenue: 12.00,
+     *         orderId: 'OUNXBG2HMA',
+     *         section: 'Products',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackPurchase(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -1012,55 +1047,55 @@ class Tracker {
   }
 
   /**
-   * Send recommendation view event to API
-   *
-   * @function trackRecommendationView
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.url - Current page URL
-   * @param {string} parameters.podId - Pod identifier
-   * @param {number} parameters.numResultsViewed - Number of results viewed
-   * @param {object[]} [parameters.items] - List of Product Item objects
-   * @param {number} [parameters.resultCount] - Total number of results
-   * @param {number} [parameters.resultPage] - Page number of results
-   * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
-   * @param {string} [parameters.section="Products"] - Results section
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a search product listing page
-   * @example
-   * constructorio.tracker.trackRecommendationView(
-   *     {
-   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
-   *         resultCount: 22,
-   *         resultPage: 2,
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         url: 'https://demo.constructor.io/sandbox/farmstand',
-   *         podId: '019927c2-f955-4020',
-   *         numResultsViewed: 3,
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send recommendation view event to API
+     *
+     * @function trackRecommendationView
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.url - Current page URL
+     * @param {string} parameters.podId - Pod identifier
+     * @param {number} parameters.numResultsViewed - Number of results viewed
+     * @param {object[]} [parameters.items] - List of Product Item objects
+     * @param {number} [parameters.resultCount] - Total number of results
+     * @param {number} [parameters.resultPage] - Page number of results
+     * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
+     * @param {string} [parameters.section="Products"] - Results section
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User clicked a result that appeared within a search product listing page
+     * @example
+     * constructorio.tracker.trackRecommendationView(
+     *     {
+     *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
+     *         resultCount: 22,
+     *         resultPage: 2,
+     *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+     *         url: 'https://demo.constructor.io/sandbox/farmstand',
+     *         podId: '019927c2-f955-4020',
+     *         numResultsViewed: 3,
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackRecommendationView(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -1141,60 +1176,60 @@ class Tracker {
   }
 
   /**
-   * Send recommendation click event to API
-   *
-   * @function trackRecommendationClick
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.podId - Pod identifier
-   * @param {string} parameters.strategyId - Strategy identifier
-   * @param {string} parameters.itemId - Product item unique identifier
-   * @param {string} parameters.itemName - Product item name
-   * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.section="Products"] - Index section
-   * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
-   * @param {number} [parameters.resultCount] - Total number of results
-   * @param {number} [parameters.resultPage] - Page number of results
-   * @param {number} [parameters.resultPositionOnPage] - Position of result on page
-   * @param {number} [parameters.numResultsPerPage] - Number of results on page
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User clicked an item that appeared within a list of recommended results
-   * @example
-   * constructorio.tracker.trackRecommendationClick(
-   *     {
-   *         variationId: 'KMH879-7632',
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         resultCount: 22,
-   *         resultPage: 2,
-   *         resultPositionOnPage: 2,
-   *         numResultsPerPage: 12,
-   *         podId: '019927c2-f955-4020',
-   *         strategyId: 'complimentary',
-   *         itemId: 'KMH876',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send recommendation click event to API
+     *
+     * @function trackRecommendationClick
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.podId - Pod identifier
+     * @param {string} parameters.strategyId - Strategy identifier
+     * @param {string} parameters.itemId - Product item unique identifier
+     * @param {string} parameters.itemName - Product item name
+     * @param {string} [parameters.variationId] - Product item variation unique identifier
+     * @param {string} [parameters.section="Products"] - Index section
+     * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
+     * @param {number} [parameters.resultCount] - Total number of results
+     * @param {number} [parameters.resultPage] - Page number of results
+     * @param {number} [parameters.resultPositionOnPage] - Position of result on page
+     * @param {number} [parameters.numResultsPerPage] - Number of results on page
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User clicked an item that appeared within a list of recommended results
+     * @example
+     * constructorio.tracker.trackRecommendationClick(
+     *     {
+     *         variationId: 'KMH879-7632',
+     *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+     *         resultCount: 22,
+     *         resultPage: 2,
+     *         resultPositionOnPage: 2,
+     *         numResultsPerPage: 12,
+     *         podId: '019927c2-f955-4020',
+     *         strategyId: 'complimentary',
+     *         itemId: 'KMH876',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackRecommendationClick(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -1295,61 +1330,61 @@ class Tracker {
   }
 
   /**
-   * Send browse results loaded event to API
-   *
-   * @function trackBrowseResultsLoaded
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.url - Current page URL
-   * @param {string} parameters.filterName - Filter name
-   * @param {string} parameters.filterValue - Filter value
-   * @param {object[]} parameters.items - List of product item objects
-   * @param {string} [parameters.section="Products"] - Index section
-   * @param {number} [parameters.resultCount] - Total number of results
-   * @param {number} [parameters.resultPage] - Page number of results
-   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
-   * @param {object} [parameters.selectedFilters] - Selected filters
-   * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
-   * @param {string} [parameters.sortBy] - Sorting method
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User loaded a browse product listing page
-   * @example
-   * constructorio.tracker.trackBrowseResultsLoaded(
-   *     {
-   *         resultCount: 22,
-   *         resultPage: 2,
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         selectedFilters: { brand: ['foo'], color: ['black'] },
-   *         sortOrder: 'ascending',
-   *         sortBy: 'price',
-   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
-   *         url: 'https://demo.constructor.io/sandbox/farmstand',
-   *         filterName: 'brand',
-   *         filterValue: 'XYZ',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send browse results loaded event to API
+     *
+     * @function trackBrowseResultsLoaded
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.url - Current page URL
+     * @param {string} parameters.filterName - Filter name
+     * @param {string} parameters.filterValue - Filter value
+     * @param {object[]} parameters.items - List of product item objects
+     * @param {string} [parameters.section="Products"] - Index section
+     * @param {number} [parameters.resultCount] - Total number of results
+     * @param {number} [parameters.resultPage] - Page number of results
+     * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+     * @param {object} [parameters.selectedFilters] - Selected filters
+     * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
+     * @param {string} [parameters.sortBy] - Sorting method
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User loaded a browse product listing page
+     * @example
+     * constructorio.tracker.trackBrowseResultsLoaded(
+     *     {
+     *         resultCount: 22,
+     *         resultPage: 2,
+     *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+     *         selectedFilters: { brand: ['foo'], color: ['black'] },
+     *         sortOrder: 'ascending',
+     *         sortBy: 'price',
+     *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
+     *         url: 'https://demo.constructor.io/sandbox/farmstand',
+     *         filterName: 'brand',
+     *         filterValue: 'XYZ',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackBrowseResultsLoaded(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -1448,61 +1483,61 @@ class Tracker {
   }
 
   /**
-   * Send browse result click event to API
-   *
-   * @function trackBrowseResultClick
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.filterName - Filter name
-   * @param {string} parameters.filterValue - Filter value
-   * @param {string} parameters.itemId - Product item unique identifier
-   * @param {string} [parameters.section="Products"] - Index section
-   * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
-   * @param {number} [parameters.resultCount] - Total number of results
-   * @param {number} [parameters.resultPage] - Page number of results
-   * @param {number} [parameters.resultPositionOnPage] - Position of clicked item
-   * @param {number} [parameters.numResultsPerPage] - Number of results shown
-   * @param {object} [parameters.selectedFilters] -  Selected filters
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} userParameters - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a browse product listing page
-   * @example
-   * constructorio.tracker.trackBrowseResultClick(
-   *     {
-   *         variationId: 'KMH879-7632',
-   *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
-   *         resultCount: 22,
-   *         resultPage: 2,
-   *         resultPositionOnPage: 2,
-   *         numResultsPerPage: 12,
-   *         selectedFilters: { brand: ['foo'], color: ['black'] },
-   *         filterName: 'brand',
-   *         filterValue: 'XYZ',
-   *         itemId: 'KMH876',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send browse result click event to API
+     *
+     * @function trackBrowseResultClick
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.filterName - Filter name
+     * @param {string} parameters.filterValue - Filter value
+     * @param {string} parameters.itemId - Product item unique identifier
+     * @param {string} [parameters.section="Products"] - Index section
+     * @param {string} [parameters.variationId] - Product item variation unique identifier
+     * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+     * @param {number} [parameters.resultCount] - Total number of results
+     * @param {number} [parameters.resultPage] - Page number of results
+     * @param {number} [parameters.resultPositionOnPage] - Position of clicked item
+     * @param {number} [parameters.numResultsPerPage] - Number of results shown
+     * @param {object} [parameters.selectedFilters] -  Selected filters
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} userParameters - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User clicked a result that appeared within a browse product listing page
+     * @example
+     * constructorio.tracker.trackBrowseResultClick(
+     *     {
+     *         variationId: 'KMH879-7632',
+     *         resultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+     *         resultCount: 22,
+     *         resultPage: 2,
+     *         resultPositionOnPage: 2,
+     *         numResultsPerPage: 12,
+     *         selectedFilters: { brand: ['foo'], color: ['black'] },
+     *         filterName: 'brand',
+     *         filterValue: 'XYZ',
+     *         itemId: 'KMH876',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackBrowseResultClick(parameters, userParameters, networkParameters = {}) {
     // Ensure parameters are provided (required)
     if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
@@ -1603,47 +1638,47 @@ class Tracker {
   }
 
   /**
-   * Send generic result click event to API
-   *
-   * @function trackGenericResultClick
-   * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} parameters.itemId - Product item unique identifier
-   * @param {string} [parameters.itemName] - Product item name
-   * @param {string} [parameters.variationId] - Product item variation unique identifier
-   * @param {string} [parameters.section="Products"] - Index section
-   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {object} [userParameters] - Parameters relevant to the user request
-   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
-   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
-   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
-   * @param {string[]} [userParameters.segments] - User segments
-   * @param {object} [userParameters.testCells] - User test cells
-   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
-   * @param {string} [userParameters.referer] - Client page URL (including path)
-   * @param {string} [userParameters.userIp] - Client user IP
-   * @param {string} [userParameters.userAgent] - Client user agent
-   * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
-   * @param {object} [networkParameters] - Parameters relevant to the network request
-   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
-   * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a browse product listing page
-   * @example
-   * constructorio.tracker.trackGenericResultClick(
-   *     {
-   *         itemId: 'KMH876',
-   *         itemName: 'Red T-Shirt',
-   *         variationId: 'KMH879-7632',
-   *     },
-   *     {
-   *         sessionId: 1,
-   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
-   *         testCells: {
-   *             testName: 'cellName',
-   *         },
-   *     },
-   * );
-   */
+     * Send generic result click event to API
+     *
+     * @function trackGenericResultClick
+     * @param {object} parameters - Additional parameters to be sent with request
+     * @param {string} parameters.itemId - Product item unique identifier
+     * @param {string} [parameters.itemName] - Product item name
+     * @param {string} [parameters.variationId] - Product item variation unique identifier
+     * @param {string} [parameters.section="Products"] - Index section
+     * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+     * @param {object} [userParameters] - Parameters relevant to the user request
+     * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+     * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+     * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+     * @param {string[]} [userParameters.segments] - User segments
+     * @param {object} [userParameters.testCells] - User test cells
+     * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+     * @param {string} [userParameters.referer] - Client page URL (including path)
+     * @param {string} [userParameters.userIp] - Client user IP
+     * @param {string} [userParameters.userAgent] - Client user agent
+     * @param {string} [userParameters.acceptLanguage] - Client accept language
+     * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+     * @param {object} [networkParameters] - Parameters relevant to the network request
+     * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+     * @returns {(true|Error)}
+     * @description User clicked a result that appeared within a browse product listing page
+     * @example
+     * constructorio.tracker.trackGenericResultClick(
+     *     {
+     *         itemId: 'KMH876',
+     *         itemName: 'Red T-Shirt',
+     *         variationId: 'KMH879-7632',
+     *     },
+     *     {
+     *         sessionId: 1,
+     *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+     *         testCells: {
+     *             testName: 'cellName',
+     *         },
+     *     },
+     * );
+     */
   trackGenericResultClick(parameters, userParameters, networkParameters = {}) {
     // Ensure required parameters are provided
     if (typeof parameters === 'object' && parameters && (parameters.item_id || parameters.itemId)) {
@@ -1695,22 +1730,22 @@ class Tracker {
   }
 
   /**
-   * Subscribe to success or error messages emitted by tracking requests
-   *
-   * @function on
-   * @param {string} messageType - Type of message to listen for ('success' or 'error')
-   * @param {function} callback - Callback to be invoked when message received
-   * @returns {(true|Error)}
-   * @description
-   * If an error event is emitted and does not have at least one listener registered for the
-   * 'error' event, the error is thrown, a stack trace is printed, and the Node.js process
-   * exits - it is best practice to always bind a `.on('error')` handler
-   * @see https://nodejs.org/api/events.html#events_error_events
-   * @example
-   * constructorio.tracker.on('error', (data) => {
-   *     // Handle tracking error
-   * });
-   */
+     * Subscribe to success or error messages emitted by tracking requests
+     *
+     * @function on
+     * @param {string} messageType - Type of message to listen for ('success' or 'error')
+     * @param {function} callback - Callback to be invoked when message received
+     * @returns {(true|Error)}
+     * @description
+     * If an error event is emitted and does not have at least one listener registered for the
+     * 'error' event, the error is thrown, a stack trace is printed, and the Node.js process
+     * exits - it is best practice to always bind a `.on('error')` handler
+     * @see https://nodejs.org/api/events.html#events_error_events
+     * @example
+     * constructorio.tracker.on('error', (data) => {
+     *     // Handle tracking error
+     * });
+     */
   on(messageType, callback) {
     if (messageType !== 'success' && messageType !== 'error') {
       return new Error('messageType must be a string of value "success" or "error"');
