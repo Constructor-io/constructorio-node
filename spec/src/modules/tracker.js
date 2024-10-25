@@ -2724,7 +2724,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
 
-        // Response
+        // Body
         expect(bodyParams).to.have.property('result_count').to.equal(snakeCaseParameters.num_results);
         expect(bodyParams).to.have.property('url').to.equal(snakeCaseParameters.url);
         expect(bodyParams).to.have.property('result_page').to.equal(snakeCaseParameters.result_page);
@@ -2764,7 +2764,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('_dt');
         expect(requestParams).to.have.property('beacon').to.equal('true');
 
-        // Response
+        // Body
         expect(bodyParams).to.have.property('result_count').to.equal(requiredParameters.numResults);
         expect(bodyParams).to.have.property('url').to.equal(optionalParameters.url);
         expect(bodyParams).to.have.property('result_page').to.equal(optionalParameters.resultPage);
@@ -2803,7 +2803,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(fetchSpy).to.have.been.called;
         expect(requestParams).to.have.property('ui').to.equal(userId);
 
-        // Response
+        // Body
         expect(bodyParams).to.have.property('ui').to.equal(userId);
 
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -3210,7 +3210,7 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('success', (responseParams) => {
         const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
-        // Request
+        // Body
         expect(fetchSpy).to.have.been.called;
         expect(bodyParams).to.have.property('result_count').to.equal(parameters.numResults);
         expect(bodyParams).to.have.property('items').to.deep.equal(formattedItems);
@@ -3240,7 +3240,7 @@ describe('ConstructorIO - Tracker', () => {
       tracker.on('success', (responseParams) => {
         const bodyParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
-        // Request
+        // Body
         expect(fetchSpy).to.have.been.called;
         expect(bodyParams).to.have.property('result_count').to.equal(parameters.numResults);
         expect(bodyParams).to.have.property('items').to.deep.equal(formattedItems);
