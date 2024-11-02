@@ -52,7 +52,7 @@ class Tasks {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/tasks/#retrieve-all-tasks
+   * @see https://docs.constructor.com/reference/catalog-tasks
    */
   getAllTasks(parameters = {}, networkParameters = {}) {
     const queryParams = {};
@@ -129,7 +129,7 @@ class Tasks {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/tasks/#retrieve-by-specific-task-id
+   * @see https://docs.constructor.com/reference/catalog-tasks
    */
   getTask(parameters = {}, networkParameters = {}) {
     let requestUrl;
