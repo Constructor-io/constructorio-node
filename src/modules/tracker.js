@@ -600,8 +600,8 @@ class Tracker {
    * constructorio.tracker.trackSearchResultsLoaded(
    *     'T-Shirt',
    *     {
-   *         numResults: 167,
-   *         itemIds: ['KMH876', 'KMH140', 'KMH437'],
+   *         resultCount: 167,
+   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
    *     },
    *     {
    *         sessionId: 1,
