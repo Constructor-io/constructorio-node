@@ -226,9 +226,9 @@ class Search {
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
-   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details
-   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections for details
-   * @param {object} [parameters.qsParam] - Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.com/reference/search-search-resultsqueries for details
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
+   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details
+   * @param {object} [parameters.qsParam] - Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.io/rest_api/search/queries for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -240,7 +240,7 @@ class Search {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.com/reference/search-search-results
+   * @see https://docs.constructor.io/rest_api/search/
    * @example
    * constructorio.search.getSearchResults('t-shirt', {
    *     resultsPerPage: 40,
@@ -324,9 +324,9 @@ class Search {
    * @param {object} [parameters.fmtOptions] - The format options used to refine result groups
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
-   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details
-   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections for details
-   * @param {object} [parameters.qsParam] - Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.com/reference/search-search-resultsqueries for details
+   * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.io/rest_api/variations_mapping for details
+   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.io/rest_api/collections/#add-items-dynamically for details
+   * @param {object} [parameters.qsParam] - Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.io/rest_api/search/queries for details
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
@@ -338,7 +338,7 @@ class Search {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.com/reference/search-search-resultsnatural_language_search/
+   * @see https://docs.constructor.io/rest_api/search/natural_language_search/
    * @example
    * constructorio.search.getVoiceSearchResults('show me lipstick', {
    *     resultsPerPage: 40,
