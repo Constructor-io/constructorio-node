@@ -185,14 +185,14 @@ class Catalog {
    *
    * @function createOrReplaceItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.com/reference/catalog-items)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/items#create-or-replace-items
+   * @see https://docs.constructor.com/reference/catalog-items
    * @example
    * constructorio.catalog.createOrReplaceItems({
    *     items: [
@@ -266,7 +266,7 @@ class Catalog {
    *
    * @function updateItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.com/reference/catalog-items)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
    * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
@@ -274,7 +274,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/items#update-items
+   * @see https://docs.constructor.com/reference/catalog-items
    * @example
    * constructorio.catalog.updateItems({
    *     items: [
@@ -358,14 +358,14 @@ class Catalog {
    *
    * @function deleteItems
    * @param {object} parameters - Additional parameters for item details
-   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.io/rest_api/items/items/#item-schema)
+   * @param {object[]} parameters.items - A list of items with the same attributes as defined in the Item schema resource (https://docs.constructor.com/reference/catalog-items)
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing items
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/items#delete-items
+   * @see https://docs.constructor.com/reference/catalog-items
    * @example
    * constructorio.catalog.deleteItems({
    *     items: [
@@ -438,7 +438,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/items#retrieve-items
+   * @see https://docs.constructor.com/reference/catalog-items
    * @example
    * constructorio.catalog.retrieveItems({
    *     section: 'Products',
@@ -507,14 +507,14 @@ class Catalog {
    *
    * @function createOrReplaceVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.com/reference/catalog-variations)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/variations/#create-or-replace-variations
+   * @see https://docs.constructor.com/reference/catalog-variations
    * @example
    * constructorio.catalog.createOrReplaceVariations({
    *     variations: [
@@ -590,7 +590,7 @@ class Catalog {
    *
    * @function updateVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.com/reference/catalog-variations)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
    * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
@@ -598,7 +598,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/variations/#update-variations
+   * @see https://docs.constructor.com/reference/catalog-variations
    * @example
    * constructorio.catalog.updateVariations({
    *     variations: [
@@ -683,14 +683,14 @@ class Catalog {
    *
    * @function deleteVariations
    * @param {object} parameters - Additional parameters for variation details
-   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.io/rest_api/items/variations/#variation-schema)
+   * @param {object[]} parameters.variations - A list of variations with the same attributes as defined in the Variation schema resource (https://docs.constructor.com/reference/catalog-variations)
    * @param {boolean} [parameters.force=false] - Process the request even if it will invalidate a large number of existing variations
    * @param {string} [parameters.notificationEmail] - An email address where you'd like to receive an email notification in case the task fails
    * @param {string} [parameters.section="Products"] - This indicates which section to operate on within the index
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/variations/#delete-variations
+   * @see https://docs.constructor.com/reference/catalog-variations
    * @example
    * constructorio.catalog.deleteVariations({
    *     variations: [
@@ -764,7 +764,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/items/variations/#retrieve-variations
+   * @see https://docs.constructor.com/reference/catalog-variations
    * @example
    * constructorio.catalog.retrieveVariations({
    *     section: 'Products',
@@ -846,7 +846,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.addItemGroup({
    *     id: 'subcat_12891',
@@ -896,7 +896,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.addItemGroups({
    *     itemGroups: [
@@ -958,7 +958,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.getItemGroup({
    *     id: 'subcat_12891',
@@ -1002,7 +1002,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.getItemGroups();
    */
@@ -1046,7 +1046,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
   * @example
    * constructorio.catalog.addOrUpdateItemGroups({
    *     itemGroups: [
@@ -1110,7 +1110,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.modifyItemGroup({
    *     id: 'subcat_12891',
@@ -1161,7 +1161,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/item_groups
+   * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.removeItemGroups();
    */
@@ -1203,7 +1203,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/add_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-create-one-way-synonym
    * @example
    * constructorio.catalog.addOneWaySynonym({
    *     phrase: 'spices',
@@ -1256,7 +1256,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/modify_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-replace-one-way-synonym
    * @example
    * constructorio.catalog.modifyOneWaySynonym({
    *     phrase: 'spices',
@@ -1309,7 +1309,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-retrieve-one-way-synonyms
    * @example
    * constructorio.catalog.getOneWaySynonym({
    *     phrase: 'spices',
@@ -1358,7 +1358,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/retrieve_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-retrieve-one-way-synonyms
    * @example
    * constructorio.catalog.getOneWaySynonyms({
    *     numResultsPerPage: 50,
@@ -1420,7 +1420,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-delete-one-way-synonyms
    * @example
    * constructorio.catalog.removeOneWaySynonym({
    *     phrase: 'spices',
@@ -1464,7 +1464,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/one_way_synonyms/remove_synonyms
+   * @see https://docs.constructor.com/reference/v2-one-way-synonyms-delete-one-way-synonyms
    * @example
    * constructorio.catalog.removeOneWaySynonyms();
    */
@@ -1507,7 +1507,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.addSynonymGroup({
    *     synonyms: ['0% milk', 'skim milk'],
@@ -1555,7 +1555,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.modifySynonymGroup({
    *     id: 32,
@@ -1604,7 +1604,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.modifySynonymGroup({
    *     id: 32,
@@ -1649,7 +1649,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.modifySynonymGroup({
    *     phrase: '0% milk',
@@ -1710,7 +1710,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.removeSynonymGroup({
    *     id: 32,
@@ -1752,7 +1752,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/synonyms/
+   * @see https://docs.constructor.com/reference/configuration-synonym-groups
    * @example
    * constructorio.catalog.modifySynonymGroup();
    */
@@ -1798,7 +1798,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.addRedirectRule({
    *     url: '/categories/cat_49203',
@@ -1865,7 +1865,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.updateRedirectRule({
    *     id: 1,
@@ -1932,7 +1932,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.modifyRedirectRule({
    *     id: '1',
@@ -1990,7 +1990,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.getRedirectRule({
    *     id: '1',
@@ -2036,7 +2036,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.getRedirectRules({
    *     numResultsPerPage: 50,
@@ -2107,7 +2107,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/redirect_rules
+   * @see https://docs.constructor.com/reference/configuration-redirect-rules
    * @example
    * constructorio.catalog.removeRedirectRule({
    *     id: '1',
@@ -2155,7 +2155,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.replaceCatalog({
    *     section: 'Products',
@@ -2207,7 +2207,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.updateCatalog({
    *     section: 'Products',
@@ -2260,7 +2260,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.patchCatalog({
    *     section: 'Products',
@@ -2310,7 +2310,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.replaceCatalogUsingTarArchive({
    *     section: 'Products',
@@ -2366,7 +2366,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.updateCatalogUsingTarArchive({
    *     section: 'Products',
@@ -2425,7 +2425,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/full_catalog
+   * @see https://docs.constructor.com/reference/catalog-catalog
    * @example
    * constructorio.catalog.patchCatalogUsingTarArchive({
    *     section: 'Products',
@@ -2495,7 +2495,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#create-a-facet-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.addFacetConfiguration({
    *     name: 'color',
@@ -2552,7 +2552,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#get-all-facet-configs
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.getFacetConfigurations({
    *     page: 2,
@@ -2612,7 +2612,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#get-a-single-facets-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.getFacetConfiguration({
    *     name: 'color',
@@ -2662,7 +2662,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#update-facet-configs-partial
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.modifyFacetConfigurations(
    *     facetConfigurations: [
@@ -2745,7 +2745,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-total
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.replaceFacetConfiguration({
    *     name: 'color',
@@ -2817,7 +2817,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#update-a-facet-config-partial
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.modifyFacetConfiguration({
    *     name: 'color',
@@ -2876,7 +2876,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facets#delete-a-facet-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.removeFacetConfiguration({
    *     name: 'color',
@@ -2931,7 +2931,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#create-a-facet-option-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.addFacetOptionConfiguration({
    *     facetGroupName: 'color',
@@ -2987,7 +2987,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#batch-update-or-create-facet-options-configs
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.addOrModifyFacetOptionConfigurations({
    *     facetGroupName: 'color',
@@ -3054,7 +3054,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#get-all-option-configs-for-facet
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.getFacetOptionConfigurations({
    *     facetGroupName: 'color',
@@ -3122,7 +3122,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#get-a-single-facet-option-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.getFacetOptionConfiguration({
    *     facetGroupName: 'color',
@@ -3179,7 +3179,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-total
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.replaceFacetOptionConfiguration({
    *     facetGroupName: 'color',
@@ -3239,7 +3239,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#update-facet-option-partial
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.catalog.modifyFacetOptionConfiguration({
    *     facetGroupName: 'color',
@@ -3295,7 +3295,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/facet_options#delete-a-facet-option-config
+   * @see https://docs.constructor.com/reference/configuration-facets
    * @example
    * constructorio.removeFacetOptionConfiguration({
    *     facetGroupName: 'color',
@@ -3353,7 +3353,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/searchabilities/#retrieve-searchabilities
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
    * @example
    * constructorio.catalog.retrieveSearchabilities({
    *     page: 2,
@@ -3443,12 +3443,12 @@ class Catalog {
    *
    * @function patchSearchabilities
    * @param {object} parameters - Additional parameters for patching metadata searchabilities
-   * @param {object[]} parameters.searchabilities - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities}
+   * @param {object[]} parameters.searchabilities - Array of searchabilities. Additional information about the searchabilities schema can be found [here]{@link https://docs.constructor.com/reference/configuration-searchabilities}
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.io/rest_api/searchabilities/#patch-searchabilities
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
    * @example
    * constructorio.catalog.patchSearchabilities({
    *   searchabilities: [
