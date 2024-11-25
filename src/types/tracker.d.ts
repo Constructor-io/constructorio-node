@@ -7,7 +7,7 @@ export interface TrackerUserParameters {
   sessionId: number;
   clientId: string;
   userId?: string;
-  segments?: string[];
+  segments?: string | string[];
   testCells?: Record<string, any>;
   originReferrer?: string;
   referer?: string;
