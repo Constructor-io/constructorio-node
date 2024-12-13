@@ -8,6 +8,7 @@ export interface RecommendationsParameters {
   section?: string;
   term?: string;
   filters?: Record<string, any>;
+  preFilterExpression?: FilterExpression;
   variationsMap?: VariationsMap;
   hiddenFields?: string[];
 }
