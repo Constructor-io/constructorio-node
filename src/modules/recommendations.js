@@ -38,7 +38,16 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, itemIds, section, term, filters, variationsMap, hiddenFields, preFilterExpression } = parameters;
+    const {
+      numResults,
+      itemIds,
+      section,
+      term,
+      filters,
+      variationsMap,
+      hiddenFields,
+      preFilterExpression,
+    } = parameters;
 
     // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
