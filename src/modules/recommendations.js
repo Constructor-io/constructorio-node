@@ -38,7 +38,16 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   }
 
   if (parameters) {
-    const { numResults, itemIds, section, term, filters, variationsMap, hiddenFields } = parameters;
+    const {
+      numResults,
+      itemIds,
+      section,
+      term,
+      filters,
+      variationsMap,
+      hiddenFields,
+      preFilterExpression,
+    } = parameters;
 
     // Pull num results number from parameters
     if (!helpers.isNil(numResults)) {
@@ -78,6 +87,11 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     if (variationsMap) {
       queryParams.variations_map = JSON.stringify(variationsMap);
     }
+
+    // Pull pre_filter_expression from parameters
+    if (preFilterExpression) {
+      queryParams.pre_filter_expression = JSON.stringify(preFilterExpression);
+    }
   }
 
   queryParams = helpers.cleanParams(queryParams);
@@ -111,6 +125,7 @@ class Recommendations {
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)
    * @param {object} [parameters.filters] - Key / value mapping of filters used to refine results
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details
+   * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
