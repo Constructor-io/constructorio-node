@@ -570,9 +570,16 @@ class Tracker {
    * @function trackSearchResultsLoaded
    * @param {string} term - Search results query term
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {number} parameters.numResults - Total number of results
-   * @param {string[]} parameters.itemIds - List of product item unique identifiers in search results listing
-   * @param {string} [parameters.section] - Index section
+   * @param {object[]} parameters.items - List of product item unique identifiers in search results listing
+   * @param {string} [parameters.url] - URL of the search results page
+   * @param {number} [parameters.resultCount] - Total number of results
+   * @param {number} [parameters.resultPage] - Current page of search results
+   * @param {string} [parameters.resultId] - Browse result identifier (returned in response from Constructor)
+   * @param {object} [parameters.selectedFilters] - Selected filters
+   * @param {string} [parameters.sortOrder] - Sort order ('ascending' or 'descending')
+   * @param {string} [parameters.sortBy] - Sorting method
+   * @param {string} [parameters.section] - The section name for the item Ex. "Products"
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -593,8 +600,8 @@ class Tracker {
    * constructorio.tracker.trackSearchResultsLoaded(
    *     'T-Shirt',
    *     {
-   *         numResults: 167,
-   *         itemIds: ['KMH876', 'KMH140', 'KMH437'],
+   *         resultCount: 167,
+   *         items: [{ itemId: 'KMH876' }, { itemId: 'KMH140' }],
    *     },
    *     {
    *         sessionId: 1,
@@ -610,45 +617,73 @@ class Tracker {
     if (term && typeof term === 'string') {
       // Ensure parameters are provided (required)
       if (parameters && typeof parameters === 'object' && !Array.isArray(parameters)) {
-        const url = `${this.options.serviceUrl}/behavior?`;
-        const queryParams = { action: 'search-results', term };
+        const baseUrl = `${this.options.serviceUrl}/v2/behavioral_action/search_result_load?`;
         const {
           num_results,
           numResults = num_results,
-          customer_ids,
-          customerIds = customer_ids,
-          item_ids,
-          itemIds = item_ids,
+          result_count,
+          customerIds,
+          customer_ids = customerIds,
+          itemIds,
+          item_ids = itemIds,
+          items = customer_ids || item_ids,
+          result_page,
+          resultPage = result_page,
+          result_id,
+          resultId = result_id,
+          sort_order,
+          sortOrder = sort_order,
+          sort_by,
+          sortBy = sort_by,
+          selected_filters,
+          selectedFilters = selected_filters,
+          url = 'N/A',
           section,
+          analyticsTags,
+          resultCount = numResults || result_count || items?.length || 0,
         } = parameters;
-        let customerIDs;
+        const queryParams = {};
+        let transformedItems;
 
-        if (!helpers.isNil(numResults)) {
-          queryParams.num_results = numResults;
-        }
+        if (items && Array.isArray(items) && items.length !== 0) {
+          const trimmedItems = items.slice(0, 100);
 
-        // Ensure support for both item_ids and customer_ids as parameters
-        if (itemIds && Array.isArray(itemIds)) {
-          customerIDs = itemIds;
-        } else if (customerIds && Array.isArray(customerIds)) {
-          customerIDs = customerIds;
-        }
-
-        if (customerIDs && Array.isArray(customerIDs) && customerIDs.length) {
-          queryParams.customer_ids = customerIDs.slice(0, 100).join(',');
+          if (typeof items[0] === 'string' || typeof items[0] === 'number') {
+            transformedItems = trimmedItems.map((itemId) => ({ item_id: String(itemId) }));
+          } else {
+            transformedItems = trimmedItems.map((item) => helpers.toSnakeCaseKeys(item, false));
+          }
         }
 
         if (section) {
           queryParams.section = section;
         }
 
-        const requestUrl = `${url}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+        const bodyParams = {
+          search_term: term,
+          result_count: resultCount,
+          items: transformedItems,
+          result_page: resultPage,
+          result_id: resultId,
+          sort_order: sortOrder,
+          sort_by: sortBy,
+          selected_filters: selectedFilters,
+          analytics_tags: analyticsTags,
+          url,
+          section,
+        };
+
+        const requestUrl = `${baseUrl}${applyParamsAsString({}, userParameters, this.options)}`;
+        const requestMethod = 'POST';
+        const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
 
         send.call(
           this,
           requestUrl,
           userParameters,
           networkParameters,
+          requestMethod,
+          requestBody,
         );
 
         return true;

@@ -74,9 +74,16 @@ declare class Tracker {
   trackSearchResultsLoaded(
     term: string,
     parameters: {
-      numResults: number;
-      itemIds: string[];
+      url: string;
+      items: ItemTracked[];
+      resultCount?: number;
+      resultPage?: number;
+      resultId?: string;
+      selectedFilters?: Record<string, any>;
+      sortOrder?: string;
+      sortBy?: string;
       section?: string;
+      analyticsTags?: Record<string, string>;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
@@ -97,7 +104,7 @@ declare class Tracker {
   ): true | Error;
 
   trackConversion(
-    term : string | null | undefined,
+    term: string | null | undefined,
     parameters: {
       itemId: string;
       revenue?: number;
