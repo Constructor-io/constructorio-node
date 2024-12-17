@@ -1041,7 +1041,7 @@ class Tracker {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a search product listing page
+   * @description User viewed a set of recommendations
    * @example
    * constructorio.tracker.trackRecommendationView(
    *     {
@@ -1628,7 +1628,7 @@ class Tracker {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
-   * @description User clicked a result that appeared within a browse product listing page
+   * @description User clicked a result that appeared outside of the scope of search / browse / recommendations
    * @example
    * constructorio.tracker.trackGenericResultClick(
    *     {
