@@ -48,19 +48,21 @@ describe('ConstructorIO - Catalog', () => {
     fetchSpy = null;
 
     // Add throttling between requests to avoid rate limiting
-    setTimeout(done, sendTimeout);
+    setTimeout(() => done(), sendTimeout);
   });
 
   describe('Facet Configurations', () => {
     const facetConfigurations = [];
 
-    after(async () => {
+    after(async function afterHook() {
       const { catalog } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
       });
 
       // Clean up all the facet configurations that were created
+      // Increasing timeout, since cleanup is consistently taking longer than default 5 seconds
+      this.timeout(30000);
       for await (const facetConfig of facetConfigurations) {
         await catalog.removeFacetConfiguration(facetConfig);
       }

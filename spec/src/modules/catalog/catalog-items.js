@@ -81,9 +81,9 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items }).then(() => {
+        catalog.createOrReplaceItems({ items }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
@@ -99,9 +99,9 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items, ...optionalParameters }).then(() => {
+        catalog.createOrReplaceItems({ items, ...optionalParameters }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
@@ -188,7 +188,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items }).then(done);
+        catalog.createOrReplaceItems({ items }).then(() => done());
         itemsToCleanup.push(...items);
       });
 
@@ -198,9 +198,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.updateItems({ items: updatedItems }).then(() => {
+        catalog.updateItems({ items: updatedItems }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
@@ -214,9 +215,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.updateItems({ items: updatedItems, ...optionalParameters }).then(() => {
+        catalog.updateItems({ items: updatedItems, ...optionalParameters }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
           expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
@@ -231,9 +233,10 @@ describe('ConstructorIO - Catalog', () => {
         });
         const onMissing = 'IGNORE';
 
-        catalog.updateItems({ items: updatedItems, onMissing }).then(() => {
+        catalog.updateItems({ items: updatedItems, onMissing }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('on_missing').to.equal(onMissing);
           done();
         });
@@ -337,7 +340,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items }).then(done);
+        catalog.createOrReplaceItems({ items }).then(() => done());
         itemsToCleanup.push(...items);
       });
 
@@ -347,9 +350,10 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })) }).then(() => {
+        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })) }).then((response) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          expect(response).to.have.property('task_id').to.be.a('number');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
@@ -368,14 +372,16 @@ describe('ConstructorIO - Catalog', () => {
           notificationEmail: 'test@constructor.io',
         };
 
-        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })), ...optionalParameters }).then(() => {
-          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        catalog.deleteItems({ items: items.map((item) => ({ id: item.id })), ...optionalParameters })
+          .then((response) => {
+            const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
-          expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
-          expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
-          done();
-        });
+            expect(response).to.have.property('task_id').to.be.a('number');
+            expect(requestedUrlParams).to.have.property('section').to.equal(optionalParameters.section);
+            expect(requestedUrlParams).to.have.property('force').to.equal(optionalParameters.force.toString());
+            expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+            done();
+          });
       });
 
       it('Should return error when no items are provided', () => {
@@ -468,7 +474,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.createOrReplaceItems({ items: mockItems }).then((done));
+        catalog.createOrReplaceItems({ items: mockItems }).then(() => done());
         itemsToCleanup.push(...mockItems);
       });
 
