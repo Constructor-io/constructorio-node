@@ -41,6 +41,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     const {
       numResults,
       itemIds,
+      variationId,
       section,
       term,
       filters,
@@ -57,6 +58,14 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     // Pull item ids from parameters
     if (itemIds) {
       queryParams.item_id = itemIds;
+    }
+
+    if (variationId) {
+      if (!itemIds) {
+        throw new Error('itemIds is a required parameter for variationId');
+      }
+
+      queryParams.variation_id = variationId;
     }
 
     // Pull section from parameters

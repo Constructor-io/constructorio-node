@@ -1,9 +1,10 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap } from '.';
+import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap, FilterExpression } from '.';
 
 export default Recommendations;
 
 export interface RecommendationsParameters {
   itemIds?: string | string[];
+  variationIds?: string;
   numResults?: number;
   section?: string;
   term?: string;
