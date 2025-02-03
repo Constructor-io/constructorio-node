@@ -38,7 +38,7 @@ describe('ConstructorIO - Recommendations', () => {
     fetchSpy = null;
   });
 
-  describe.only('getRecommendations', () => {
+  describe('getRecommendations', () => {
     const podId = 'item_page_1';
     const queryRecommendationsPodId = 'query_recommendations';
     const filteredItemsRecommendationsPodId = 'filtered_items';
@@ -99,7 +99,7 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
-    it.only('Should return a response with valid itemId and variationId', (done) => {
+    it('Should return a response with valid itemId and variationId', (done) => {
       const { recommendations } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,

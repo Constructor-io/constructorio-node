@@ -129,6 +129,7 @@ class Recommendations {
    * @param {string} podId - Pod identifier
    * @param {object} [parameters] - Additional parameters to refine results
    * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific)
+   * @param {string|array} [parameters.variationId] - Variation ID to retrieve recommendations for (strategy specific)
    * @param {number} [parameters.numResults] - The number of results to return
    * @param {string} [parameters.section] - The section to return results from
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)
