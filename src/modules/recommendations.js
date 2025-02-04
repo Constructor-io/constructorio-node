@@ -65,6 +65,10 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
         throw new Error('itemIds is a required parameter for variationId');
       }
 
+      if (Array.isArray(itemIds) && !itemIds.length) {
+        throw new Error('At least one itemId is a required parameter for variationId');
+      }
+
       queryParams.variation_id = variationId;
     }
 
@@ -128,8 +132,8 @@ class Recommendations {
    * @function getRecommendations
    * @param {string} podId - Pod identifier
    * @param {object} [parameters] - Additional parameters to refine results
-   * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific)
-   * @param {string|array} [parameters.variationId] - Variation ID to retrieve recommendations for (strategy specific)
+   * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific). Required for variationId
+   * @param {string} [parameters.variationId] - Variation ID to retrieve recommendations for (strategy specific)
    * @param {number} [parameters.numResults] - The number of results to return
    * @param {string} [parameters.section] - The section to return results from
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)
