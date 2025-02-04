@@ -597,6 +597,14 @@ describe('ConstructorIO - Recommendations', () => {
       })).to.eventually.be.rejected;
     });
 
+    it('Should be rejected when a variation id parameter is provided without the item id', () => {
+      const { recommendations } = new ConstructorIO(validOptions);
+
+      return expect(recommendations.getRecommendations(podId, {
+        variationId,
+      })).to.eventually.be.rejected;
+    });
+
     it('Should be rejected when invalid numResults parameter is provided', () => {
       const { recommendations } = new ConstructorIO(validOptions);
 
