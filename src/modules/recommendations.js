@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-param-reassign */
+/* eslint-disable object-curly-newline, no-param-reassign, max-len */
 const qs = require('qs');
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
