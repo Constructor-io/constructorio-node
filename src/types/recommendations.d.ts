@@ -1,9 +1,10 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap } from '.';
+import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap, FilterExpression } from '.';
 
 export default Recommendations;
 
 export interface RecommendationsParameters {
   itemIds?: string | string[];
+  variationId?: string;
   numResults?: number;
   section?: string;
   term?: string;
@@ -39,7 +40,8 @@ export interface RecommendationsResponse extends Record<string, any> {
 
 export interface RecommendationsRequestType extends Record<string, any> {
   num_results: number;
-  item_id: string;
+  item_id: string | string[];
+  variation_id: string;
   filters: {
     group_id: string;
     [key: string]: any;

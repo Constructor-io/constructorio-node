@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-param-reassign */
+/* eslint-disable object-curly-newline, no-param-reassign, max-len */
 const qs = require('qs');
 const { AbortController } = require('node-abort-controller');
 const helpers = require('../utils/helpers');
@@ -41,6 +41,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     const {
       numResults,
       itemIds,
+      variationId,
       section,
       term,
       filters,
@@ -57,6 +58,18 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     // Pull item ids from parameters
     if (itemIds) {
       queryParams.item_id = itemIds;
+    }
+
+    if (variationId) {
+      if (!itemIds) {
+        throw new Error('itemIds is a required parameter for variationId');
+      }
+
+      if (Array.isArray(itemIds) && !itemIds.length) {
+        throw new Error('At least one itemId is a required parameter for variationId');
+      }
+
+      queryParams.variation_id = variationId;
     }
 
     // Pull section from parameters
@@ -119,7 +132,8 @@ class Recommendations {
    * @function getRecommendations
    * @param {string} podId - Pod identifier
    * @param {object} [parameters] - Additional parameters to refine results
-   * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific)
+   * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific). Required for variationId
+   * @param {string} [parameters.variationId] - Variation ID to retrieve recommendations for (strategy specific)
    * @param {number} [parameters.numResults] - The number of results to return
    * @param {string} [parameters.section] - The section to return results from
    * @param {string} [parameters.term] - The term to use to refine results (strategy specific)

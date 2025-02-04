@@ -43,6 +43,7 @@ describe('ConstructorIO - Recommendations', () => {
     const queryRecommendationsPodId = 'query_recommendations';
     const filteredItemsRecommendationsPodId = 'filtered_items';
     const itemId = 'power_drill';
+    const variationId = 'power_drill_variation';
     const itemIds = [itemId, 'drill'];
 
     it('Should return a response with valid itemIds (singular) and client + session identifiers', (done) => {
@@ -94,6 +95,29 @@ describe('ConstructorIO - Recommendations', () => {
         expect(res.response.pod).to.have.property('id').to.equal(podId);
         expect(res.response.pod).to.have.property('display_name');
         expect(requestedUrlParams).to.have.property('item_id').to.deep.equal(itemIds);
+        done();
+      });
+    });
+
+    it('Should return a response with valid itemId and variationId', (done) => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds: itemId, variationId }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.item_id).to.deep.equal(itemId);
+        expect(res.response).to.have.property('results').to.be.an('array');
+        expect(res.response).to.have.property('pod');
+        expect(res.response.pod).to.have.property('id').to.equal(podId);
+        expect(res.response.pod).to.have.property('display_name');
+        expect(requestedUrlParams).to.have.property('item_id').to.deep.equal(itemId);
+        expect(requestedUrlParams).to.have.property('variation_id').to.deep.equal(variationId);
         done();
       });
     });
@@ -570,6 +594,14 @@ describe('ConstructorIO - Recommendations', () => {
 
       return expect(recommendations.getRecommendations(null, {
         itemIds,
+      })).to.eventually.be.rejected;
+    });
+
+    it('Should be rejected when a variation id parameter is provided without the item id', () => {
+      const { recommendations } = new ConstructorIO(validOptions);
+
+      return expect(recommendations.getRecommendations(podId, {
+        variationId,
       })).to.eventually.be.rejected;
     });
 
