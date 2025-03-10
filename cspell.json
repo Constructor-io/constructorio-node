@@ -43,6 +43,7 @@
     "searchabilities",
     "forcesync",
     "forcedelta",
-    "forcepatchdelta"
+    "forcepatchdelta",
+    "skippable"
   ]
 }
