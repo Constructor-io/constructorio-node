@@ -152,19 +152,38 @@ function send(url, userParameters, networkParameters, method = 'GET', body = {})
 
       // Request was successful, but returned a non-2XX status code
       else {
-        response.json().then((json) => {
-          instance.eventemitter.emit('error', {
-            url,
-            method,
-            message: json && json.message,
+        const contentType = response.headers.get('Content-Type') || '';
+
+        if (contentType.includes('application/json')) {
+          response.json().then((json) => {
+            instance.eventemitter.emit('error', {
+              url,
+              method,
+              message: json && json.message,
+            });
+          }).catch((error) => {
+            instance.eventemitter.emit('error', {
+              url,
+              method,
+              message: error.type,
+            });
           });
-        }).catch((error) => {
-          instance.eventemitter.emit('error', {
-            url,
-            method,
-            message: error.type,
+        } else {
+          // If not JSON, fallback to text
+          response.text().then((text) => {
+            instance.eventemitter.emit('error', {
+              url,
+              method,
+              message: text || 'Unknown error message',
+            });
+          }).catch((error) => {
+            instance.eventemitter.emit('error', {
+              url,
+              method,
+              message: `Error reading text: ${error.message}`,
+            });
           });
-        });
+        }
       }
     }).catch((error) => {
       instance.eventemitter.emit('error', {

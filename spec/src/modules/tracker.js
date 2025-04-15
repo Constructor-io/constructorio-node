@@ -8143,6 +8143,33 @@ describe('ConstructorIO - Tracker', () => {
       });
     });
 
+    it('Should receive an error message when rate limited (429)', (done) => {
+      // Create a mock response for 429 error
+      fetchSpy = sinon.spy(() => Promise.resolve({
+        ok: false,
+        status: 429,
+        statusText: 'Too Many Requests',
+        headers: new Map([['content-type', 'application/text']]),
+        text: () => Promise.resolve('Too many requests'),
+      }));
+
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.trackInputFocus(userParameters);
+
+      tracker.on('error', (response) => {
+        expect(response).to.have.property('url');
+        expect(response).to.have.property('method');
+        expect(response).to.have.property('message');
+        expect(response.message).to.not.be.undefined;
+        expect(response.message).to.equal('Too many requests');
+        done();
+      });
+    });
+
     it('Should receive an error message when making a request to an invalid endpoint', (done) => {
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
