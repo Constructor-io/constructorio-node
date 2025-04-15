@@ -8149,7 +8149,7 @@ describe('ConstructorIO - Tracker', () => {
         ok: false,
         status: 429,
         statusText: 'Too Many Requests',
-        headers: new Map([['content-type', 'application/text']]),
+        headers: new Map([['content-type', 'text/plain']]),
         text: () => Promise.resolve('Too many requests'),
       }));
 
