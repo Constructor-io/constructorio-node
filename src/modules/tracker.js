@@ -139,6 +139,7 @@ function send(url, userParameters, networkParameters, method = 'GET', body = {})
 
   if (request) {
     const instance = this;
+    const emitError = helpers.getEmitError(instance, { url, method });
 
     request.then((response) => {
       // Request was successful, and returned a 2XX status code
@@ -156,41 +157,21 @@ function send(url, userParameters, networkParameters, method = 'GET', body = {})
 
         if (contentType.includes('application/json')) {
           response.json().then((json) => {
-            instance.eventemitter.emit('error', {
-              url,
-              method,
-              message: json && json.message,
-            });
+            emitError(json && json.message);
           }).catch((error) => {
-            instance.eventemitter.emit('error', {
-              url,
-              method,
-              message: error.type,
-            });
+            emitError(error.type);
           });
         } else {
           // If not JSON, fallback to text
           response.text().then((text) => {
-            instance.eventemitter.emit('error', {
-              url,
-              method,
-              message: text || 'Unknown error message',
-            });
+            emitError(text || 'Unknown error message');
           }).catch((error) => {
-            instance.eventemitter.emit('error', {
-              url,
-              method,
-              message: `Error reading text: ${error.message}`,
-            });
+            emitError(`Error reading text: ${error.message}`);
           });
         }
       }
     }).catch((error) => {
-      instance.eventemitter.emit('error', {
-        url,
-        method,
-        message: error.toString(),
-      });
+      emitError(error.toString());
     });
   }
 }

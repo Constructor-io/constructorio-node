@@ -134,6 +134,12 @@ const utils = {
 
     return url;
   },
+
+  getEmitError(instance, { url, method }) {
+    return function emitError(message) {
+      instance.eventemitter.emit('error', { url, method, message });
+    };
+  },
 };
 
 module.exports = utils;
