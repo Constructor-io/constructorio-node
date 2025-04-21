@@ -212,6 +212,10 @@ class Autocomplete {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
+      // Add request url to responses
+      // eslint-disable-next-line no-param-reassign
+      json.request_url = requestUrl;
+
       if (json.sections) {
         if (json.result_id) {
           const sectionKeys = Object.keys(json.sections);

@@ -203,6 +203,10 @@ class Recommendations {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
+      // Add request url to responses
+      // eslint-disable-next-line no-param-reassign
+      json.request_url = requestUrl;
+
       // Recommendations results
       if (json.response && json.response.results) {
         if (json.result_id) {
