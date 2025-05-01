@@ -216,6 +216,16 @@ describe('ConstructorIO - Quizzes', () => {
 
       return expect(quizzes.getQuizNextQuestion(validQuizId, {})).to.eventually.be.rejected;
     });
+
+    it('Should include requestUrl in the promise for getQuizNextQuestion', () => {
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      const promise = quizzes.getQuizNextQuestion(validQuizId, {}, { clientId, sessionId });
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
   });
 
   describe('getQuizResults', () => {
@@ -470,5 +480,15 @@ describe('ConstructorIO - Quizzes', () => {
         return expect(quizzes.getQuizResults(validQuizId, { answers: validAnswers })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
+
+    it('Should include requestUrl in the promise for getQuizResults', () => {
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      const promise = quizzes.getQuizResults(validQuizId, { answers: validAnswers });
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
   });
 });

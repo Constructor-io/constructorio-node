@@ -234,17 +234,13 @@ class Search {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
-      // Add request url to responses
-      // eslint-disable-next-line no-param-reassign
-      json.request_url = requestUrl;
-
       // Search results
       if (json.response && json.response.results) {
         if (json.result_id) {
@@ -264,6 +260,10 @@ class Search {
 
       throw new Error('getSearchResults response data is malformed');
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -338,7 +338,7 @@ class Search {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -364,6 +364,10 @@ class Search {
 
       throw new Error('getVoiceSearchResults response data is malformed');
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 }
 

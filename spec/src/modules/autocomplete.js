@@ -401,35 +401,49 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
-    it('Should return a variations_map object in the response', (done) => {
-      const variationsMap = {
-        group_by: [
-          {
-            name: 'variation',
-            field: 'data.variation_id',
-          },
-        ],
-        values: {
-          size: {
-            aggregation: 'all',
-            field: 'data.facets.size',
-          },
-        },
-        dtype: 'array',
-      };
+    it('Should include requestUrl in the promise for getAutocompleteResults', () => {
       const { autocomplete } = new ConstructorIO({
-        apiKey: testApiKey,
+        ...validOptions,
         fetch: fetchSpy,
       });
 
-      autocomplete.getAutocompleteResults('Jacket', { variationsMap }, {}).then((res) => {
+      const promise = autocomplete.getAutocompleteResults(query);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
+    it('Should return a response with a valid query, section and preFilterExpression', (done) => {
+      const preFilterExpression = {
+        or: [
+          {
+            and: [
+              { name: 'group_id', value: 'BrandXY' },
+              { name: 'Color', value: 'red' },
+            ],
+          },
+          {
+            and: [
+              { name: 'Color', value: 'blue' },
+              { name: 'Brand', value: 'XYZ' },
+            ],
+          },
+        ],
+      };
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, { preFilterExpression }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
         expect(res).to.have.property('request').to.be.an('object');
-        expect(res).to.have.property('sections').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
-        expect(JSON.stringify(res.request.variations_map)).to.eql(JSON.stringify(variationsMap));
-        expect(res.sections.Products[0]).to.have.property('variations_map');
-        expect(res.sections.Products[0].variations_map[0]).to.have.property('size');
-        expect(res.sections.Products[0].variations_map[0]).to.have.property('variation');
+        expect(requestedUrlParams).to.have.property('pre_filter_expression');
+        expect(requestedUrlParams.pre_filter_expression).to.eql(JSON.stringify(preFilterExpression));
+        expect(res.sections).to.have.property('Products').to.be.an('array');
+        expect(res.sections.Products.length).to.be.eql(2);
+        expect(res.sections.Products[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
+        expect(res.sections.Products[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
         done();
       });
     });

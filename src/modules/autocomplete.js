@@ -205,17 +205,13 @@ class Autocomplete {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => {
-      // Add request url to responses
-      // eslint-disable-next-line no-param-reassign
-      json.request_url = requestUrl;
-
       if (json.sections) {
         if (json.result_id) {
           const sectionKeys = Object.keys(json.sections);
@@ -238,6 +234,10 @@ class Autocomplete {
 
       throw new Error('getAutocompleteResults response data is malformed');
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 }
 

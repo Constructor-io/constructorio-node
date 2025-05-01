@@ -657,6 +657,16 @@ describe('ConstructorIO - Recommendations', () => {
         )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
+
+    it('Should include requestUrl in the promise for getRecommendations', () => {
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = recommendations.getRecommendations(podId, { itemIds: itemId });
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
   });
 
   describe('getRecommendationPods', () => {

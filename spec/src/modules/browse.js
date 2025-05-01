@@ -706,6 +706,16 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should include requestUrl in the promise for getBrowseResults', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseResults(filterName, filterValue);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
     it('Should be rejected when invalid filterName is provided', () => {
       const { browse } = new ConstructorIO(validOptions);
 
@@ -834,6 +844,16 @@ describe('ConstructorIO - Browse', () => {
         )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
+
+    it('Should include requestUrl in the promise for getBrowseResults', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseResults(filterName, filterValue);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
   });
 
   describe('getBrowseResultsForItemIds', () => {
