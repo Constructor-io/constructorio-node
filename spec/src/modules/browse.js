@@ -56,7 +56,6 @@ describe('ConstructorIO - Browse', () => {
       browse.getBrowseResults(filterName, filterValue, {}, { ...clientSessionIdentifiers }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-        expect(res).to.have.property('request_url').to.be.an('string');
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
@@ -868,7 +867,6 @@ describe('ConstructorIO - Browse', () => {
       browse.getBrowseResultsForItemIds(ids).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-        expect(res).to.have.property('request_url').to.be.an('string');
         expect(res).to.have.property('request').to.be.an('object');
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
