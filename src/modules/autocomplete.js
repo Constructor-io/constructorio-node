@@ -205,7 +205,7 @@ class Autocomplete {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -234,6 +234,10 @@ class Autocomplete {
 
       throw new Error('getAutocompleteResults response data is malformed');
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 }
 

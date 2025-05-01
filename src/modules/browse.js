@@ -295,7 +295,7 @@ class Browse {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -321,6 +321,10 @@ class Browse {
 
       throw new Error('getBrowseResults response data is malformed');
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -375,27 +379,29 @@ class Browse {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
 
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      })
-      .then((json) => {
-        if (json.response && json.response.results) {
-          if (json.result_id) {
-            // Append `result_id` to each result item
-            json.response.results.forEach((result) => {
-              // eslint-disable-next-line no-param-reassign
-              result.result_id = json.result_id;
-            });
-          }
-          return json;
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => {
+      if (json.response && json.response.results) {
+        if (json.result_id) {
+          // Append `result_id` to each result item
+          json.response.results.forEach((result) => {
+            // eslint-disable-next-line no-param-reassign
+            result.result_id = json.result_id;
+          });
         }
-        throw new Error('getBrowseResultsForItemIds response data is malformed');
-      });
+        return json;
+      }
+      throw new Error('getBrowseResultsForItemIds response data is malformed');
+    });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -443,13 +449,17 @@ class Browse {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal }).then((response) => {
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
       if (response.ok) {
         return response.json();
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -498,7 +508,7 @@ class Browse {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
+    const promise = fetch(requestUrl, {
       headers: { ...headers, ...helpers.createAuthHeader(this.options) },
       signal,
     }).then((response) => {
@@ -508,6 +518,10 @@ class Browse {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -553,7 +567,7 @@ class Browse {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, {
+    const promise = fetch(requestUrl, {
       headers: { ...headers, ...helpers.createAuthHeader(this.options) },
       signal,
     }).then((response) => {
@@ -563,6 +577,10 @@ class Browse {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 }
 

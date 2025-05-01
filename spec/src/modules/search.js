@@ -668,6 +668,16 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should include requestUrl in the promise for getSearchResults', () => {
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = search.getSearchResults(query, { section });
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
     it('Should be rejected when invalid query is provided', () => {
       const { search } = new ConstructorIO(validOptions);
 

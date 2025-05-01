@@ -162,21 +162,23 @@ class Quizzes {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
 
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      })
-      .then((json) => {
-        if (json.quiz_version_id) {
-          return json;
-        }
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => {
+      if (json.quiz_version_id) {
+        return json;
+      }
 
-        throw new Error('getQuizNextQuestion response data is malformed');
-      });
+      throw new Error('getQuizNextQuestion response data is malformed');
+    });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 
   /**
@@ -243,21 +245,23 @@ class Quizzes {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    return fetch(requestUrl, { headers, signal })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+    const promise = fetch(requestUrl, { headers, signal }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
 
-        return helpers.throwHttpErrorFromResponse(new Error(), response);
-      })
-      .then((json) => {
-        if (json.quiz_version_id) {
-          return json;
-        }
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    }).then((json) => {
+      if (json.quiz_version_id) {
+        return json;
+      }
 
-        throw new Error('getQuizResults response data is malformed');
-      });
+      throw new Error('getQuizResults response data is malformed');
+    });
+
+    promise.requestUrl = requestUrl;
+
+    return promise;
   }
 }
 

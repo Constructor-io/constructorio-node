@@ -400,6 +400,16 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should include requestUrl in the promise for getAutocompleteResults', () => {
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = autocomplete.getAutocompleteResults(query);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
     it('Should return a variations_map object in the response', (done) => {
       const variationsMap = {
         group_by: [
