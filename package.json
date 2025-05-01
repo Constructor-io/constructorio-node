@@ -1,6 +1,6 @@
 {
   "name": "@constructor-io/constructorio-node",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "Constructor.io Node.js client",
   "main": "src/constructorio.js",
   "types": "src/types/constructorio.d.ts",
