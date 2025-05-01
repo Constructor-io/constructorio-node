@@ -843,16 +843,6 @@ describe('ConstructorIO - Browse', () => {
         )).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
-
-    it('Should include requestUrl in the promise for getBrowseResults', () => {
-      const { browse } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
-
-      const promise = browse.getBrowseResults(filterName, filterValue);
-      expect(promise).to.have.property('requestUrl').that.is.a('string');
-    });
   });
 
   describe('getBrowseResultsForItemIds', () => {
@@ -877,6 +867,17 @@ describe('ConstructorIO - Browse', () => {
         expect(requestedUrlParams).to.have.property('_dt');
         done();
       });
+    });
+
+    it('Should include requestUrl in the promise for getBrowseResultsForItemIds', () => {
+      const itemIds = ['item1', 'item2'];
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseResultsForItemIds(itemIds);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
     });
 
     it('should return a response with valid ids, client id and session id', (done) => {
@@ -1396,6 +1397,16 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should include requestUrl in the promise for getBrowseGroups', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseGroups({});
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
     it('Should return a response with valid ids and user id', (done) => {
       const userId = 'user-id';
       const { browse } = new ConstructorIO({
@@ -1752,6 +1763,16 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should include requestUrl in the promise for getBrowseFacets', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseFacets({});
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
+    });
+
     it('Should be rejected when invalid apiKey is provided', () => {
       const { browse } = new ConstructorIO({ apiKey: 'fyzs7tfF8L161VoAXQ8u' });
 
@@ -1933,6 +1954,16 @@ describe('ConstructorIO - Browse', () => {
         expect(requestedHeaders).to.have.property('X-Constructor-IO-Test-Another').to.equal('test');
         done();
       });
+    });
+
+    it('Should include requestUrl in the promise for getBrowseFacetOptions', () => {
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      const promise = browse.getBrowseFacetOptions(facetName);
+      expect(promise).to.have.property('requestUrl').that.is.a('string');
     });
 
     it('Should be rejected when no facetName is provided', () => {
