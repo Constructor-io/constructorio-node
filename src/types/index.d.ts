@@ -338,9 +338,9 @@ export interface ItemTracked {
   itemName?: string;
   itemId?: string;
   variationId?: string;
+  price?: number;
 }
 
 export interface ItemTrackedPurchased extends ItemTracked {
-  price: number,
   count: number
 }

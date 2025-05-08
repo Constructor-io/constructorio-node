@@ -4540,7 +4540,7 @@ describe('ConstructorIO - Tracker', () => {
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
-        expect(responseParams).to.have.property('message').to.equal('conversion type must be one of add_to_wishlist, add_to_cart, like, message, make_offer, read. If you wish to use custom types, please set is_custom_type to true and specify a display_name.');
+        expect(responseParams).to.have.property('message').to.equal('Invalid parameters');
 
         done();
       });
