@@ -49,7 +49,7 @@ function createMockItemGroupWithChildren() {
   };
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -85,6 +85,39 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
+      });
+
+      it('Should resolve when adding item group with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroup({
+          ...group,
+          section: 'Products',
+        }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
+      it('Should resolve when adding item group with valid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const response = catalog.addItemGroup({
+          ...group,
+          section: 'test',
+        });
+
+        return expect(response).to.eventually.be.rejected;
       });
 
       it('Should return error when adding an item group with an invalid API key', () => {
@@ -159,6 +192,22 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should resolve when adding item groups with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addItemGroups({ itemGroups: groups, section: 'Products' }).then(() => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
       it('Should resolve when adding item groups with children', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -213,6 +262,15 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addItemGroups({ itemGroups: groups })).to.eventually.be.rejected;
       });
 
+      it('Should return error when adding an item group with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addItemGroups({ itemGroups: groups, section: 'test' })).to.eventually.be.rejected;
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -262,16 +320,45 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when getting item group with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.getItemGroup({ id: mockItemGroup.id, section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('array').to.have.length(1);
+          expect(res.item_groups[0]).to.have.property('name').to.equal(mockItemGroup.name);
+          expect(res.item_groups[0]).to.have.property('id').to.equal(mockItemGroup.id);
+
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
       it('Should return a response with no items when getting item group that does not exist', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.getItemGroup({ group_id: uuidv4() }).then((res) => {
+        catalog.getItemGroup({ id: uuidv4() }).then((res) => {
           expect(res).to.have.property('item_groups').to.be.an('array').of.length(0);
           done();
         });
+      });
+
+      it('Should return error when getting item group with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        expect(catalog.getItemGroup({ id: mockItemGroup.id, section: 'test' })).to.eventually.be.rejected;
       });
 
       it('Should return error when getting item group with an invalid API key', () => {
@@ -284,7 +371,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
+        return expect(catalog.getItemGroup({ id: mockItemGroup.id })).to.eventually.be.rejected;
       });
 
       it('Should return error when getting item group with an invalid API token', () => {
@@ -297,14 +384,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejected;
+        return expect(catalog.getItemGroup({ id: mockItemGroup.id })).to.eventually.be.rejected;
       });
 
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getItemGroup({ group_id: mockItemGroup.id }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.getItemGroup({ id: mockItemGroup.id }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -313,7 +400,7 @@ describe('ConstructorIO - Catalog', () => {
             networkParameters: { timeout: 20 },
           });
 
-          return expect(catalog.getItemGroup({ group_id: mockItemGroup.id })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.getItemGroup({ id: mockItemGroup.id })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -347,6 +434,57 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when getting item groups with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        catalog.addItemGroups({
+          itemGroups: [createMockItemGroup(), createMockItemGroup()],
+          section: 'Search Suggestions',
+        }).then(done);
+
+        catalog.getItemGroups({ section: 'Search Suggestions' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('array').to.have.length(2);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
+      it('Should return a response with no items when getting item groups from an empty section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+        catalog.addItemGroups({
+          itemGroups: [createMockItemGroup(), createMockItemGroup()],
+          section: 'Search Suggestions',
+        }).then(done);
+
+        catalog.getItemGroups({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('array').to.have.length(0);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
+      it('Should return error when getting item groups with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.getItemGroups({ section: 'test' })).to.eventually.be.rejected;
+      });
+
       it('Should return error when getting item groups with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
@@ -377,7 +515,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getItemGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.getItemGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -424,6 +562,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when adding multiple item groups with valid section', (done) => {
+        const mockGroups = [
+          createMockItemGroup(),
+          createMockItemGroup(),
+          createMockItemGroup(),
+        ];
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ itemGroups: mockGroups, section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(mockGroups.length);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(mockGroups.length);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
       it('Should return a response when adding multiple item groups with children', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -460,6 +624,17 @@ describe('ConstructorIO - Catalog', () => {
         ).to.eventually.be.rejected;
       });
 
+      it('Should return error when adding item groups with invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(
+          catalog.addOrUpdateItemGroups({ itemGroups: groups, section: 'test' }),
+        ).to.eventually.be.rejected;
+      });
+
       it('Should return a response when updating multiple item groups', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -467,6 +642,26 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         catalog.addOrUpdateItemGroups({ itemGroups: groups }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('item_groups').to.be.an('object');
+          expect(res.item_groups).to.have.property('processed').to.be.an('number').to.equal(groups.length);
+          expect(res.item_groups).to.have.property('inserted').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('updated').to.be.an('number').to.equal(0);
+          expect(res.item_groups).to.have.property('deleted').to.be.an('number');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          done();
+        });
+      });
+
+      it('Should return a response when updating multiple item groups with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addOrUpdateItemGroups({ itemGroups: groups, section: 'Products' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('item_groups').to.be.an('object');
@@ -498,6 +693,15 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           done();
         });
+      });
+
+      it('Should return error when updating multiple item groups with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addOrUpdateItemGroups({ itemGroups: groups, section: 'test' })).to.eventually.be.rejected;
       });
 
       it('Should return error when updating multiple item groups with an invalid API key', () => {
@@ -581,6 +785,35 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when modifying an item group with updated item group name with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        mockItemGroup.name = `group-${uuidv4()}`;
+
+        catalog.modifyItemGroup(mockItemGroup, { section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('id').to.be.a('string').to.equal(mockItemGroup.id);
+          expect(res).to.have.property('name').to.be.a('string').to.equal(mockItemGroup.name);
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
+      it('Should return error when modifying an item with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyItemGroup({ ...mockItemGroup, section: 'test' })).to.eventually.be.rejected;
+      });
+
       it('Should return error when modifying an item with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
@@ -658,6 +891,32 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should return a response when removing multiple item groups with valid section', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.removeItemGroups({ section: 'Products' }).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('message').to.be.a('string');
+          expect(fetchSpy).to.have.been.called;
+          expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+          done();
+        });
+      });
+
+      it('Should return error when removing item groups with an invalid section', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeItemGroups({ section: 'test' })).to.eventually.be.rejected;
+      });
+
       it('Should return error when removing item groups with an invalid API key', () => {
         const invalidOptions = cloneDeep(validOptions);
 
@@ -688,7 +947,7 @@ describe('ConstructorIO - Catalog', () => {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.removeItemGroups({ timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.removeItemGroups({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {

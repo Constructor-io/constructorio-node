@@ -872,6 +872,7 @@ class Catalog {
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - Item group ID
    * @param {string} parameters.name - Item group name
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {string} [parameters.parentId] - Item group parent ID
    * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -890,10 +891,15 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { id, ...rest } = parameters;
+    const { id, section, ...rest } = parameters;
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -924,6 +930,7 @@ class Catalog {
    * @function addItemGroups
    * @param {object} parameters - Additional parameters for item group details
    * @param {object[]} parameters.itemGroups - A list of item groups
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -950,12 +957,17 @@ class Catalog {
     const { signal } = controller;
 
     // Backwards Compatibility
-    const { item_groups, itemGroups = item_groups, ...rest } = parameters;
+    const { item_groups, itemGroups = item_groups, section, ...rest } = parameters;
     const params = { itemGroups, ...rest };
     params.itemGroups = params.itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false));
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl('item_groups', this.options);
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -986,6 +998,7 @@ class Catalog {
    * @function getItemGroup
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - The group ID you'd like to retrieve results for
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1000,9 +1013,15 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section, id } = parameters;
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${parameters.id}`, this.options);
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1030,6 +1049,8 @@ class Catalog {
    * Retrieves item groups from index
    *
    * @function getItemGroups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1037,14 +1058,20 @@ class Catalog {
    * @example
    * constructorio.catalog.getItemGroups();
    */
-  getItemGroups(networkParameters = {}) {
+  getItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section } = parameters;
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl('item_groups', this.options);
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1073,12 +1100,13 @@ class Catalog {
    *
    * @function addOrUpdateItemGroups
    * @param {object} parameters - Additional parameters for item group details
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {object[]} parameters.itemGroups - A list of item groups
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/catalog-item-groups
-  * @example
+   * @example
    * constructorio.catalog.addOrUpdateItemGroups({
    *     itemGroups: [
    *         {
@@ -1100,11 +1128,17 @@ class Catalog {
     const { signal } = controller;
 
     // Backwards Compatibility
-    const { item_groups, itemGroups = item_groups, ...rest } = parameters;
+    const { item_groups, itemGroups = item_groups, section, ...rest } = parameters;
     const params = { itemGroups, ...rest };
     params.itemGroups = params.itemGroups.map((config) => toSnakeCaseKeys(config));
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
+
     try {
-      requestUrl = createCatalogUrl('item_groups', this.options);
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1135,6 +1169,7 @@ class Catalog {
    * @function modifyItemGroup
    * @param {object} parameters - Additional parameters for item group details
    * @param {string} parameters.id - The group ID to update
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {string} [parameters.name] - Item group display name
    * @param {string} [parameters.parentId] - Parent item group customer ID or null for root item groups
    * @param {object} [parameters.data] - JSON object with custom metadata attached with the item group
@@ -1157,10 +1192,15 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { id, ...rest } = parameters;
+    const { id, section, ...rest } = parameters;
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options);
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1189,6 +1229,8 @@ class Catalog {
    * Remove all item groups from index
    *
    * @function removeItemGroups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} [parameters.section="Products"] - The section of the index to use. Defaults to Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -1196,14 +1238,20 @@ class Catalog {
    * @example
    * constructorio.catalog.removeItemGroups();
    */
-  removeItemGroups(networkParameters = {}) {
+  removeItemGroups(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
+    const { section } = parameters;
+    const queryParams = {};
+
+    if (section) {
+      queryParams.section = section;
+    }
 
     try {
-      requestUrl = createCatalogUrl('item_groups', this.options);
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams);
     } catch (e) {
       return Promise.reject(e);
     }
