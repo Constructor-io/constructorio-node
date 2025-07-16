@@ -49,7 +49,7 @@ function createMockItemGroupWithChildren() {
   };
 }
 
-describe.only('ConstructorIO - Catalog', () => {
+describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
