@@ -164,6 +164,7 @@ export interface ItemData extends Record<string, any> {
   keywords?: string[];
   url?: string;
   image_url?: string;
+  /** @deprecated This field is deprecated and will be removed in a future version. */
   facets?: Record<string, string[] | number[]>;
   group_ids?: string[];
   description?: string;
