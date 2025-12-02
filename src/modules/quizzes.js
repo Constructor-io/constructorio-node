@@ -44,7 +44,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
   }
 
   if (parameters) {
-    const { section, answers, quizVersionId, quizSessionId, filters, resultsPerPage, page } = parameters;
+    const { section, answers, quizVersionId, quizSessionId, filters, resultsPerPage, page, skipTracking } = parameters;
 
     // Pull section from parameters
     if (section) {
@@ -59,6 +59,11 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     // Pull quiz_session_id from parameters
     if (quizSessionId) {
       queryParams.quiz_session_id = quizSessionId;
+    }
+
+    // Pull skip_tracking from parameters
+    if (skipTracking) {
+      queryParams.skip_tracking = skipTracking;
     }
 
     if (!helpers.isNil(page)) {
@@ -112,6 +117,7 @@ class Quizzes {
    * @param {string} [parameters.section] - Product catalog section
    * @param {string} [parameters.quizVersionId] - Version identifier for the quiz. Version ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.com/reference/configuration-quizzes}
    * @param {string} [parameters.quizSessionId] - Session identifier for the quiz. Session ID will be returned with the first request and it should be passed with subsequent requests. More information can be found [here]{@link https://docs.constructor.com/reference/configuration-quizzes}
+   * @param {boolean} [parameters.skipTracking] - If true, tracking for this question will be skipped. This is useful for preloading the first question of a quiz
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
