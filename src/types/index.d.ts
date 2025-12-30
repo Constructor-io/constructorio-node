@@ -335,6 +335,69 @@ export interface SearchabilityConfiguration {
   hidden?: boolean,
 }
 
+// V2 Facet Types
+export interface FacetConfigurationV2 {
+  name: string;
+  pathInMetadata: string;
+  type: 'multiple' | 'hierarchical' | 'range';
+  displayName?: string;
+  sortOrder?: 'relevance' | 'value' | 'num_matches';
+  sortDescending?: boolean;
+  rangeType?: 'static' | null;
+  rangeFormat?: 'boundaries' | 'options' | null;
+  rangeInclusive?: 'above' | 'below' | null;
+  rangeLimits?: number[];
+  matchType?: 'any' | 'all' | 'none';
+  position?: number | null;
+  hidden?: boolean;
+  protected?: boolean;
+  countable?: boolean;
+  optionsLimit?: number;
+  data?: Record<string, any>;
+  section?: string;
+}
+
+export interface FacetConfigurationV2Response {
+  name: string;
+  path_in_metadata: string;
+  type: 'multiple' | 'hierarchical' | 'range';
+  display_name?: string | null;
+  sort_order?: 'relevance' | 'value' | 'num_matches';
+  sort_descending?: boolean;
+  range_type?: 'static' | null;
+  range_format?: 'boundaries' | 'options' | null;
+  range_inclusive?: 'above' | 'below' | null;
+  range_limits?: number[] | null;
+  match_type?: 'any' | 'all' | 'none';
+  position?: number | null;
+  hidden?: boolean;
+  protected?: boolean;
+  countable?: boolean;
+  options_limit?: number;
+  data?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// V2 Searchability Types
+export interface SearchabilityConfigurationV2 {
+  name: string;
+  fuzzySearchable?: boolean;
+  exactSearchable?: boolean;
+  displayable?: boolean;
+  hidden?: boolean;
+}
+
+export interface SearchabilityConfigurationV2Response {
+  name: string;
+  fuzzy_searchable: boolean;
+  exact_searchable: boolean;
+  displayable: boolean;
+  hidden: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
 export interface ItemTracked {
   itemName?: string;
   itemId?: string;
