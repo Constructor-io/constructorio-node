@@ -97,7 +97,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Backwards Compatibility `display_name` - Should resolve when adding a facet configuration', (done) => {
@@ -116,7 +116,7 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(response).to.have.property('display_name').to.be.equal(newFacetConfiguration.display_name);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when adding a facet configuration that already exists', () => {
@@ -176,7 +176,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when getting facet configurations', (done) => {
@@ -196,7 +196,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when getting facet configurations with pagination parameters', (done) => {
@@ -214,7 +214,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal('1');
           expect(requestedUrlParams).to.have.property('page').to.equal('1');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when getting facet configurations with offset parameter', (done) => {
@@ -230,7 +230,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('offset').to.equal('0');
           done();
-        });
+        }).catch(done);
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -265,7 +265,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when getting a single facet configuration', (done) => {
@@ -285,7 +285,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when getting a facet configuration that does not exist', () => {
@@ -329,7 +329,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when modifying multiple facet configurations', (done) => {
@@ -357,7 +357,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when facetConfigurations parameter is missing', () => {
@@ -392,7 +392,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when modifying a single facet configuration', (done) => {
@@ -417,7 +417,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when modifying a facet configuration that does not exist', () => {
@@ -452,7 +452,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when replacing a facet configuration', (done) => {
@@ -478,7 +478,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -521,7 +521,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -545,7 +545,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addFacetConfigurationV2(facetToRemove).then(() => {
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when removing a facet configuration', (done) => {
@@ -563,7 +563,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when removing a facet configuration that does not exist', () => {

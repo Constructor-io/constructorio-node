@@ -95,7 +95,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when retrieving searchabilities with pagination parameters', (done) => {
@@ -113,7 +113,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal('5');
           expect(requestedUrlParams).to.have.property('page').to.equal('1');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when retrieving searchabilities with filter parameters', (done) => {
@@ -129,7 +129,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('displayable').to.equal('true');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when retrieving searchabilities with sort parameters', (done) => {
@@ -146,7 +146,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('sort_by').to.equal('name');
           expect(requestedUrlParams).to.have.property('sort_order').to.equal('ascending');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when retrieving searchabilities with name filter', (done) => {
@@ -162,7 +162,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('name').to.equal('keywords');
           done();
-        });
+        }).catch(done);
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -215,7 +215,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('section');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when patching searchabilities with skipRebuild', (done) => {
@@ -237,7 +237,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('searchabilities').to.be.an('array');
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when patching searchabilities with unsupported values', () => {
@@ -300,7 +300,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when getting a searchability that does not exist', () => {
@@ -344,7 +344,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.patchSearchabilitiesV2({ searchabilities: [existingSearchability] }).then(() => {
           searchabilitiesToCleanup.push(existingSearchability);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when patching a single searchability', (done) => {
@@ -367,7 +367,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when patching a single searchability with skipRebuild', (done) => {
@@ -386,7 +386,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.equal(existingSearchability.name);
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when patching a searchability that does not exist', () => {
@@ -420,7 +420,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when deleting searchabilities', (done) => {
@@ -441,7 +441,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when deleting searchabilities with skipRebuild', (done) => {
@@ -459,7 +459,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('searchabilities').to.be.an('array');
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        });
+        }).catch(done);
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -484,7 +484,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when deleting a single searchability', (done) => {
@@ -502,7 +502,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return a response when deleting a single searchability with skipRebuild', (done) => {
@@ -517,7 +517,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.equal(searchabilityToDelete.name);
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        });
+        }).catch(done);
       });
 
       it('Should return error when deleting a searchability that does not exist', () => {
