@@ -3530,6 +3530,997 @@ class Catalog {
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     });
   }
+
+  // -------------------- V2 Facet Configuration Methods --------------------
+
+  /**
+   * Create a facet configuration (V2)
+   *
+   * @function addFacetConfigurationV2
+   * @param {object} parameters - Additional parameters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.pathInMetadata - The path in metadata of each item where this facet is present
+   * @param {string} parameters.type - Type of facet. Must be one of multiple, hierarchical, or range
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options of this facet group are sorted
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order
+   * @param {string} [parameters.rangeType] - Should be 'static' if a facet is configured as range
+   * @param {string} [parameters.rangeFormat] - Format of range facets: 'boundaries' for sliders, 'options' for buckets
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets: 'above', 'below', or null
+   * @param {number[]} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters: 'any', 'all', or 'none'
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users
+   * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users
+   * @param {boolean} [parameters.countable] - Specifies whether counts for each facet option should be calculated
+   * @param {number} [parameters.optionsLimit] - Maximum number of options to return in search responses
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Facet configuration response with name, path_in_metadata, type, and other fields
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.addFacetConfigurationV2({
+   *     name: 'color',
+   *     pathInMetadata: 'color',
+   *     type: 'multiple',
+   *     displayName: 'Color',
+   * });
+   */
+  addFacetConfigurationV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, ...rest } = parameters;
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+    return fetch(requestUrl, {
+      method: 'POST',
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get all facet configurations (V2)
+   *
+   * @function getFacetConfigurationsV2
+   * @param {object} parameters - Additional parameters for retrieving facet configurations.
+   * @param {number} [parameters.page] - Page number you'd like to request. Defaults to 1.
+   * @param {number} [parameters.numResultsPerPage] - Number of facets per page in paginated response. Default value is 100.
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning. Cannot be used together with page.
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{facets: object[], total_count: number}>} - Paginated list of facet configurations
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.getFacetConfigurationsV2({
+   *     page: 2,
+   *     numResultsPerPage: 50,
+   * });
+   */
+  getFacetConfigurationsV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { num_results_per_page, numResultsPerPage = num_results_per_page, page, offset } = parameters;
+    const additionalQueryParams = {
+      section: parameters.section || 'Products',
+    };
+
+    if (numResultsPerPage) {
+      additionalQueryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (page) {
+      additionalQueryParams.page = page;
+    }
+
+    if (!helpers.isNil(offset)) {
+      additionalQueryParams.offset = offset;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get a single facet's configuration (V2)
+   *
+   * @function getFacetConfigurationV2
+   * @param {object} parameters - Additional parameters for retrieving a facet configuration.
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Facet configuration response with name, path_in_metadata, type, and other fields
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.getFacetConfigurationV2({
+   *     name: 'color',
+   * });
+   */
+  getFacetConfigurationV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, name } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Create or replace facet configurations (V2)
+   *
+   * Caution: Replacing will overwrite all other configurations you may have defined for the facet group,
+   * resetting them to their defaults, except facet options - they will not be affected.
+   *
+   * @function createOrReplaceFacetConfigurationsV2
+   * @param {object} parameters - Additional parameters for creating or replacing facet configurations
+   * @param {array} parameters.facetConfigurations - List of facet configurations to create or replace
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{facets: object[]}>} - List of created/replaced facet configurations
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.createOrReplaceFacetConfigurationsV2({
+   *     facetConfigurations: [
+   *         {
+   *             name: 'color',
+   *             pathInMetadata: 'color',
+   *             type: 'multiple',
+   *             displayName: 'Color',
+   *         },
+   *     ],
+   * });
+   */
+  createOrReplaceFacetConfigurationsV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, facetConfigurations: facetConfigurationsRaw } = parameters;
+
+    if (!facetConfigurationsRaw || !Array.isArray(facetConfigurationsRaw)) {
+      return Promise.reject(new Error('facetConfigurations is a required parameter of type array'));
+    }
+
+    const facetConfigurations = facetConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify({ facets: facetConfigurations }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Modify the configurations of multiple facets (partially) at once (V2)
+   *
+   * @function modifyFacetConfigurationsV2
+   * @param {object} parameters - Additional parameters for modifying facet configurations
+   * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{facets: object[]}>} - List of modified facet configurations
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.modifyFacetConfigurationsV2({
+   *     facetConfigurations: [
+   *         {
+   *             name: 'color',
+   *             displayName: 'Color',
+   *             sortOrder: 'value',
+   *         },
+   *     ],
+   * });
+   */
+  modifyFacetConfigurationsV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, facetConfigurations: facetConfigurationsRaw } = parameters;
+
+    if (!facetConfigurationsRaw || !Array.isArray(facetConfigurationsRaw)) {
+      return Promise.reject(new Error('facetConfigurations is a required parameter of type array'));
+    }
+
+    const facetConfigurations = facetConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ facets: facetConfigurations }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Replace the configuration of a facet (completely) (V2)
+   *
+   * Caution: This will overwrite all other configurations you may have defined for the facet group,
+   * resetting them to their defaults, except facet options - they will not be affected.
+   *
+   * @function replaceFacetConfigurationV2
+   * @param {object} parameters - Additional parameters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} parameters.pathInMetadata - The path in metadata of each item where this facet is present
+   * @param {string} parameters.type - Type of facet. Must be one of multiple, hierarchical, or range
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options are sorted
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order
+   * @param {string} [parameters.rangeType] - Should be 'static' if a facet is configured as range
+   * @param {string} [parameters.rangeFormat] - Format of range facets: 'boundaries' or 'options'
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets: 'above', 'below', or null
+   * @param {number[]} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters: 'any', 'all', or 'none'
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users
+   * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users
+   * @param {boolean} [parameters.countable] - Specifies whether counts for each facet option should be calculated
+   * @param {number} [parameters.optionsLimit] - Maximum number of options to return in search responses
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Replaced facet configuration response
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.replaceFacetConfigurationV2({
+   *     name: 'color',
+   *     pathInMetadata: 'color',
+   *     type: 'multiple',
+   *     displayName: 'Color',
+   * });
+   */
+  replaceFacetConfigurationV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, name, ...rest } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Modify the configuration of a facet (partially) (V2)
+   *
+   * @function modifyFacetConfigurationV2
+   * @param {object} parameters - Additional parameters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} [parameters.pathInMetadata] - The path in metadata of each item where this facet is present
+   * @param {string} [parameters.type] - Type of facet. Must be one of multiple, hierarchical, or range
+   * @param {string} [parameters.displayName] - The name of the facet presented to the end users
+   * @param {string} [parameters.sortOrder] - Defines the criterion by which the options are sorted
+   * @param {boolean} [parameters.sortDescending] - Set to true if the options should be sorted in descending order
+   * @param {string} [parameters.rangeType] - Should be 'static' if a facet is configured as range
+   * @param {string} [parameters.rangeFormat] - Format of range facets: 'boundaries' or 'options'
+   * @param {string} [parameters.rangeInclusive] - Used to create inclusive buckets: 'above', 'below', or null
+   * @param {number[]} [parameters.rangeLimits] - Defines the cut-off points for generating static range buckets
+   * @param {string} [parameters.matchType] - Specifies the behavior of filters: 'any', 'all', or 'none'
+   * @param {number} [parameters.position] - Slot facet groups to fixed positions
+   * @param {boolean} [parameters.hidden] - Specifies whether the facet is hidden from users
+   * @param {boolean} [parameters.protected] - Specifies whether the facet is protected from users
+   * @param {boolean} [parameters.countable] - Specifies whether counts for each facet option should be calculated
+   * @param {number} [parameters.optionsLimit] - Maximum number of options to return in search responses
+   * @param {object} [parameters.data] - Dictionary/Object with any extra facet data
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Modified facet configuration response
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.modifyFacetConfigurationV2({
+   *     name: 'color',
+   *     displayName: 'Color',
+   *     sortOrder: 'num_matches',
+   * });
+   */
+  modifyFacetConfigurationV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, name, ...rest } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Remove a facet configuration (V2)
+   *
+   * Caution: Once a facet group's configuration is removed, all configurations will return to their default values.
+   * This includes all facet option configurations (display name, position, etc) you may have defined.
+   *
+   * @function removeFacetConfigurationV2
+   * @param {object} parameters - Additional parameters for facet configuration details
+   * @param {string} parameters.name - Unique facet name used to refer to the facet in your catalog
+   * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Removed facet configuration response
+   * @see https://docs.constructor.com/reference/configuration-facets
+   * @example
+   * constructorio.catalog.removeFacetConfigurationV2({
+   *     name: 'color',
+   * });
+   */
+  removeFacetConfigurationV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { section, name } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section: section || 'Products',
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  // -------------------- V2 Searchabilities Methods --------------------
+
+  /**
+   * Retrieve all searchabilities (V2)
+   *
+   * @function retrieveSearchabilitiesV2
+   * @param {object} parameters - Additional parameters for retrieving searchabilities
+   * @param {string} [parameters.name] - Name of searchability field to filter for
+   * @param {number} [parameters.page] - Page number you'd like to request
+   * @param {number} [parameters.offset] - The number of results to skip from the beginning
+   * @param {number} [parameters.numResultsPerPage] - Number of searchabilities per page. Default value is 20.
+   * @param {boolean} [parameters.fuzzySearchable] - Filter by fuzzy_searchable
+   * @param {boolean} [parameters.exactSearchable] - Filter by exact_searchable
+   * @param {boolean} [parameters.displayable] - Filter by displayable
+   * @param {string} [parameters.matchType] - Whether filters should be ANDed or ORed ('and' or 'or')
+   * @param {string} [parameters.sortBy] - The criteria by which searchabilities should be sorted ('name')
+   * @param {string} [parameters.sortOrder] - The sort order ('ascending' or 'descending')
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{searchabilities: object[], total_count: number}>} - Paginated list of searchability configurations
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.retrieveSearchabilitiesV2({
+   *     page: 1,
+   *     numResultsPerPage: 50,
+   * });
+   */
+  retrieveSearchabilitiesV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Support both camelCase and snake_case for backwards compatibility
+    const {
+      name,
+      page,
+      offset,
+      num_results_per_page,
+      numResultsPerPage = num_results_per_page,
+      fuzzy_searchable,
+      fuzzySearchable = fuzzy_searchable,
+      exact_searchable,
+      exactSearchable = exact_searchable,
+      displayable,
+      match_type,
+      matchType = match_type,
+      sort_by,
+      sortBy = sort_by,
+      sort_order,
+      sortOrder = sort_order,
+      section = 'Products',
+    } = parameters;
+    const additionalQueryParams = {};
+
+    if (section) {
+      additionalQueryParams.section = section;
+    }
+
+    if (!helpers.isNil(page)) {
+      additionalQueryParams.page = page;
+    }
+
+    if (!helpers.isNil(offset)) {
+      additionalQueryParams.offset = offset;
+    }
+
+    if (!helpers.isNil(numResultsPerPage)) {
+      additionalQueryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (name) {
+      additionalQueryParams.name = name;
+    }
+
+    if (!helpers.isNil(fuzzySearchable)) {
+      additionalQueryParams.fuzzy_searchable = fuzzySearchable;
+    }
+
+    if (!helpers.isNil(exactSearchable)) {
+      additionalQueryParams.exact_searchable = exactSearchable;
+    }
+
+    if (!helpers.isNil(displayable)) {
+      additionalQueryParams.displayable = displayable;
+    }
+
+    if (matchType) {
+      additionalQueryParams.match_type = matchType;
+    }
+
+    if (sortBy) {
+      additionalQueryParams.sort_by = sortBy;
+    }
+
+    if (sortOrder) {
+      additionalQueryParams.sort_order = sortOrder;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Get a single searchability configuration (V2)
+   *
+   * @function getSearchabilityV2
+   * @param {object} parameters - Additional parameters for retrieving a searchability
+   * @param {string} parameters.name - Name of the searchability field
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Searchability configuration response
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.getSearchabilityV2({
+   *     name: 'keywords',
+   * });
+   */
+  getSearchabilityV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { name, section = 'Products' } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section,
+    };
+
+    try {
+      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Create or update searchabilities (V2)
+   *
+   * @function patchSearchabilitiesV2
+   * @param {object} parameters - Additional parameters for patching searchabilities
+   * @param {object[]} parameters.searchabilities - Array of searchabilities to create or update
+   * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{searchabilities: object[], total_count: number}>} - Updated searchability configurations
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.patchSearchabilitiesV2({
+   *   searchabilities: [
+   *     {
+   *       name: 'style_id',
+   *       exactSearchable: true,
+   *     },
+   *     {
+   *       name: 'keywords',
+   *       fuzzySearchable: true,
+   *     },
+   *   ],
+   * });
+   */
+  patchSearchabilitiesV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Support both camelCase and snake_case for backwards compatibility
+    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
+    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+
+    if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
+      return Promise.reject(new Error('searchabilities is a required parameter of type array'));
+    }
+
+    const searchabilities = searchabilitiesRaw.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section,
+    };
+
+    if (!helpers.isNil(skipRebuild)) {
+      additionalQueryParams.skip_rebuild = skipRebuild;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ searchabilities }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Update a single searchability configuration (V2)
+   *
+   * @function patchSearchabilityV2
+   * @param {object} parameters - Additional parameters for patching a searchability
+   * @param {string} parameters.name - Name of the searchability field
+   * @param {boolean} [parameters.fuzzySearchable] - Whether the field is fuzzy searchable
+   * @param {boolean} [parameters.exactSearchable] - Whether the field is exact searchable
+   * @param {boolean} [parameters.displayable] - Whether the field is displayable
+   * @param {boolean} [parameters.hidden] - Whether the field is hidden
+   * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Updated searchability configuration response
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.patchSearchabilityV2({
+   *     name: 'keywords',
+   *     fuzzySearchable: true,
+   * });
+   */
+  patchSearchabilityV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Support both camelCase and snake_case for backwards compatibility
+    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
+    const { name, skip_rebuild: _sr, skipRebuild: _srCamel, section = 'Products', ...rest } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section,
+    };
+
+    if (!helpers.isNil(skipRebuild)) {
+      additionalQueryParams.skip_rebuild = skipRebuild;
+    }
+
+    try {
+      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Delete searchabilities (V2)
+   *
+   * @function deleteSearchabilitiesV2
+   * @param {object} parameters - Additional parameters for deleting searchabilities
+   * @param {object[]} parameters.searchabilities - Array of searchabilities names to delete
+   * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<{searchabilities: object[], total_count: number}>} - Deleted searchability configurations
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.deleteSearchabilitiesV2({
+   *   searchabilities: [
+   *     { name: 'style_id' },
+   *     { name: 'keywords' },
+   *   ],
+   * });
+   */
+  deleteSearchabilitiesV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Support both camelCase and snake_case for backwards compatibility
+    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
+    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+
+    if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
+      return Promise.reject(new Error('searchabilities is a required parameter of type array'));
+    }
+
+    const searchabilities = searchabilitiesRaw.map((config) => toSnakeCaseKeys(config));
+    const additionalQueryParams = {
+      section,
+    };
+
+    if (!helpers.isNil(skipRebuild)) {
+      additionalQueryParams.skip_rebuild = skipRebuild;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('searchabilities', this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify({ searchabilities }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Delete a single searchability configuration (V2)
+   *
+   * @function deleteSearchabilityV2
+   * @param {object} parameters - Additional parameters for deleting a searchability
+   * @param {string} parameters.name - Name of the searchability field to delete
+   * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
+   * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise<object>} - Deleted searchability configuration response
+   * @see https://docs.constructor.com/reference/configuration-searchabilities
+   * @example
+   * constructorio.catalog.deleteSearchabilityV2({
+   *     name: 'keywords',
+   * });
+   */
+  deleteSearchabilityV2(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    // Support both camelCase and snake_case for backwards compatibility
+    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
+    const { name, section = 'Products' } = parameters;
+
+    if (!name || typeof name !== 'string') {
+      return Promise.reject(new Error('name is a required parameter of type string'));
+    }
+
+    const additionalQueryParams = {
+      section,
+    };
+
+    if (!helpers.isNil(skipRebuild)) {
+      additionalQueryParams.skip_rebuild = skipRebuild;
+    }
+
+    try {
+      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
 }
 
 module.exports = Catalog;
