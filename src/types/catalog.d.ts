@@ -277,6 +277,14 @@ export interface PatchSearchabilitiesParameters {
 }
 
 // V2 Facet Configuration Parameters
+export interface AddFacetConfigurationV2Parameters extends Omit<FacetConfigurationV2, 'section'> {
+  section?: string;
+}
+
+export interface ReplaceFacetConfigurationV2Parameters extends Omit<FacetConfigurationV2, 'section'> {
+  section?: string;
+}
+
 export interface GetFacetConfigurationsV2Parameters {
   page?: number;
   numResultsPerPage?: number;
@@ -687,7 +695,7 @@ declare class Catalog {
 
   // V2 Facet Configuration Methods
   addFacetConfigurationV2(
-    parameters: FacetConfigurationV2,
+    parameters: AddFacetConfigurationV2Parameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfigurationV2Response>;
 
@@ -719,7 +727,7 @@ declare class Catalog {
   }>;
 
   replaceFacetConfigurationV2(
-    parameters: FacetConfigurationV2,
+    parameters: ReplaceFacetConfigurationV2Parameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfigurationV2Response>;
 

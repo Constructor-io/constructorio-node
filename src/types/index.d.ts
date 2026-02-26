@@ -353,7 +353,7 @@ export interface FacetConfigurationV2 {
   protected?: boolean;
   countable?: boolean;
   optionsLimit?: number;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   section?: string;
 }
 
@@ -374,7 +374,7 @@ export interface FacetConfigurationV2Response {
   protected?: boolean;
   countable?: boolean;
   options_limit?: number;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   created_at?: string;
   updated_at?: string;
 }

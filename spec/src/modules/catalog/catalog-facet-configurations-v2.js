@@ -56,10 +56,7 @@ describe('ConstructorIO - Catalog', () => {
     const facetConfigurations = [];
 
     after(async function afterHook() {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
+      const { catalog } = new ConstructorIO(validOptions);
 
       // Clean up all the facet configurations that were created
       // Increasing timeout, since cleanup is consistently taking longer than default 5 seconds
@@ -131,6 +128,15 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.addFacetConfigurationV2(facetConfiguration)).to.eventually.be.rejected;
       });
 
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addFacetConfigurationV2({ pathInMetadata: 'test.path', type: 'multiple' })).to.eventually.be.rejectedWith('name is a required parameter of type string');
+      });
+
       it('Should return error when adding a facet configuration without required pathInMetadata', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -143,7 +149,7 @@ describe('ConstructorIO - Catalog', () => {
           // Missing pathInMetadata
         };
 
-        return expect(catalog.addFacetConfigurationV2(invalidConfig)).to.eventually.be.rejected;
+        return expect(catalog.addFacetConfigurationV2(invalidConfig)).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -497,6 +503,15 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('createOrReplaceFacetConfigurationsV2', () => {
+      it('Should return error when facetConfigurations parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.createOrReplaceFacetConfigurationsV2({})).to.eventually.be.rejectedWith('facetConfigurations is a required parameter of type array');
+      });
+
       it('Should return a response when creating or replacing facet configurations', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,

@@ -57,10 +57,7 @@ describe('ConstructorIO - Catalog', () => {
     const searchabilitiesToCleanup = [];
 
     after(async function afterHook() {
-      const { catalog } = new ConstructorIO({
-        ...validOptions,
-        fetch: fetchSpy,
-      });
+      const { catalog } = new ConstructorIO(validOptions);
 
       // Clean up all the searchabilities that were created
       this.timeout(30000);
