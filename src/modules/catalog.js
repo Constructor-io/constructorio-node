@@ -3701,7 +3701,7 @@ class Catalog {
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -3911,7 +3911,7 @@ class Catalog {
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -3986,7 +3986,7 @@ class Catalog {
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -4046,7 +4046,7 @@ class Catalog {
     };
 
     try {
-      requestUrl = createCatalogUrl(`facets/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -4225,7 +4225,7 @@ class Catalog {
     };
 
     try {
-      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`searchabilities/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -4367,7 +4367,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`searchabilities/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -4499,7 +4499,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`searchabilities/${encodeURIComponent(name)}`, this.options, additionalQueryParams, 'v2');
+      requestUrl = createCatalogUrl(`searchabilities/${name}`, this.options, additionalQueryParams, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
