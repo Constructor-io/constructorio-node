@@ -399,7 +399,9 @@ describe('ConstructorIO - Catalog', () => {
 
         searchabilitiesToCleanup.push({ name: upsertName });
 
-        return expect(catalog.patchSearchabilityV2({ name: upsertName, displayable: false })).to.eventually.be.fulfilled;
+        return expect(catalog.patchSearchabilityV2({
+          name: upsertName, displayable: false,
+        })).to.eventually.be.fulfilled;
       });
 
       if (!skipNetworkTimeoutTests) {
