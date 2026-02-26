@@ -309,7 +309,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSearchabilityV2({ name: 'non_existent_searchability_xyz123' })).to.eventually.be.rejected;
+        return expect(catalog.getSearchabilityV2({ name: 'truly_non_existent_searchability_abc987' })).to.eventually.be.rejected;
       });
 
       it('Should return error when name parameter is missing', () => {
