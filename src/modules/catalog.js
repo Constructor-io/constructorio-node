@@ -31,7 +31,9 @@ function createCatalogUrl(path, options, additionalQueryParams = {}, apiVersion 
 
   const queryString = qs.stringify(queryParams, { indices: false });
 
-  return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodeURIComponent(path)}?${queryString}`;
+  const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+
+  return `${serviceUrl}/${encodeURIComponent(apiVersion)}/${encodedPath}?${queryString}`;
 }
 
 // Convert a read stream to buffer
