@@ -395,7 +395,11 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.patchSearchabilityV2({ name: 'non_existent_searchability_xyz123', displayable: false })).to.eventually.be.fulfilled;
+        const upsertName = 'non_existent_searchability_xyz123';
+
+        searchabilitiesToCleanup.push({ name: upsertName });
+
+        return expect(catalog.patchSearchabilityV2({ name: upsertName, displayable: false })).to.eventually.be.fulfilled;
       });
 
       if (!skipNetworkTimeoutTests) {
