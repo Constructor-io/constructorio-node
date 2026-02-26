@@ -3581,7 +3581,8 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    if (!parameters.pathInMetadata && !parameters.path_in_metadata) {
+    const pathInMetadata = parameters.pathInMetadata || parameters.path_in_metadata;
+    if (!pathInMetadata || typeof pathInMetadata !== 'string') {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
@@ -3917,7 +3918,8 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    if (!parameters.pathInMetadata && !parameters.path_in_metadata) {
+    const pathInMetadata = parameters.pathInMetadata || parameters.path_in_metadata;
+    if (!pathInMetadata || typeof pathInMetadata !== 'string') {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
@@ -4171,15 +4173,15 @@ class Catalog {
       additionalQueryParams.displayable = displayable;
     }
 
-    if (matchType) {
+    if (!helpers.isNil(matchType)) {
       additionalQueryParams.match_type = matchType;
     }
 
-    if (sortBy) {
+    if (!helpers.isNil(sortBy)) {
       additionalQueryParams.sort_by = sortBy;
     }
 
-    if (sortOrder) {
+    if (!helpers.isNil(sortOrder)) {
       additionalQueryParams.sort_order = sortOrder;
     }
 
@@ -4296,8 +4298,7 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     // Support both camelCase and snake_case for backwards compatibility
-    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
-    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
@@ -4366,8 +4367,7 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     // Support both camelCase and snake_case for backwards compatibility
-    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
-    const { name, skip_rebuild: _sr, skipRebuild: _srCamel, section = 'Products', ...rest } = parameters;
+    const { name, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products', ...rest } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
@@ -4433,8 +4433,7 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     // Support both camelCase and snake_case for backwards compatibility
-    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
-    const { searchabilities: searchabilitiesRaw, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
@@ -4498,8 +4497,7 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     // Support both camelCase and snake_case for backwards compatibility
-    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
-    const { name, section = 'Products' } = parameters;
+    const { name, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));

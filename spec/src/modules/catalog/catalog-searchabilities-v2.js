@@ -422,6 +422,7 @@ describe('ConstructorIO - Catalog', () => {
         searchabilityToDelete = createMockSearchabilityConfigurationV2();
 
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
+          searchabilitiesToCleanup.push(searchabilityToDelete);
           done();
         }).catch(done);
       });
@@ -486,6 +487,7 @@ describe('ConstructorIO - Catalog', () => {
         searchabilityToDelete = createMockSearchabilityConfigurationV2();
 
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
+          searchabilitiesToCleanup.push(searchabilityToDelete);
           done();
         }).catch(done);
       });
