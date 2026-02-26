@@ -3923,7 +3923,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      body: JSON.stringify(toSnakeCaseKeys({ name, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),

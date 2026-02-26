@@ -389,13 +389,13 @@ describe('ConstructorIO - Catalog', () => {
         }).catch(done);
       });
 
-      it('Should return error when patching a searchability that does not exist', () => {
+      it('Should create a searchability when patching one that does not exist (upsert behavior)', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        return expect(catalog.patchSearchabilityV2({ name: 'non_existent_searchability_xyz123', displayable: false })).to.eventually.be.rejected;
+        return expect(catalog.patchSearchabilityV2({ name: 'non_existent_searchability_xyz123', displayable: false })).to.eventually.be.fulfilled;
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -433,7 +433,7 @@ describe('ConstructorIO - Catalog', () => {
           searchabilities: [{ name: searchabilityToDelete.name }],
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities');
           expect(res).to.have.property('searchabilities').to.be.an('array');
@@ -495,7 +495,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.deleteSearchabilityV2({ name: searchabilityToDelete.name }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities/');
           expect(res).to.have.property('name').to.equal(searchabilityToDelete.name);
