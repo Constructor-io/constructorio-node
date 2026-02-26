@@ -49,7 +49,7 @@ describe('ConstructorIO - Catalog', () => {
     fetchSpy = null;
 
     // Add throttling between requests to avoid rate limiting
-    setTimeout(() => done(), sendTimeout);
+    setTimeout(done, sendTimeout);
   });
 
   describe('Facet Configurations V2', () => {
@@ -66,7 +66,7 @@ describe('ConstructorIO - Catalog', () => {
           await catalog.removeFacetConfigurationV2(facetConfig);
         } catch (e) {
           // Log warning for debugging but don't fail cleanup
-          console.warn(`Cleanup warning: failed to remove facet ${facetConfig.name}:`, e.message);
+          console.warn(`Cleanup warning: failed to remove facet ${facetConfig.name}:`, e.message); // eslint-disable-line no-console
         }
       }
     });

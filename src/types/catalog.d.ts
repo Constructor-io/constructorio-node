@@ -277,13 +277,9 @@ export interface PatchSearchabilitiesParameters {
 }
 
 // V2 Facet Configuration Parameters
-export interface AddFacetConfigurationV2Parameters extends Omit<FacetConfigurationV2, 'section'> {
-  section?: string;
-}
+export type AddFacetConfigurationV2Parameters = FacetConfigurationV2;
 
-export interface ReplaceFacetConfigurationV2Parameters extends Omit<FacetConfigurationV2, 'section'> {
-  section?: string;
-}
+export type ReplaceFacetConfigurationV2Parameters = FacetConfigurationV2;
 
 export interface GetFacetConfigurationsV2Parameters {
   page?: number;

@@ -69,7 +69,7 @@ describe('ConstructorIO - Catalog', () => {
         } catch (e) {
           // Log warning for debugging but don't fail cleanup
           const names = searchabilitiesToCleanup.map((s) => s.name).join(', ');
-          console.warn(`Cleanup warning: failed to remove searchabilities [${names}]:`, e.message);
+          console.warn(`Cleanup warning: failed to remove searchabilities [${names}]:`, e.message); // eslint-disable-line no-console
         }
       }
     });

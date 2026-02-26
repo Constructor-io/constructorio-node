@@ -3575,14 +3575,13 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { name, pathInMetadata, path_in_metadata, section, ...rest } = parameters;
+    const { section, ...rest } = parameters;
 
-    if (!name || typeof name !== 'string') {
+    if (!parameters.name || typeof parameters.name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const effectivePathInMetadata = pathInMetadata || path_in_metadata;
-    if (!effectivePathInMetadata || typeof effectivePathInMetadata !== 'string') {
+    if (!parameters.pathInMetadata && !parameters.path_in_metadata) {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
@@ -3600,7 +3599,7 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(toSnakeCaseKeys({ name, pathInMetadata: effectivePathInMetadata, ...rest })),
+      body: JSON.stringify(toSnakeCaseKeys(rest)),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -3918,6 +3917,10 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
+    if (!parameters.pathInMetadata && !parameters.path_in_metadata) {
+      return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
+    }
+
     const additionalQueryParams = {
       section: section || 'Products',
     };
@@ -4136,7 +4139,7 @@ class Catalog {
     } = parameters;
     const additionalQueryParams = {};
 
-    if (section) {
+    if (!helpers.isNil(section)) {
       additionalQueryParams.section = section;
     }
 
@@ -4152,7 +4155,7 @@ class Catalog {
       additionalQueryParams.num_results_per_page = numResultsPerPage;
     }
 
-    if (name) {
+    if (!helpers.isNil(name)) {
       additionalQueryParams.name = name;
     }
 
@@ -4363,8 +4366,8 @@ class Catalog {
     const controller = new AbortController();
     const { signal } = controller;
     // Support both camelCase and snake_case for backwards compatibility
-    const { name, skip_rebuild, skipRebuild: skipRebuildCamel, section = 'Products', ...rest } = parameters;
-    const skipRebuild = skipRebuildCamel !== undefined ? skipRebuildCamel : skip_rebuild;
+    const { skip_rebuild, skipRebuild = skip_rebuild } = parameters;
+    const { name, skip_rebuild: _sr, skipRebuild: _srCamel, section = 'Products', ...rest } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
