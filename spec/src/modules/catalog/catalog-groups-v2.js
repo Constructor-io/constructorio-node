@@ -61,7 +61,7 @@ function addToCleanup(groups) {
   groups.forEach((group) => createdItemGroupIds.push(group.id));
 }
 
-describe.only('ConstructorIO - Catalog', () => {
+describe('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
