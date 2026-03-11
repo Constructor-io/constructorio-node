@@ -61,7 +61,7 @@ function addToCleanup(groups) {
   groups.forEach((group) => createdItemGroupIds.push(group.id));
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -83,10 +83,10 @@ describe('ConstructorIO - Catalog', () => {
     // Clean up created item groups
     const { catalog } = new ConstructorIO({
       ...validOptions,
-      fetch: fetchSpy,
+      fetch: nodeFetch,
     });
 
-    catalog.deleteItemGroups({ ids: createdItemGroupIds.map((id) => ({ id })) });
+    return catalog.deleteItemGroups({ itemGroups: createdItemGroupIds.map((id) => ({ id })) });
   });
 
   describe('Groups V2', () => {

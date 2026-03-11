@@ -1260,7 +1260,7 @@ class Catalog {
   }
 
   /**
-   * Retrieve all items groups, optionally filtered by ids.
+   * Retrieve all item groups, optionally filtered by ids.
    *
    * @function retrieveItemGroups
    * @param {object} [parameters] - Additional parameters for item group details
@@ -1271,7 +1271,7 @@ class Catalog {
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
-   * @see https://docs.constructor.com/reference/v2-item-groups-retrieve-item-group
+   * @see https://docs.constructor.com/reference/v2-item-groups-retrieve-item-groups
    * @example
    * constructorio.catalog.retrieveItemGroups();
    * @example
@@ -1297,11 +1297,11 @@ class Catalog {
       queryParams.num_results_per_page = numResultsPerPage;
     }
 
-    if (page) {
+    if (page && Number.isInteger(page) && page > 0) {
       queryParams.page = page;
     }
 
-    if (offset) {
+    if (offset && Number.isInteger(offset) && offset > 0) {
       queryParams.offset = offset;
     }
 
@@ -1461,7 +1461,7 @@ class Catalog {
   }
 
   /**
-   * Update existing item groups data. Data included in the request will be merged with data of the existing items groups.
+   * Update existing item groups data. Data included in the request will be merged with data of the existing item groups.
    * Returns an identifier for a background task.
    *
    * @function updateItemGroups
