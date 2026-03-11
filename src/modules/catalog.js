@@ -885,7 +885,7 @@ class Catalog {
    *     parentId: 'cat_49203',
    * });
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link addOrUpdateItemGroups} instead.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} instead.
    */
   addItemGroup(parameters = {}, networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -948,7 +948,7 @@ class Catalog {
    *     ],
    * });
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link createOrReplaceItemGroups} instead.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} instead.
    */
   addItemGroups(parameters = {}, networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1005,7 +1005,7 @@ class Catalog {
    *     id: 'subcat_12891',
    * });
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link retrieveItemGroup} instead.
+   * Use [retrieveItemGroup]{@link module:catalog~retrieveItemGroup} instead.
    */
   getItemGroup(parameters = {}, networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1051,7 +1051,8 @@ class Catalog {
    * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.getItemGroups();
-   * @deprecated Use retrieveItemGroups instead
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [retrieveItemGroups]{@link module:catalog~retrieveItemGroups} instead.
    */
   getItemGroups(networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1112,7 +1113,7 @@ class Catalog {
    *     ],
    * });
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link createOrReplaceItemGroups} or {@link updateItemGroups} instead.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} or [updateItemGroups]{@link module:catalog~updateItemGroups} instead.
    */
   addOrUpdateItemGroups(parameters = {}, networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1176,7 +1177,7 @@ class Catalog {
    *     },
    * });
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link updateItemGroups} instead.
+   * Use [updateItemGroups]{@link module:catalog~updateItemGroups} instead.
    */
   modifyItemGroup(parameters = {}, networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1225,7 +1226,7 @@ class Catalog {
    * @example
    * constructorio.catalog.removeItemGroups();
    * @deprecated This method is deprecated and will be removed in the next major version.
-   * Use {@link deleteItemGroups} instead.
+   * Use [deleteItemGroups]{@link module:catalog~deleteItemGroups} instead.
    */
   removeItemGroups(networkParameters = {}) {
     // eslint-disable-next-line no-console
@@ -1356,7 +1357,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2');
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2', false);
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1399,7 +1400,7 @@ class Catalog {
    *             id: 'group_1',
    *             name: 'Shoes',
    *             data: { url: '/shoes' },
-   *             parent_ids: ['parent_group'],
+   *             parentIds: ['parent_group'],
    *         },
    *         {
    *             id: 'group_2',
