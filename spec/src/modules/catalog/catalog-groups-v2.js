@@ -28,34 +28,26 @@ const skipNetworkTimeoutTests = process.env.SKIP_NETWORK_TIMEOUT_TESTS === 'true
 function createMockItemGroupV2() {
   const uuid = uuidv4();
 
-  const group = {
+  return {
     id: `group-v2-${uuid}`,
     name: `Group V2 ${uuid}`,
   };
-
-  createdItemGroupIds.push(group.id);
-
-  return group;
 }
 
 function createMockItemGroupV2WithParent(parentId) {
   const uuid = uuidv4();
 
-  const group = {
+  return {
     id: `group-v2-${uuid}`,
     name: `Group V2 ${uuid}`,
     parentIds: [parentId],
   };
-
-  createdItemGroupIds.push(group.id);
-
-  return group;
 }
 
 function createMockItemGroupV2WithData() {
   const uuid = uuidv4();
 
-  const group = {
+  return {
     id: `group-v2-${uuid}`,
     name: `Group V2 ${uuid}`,
     data: {
@@ -63,10 +55,10 @@ function createMockItemGroupV2WithData() {
       imageUrl: `https://example.com/images/${uuid}.jpg`,
     },
   };
+}
 
-  createdItemGroupIds.push(group.id);
-
-  return group;
+function addToCleanup(groups) {
+  groups.forEach((group) => createdItemGroupIds.push(group.id));
 }
 
 describe('ConstructorIO - Catalog', () => {
@@ -296,6 +288,7 @@ describe('ConstructorIO - Catalog', () => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
+          addToCleanup(groups);
           expect(res).to.have.property('task_id').to.be.a('number');
           expect(res).to.have.property('task_status_path').to.be.a('string');
 
@@ -320,6 +313,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.createOrReplaceItemGroups({ itemGroups: [parentGroup, childGroup] }).then((res) => {
           const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
+          addToCleanup([parentGroup, childGroup]);
           expect(res).to.have.property('task_id').to.be.a('number');
           expect(res).to.have.property('task_status_path').to.be.a('string');
           expect(requestedBody).to.have.property('item_groups').to.be.an('array').with.length(2);
@@ -338,6 +332,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.createOrReplaceItemGroups({ itemGroups: [groupWithData] }).then((res) => {
           const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
+          addToCleanup([groupWithData]);
           expect(res).to.have.property('task_id').to.be.a('number');
           expect(requestedBody).to.have.property('item_groups').to.be.an('array').with.length(1);
           expect(requestedBody.item_groups[0]).to.have.property('data').to.be.an('object');
@@ -357,6 +352,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.createOrReplaceItemGroups({ itemGroups: groups, force: true }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          addToCleanup(groups);
           expect(res).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('force').to.equal('true');
           done();
@@ -373,6 +369,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.createOrReplaceItemGroups({ itemGroups: groups, notificationEmail: 'test@example.com' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+          addToCleanup(groups);
           expect(res).to.have.property('task_id').to.be.a('number');
           expect(requestedUrlParams).to.have.property('notification_email').to.equal('test@example.com');
           done();
