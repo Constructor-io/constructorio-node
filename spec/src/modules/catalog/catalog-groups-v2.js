@@ -62,7 +62,7 @@ function addToCleanup(groups) {
   groups.forEach((group) => createdItemGroupIds.push(group.id));
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -80,8 +80,8 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  after((done) => {
-    if (!createdItemGroupIds.length && !networkTimeoutsItemGroupIds.length) { return done(); }
+  after(() => {
+    if (!createdItemGroupIds.length && !networkTimeoutsItemGroupIds.length) { return Promise.resolve(); }
 
     const { catalog } = new ConstructorIO({
       ...validOptions,
