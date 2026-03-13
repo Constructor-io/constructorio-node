@@ -19,6 +19,7 @@ const sendTimeout = 300;
 const testApiKey = process.env.TEST_CATALOG_API_KEY;
 const testApiToken = process.env.TEST_API_TOKEN;
 const createdItemGroupIds = [];
+const networkTimeoutsItemGroupIds = [];
 const validOptions = {
   apiKey: testApiKey,
   apiToken: testApiToken,
@@ -79,14 +80,25 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  after(() => {
-    // Clean up created item groups
+  after((done) => {
+    if (!createdItemGroupIds.length && !networkTimeoutsItemGroupIds.length) { return done(); }
+
     const { catalog } = new ConstructorIO({
       ...validOptions,
       fetch: nodeFetch,
     });
+    const APIResponses = [];
 
-    return catalog.deleteItemGroups({ itemGroups: createdItemGroupIds.map((id) => ({ id })) });
+    // Clean up created item groups
+    APIResponses.push(catalog
+      .deleteItemGroups({ itemGroups: createdItemGroupIds.map((id) => ({ id })), force: true }));
+
+    // Clean up potentially created network timeouts item groups
+    networkTimeoutsItemGroupIds.forEach((id) => {
+      APIResponses.push(catalog.deleteItemGroups({ itemGroups: [{ id }], force: true }));
+    });
+
+    return Promise.all(APIResponses);
   });
 
   describe('Groups V2', () => {
@@ -425,8 +437,10 @@ describe('ConstructorIO - Catalog', () => {
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
+          const mockItemGroup = createMockItemGroupV2();
+          networkTimeoutsItemGroupIds.push(mockItemGroup.id);
 
-          return expect(catalog.createOrReplaceItemGroups({ itemGroups: [createMockItemGroupV2()] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.createOrReplaceItemGroups({ itemGroups: [mockItemGroup] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
 
         it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -434,8 +448,10 @@ describe('ConstructorIO - Catalog', () => {
             ...validOptions,
             networkParameters: { timeout: 20 },
           });
+          const mockItemGroup = createMockItemGroupV2();
+          networkTimeoutsItemGroupIds.push(mockItemGroup.id);
 
-          return expect(catalog.createOrReplaceItemGroups({ itemGroups: [createMockItemGroupV2()] })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.createOrReplaceItemGroups({ itemGroups: [mockItemGroup] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -505,6 +521,7 @@ describe('ConstructorIO - Catalog', () => {
 
         const updatedGroup = {
           id: mockItemGroup.id,
+          name: 'Test',
           data: {
             url: '/updated-category',
             imageUrl: 'https://example.com/updated.jpg',
