@@ -67,7 +67,7 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  describe('Groups', () => {
+  describe('Groups V1', () => {
     describe('addItemGroup', () => {
       const group = createMockItemGroup();
 

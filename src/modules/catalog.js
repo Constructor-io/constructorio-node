@@ -884,8 +884,13 @@ class Catalog {
    *     name: 'Hoodies & Sweaters',
    *     parentId: 'cat_49203',
    * });
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} instead.
    */
   addItemGroup(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: addItemGroup is deprecated and will be removed in the next major version. Use createOrReplaceItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -942,8 +947,13 @@ class Catalog {
    *         },
    *     ],
    * });
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} instead.
    */
   addItemGroups(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: addItemGroups is deprecated and will be removed in the next major version. Use createOrReplaceItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -994,8 +1004,13 @@ class Catalog {
    * constructorio.catalog.getItemGroup({
    *     id: 'subcat_12891',
    * });
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [retrieveItemGroup]{@link module:catalog~retrieveItemGroup} instead.
    */
   getItemGroup(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: getItemGroup is deprecated and will be removed in the next major version. Use retrieveItemGroup instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -1036,8 +1051,13 @@ class Catalog {
    * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.getItemGroups();
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [retrieveItemGroups]{@link module:catalog~retrieveItemGroups} instead.
    */
   getItemGroups(networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: getItemGroups is deprecated and will be removed in the next major version. Use retrieveItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -1092,8 +1112,13 @@ class Catalog {
    *         },
    *     ],
    * });
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [createOrReplaceItemGroups]{@link module:catalog~createOrReplaceItemGroups} or [updateItemGroups]{@link module:catalog~updateItemGroups} instead.
    */
   addOrUpdateItemGroups(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: addOrUpdateItemGroups is deprecated and will be removed in the next major version. Use createOrReplaceItemGroups or updateItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -1151,8 +1176,13 @@ class Catalog {
    *         landing_image_url: '/images/hd_swtrs_jckts.jpg',
    *     },
    * });
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [updateItemGroups]{@link module:catalog~updateItemGroups} instead.
    */
   modifyItemGroup(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: modifyItemGroup is deprecated and will be removed in the next major version. Use updateItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -1195,8 +1225,13 @@ class Catalog {
    * @see https://docs.constructor.com/reference/catalog-item-groups
    * @example
    * constructorio.catalog.removeItemGroups();
+   * @deprecated This method is deprecated and will be removed in the next major version.
+   * Use [deleteItemGroups]{@link module:catalog~deleteItemGroups} instead.
    */
   removeItemGroups(networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: removeItemGroups is deprecated and will be removed in the next major version. Use deleteItemGroups instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -1222,6 +1257,344 @@ class Catalog {
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
     }).then((json) => json);
+  }
+
+  /**
+   * Retrieve all item groups, optionally filtered by ids.
+   *
+   * @function retrieveItemGroups
+   * @param {object} [parameters] - Additional parameters for item group details
+   * @param {string[]} [parameters.ids] - Item group IDs to filter by
+   * @param {number} [parameters.numResultsPerPage=20] - The number of item groups to return (max 100)
+   * @param {number} [parameters.page] - The page of results to return
+   * @param {number} [parameters.offset] - The number of results to skip
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.com/reference/v2-item-groups-retrieve-item-groups
+   * @example
+   * constructorio.catalog.retrieveItemGroups();
+   * @example
+   * constructorio.catalog.retrieveItemGroups({
+   *     ids: ['group_1', 'group_2'],
+   *     numResultsPerPage: 50,
+   *     page: 1,
+   * });
+   */
+  retrieveItemGroups(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { ids, numResultsPerPage, page, offset } = parameters;
+    const queryParams = {};
+
+    if (ids) {
+      queryParams.id = ids;
+    }
+
+    if (numResultsPerPage) {
+      queryParams.num_results_per_page = numResultsPerPage;
+    }
+
+    if (page && Number.isInteger(page) && page > 0) {
+      queryParams.page = page;
+    }
+
+    if (offset && Number.isInteger(offset) && offset > 0) {
+      queryParams.offset = offset;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Retrieve an item group.
+   *
+   * @function retrieveItemGroup
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {string} parameters.id - The item group ID to retrieve
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.com/reference/v2-item-groups-retrieve-item-group
+   * @example
+   * constructorio.catalog.retrieveItemGroup({
+   *     id: 'group_1',
+   * });
+   */
+  retrieveItemGroup(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { id } = parameters;
+
+    if (!id) {
+      return Promise.reject(new Error('id is a required parameter'));
+    }
+
+    try {
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2', false);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    return fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return helpers.throwHttpErrorFromResponse(new Error(), response);
+    });
+  }
+
+  /**
+   * Create item groups or replace the data of existing item groups. Returns an identifier for a background task.
+   *
+   * @function createOrReplaceItemGroups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {object[]} parameters.itemGroups - Array of item group objects you want to create or replace.
+   * @param {boolean} [parameters.force=false] - A flag to process the catalog even if it will invalidate a large part of existing data. Defaults to false.
+   * @param {string|string[]} [parameters.notificationEmail] - An email address or array of email addresses to receive an email notification in case the task fails
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.com/reference/v2-item-groups-create-or-replace-item-groups
+   * @example
+   * constructorio.catalog.createOrReplaceItemGroups({
+   *     itemGroups: [
+   *         {
+   *             id: 'group_1',
+   *             name: 'Shoes',
+   *             data: { url: '/shoes' },
+   *             parentIds: ['parent_group'],
+   *         },
+   *         {
+   *             id: 'group_2',
+   *             name: 'Apparel',
+   *         },
+   *     ],
+   * });
+   */
+  async createOrReplaceItemGroups(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { itemGroups, force, notificationEmail } = parameters;
+    const queryParams = {};
+
+    // Validate itemGroups is provided
+    if (!itemGroups || !Array.isArray(itemGroups)) {
+      return Promise.reject(new Error('itemGroups is a required parameter of type array'));
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    const response = await fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
+  }
+
+  /**
+   * Update existing item groups data. Data included in the request will be merged with data of the existing item groups.
+   * Returns an identifier for a background task.
+   *
+   * @function updateItemGroups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {object[]} parameters.itemGroups - Array of item group objects you want to update.
+   * @param {boolean} [parameters.force=false] - A flag to process the catalog even if it will invalidate a large part of existing data. Defaults to false.
+   * @param {string|string[]} [parameters.notificationEmail] - An email address or array of email addresses to receive an email notification in case the task fails
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.com/reference/v2-item-groups-update-item-groups
+   * @example
+   * constructorio.catalog.updateItemGroups({
+   *     itemGroups: [
+   *         {
+   *             id: 'group_1',
+   *             name: 'Updated Shoes',
+   *         },
+   *         {
+   *             id: 'group_2',
+   *             data: { url: '/new-apparel' },
+   *         },
+   *     ],
+   * });
+   */
+  async updateItemGroups(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { itemGroups, force, notificationEmail } = parameters;
+    const queryParams = {};
+
+    // Validate itemGroups is provided
+    if (!itemGroups || !Array.isArray(itemGroups)) {
+      return Promise.reject(new Error('itemGroups is a required parameter of type array'));
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    const response = await fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
+  }
+
+  /**
+   * Delete item groups. Returns an identifier for a background task.
+   *
+   * @function deleteItemGroups
+   * @param {object} parameters - Additional parameters for item group details
+   * @param {object[]} parameters.itemGroups - Array of item group objects with id to delete
+   * @param {boolean} [parameters.force=false] - A flag to process the catalog even if it will invalidate a large part of existing data. Defaults to false.
+   * @param {string|string[]} [parameters.notificationEmail] - An email address or array of email addresses to receive an email notification in case the task fails
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {Promise}
+   * @see https://docs.constructor.com/reference/v2-item-groups-delete-item-groups
+   * @example
+   * constructorio.catalog.deleteItemGroups({
+   *     itemGroups: [
+   *         { id: 'group_1' },
+   *         { id: 'group_2' },
+   *     ],
+   * });
+   */
+  async deleteItemGroups(parameters = {}, networkParameters = {}) {
+    let requestUrl;
+    const { fetch } = this.options;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const { itemGroups, force, notificationEmail } = parameters;
+    const queryParams = {};
+
+    // Validate itemGroups is provided
+    if (!itemGroups || !Array.isArray(itemGroups)) {
+      return Promise.reject(new Error('itemGroups is a required parameter of type array'));
+    }
+
+    if (force) {
+      queryParams.force = force;
+    }
+
+    if (notificationEmail) {
+      queryParams.notification_email = notificationEmail;
+    }
+
+    try {
+      requestUrl = createCatalogUrl('item_groups', this.options, queryParams, 'v2');
+    } catch (e) {
+      return Promise.reject(e);
+    }
+
+    // Handle network timeout if specified
+    helpers.applyNetworkTimeout(this.options, networkParameters, controller);
+
+    const response = await fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
   }
 
   /**
