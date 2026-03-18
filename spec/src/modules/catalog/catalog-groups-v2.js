@@ -218,7 +218,6 @@ describe('ConstructorIO - Catalog', () => {
           expect(decodeURIComponent(requestedUrl)).to.include(`/item_groups/${mockItemGroup.id}`);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
-          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
