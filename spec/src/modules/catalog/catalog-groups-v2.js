@@ -211,7 +211,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.retrieveItemGroup({ id: mockItemGroup.id }).then(() => {
+        catalog.retrieveItemGroup({ id: mockItemGroup.id }).finally(() => {
           const requestedUrl = helpers.extractUrlFromFetch(fetchSpy);
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
