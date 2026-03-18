@@ -112,7 +112,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.retrieveItemGroups({ ids: [mockItemGroup.id, mockItemGroup2.id] }).finally(() => {
+        catalog.retrieveItemGroups({ ids: [mockItemGroup.id, mockItemGroup2.id] }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           expect(requestedUrlParams).to.have.property('id').to.be.an('array');
           expect(requestedUrlParams.id[0]).to.equal(mockItemGroup.id);
@@ -211,13 +211,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.retrieveItemGroup({ id: mockItemGroup.id }).finally(() => {
+        catalog.retrieveItemGroup({ id: mockItemGroup.id }).then(() => {
           const requestedUrl = helpers.extractUrlFromFetch(fetchSpy);
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(decodeURIComponent(requestedUrl)).to.include(`/item_groups/${mockItemGroup.id}`);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
+          expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         });
       });
@@ -459,6 +460,18 @@ describe('ConstructorIO - Catalog', () => {
     describe('updateItemGroups', () => {
       const mockItemGroup = createMockItemGroupV2();
 
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: nodeFetch,
+        });
+
+        catalog.createOrReplaceItemGroups({ itemGroups: [mockItemGroup] }).then(() => {
+          addToCleanup([mockItemGroup]);
+          done();
+        });
+      });
+
       it('Should have correct body payload when updating item groups', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -467,7 +480,7 @@ describe('ConstructorIO - Catalog', () => {
 
         const updatedGroup = { ...mockItemGroup };
 
-        catalog.updateItemGroups({ itemGroups: [updatedGroup] }).finally(() => {
+        catalog.updateItemGroups({ itemGroups: [updatedGroup] }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -489,7 +502,7 @@ describe('ConstructorIO - Catalog', () => {
 
         const updatedGroup = { ...mockItemGroup };
 
-        catalog.updateItemGroups({ itemGroups: [updatedGroup], force: true }).finally(() => {
+        catalog.updateItemGroups({ itemGroups: [updatedGroup], force: true }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(requestedUrlParams).to.have.property('force').to.equal('true');
@@ -505,7 +518,7 @@ describe('ConstructorIO - Catalog', () => {
 
         const updatedGroup = { ...mockItemGroup };
 
-        catalog.updateItemGroups({ itemGroups: [updatedGroup], notificationEmail: 'test@example.com' }).finally(() => {
+        catalog.updateItemGroups({ itemGroups: [updatedGroup], notificationEmail: 'test@example.com' }).then(() => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(requestedUrlParams).to.have.property('notification_email').to.equal('test@example.com');
@@ -528,7 +541,7 @@ describe('ConstructorIO - Catalog', () => {
           },
         };
 
-        catalog.updateItemGroups({ itemGroups: [updatedGroup] }).finally(() => {
+        catalog.updateItemGroups({ itemGroups: [updatedGroup] }).then(() => {
           const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
           expect(requestedBody).to.have.property('item_groups').to.be.an('array').with.length(1);
@@ -603,6 +616,21 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('deleteItemGroups', () => {
+      const deleteGroup1 = createMockItemGroupV2();
+      const deleteGroup2 = createMockItemGroupV2();
+      const deleteGroup3 = createMockItemGroupV2();
+
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: nodeFetch,
+        });
+
+        catalog.createOrReplaceItemGroups({ itemGroups: [deleteGroup1, deleteGroup2, deleteGroup3] }).then(() => {
+          done();
+        });
+      });
+
       it('Should have correct body payload when deleting item groups', (done) => {
         const mockItemGroup = createMockItemGroupV2();
         const { catalog } = new ConstructorIO({

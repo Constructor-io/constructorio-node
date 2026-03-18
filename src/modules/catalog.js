@@ -1327,7 +1327,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then((json) => json);
+    });
   }
 
   /**
@@ -1357,7 +1357,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2', false);
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2');
     } catch (e) {
       return Promise.reject(e);
     }
@@ -1378,7 +1378,7 @@ class Catalog {
       }
 
       return helpers.throwHttpErrorFromResponse(new Error(), response);
-    }).then((json) => json);
+    });
   }
 
   /**
@@ -1439,25 +1439,21 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    try {
-      const response = await fetch(requestUrl, {
-        method: 'PUT',
-        body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
-        headers: {
-          'Content-Type': 'application/json',
-          ...helpers.createAuthHeader(this.options),
-        },
-        signal,
-      });
+    const response = await fetch(requestUrl, {
+      method: 'PUT',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
 
-      if (response.ok) {
-        return response.json();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    } catch (error) {
-      return Promise.reject(error);
+    if (response.ok) {
+      return response.json();
     }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
   }
 
   /**
@@ -1517,25 +1513,21 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    try {
-      const response = await fetch(requestUrl, {
-        method: 'PATCH',
-        body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
-        headers: {
-          'Content-Type': 'application/json',
-          ...helpers.createAuthHeader(this.options),
-        },
-        signal,
-      });
+    const response = await fetch(requestUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
 
-      if (response.ok) {
-        return response.json();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    } catch (error) {
-      return Promise.reject(error);
+    if (response.ok) {
+      return response.json();
     }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
   }
 
   /**
@@ -1588,25 +1580,21 @@ class Catalog {
     // Handle network timeout if specified
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
 
-    try {
-      const response = await fetch(requestUrl, {
-        method: 'DELETE',
-        body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
-        headers: {
-          'Content-Type': 'application/json',
-          ...helpers.createAuthHeader(this.options),
-        },
-        signal,
-      });
+    const response = await fetch(requestUrl, {
+      method: 'DELETE',
+      body: JSON.stringify({ item_groups: itemGroups.map((itemGroup) => toSnakeCaseKeys(itemGroup, false)) }),
+      headers: {
+        'Content-Type': 'application/json',
+        ...helpers.createAuthHeader(this.options),
+      },
+      signal,
+    });
 
-      if (response.ok) {
-        return response.json();
-      }
-
-      return helpers.throwHttpErrorFromResponse(new Error(), response);
-    } catch (error) {
-      return Promise.reject(error);
+    if (response.ok) {
+      return response.json();
     }
+
+    return helpers.throwHttpErrorFromResponse(new Error(), response);
   }
 
   /**
