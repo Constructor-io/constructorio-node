@@ -211,7 +211,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        catalog.retrieveItemGroup({ id: mockItemGroup.id }).finally(() => {
+        catalog.retrieveItemGroup({ id: mockItemGroup.id }).then(() => {
           const requestedUrl = helpers.extractUrlFromFetch(fetchSpy);
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
@@ -219,6 +219,13 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
+        }).catch((error) => {
+          if (error.status === 404 && error.message.toLowerCase().includes('item group not found')) {
+            // Item group isn't created yet due to the nature of the API (async)
+            // This is expected and we can safely ignore this error
+            done();
+          }
+          throw error;
         });
       });
 
@@ -615,21 +622,6 @@ describe('ConstructorIO - Catalog', () => {
     });
 
     describe('deleteItemGroups', () => {
-      const deleteGroup1 = createMockItemGroupV2();
-      const deleteGroup2 = createMockItemGroupV2();
-      const deleteGroup3 = createMockItemGroupV2();
-
-      before((done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: nodeFetch,
-        });
-
-        catalog.createOrReplaceItemGroups({ itemGroups: [deleteGroup1, deleteGroup2, deleteGroup3] }).then(() => {
-          done();
-        });
-      });
-
       it('Should have correct body payload when deleting item groups', (done) => {
         const mockItemGroup = createMockItemGroupV2();
         const { catalog } = new ConstructorIO({
