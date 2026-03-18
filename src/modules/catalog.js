@@ -1357,7 +1357,7 @@ class Catalog {
     }
 
     try {
-      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2');
+      requestUrl = createCatalogUrl(`item_groups/${id}`, this.options, {}, 'v2', false);
     } catch (e) {
       return Promise.reject(e);
     }
