@@ -336,17 +336,12 @@ export interface SearchabilityConfiguration {
 }
 
 // V2 Facet Types
-export interface FacetConfigurationV2 {
+export interface FacetConfigurationV2Base {
   name: string;
   pathInMetadata: string;
-  type: 'multiple' | 'hierarchical' | 'range';
   displayName?: string;
   sortOrder?: 'relevance' | 'value' | 'num_matches';
   sortDescending?: boolean;
-  rangeType?: 'static' | null;
-  rangeFormat?: 'boundaries' | 'options' | null;
-  rangeInclusive?: 'above' | 'below' | null;
-  rangeLimits?: number[];
   matchType?: 'any' | 'all' | 'none';
   position?: number | null;
   hidden?: boolean;
@@ -356,6 +351,12 @@ export interface FacetConfigurationV2 {
   data?: Record<string, unknown>;
   section?: string;
 }
+
+export type FacetConfigurationV2 = FacetConfigurationV2Base & (
+  | { type: 'multiple' | 'hierarchical'; rangeType?: null; rangeFormat?: null; rangeInclusive?: null; rangeLimits?: null }
+  | { type: 'range'; rangeFormat: 'boundaries'; rangeType?: 'static'; rangeInclusive?: 'above' | 'below' | null; rangeLimits?: null }
+  | { type: 'range'; rangeFormat: 'options'; rangeLimits: number[]; rangeType?: 'static'; rangeInclusive?: 'above' | 'below' | null }
+);
 
 export interface FacetConfigurationV2Response {
   name: string;
