@@ -74,21 +74,35 @@ describe('ConstructorIO - Catalog', () => {
     describe('addFacetConfigurationV2', () => {
       const mockFacetConfiguration = createMockFacetConfigurationV2();
 
+      before((done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        catalog.addFacetConfigurationV2(mockFacetConfiguration).then(() => {
+          facetConfigurations.push(mockFacetConfiguration);
+          done();
+        }).catch(done);
+      });
+
       it('Should resolve when adding a facet configuration', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
         });
 
-        catalog.addFacetConfigurationV2(mockFacetConfiguration).then((response) => {
+        const newFacetConfiguration = createMockFacetConfigurationV2();
+
+        catalog.addFacetConfigurationV2(newFacetConfiguration).then((response) => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
-          facetConfigurations.push(mockFacetConfiguration);
+          facetConfigurations.push(newFacetConfiguration);
 
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           const requestUrl = fetchSpy.args[0][0];
 
           expect(requestUrl).to.include('/v2/facets');
-          expect(response).to.have.property('name').to.equal(mockFacetConfiguration.name);
+          expect(response).to.have.property('name').to.equal(newFacetConfiguration.name);
           expect(response).to.have.property('path_in_metadata');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
@@ -103,10 +117,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        // Grab a mock configuration that already exists and try to add it
-        const facetConfiguration = facetConfigurations[0];
-
-        return expect(catalog.addFacetConfigurationV2(facetConfiguration)).to.eventually.be.rejected;
+        return expect(catalog.addFacetConfigurationV2(mockFacetConfiguration)).to.eventually.be.rejected;
       });
 
       it('Should return error when name parameter is missing', () => {
@@ -131,6 +142,24 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         return expect(catalog.addFacetConfigurationV2(invalidConfig)).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
+      });
+
+      it('Should return error when adding a facet configuration without required type', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addFacetConfigurationV2({ name: 'test-facet', pathInMetadata: 'test.path' })).to.eventually.be.rejectedWith('type is a required parameter and must be one of: multiple, hierarchical, or range');
+      });
+
+      it('Should return error when adding a facet configuration with invalid type', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.addFacetConfigurationV2({ name: 'test-facet', pathInMetadata: 'test.path', type: 'invalid' })).to.eventually.be.rejectedWith('type is a required parameter and must be one of: multiple, hierarchical, or range');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -493,6 +522,24 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.replaceFacetConfigurationV2({ name: 'test-facet', type: 'multiple' })).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
+      });
+
+      it('Should return error when replacing a facet configuration without required type', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.replaceFacetConfigurationV2({ name: 'test-facet', pathInMetadata: 'test.path' })).to.eventually.be.rejectedWith('type is a required parameter and must be one of: multiple, hierarchical, or range');
+      });
+
+      it('Should return error when replacing a facet configuration with invalid type', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.replaceFacetConfigurationV2({ name: 'test-facet', pathInMetadata: 'test.path', type: 'invalid' })).to.eventually.be.rejectedWith('type is a required parameter and must be one of: multiple, hierarchical, or range');
       });
 
       if (!skipNetworkTimeoutTests) {

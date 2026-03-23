@@ -3594,6 +3594,12 @@ class Catalog {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
+    const validFacetTypes = ['multiple', 'hierarchical', 'range'];
+
+    if (!rest.type || !validFacetTypes.includes(rest.type)) {
+      return Promise.reject(new Error('type is a required parameter and must be one of: multiple, hierarchical, or range'));
+    }
+
     const additionalQueryParams = {};
 
     if (!helpers.isNil(section)) {
@@ -3938,6 +3944,12 @@ class Catalog {
 
     if (!pathInMetadata || typeof pathInMetadata !== 'string') {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
+    }
+
+    const validFacetTypes = ['multiple', 'hierarchical', 'range'];
+
+    if (!rest.type || !validFacetTypes.includes(rest.type)) {
+      return Promise.reject(new Error('type is a required parameter and must be one of: multiple, hierarchical, or range'));
     }
 
     const additionalQueryParams = {};
