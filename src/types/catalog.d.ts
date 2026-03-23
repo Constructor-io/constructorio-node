@@ -15,6 +15,10 @@ import {
   SynonymGroup,
   SearchabilityConfiguration,
   SearchabilityConfigurationResponse,
+  FacetConfigurationV2,
+  FacetConfigurationV2Response,
+  SearchabilityConfigurationV2,
+  SearchabilityConfigurationV2Response,
 } from '.';
 
 export default Catalog;
@@ -272,6 +276,86 @@ export interface PatchSearchabilitiesParameters {
   section?: string;
 }
 
+// V2 Facet Configuration Parameters
+export type AddFacetConfigurationV2Parameters = FacetConfigurationV2;
+
+export type ReplaceFacetConfigurationV2Parameters = FacetConfigurationV2;
+
+export interface GetFacetConfigurationsV2Parameters {
+  page?: number;
+  numResultsPerPage?: number;
+  offset?: number;
+  section?: string;
+}
+
+export interface GetFacetConfigurationV2Parameters {
+  name: string;
+  section?: string;
+}
+
+export interface CreateOrReplaceFacetConfigurationsV2Parameters {
+  facetConfigurations: FacetConfigurationV2[];
+  section?: string;
+}
+
+export interface ModifyFacetConfigurationsV2Parameters {
+  facetConfigurations: (Partial<FacetConfigurationV2> & { name: string })[];
+  section?: string;
+}
+
+export interface RemoveFacetConfigurationV2Parameters {
+  name: string;
+  section?: string;
+}
+
+// V2 Searchabilities Parameters
+export interface RetrieveSearchabilitiesV2Parameters {
+  name?: string;
+  page?: number;
+  offset?: number;
+  numResultsPerPage?: number;
+  fuzzySearchable?: boolean;
+  exactSearchable?: boolean;
+  displayable?: boolean;
+  matchType?: 'and' | 'or';
+  sortBy?: 'name';
+  sortOrder?: 'ascending' | 'descending';
+  section?: string;
+}
+
+export interface RetrieveSearchabilityV2Parameters {
+  name: string;
+  section?: string;
+}
+
+export interface PatchSearchabilitiesV2Parameters {
+  searchabilities: SearchabilityConfigurationV2[];
+  skipRebuild?: boolean;
+  section?: string;
+}
+
+export interface PatchSearchabilityV2Parameters {
+  name: string;
+  fuzzySearchable?: boolean;
+  exactSearchable?: boolean;
+  displayable?: boolean;
+  hidden?: boolean;
+  skipRebuild?: boolean;
+  section?: string;
+}
+
+export interface DeleteSearchabilitiesV2Parameters {
+  searchabilities: { name: string }[];
+  skipRebuild?: boolean;
+  section?: string;
+}
+
+export interface DeleteSearchabilityV2Parameters {
+  name: string;
+  skipRebuild?: boolean;
+  section?: string;
+}
+
 interface CatalogMutationResponse {
   task_id: string;
   task_status_path: string;
@@ -512,11 +596,13 @@ declare class Catalog {
     networkParameters?: NetworkParameters
   ): Promise<CatalogMutationResponse>;
 
+  /** @deprecated Use addFacetConfigurationV2 instead. */
   addFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use getFacetConfigurationsV2 instead. */
   getFacetConfigurations(
     parameters: GetFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
@@ -526,26 +612,31 @@ declare class Catalog {
     [key: string]: any;
   }>;
 
+  /** @deprecated Use getFacetConfigurationV2 instead. */
   getFacetConfiguration(
     parameters: GetFacetConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use modifyFacetConfigurationsV2 instead. */
   modifyFacetConfigurations(
     parameters?: ModifyFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration[]>;
 
+  /** @deprecated Use replaceFacetConfigurationV2 instead. */
   replaceFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use modifyFacetConfigurationV2 instead. */
   modifyFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use removeFacetConfigurationV2 instead. */
   removeFacetConfiguration(
     parameters?: RemoveFacetConfigurationParameters,
     networkParameters?: NetworkParameters
@@ -590,6 +681,7 @@ declare class Catalog {
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
+  /** @deprecated Use retrieveSearchabilitiesV2 instead. */
   retrieveSearchabilities(
     parameters?: RetrieveSearchabilitiesParameters,
     networkParameters?: NetworkParameters
@@ -598,10 +690,99 @@ declare class Catalog {
     total_count: number;
   }>;
 
+  /** @deprecated Use patchSearchabilitiesV2 instead. */
   patchSearchabilities(
     parameters: PatchSearchabilitiesParameters,
     networkParameters?: NetworkParameters
   ): Promise<{
     searchabilities: SearchabilityConfigurationResponse[];
   }>;
+
+  // V2 Facet Configuration Methods
+  addFacetConfigurationV2(
+    parameters: AddFacetConfigurationV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<FacetConfigurationV2Response>;
+
+  getFacetConfigurationsV2(
+    parameters?: GetFacetConfigurationsV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    facets: FacetConfigurationV2Response[];
+    total_count: number;
+  }>;
+
+  getFacetConfigurationV2(
+    parameters: GetFacetConfigurationV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<FacetConfigurationV2Response>;
+
+  createOrReplaceFacetConfigurationsV2(
+    parameters: CreateOrReplaceFacetConfigurationsV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    facets: FacetConfigurationV2Response[];
+  }>;
+
+  modifyFacetConfigurationsV2(
+    parameters: ModifyFacetConfigurationsV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    facets: FacetConfigurationV2Response[];
+  }>;
+
+  replaceFacetConfigurationV2(
+    parameters: ReplaceFacetConfigurationV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<FacetConfigurationV2Response>;
+
+  modifyFacetConfigurationV2(
+    parameters: Partial<FacetConfigurationV2> & { name: string },
+    networkParameters?: NetworkParameters
+  ): Promise<FacetConfigurationV2Response>;
+
+  removeFacetConfigurationV2(
+    parameters: RemoveFacetConfigurationV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<FacetConfigurationV2Response>;
+
+  // V2 Searchabilities Methods
+  retrieveSearchabilitiesV2(
+    parameters?: RetrieveSearchabilitiesV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationV2Response[];
+    total_count: number;
+  }>;
+
+  retrieveSearchabilityV2(
+    parameters: RetrieveSearchabilityV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<SearchabilityConfigurationV2Response>;
+
+  patchSearchabilitiesV2(
+    parameters: PatchSearchabilitiesV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationV2Response[];
+    total_count: number;
+  }>;
+
+  patchSearchabilityV2(
+    parameters: PatchSearchabilityV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<SearchabilityConfigurationV2Response>;
+
+  deleteSearchabilitiesV2(
+    parameters: DeleteSearchabilitiesV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<{
+    searchabilities: SearchabilityConfigurationV2Response[];
+    total_count: number;
+  }>;
+
+  deleteSearchabilityV2(
+    parameters: DeleteSearchabilityV2Parameters,
+    networkParameters?: NetworkParameters
+  ): Promise<SearchabilityConfigurationV2Response>;
 }

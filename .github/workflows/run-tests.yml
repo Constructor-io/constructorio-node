@@ -26,5 +26,6 @@ jobs:
         env:
           TEST_REQUEST_API_KEY: ${{ secrets.TEST_REQUEST_API_KEY }}
           TEST_CATALOG_API_KEY: ${{ secrets.TEST_CATALOG_API_KEY }}
+          TEST_CATALOG_FACETS_V2_API_KEY: ${{ secrets.TEST_CATALOG_FACETS_V2_API_KEY }}
           TEST_API_TOKEN: ${{ secrets.TEST_API_TOKEN }}
           SKIP_NETWORK_TIMEOUT_TESTS: true
