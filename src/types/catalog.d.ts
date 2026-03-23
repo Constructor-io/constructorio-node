@@ -323,7 +323,7 @@ export interface RetrieveSearchabilitiesV2Parameters {
   section?: string;
 }
 
-export interface GetSearchabilityV2Parameters {
+export interface RetrieveSearchabilityV2Parameters {
   name: string;
   section?: string;
 }
@@ -596,11 +596,13 @@ declare class Catalog {
     networkParameters?: NetworkParameters
   ): Promise<CatalogMutationResponse>;
 
+  /** @deprecated Use addFacetConfigurationV2 instead. */
   addFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use getFacetConfigurationsV2 instead. */
   getFacetConfigurations(
     parameters: GetFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
@@ -610,26 +612,31 @@ declare class Catalog {
     [key: string]: any;
   }>;
 
+  /** @deprecated Use getFacetConfigurationV2 instead. */
   getFacetConfiguration(
     parameters: GetFacetConfigurationParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use modifyFacetConfigurationsV2 instead. */
   modifyFacetConfigurations(
     parameters?: ModifyFacetConfigurationsParameters,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration[]>;
 
+  /** @deprecated Use replaceFacetConfigurationV2 instead. */
   replaceFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use modifyFacetConfigurationV2 instead. */
   modifyFacetConfiguration(
     parameters: FacetConfiguration,
     networkParameters?: NetworkParameters
   ): Promise<FacetConfiguration>;
 
+  /** @deprecated Use removeFacetConfigurationV2 instead. */
   removeFacetConfiguration(
     parameters?: RemoveFacetConfigurationParameters,
     networkParameters?: NetworkParameters
@@ -674,6 +681,7 @@ declare class Catalog {
     networkParameters?: NetworkParameters
   ): Promise<FacetOptionConfiguration>;
 
+  /** @deprecated Use retrieveSearchabilitiesV2 instead. */
   retrieveSearchabilities(
     parameters?: RetrieveSearchabilitiesParameters,
     networkParameters?: NetworkParameters
@@ -682,6 +690,7 @@ declare class Catalog {
     total_count: number;
   }>;
 
+  /** @deprecated Use patchSearchabilitiesV2 instead. */
   patchSearchabilities(
     parameters: PatchSearchabilitiesParameters,
     networkParameters?: NetworkParameters
@@ -746,8 +755,8 @@ declare class Catalog {
     total_count: number;
   }>;
 
-  getSearchabilityV2(
-    parameters: GetSearchabilityV2Parameters,
+  retrieveSearchabilityV2(
+    parameters: RetrieveSearchabilityV2Parameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchabilityConfigurationV2Response>;
 

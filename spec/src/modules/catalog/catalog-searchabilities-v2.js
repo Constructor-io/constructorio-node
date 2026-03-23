@@ -283,7 +283,7 @@ describe('ConstructorIO - Catalog', () => {
       }
     });
 
-    describe('getSearchabilityV2', () => {
+    describe('retrieveSearchabilityV2', () => {
       it('Should return a response when getting a single searchability', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -291,7 +291,7 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         // Use a known searchability that should exist
-        catalog.getSearchabilityV2({ name: 'keywords' }).then((res) => {
+        catalog.retrieveSearchabilityV2({ name: 'keywords' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
           const requestUrl = fetchSpy.args[0][0];
 
@@ -315,7 +315,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSearchabilityV2({ name: 'truly_non_existent_searchability_abc987' })).to.eventually.be.rejected;
+        return expect(catalog.retrieveSearchabilityV2({ name: 'truly_non_existent_searchability_abc987' })).to.eventually.be.rejected;
       });
 
       it('Should return error when name parameter is missing', () => {
@@ -324,14 +324,14 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        return expect(catalog.getSearchabilityV2({})).to.eventually.be.rejectedWith('name is a required parameter of type string');
+        return expect(catalog.retrieveSearchabilityV2({})).to.eventually.be.rejectedWith('name is a required parameter of type string');
       });
 
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
-          return expect(catalog.getSearchabilityV2({ name: 'keywords' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+          return expect(catalog.retrieveSearchabilityV2({ name: 'keywords' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });

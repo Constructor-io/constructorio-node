@@ -2538,6 +2538,7 @@ class Catalog {
    *     sortDescending: false,
    *     position: 1,
    * });
+   * @deprecated Use {@link module:catalog~addFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   addFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2591,6 +2592,7 @@ class Catalog {
    *     page: 2,
    *     numResultsPerPage: 50,
    * });
+   * @deprecated Use {@link module:catalog~getFacetConfigurationsV2} instead. This method will be removed in the next major version.
    */
   getFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2650,6 +2652,7 @@ class Catalog {
    * constructorio.catalog.getFacetConfiguration({
    *     name: 'color',
    * });
+   * @deprecated Use {@link module:catalog~getFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   getFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2713,6 +2716,7 @@ class Catalog {
    *         }
    *     ],
    * });
+   * @deprecated Use {@link module:catalog~modifyFacetConfigurationsV2} instead. This method will be removed in the next major version.
    */
   modifyFacetConfigurations(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2788,6 +2792,7 @@ class Catalog {
    *     sortDescending: false,
    *     position: 1,
    * });
+   * @deprecated Use {@link module:catalog~replaceFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   replaceFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2860,6 +2865,7 @@ class Catalog {
    *     sortDescending: true,
    *     position: 1,
    * });
+   * @deprecated Use {@link module:catalog~modifyFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   modifyFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -2914,6 +2920,7 @@ class Catalog {
    * constructorio.catalog.removeFacetConfiguration({
    *     name: 'color',
    * });
+   * @deprecated Use {@link module:catalog~removeFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   removeFacetConfiguration(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -3393,6 +3400,7 @@ class Catalog {
    *     numResultsPerPage: 50,
    *     filters: { exactSearchable: true }
    * });
+   * @deprecated Use {@link module:catalog~retrieveSearchabilitiesV2} instead. This method will be removed in the next major version.
    */
   retrieveSearchabilities(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -3495,6 +3503,7 @@ class Catalog {
    *     },
    *   ],
    * });
+   * @deprecated Use {@link module:catalog~patchSearchabilitiesV2} instead. This method will be removed in the next major version.
    */
   patchSearchabilities(parameters = {}, networkParameters = {}) {
     let requestUrl;
@@ -3744,7 +3753,7 @@ class Catalog {
    *
    * @function createOrReplaceFacetConfigurationsV2
    * @param {object} parameters - Additional parameters for creating or replacing facet configurations
-   * @param {array} parameters.facetConfigurations - List of facet configurations to create or replace
+   * @param {array} parameters.facetConfigurations - List of facet configurations to create or replace (max 25 items)
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -3809,7 +3818,7 @@ class Catalog {
    *
    * @function modifyFacetConfigurationsV2
    * @param {object} parameters - Additional parameters for modifying facet configurations
-   * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update
+   * @param {array} parameters.facetConfigurations - List of facet configurations you would like to update (max 1000 items)
    * @param {string} [parameters.section] - The section in which your facet is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
@@ -4204,7 +4213,7 @@ class Catalog {
   /**
    * Get a single searchability configuration (V2)
    *
-   * @function getSearchabilityV2
+   * @function retrieveSearchabilityV2
    * @param {object} parameters - Additional parameters for retrieving a searchability
    * @param {string} parameters.name - Name of the searchability field
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
@@ -4213,11 +4222,11 @@ class Catalog {
    * @returns {Promise<object>} - Searchability configuration response
    * @see https://docs.constructor.com/reference/configuration-searchabilities
    * @example
-   * constructorio.catalog.getSearchabilityV2({
+   * constructorio.catalog.retrieveSearchabilityV2({
    *     name: 'keywords',
    * });
    */
-  getSearchabilityV2(parameters = {}, networkParameters = {}) {
+  retrieveSearchabilityV2(parameters = {}, networkParameters = {}) {
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -4262,7 +4271,7 @@ class Catalog {
    *
    * @function patchSearchabilitiesV2
    * @param {object} parameters - Additional parameters for patching searchabilities
-   * @param {object[]} parameters.searchabilities - Array of searchabilities to create or update
+   * @param {object[]} parameters.searchabilities - Array of searchabilities to create or update (1-60 items)
    * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -4401,7 +4410,7 @@ class Catalog {
    *
    * @function deleteSearchabilitiesV2
    * @param {object} parameters - Additional parameters for deleting searchabilities
-   * @param {object[]} parameters.searchabilities - Array of searchabilities names to delete
+   * @param {object[]} parameters.searchabilities - Array of searchabilities names to delete (1-60 items)
    * @param {boolean} [parameters.skipRebuild] - Skip index rebuild. Default value is false.
    * @param {string} [parameters.section] - The section in which the searchability is defined. Default value is Products.
    * @param {object} [networkParameters] - Parameters relevant to the network request
