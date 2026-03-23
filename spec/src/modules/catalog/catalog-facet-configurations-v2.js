@@ -416,6 +416,15 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.modifyFacetConfigurationV2({ name: 'non-existent-facet', displayName: 'Test' })).to.eventually.be.rejected;
       });
 
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.modifyFacetConfigurationV2({ displayName: 'Test' })).to.eventually.be.rejectedWith('name is a required parameter of type string');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -466,6 +475,24 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         }).catch(done);
+      });
+
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.replaceFacetConfigurationV2({ pathInMetadata: 'test.path', type: 'multiple' })).to.eventually.be.rejectedWith('name is a required parameter of type string');
+      });
+
+      it('Should return error when pathInMetadata parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.replaceFacetConfigurationV2({ name: 'test-facet', type: 'multiple' })).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -569,6 +596,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.removeFacetConfigurationV2({ name: 'non-existent-facet' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.removeFacetConfigurationV2({})).to.eventually.be.rejectedWith('name is a required parameter of type string');
       });
 
       if (!skipNetworkTimeoutTests) {

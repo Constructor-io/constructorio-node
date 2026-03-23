@@ -254,6 +254,15 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.patchSearchabilitiesV2(params)).to.eventually.be.rejected;
       });
 
+      it('Should return error when searchabilities parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.patchSearchabilitiesV2({})).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -401,6 +410,15 @@ describe('ConstructorIO - Catalog', () => {
         })).to.eventually.be.fulfilled;
       });
 
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.patchSearchabilityV2({ displayable: true })).to.eventually.be.rejectedWith('name is a required parameter of type string');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -464,6 +482,15 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
         }).catch(done);
+      });
+
+      it('Should return error when searchabilities parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteSearchabilitiesV2({})).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -532,6 +559,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.deleteSearchabilityV2({ name: 'non_existent_searchability_xyz123' })).to.eventually.be.rejected;
+      });
+
+      it('Should return error when name parameter is missing', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteSearchabilityV2({})).to.eventually.be.rejectedWith('name is a required parameter of type string');
       });
 
       if (!skipNetworkTimeoutTests) {
