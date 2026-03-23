@@ -209,7 +209,6 @@ describe('ConstructorIO - Catalog', () => {
           expect(createdSearchability).to.have.property('created_at');
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
-          expect(requestedUrlParams).to.have.property('section');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
         }).catch(done);

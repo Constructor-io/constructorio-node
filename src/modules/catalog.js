@@ -3594,9 +3594,11 @@ class Catalog {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
@@ -3647,10 +3649,12 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { numResultsPerPage, page, offset } = parameters;
-    const additionalQueryParams = {
-      section: parameters.section || 'Products',
-    };
+    const { numResultsPerPage, page, offset, section } = parameters;
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     if (!helpers.isNil(numResultsPerPage)) {
       additionalQueryParams.num_results_per_page = numResultsPerPage;
@@ -3716,9 +3720,11 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
@@ -3783,9 +3789,11 @@ class Catalog {
     }
 
     const facetConfigurations = facetConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
@@ -3847,9 +3855,11 @@ class Catalog {
     }
 
     const facetConfigurations = facetConfigurationsRaw.map((config) => toSnakeCaseKeys(config));
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl('facets', this.options, additionalQueryParams, 'v2');
@@ -3930,9 +3940,11 @@ class Catalog {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
@@ -4005,9 +4017,11 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
@@ -4065,9 +4079,11 @@ class Catalog {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section: section || 'Products',
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl(`facets/${name}`, this.options, additionalQueryParams, 'v2');
@@ -4137,7 +4153,7 @@ class Catalog {
       matchType,
       sortBy,
       sortOrder,
-      section = 'Products',
+      section,
     } = parameters;
     const additionalQueryParams = {};
 
@@ -4231,15 +4247,17 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { name, section = 'Products' } = parameters;
+    const { name, section } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section,
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     try {
       requestUrl = createCatalogUrl(`searchabilities/${name}`, this.options, additionalQueryParams, 'v2');
@@ -4297,16 +4315,18 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { searchabilities: searchabilitiesRaw, skipRebuild, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skipRebuild, section } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
     }
 
     const searchabilities = searchabilitiesRaw.map((config) => toSnakeCaseKeys(config));
-    const additionalQueryParams = {
-      section,
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     if (!helpers.isNil(skipRebuild)) {
       additionalQueryParams.skip_rebuild = skipRebuild;
@@ -4365,15 +4385,17 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { name, skipRebuild, section = 'Products', ...rest } = parameters;
+    const { name, skipRebuild, section, ...rest } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section,
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     if (!helpers.isNil(skipRebuild)) {
       additionalQueryParams.skip_rebuild = skipRebuild;
@@ -4430,16 +4452,18 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { searchabilities: searchabilitiesRaw, skipRebuild, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skipRebuild, section } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
     }
 
     const searchabilities = searchabilitiesRaw.map((config) => toSnakeCaseKeys(config));
-    const additionalQueryParams = {
-      section,
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     if (!helpers.isNil(skipRebuild)) {
       additionalQueryParams.skip_rebuild = skipRebuild;
@@ -4493,15 +4517,17 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { name, skipRebuild, section = 'Products' } = parameters;
+    const { name, skipRebuild, section } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const additionalQueryParams = {
-      section,
-    };
+    const additionalQueryParams = {};
+
+    if (!helpers.isNil(section)) {
+      additionalQueryParams.section = section;
+    }
 
     if (!helpers.isNil(skipRebuild)) {
       additionalQueryParams.skip_rebuild = skipRebuild;
