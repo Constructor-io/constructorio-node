@@ -375,7 +375,7 @@ export interface FacetConfigurationV2Response {
   countable?: boolean;
   options_limit?: number;
   data?: Record<string, unknown>;
-  created_at?: string;
+  created_at: string;
   updated_at?: string;
 }
 
