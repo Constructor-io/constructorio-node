@@ -97,25 +97,6 @@ describe('ConstructorIO - Catalog', () => {
         }).catch(done);
       });
 
-      it('Backwards Compatibility `display_name` - Should resolve when adding a facet configuration', (done) => {
-        const { catalog } = new ConstructorIO({
-          ...validOptions,
-          fetch: fetchSpy,
-        });
-
-        const mockConfig = createMockFacetConfigurationV2();
-        // eslint-disable-next-line camelcase
-        const { displayName: display_name, pathInMetadata: path_in_metadata, ...rest } = mockConfig;
-        const newFacetConfiguration = { display_name, path_in_metadata, ...rest }; // eslint-disable-line camelcase
-        catalog.addFacetConfigurationV2(newFacetConfiguration).then((response) => {
-          // Push mock facet configuration into saved list to be cleaned up afterwards
-          facetConfigurations.push(newFacetConfiguration);
-
-          expect(response).to.have.property('display_name').to.be.equal(newFacetConfiguration.display_name);
-          done();
-        }).catch(done);
-      });
-
       it('Should return error when adding a facet configuration that already exists', () => {
         const { catalog } = new ConstructorIO({
           ...validOptions,

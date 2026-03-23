@@ -3638,7 +3638,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { num_results_per_page, numResultsPerPage = num_results_per_page, page, offset } = parameters;
+    const { numResultsPerPage, page, offset } = parameters;
     const additionalQueryParams = {
       section: parameters.section || 'Products',
     };
@@ -3911,13 +3911,12 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, name, ...rest } = parameters;
+    const { section, name, pathInMetadata, ...rest } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const pathInMetadata = parameters.pathInMetadata || parameters.path_in_metadata;
     if (!pathInMetadata || typeof pathInMetadata !== 'string') {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
@@ -3937,7 +3936,7 @@ class Catalog {
 
     return fetch(requestUrl, {
       method: 'PUT',
-      body: JSON.stringify(toSnakeCaseKeys({ name, ...rest })),
+      body: JSON.stringify(toSnakeCaseKeys({ name, pathInMetadata, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
@@ -4118,24 +4117,17 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    // Support both camelCase and snake_case for backwards compatibility
     const {
       name,
       page,
       offset,
-      num_results_per_page,
-      numResultsPerPage = num_results_per_page,
-      fuzzy_searchable,
-      fuzzySearchable = fuzzy_searchable,
-      exact_searchable,
-      exactSearchable = exact_searchable,
+      numResultsPerPage,
+      fuzzySearchable,
+      exactSearchable,
       displayable,
-      match_type,
-      matchType = match_type,
-      sort_by,
-      sortBy = sort_by,
-      sort_order,
-      sortOrder = sort_order,
+      matchType,
+      sortBy,
+      sortOrder,
       section = 'Products',
     } = parameters;
     const additionalQueryParams = {};
@@ -4296,8 +4288,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    // Support both camelCase and snake_case for backwards compatibility
-    const { searchabilities: searchabilitiesRaw, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skipRebuild, section = 'Products' } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
@@ -4365,8 +4356,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    // Support both camelCase and snake_case for backwards compatibility
-    const { name, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products', ...rest } = parameters;
+    const { name, skipRebuild, section = 'Products', ...rest } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
@@ -4431,8 +4421,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    // Support both camelCase and snake_case for backwards compatibility
-    const { searchabilities: searchabilitiesRaw, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
+    const { searchabilities: searchabilitiesRaw, skipRebuild, section = 'Products' } = parameters;
 
     if (!searchabilitiesRaw || !Array.isArray(searchabilitiesRaw)) {
       return Promise.reject(new Error('searchabilities is a required parameter of type array'));
@@ -4495,8 +4484,7 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    // Support both camelCase and snake_case for backwards compatibility
-    const { name, skip_rebuild, skipRebuild = skip_rebuild, section = 'Products' } = parameters;
+    const { name, skipRebuild, section = 'Products' } = parameters;
 
     if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
