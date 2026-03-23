@@ -3575,13 +3575,12 @@ class Catalog {
     const { fetch } = this.options;
     const controller = new AbortController();
     const { signal } = controller;
-    const { section, ...rest } = parameters;
+    const { section, name, pathInMetadata, ...rest } = parameters;
 
-    if (!parameters.name || typeof parameters.name !== 'string') {
+    if (!name || typeof name !== 'string') {
       return Promise.reject(new Error('name is a required parameter of type string'));
     }
 
-    const pathInMetadata = parameters.pathInMetadata || parameters.path_in_metadata;
     if (!pathInMetadata || typeof pathInMetadata !== 'string') {
       return Promise.reject(new Error('pathInMetadata is a required parameter of type string'));
     }
@@ -3600,7 +3599,7 @@ class Catalog {
     helpers.applyNetworkTimeout(this.options, networkParameters, controller);
     return fetch(requestUrl, {
       method: 'POST',
-      body: JSON.stringify(toSnakeCaseKeys(rest)),
+      body: JSON.stringify(toSnakeCaseKeys({ name, pathInMetadata, ...rest })),
       headers: {
         'Content-Type': 'application/json',
         ...helpers.createAuthHeader(this.options),
