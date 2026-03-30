@@ -2911,9 +2911,12 @@ class Catalog {
    *     sortDescending: false,
    *     position: 1,
    * });
-   * @deprecated Use {@link module:catalog~addFacetConfigurationV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [addFacetConfigurationV2]{@link module:catalog~addFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   addFacetConfiguration(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: addFacetConfiguration is deprecated and will be removed in the next major version. Use addFacetConfigurationV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -2965,9 +2968,12 @@ class Catalog {
    *     page: 2,
    *     numResultsPerPage: 50,
    * });
-   * @deprecated Use {@link module:catalog~getFacetConfigurationsV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [getFacetConfigurationsV2]{@link module:catalog~getFacetConfigurationsV2} instead. This method will be removed in the next major version.
    */
   getFacetConfigurations(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: getFacetConfigurations is deprecated and will be removed in the next major version. Use getFacetConfigurationsV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3025,9 +3031,12 @@ class Catalog {
    * constructorio.catalog.getFacetConfiguration({
    *     name: 'color',
    * });
-   * @deprecated Use {@link module:catalog~getFacetConfigurationV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [getFacetConfigurationV2]{@link module:catalog~getFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   getFacetConfiguration(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: getFacetConfiguration is deprecated and will be removed in the next major version. Use getFacetConfigurationV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3089,9 +3098,12 @@ class Catalog {
    *         }
    *     ],
    * });
-   * @deprecated Use {@link module:catalog~modifyFacetConfigurationsV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [modifyFacetConfigurationsV2]{@link module:catalog~modifyFacetConfigurationsV2} instead. This method will be removed in the next major version.
    */
   modifyFacetConfigurations(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: modifyFacetConfigurations is deprecated and will be removed in the next major version. Use modifyFacetConfigurationsV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3165,9 +3177,12 @@ class Catalog {
    *     sortDescending: false,
    *     position: 1,
    * });
-   * @deprecated Use {@link module:catalog~replaceFacetConfigurationV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [replaceFacetConfigurationV2]{@link module:catalog~replaceFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   replaceFacetConfiguration(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: replaceFacetConfiguration is deprecated and will be removed in the next major version. Use replaceFacetConfigurationV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3238,9 +3253,12 @@ class Catalog {
    *     sortDescending: true,
    *     position: 1,
    * });
-   * @deprecated Use {@link module:catalog~modifyFacetConfigurationV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [modifyFacetConfigurationV2]{@link module:catalog~modifyFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   modifyFacetConfiguration(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: modifyFacetConfiguration is deprecated and will be removed in the next major version. Use modifyFacetConfigurationV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3293,9 +3311,12 @@ class Catalog {
    * constructorio.catalog.removeFacetConfiguration({
    *     name: 'color',
    * });
-   * @deprecated Use {@link module:catalog~removeFacetConfigurationV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [removeFacetConfigurationV2]{@link module:catalog~removeFacetConfigurationV2} instead. This method will be removed in the next major version.
    */
   removeFacetConfiguration(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: removeFacetConfiguration is deprecated and will be removed in the next major version. Use removeFacetConfigurationV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3773,9 +3794,12 @@ class Catalog {
    *     numResultsPerPage: 50,
    *     filters: { exactSearchable: true }
    * });
-   * @deprecated Use {@link module:catalog~retrieveSearchabilitiesV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [retrieveSearchabilitiesV2]{@link module:catalog~retrieveSearchabilitiesV2} instead. This method will be removed in the next major version.
    */
   retrieveSearchabilities(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: retrieveSearchabilities is deprecated and will be removed in the next major version. Use retrieveSearchabilitiesV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
@@ -3876,9 +3900,12 @@ class Catalog {
    *     },
    *   ],
    * });
-   * @deprecated Use {@link module:catalog~patchSearchabilitiesV2} instead. This method will be removed in the next major version.
+   * @deprecated Use [patchSearchabilitiesV2]{@link module:catalog~patchSearchabilitiesV2} instead. This method will be removed in the next major version.
    */
   patchSearchabilities(parameters = {}, networkParameters = {}) {
+    // eslint-disable-next-line no-console
+    console.warn('ConstructorIO: patchSearchabilities is deprecated and will be removed in the next major version. Use patchSearchabilitiesV2 instead.');
+
     let requestUrl;
     const { fetch } = this.options;
     const controller = new AbortController();
