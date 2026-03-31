@@ -201,8 +201,8 @@ class Catalog {
    *             id: 'blk_pllvr_hd_001',
    *             data: {
    *               keywords: ['midnight black', 'black', 'hoodie', 'tops', 'outerwear'],
-   *               url: '/products/blk_pllvr_hd_001'
-   *               image_url: '/products/images/blk_pllvr_hd_001'
+   *               url: '/products/blk_pllvr_hd_001',
+   *               image_url: '/products/images/blk_pllvr_hd_001',
    *               description: 'a modified short description about the black pullover hoodie',
    *             }
    *         },
