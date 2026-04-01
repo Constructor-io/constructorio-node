@@ -335,6 +335,70 @@ export interface SearchabilityConfiguration {
   hidden?: boolean,
 }
 
+// V2 Facet Types
+export interface FacetConfigurationV2Base {
+  name: string;
+  pathInMetadata: string;
+  displayName?: string;
+  sortOrder?: 'relevance' | 'value' | 'num_matches';
+  sortDescending?: boolean;
+  matchType?: 'any' | 'all' | 'none';
+  position?: number | null;
+  hidden?: boolean;
+  protected?: boolean;
+  countable?: boolean;
+  optionsLimit?: number;
+  data?: Record<string, unknown>;
+  section?: string;
+}
+
+export type FacetConfigurationV2 = FacetConfigurationV2Base & (
+  | { type: 'multiple' | 'hierarchical'; rangeType?: null; rangeFormat?: null; rangeInclusive?: null; rangeLimits?: null }
+  | { type: 'range'; rangeFormat: 'boundaries'; rangeType?: 'static'; rangeInclusive?: 'above' | 'below' | null; rangeLimits?: null }
+  | { type: 'range'; rangeFormat: 'options'; rangeLimits: number[]; rangeType?: 'static'; rangeInclusive?: 'above' | 'below' | null }
+);
+
+export interface FacetConfigurationV2Response {
+  name: string;
+  path_in_metadata: string;
+  type: 'multiple' | 'hierarchical' | 'range';
+  display_name?: string | null;
+  sort_order?: 'relevance' | 'value' | 'num_matches';
+  sort_descending?: boolean;
+  range_type?: 'static' | null;
+  range_format?: 'boundaries' | 'options' | null;
+  range_inclusive?: 'above' | 'below' | null;
+  range_limits?: number[] | null;
+  match_type?: 'any' | 'all' | 'none';
+  position?: number | null;
+  hidden?: boolean;
+  protected?: boolean;
+  countable?: boolean;
+  options_limit?: number;
+  data?: Record<string, unknown>;
+  created_at: string;
+  updated_at?: string;
+}
+
+// V2 Searchability Types
+export interface SearchabilityConfigurationV2 {
+  name: string;
+  fuzzySearchable?: boolean;
+  exactSearchable?: boolean;
+  displayable?: boolean;
+  hidden?: boolean;
+}
+
+export interface SearchabilityConfigurationV2Response {
+  name: string;
+  fuzzy_searchable: boolean;
+  exact_searchable: boolean;
+  displayable: boolean;
+  hidden: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
 export interface ItemTracked {
   itemName?: string;
   itemId?: string;
