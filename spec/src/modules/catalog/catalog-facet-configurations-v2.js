@@ -34,7 +34,7 @@ function createMockFacetConfigurationV2() {
   };
 }
 
-describe('ConstructorIO - Catalog', () => {
+describe.only('ConstructorIO - Catalog', () => {
   const clientVersion = 'cio-mocha';
   let fetchSpy;
 
@@ -66,8 +66,11 @@ describe('ConstructorIO - Catalog', () => {
           await catalog.removeFacetConfigurationV2(facetConfig);
         } catch (e) {
           // Log warning for debugging but don't fail cleanup
-          console.warn(`Cleanup warning: failed to remove facet ${facetConfig.name}:`, e.message); // eslint-disable-line no-console
+          // eslint-disable-line no-console
+          console.warn(`Cleanup warning: failed to remove facet ${facetConfig.name}:`, e.message);
         }
+        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+        await new Promise((resolve) => setTimeout(resolve, sendTimeout));
       }
     });
 
@@ -83,7 +86,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.addFacetConfigurationV2(mockFacetConfiguration).then(() => {
           facetConfigurations.push(mockFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should resolve when adding a facet configuration', (done) => {
@@ -99,16 +102,18 @@ describe('ConstructorIO - Catalog', () => {
           facetConfigurations.push(newFacetConfiguration);
 
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets');
           expect(response).to.have.property('name').to.equal(newFacetConfiguration.name);
-          expect(response).to.have.property('path_in_metadata');
+          expect(response).to.have.property('path_in_metadata').to.equal(newFacetConfiguration.pathInMetadata);
+          expect(response).to.have.property('display_name').to.equal(newFacetConfiguration.displayName);
+          expect(response).to.have.property('type').to.equal(newFacetConfiguration.type);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when adding a facet configuration that already exists', () => {
@@ -135,13 +140,7 @@ describe('ConstructorIO - Catalog', () => {
           fetch: fetchSpy,
         });
 
-        const invalidConfig = {
-          name: `facet-v2-${uuidv4()}`,
-          type: 'multiple',
-          // Missing pathInMetadata
-        };
-
-        return expect(catalog.addFacetConfigurationV2(invalidConfig)).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
+        return expect(catalog.addFacetConfigurationV2({ name: 'test-facet', type: 'multiple' })).to.eventually.be.rejectedWith('pathInMetadata is a required parameter of type string');
       });
 
       it('Should return error when adding a facet configuration without required type', () => {
@@ -192,7 +191,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(mockFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when getting facet configurations', (done) => {
@@ -203,7 +202,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.getFacetConfigurationsV2().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets');
           expect(res).to.have.property('facets').to.be.an('array').length.gte(1);
@@ -212,7 +211,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when getting facet configurations with pagination parameters', (done) => {
@@ -230,7 +229,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal('1');
           expect(requestedUrlParams).to.have.property('page').to.equal('1');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when getting facet configurations with offset parameter', (done) => {
@@ -242,11 +241,11 @@ describe('ConstructorIO - Catalog', () => {
         catalog.getFacetConfigurationsV2({ offset: 0, numResultsPerPage: 10 }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
-          expect(res).to.have.property('facets').to.be.an('array');
+          expect(res).to.have.property('facets').to.be.an('array').to.have.lengthOf.at.most(10);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('offset').to.equal('0');
           done();
-        }).catch(done);
+        });
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -281,7 +280,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when getting a single facet configuration', (done) => {
@@ -292,7 +291,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.getFacetConfigurationV2({ name: existingFacetConfiguration.name }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets/');
           expect(res).to.have.property('name').to.equal(existingFacetConfiguration.name);
@@ -301,7 +300,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when getting a facet configuration that does not exist', () => {
@@ -328,6 +327,15 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.getFacetConfigurationV2({ name: existingFacetConfiguration.name }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.getFacetConfigurationV2({ name: existingFacetConfiguration.name })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
       }
     });
 
@@ -345,7 +353,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when modifying multiple facet configurations', (done) => {
@@ -365,15 +373,17 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.modifyFacetConfigurationsV2(updateData).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets');
           expect(res).to.have.property('facets').to.be.an('array');
+          expect(res.facets[0]).to.have.property('name').to.equal(existingFacetConfiguration.name);
+          expect(res.facets[0]).to.have.property('display_name').to.equal(updateData.facetConfigurations[0].displayName);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when facetConfigurations parameter is missing', () => {
@@ -390,6 +400,15 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.modifyFacetConfigurationsV2({ facetConfigurations: [{ name: 'test' }] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifyFacetConfigurationsV2({ facetConfigurations: [{ name: 'test' }] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -408,7 +427,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when modifying a single facet configuration', (done) => {
@@ -425,15 +444,18 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.modifyFacetConfigurationV2(updateData).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets/');
           expect(res).to.have.property('name').to.equal(existingFacetConfiguration.name);
+          expect(res).to.have.property('path_in_metadata').to.equal(existingFacetConfiguration.pathInMetadata);
+          expect(res).to.have.property('display_name').to.equal(updateData.displayName);
+          expect(res).to.have.property('sort_order').to.equal(updateData.sortOrder);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when modifying a facet configuration that does not exist', () => {
@@ -460,6 +482,15 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.modifyFacetConfigurationV2({ name: existingFacetConfiguration.name, displayName: 'Test' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.modifyFacetConfigurationV2({ name: existingFacetConfiguration.name, displayName: 'Test' })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
       }
     });
 
@@ -477,7 +508,7 @@ describe('ConstructorIO - Catalog', () => {
           // Push mock facet configuration into saved list to be cleaned up afterwards
           facetConfigurations.push(existingFacetConfiguration);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when replacing a facet configuration', (done) => {
@@ -495,15 +526,18 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.replaceFacetConfigurationV2(replaceData).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets/');
           expect(res).to.have.property('name').to.equal(existingFacetConfiguration.name);
+          expect(res).to.have.property('display_name').to.equal(replaceData.displayName);
+          expect(res).to.have.property('type').to.equal(replaceData.type);
+          expect(res).to.have.property('path_in_metadata').to.equal(replaceData.pathInMetadata);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when name parameter is missing', () => {
@@ -554,6 +588,21 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.replaceFacetConfigurationV2(replaceData, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          const replaceData = {
+            name: existingFacetConfiguration.name,
+            pathInMetadata: existingFacetConfiguration.pathInMetadata,
+            type: 'multiple',
+          };
+
+          return expect(catalog.replaceFacetConfigurationV2(replaceData)).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
       }
     });
 
@@ -583,7 +632,7 @@ describe('ConstructorIO - Catalog', () => {
           facetConfigurations.push(newConfig);
 
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets');
           expect(res).to.have.property('facets').to.be.an('array');
@@ -591,7 +640,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -599,6 +648,15 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.createOrReplaceFacetConfigurationsV2({ facetConfigurations: [] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.createOrReplaceFacetConfigurationsV2({ facetConfigurations: [] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -615,7 +673,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.addFacetConfigurationV2(facetToRemove).then(() => {
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when removing a facet configuration', (done) => {
@@ -626,14 +684,14 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.removeFacetConfigurationV2({ name: facetToRemove.name }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/facets/');
           expect(res).to.have.property('name').to.equal(facetToRemove.name);
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when removing a facet configuration that does not exist', () => {
@@ -659,6 +717,15 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.removeFacetConfigurationV2({ name: 'test-facet' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          return expect(catalog.removeFacetConfigurationV2({ name: 'test-facet' })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
