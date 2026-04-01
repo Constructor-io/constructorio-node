@@ -62,14 +62,17 @@ describe('ConstructorIO - Catalog', () => {
       // Clean up all the searchabilities that were created
       this.timeout(30000);
       if (searchabilitiesToCleanup.length > 0) {
-        try {
-          await catalog.deleteSearchabilitiesV2({
-            searchabilities: searchabilitiesToCleanup.map((s) => ({ name: s.name })),
-          });
-        } catch (e) {
-          // Log warning for debugging but don't fail cleanup
-          const names = searchabilitiesToCleanup.map((s) => s.name).join(', ');
-          console.warn(`Cleanup warning: failed to remove searchabilities [${names}]:`, e.message); // eslint-disable-line no-console
+        for (const searchability of searchabilitiesToCleanup) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await catalog.deleteSearchabilityV2({ name: searchability.name });
+          } catch (e) {
+            // Log warning for debugging but don't fail cleanup
+            // eslint-disable-next-line no-console
+            console.warn(`Cleanup warning: failed to remove searchability ${searchability.name}:`, e.message);
+          }
+          // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+          await new Promise((resolve) => setTimeout(resolve, 200));
         }
       }
     });
@@ -83,7 +86,7 @@ describe('ConstructorIO - Catalog', () => {
 
         catalog.retrieveSearchabilitiesV2().then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities');
           expect(res).to.have.property('searchabilities').to.be.an('array');
@@ -92,7 +95,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when retrieving searchabilities with pagination parameters', (done) => {
@@ -110,7 +113,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('num_results_per_page').to.equal('5');
           expect(requestedUrlParams).to.have.property('page').to.equal('1');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when retrieving searchabilities with filter parameters', (done) => {
@@ -126,7 +129,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('displayable').to.equal('true');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when retrieving searchabilities with sort parameters', (done) => {
@@ -143,7 +146,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('sort_by').to.equal('name');
           expect(requestedUrlParams).to.have.property('sort_order').to.equal('ascending');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when retrieving searchabilities with name filter', (done) => {
@@ -159,7 +162,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('name').to.equal('keywords');
           done();
-        }).catch(done);
+        });
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -195,10 +198,10 @@ describe('ConstructorIO - Catalog', () => {
           searchabilitiesToCleanup.push(mockSearchability);
 
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities');
-          expect(res).to.have.property('searchabilities').to.be.an('array').length.gte(1);
+          expect(res).to.have.property('searchabilities').to.be.an('array').to.have.lengthOf(1);
           expect(res).to.have.property('total_count');
 
           const searchabilitiesResponse = res.searchabilities;
@@ -211,7 +214,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when patching searchabilities with skipRebuild', (done) => {
@@ -233,7 +236,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('searchabilities').to.be.an('array');
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when patching searchabilities with unsupported values', () => {
@@ -260,6 +263,15 @@ describe('ConstructorIO - Catalog', () => {
         });
 
         return expect(catalog.patchSearchabilitiesV2({})).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
+      });
+
+      it('Should return error when searchabilities is not an array', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.patchSearchabilitiesV2({ searchabilities: 'not an array' })).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -292,7 +304,7 @@ describe('ConstructorIO - Catalog', () => {
         // Use a known searchability that should exist
         catalog.retrieveSearchabilityV2({ name: 'keywords' }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities/');
           expect(res).to.have.property('name').to.equal('keywords');
@@ -305,7 +317,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when getting a searchability that does not exist', () => {
@@ -332,6 +344,16 @@ describe('ConstructorIO - Catalog', () => {
 
           return expect(catalog.retrieveSearchabilityV2({ name: 'keywords' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          const params = { name: 'test' };
+          return expect(catalog.retrieveSearchabilityV2(params)).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
       }
     });
 
@@ -349,7 +371,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.patchSearchabilitiesV2({ searchabilities: [existingSearchability] }).then(() => {
           searchabilitiesToCleanup.push(existingSearchability);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when patching a single searchability', (done) => {
@@ -363,7 +385,7 @@ describe('ConstructorIO - Catalog', () => {
           displayable: false,
         }).then((res) => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
-          const requestUrl = fetchSpy.args[0][0];
+          const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
 
           expect(requestUrl).to.include('/v2/searchabilities/');
           expect(res).to.have.property('name').to.equal(existingSearchability.name);
@@ -372,7 +394,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(requestedUrlParams).to.have.property('key');
           expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when patching a single searchability with skipRebuild', (done) => {
@@ -389,12 +411,13 @@ describe('ConstructorIO - Catalog', () => {
           const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
           expect(res).to.have.property('name').to.equal(existingSearchability.name);
+          expect(res).to.have.property('hidden').to.equal(true);
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        }).catch(done);
+        });
       });
 
-      it('Should create a searchability when patching one that does not exist (upsert behavior)', () => {
+      it('Should create a searchability when patching one that does not exist (upsert behavior)', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
           fetch: fetchSpy,
@@ -403,10 +426,14 @@ describe('ConstructorIO - Catalog', () => {
         const upsertName = 'non_existent_searchability_xyz123';
 
         searchabilitiesToCleanup.push({ name: upsertName });
-
-        return expect(catalog.patchSearchabilityV2({
-          name: upsertName, displayable: false,
-        })).to.eventually.be.fulfilled;
+        catalog.patchSearchabilityV2({
+          name: upsertName,
+          displayable: false,
+        }).then((res) => {
+          expect(res).to.have.property('name').to.equal(upsertName);
+          expect(res).to.have.property('displayable').to.equal(false);
+          done();
+        });
       });
 
       it('Should return error when name parameter is missing', () => {
@@ -423,6 +450,16 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.patchSearchabilityV2({ name: existingSearchability.name, displayable: false }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          const params = { name: 'test', displayable: false };
+          return expect(catalog.patchSearchabilityV2(params)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -441,7 +478,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
           searchabilitiesToCleanup.push(searchabilityToDelete);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when deleting searchabilities', (done) => {
@@ -462,7 +499,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when deleting searchabilities with skipRebuild', (done) => {
@@ -480,7 +517,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('searchabilities').to.be.an('array');
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when searchabilities parameter is missing', () => {
@@ -492,11 +529,30 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.deleteSearchabilitiesV2({})).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
       });
 
+      it('Should return error when searchabilities is not an array', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        return expect(catalog.deleteSearchabilitiesV2({ searchabilities: 'not an array' })).to.eventually.be.rejectedWith('searchabilities is a required parameter of type array');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.deleteSearchabilitiesV2({ searchabilities: [{ name: 'test' }] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          const params = { name: 'test' };
+          return expect(catalog.deleteSearchabilitiesV2({ searchabilities: [params] })).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
@@ -515,7 +571,7 @@ describe('ConstructorIO - Catalog', () => {
         catalog.patchSearchabilitiesV2({ searchabilities: [searchabilityToDelete] }).then(() => {
           searchabilitiesToCleanup.push(searchabilityToDelete);
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when deleting a single searchability', (done) => {
@@ -533,7 +589,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(fetchSpy).to.have.been.called;
           expect(requestedUrlParams).to.have.property('key');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return a response when deleting a single searchability with skipRebuild', (done) => {
@@ -548,7 +604,7 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('name').to.equal(searchabilityToDelete.name);
           expect(requestedUrlParams).to.have.property('skip_rebuild').to.equal('true');
           done();
-        }).catch(done);
+        });
       });
 
       it('Should return error when deleting a searchability that does not exist', () => {
@@ -574,6 +630,16 @@ describe('ConstructorIO - Catalog', () => {
           const { catalog } = new ConstructorIO(validOptions);
 
           return expect(catalog.deleteSearchabilityV2({ name: searchabilityToDelete.name }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        });
+
+        it('Should be rejected when global network request timeout is provided and reached', () => {
+          const { catalog } = new ConstructorIO({
+            ...validOptions,
+            networkParameters: { timeout: 20 },
+          });
+
+          const params = { name: searchabilityToDelete.name };
+          return expect(catalog.deleteSearchabilityV2(params)).to.eventually.be.rejectedWith('The operation was aborted.');
         });
       }
     });
