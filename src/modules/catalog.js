@@ -61,7 +61,7 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notification_email, notificationEmail = notification_email, force, item_groups, onMissing } = parameters;
+    const { section, notification_email, notificationEmail = notification_email, force, item_groups, onMissing, format = 'csv' } = parameters;
     let { items, variations, itemGroups = item_groups } = parameters;
 
     try {
@@ -108,24 +108,32 @@ async function createQueryParamsAndFormData(parameters) {
       queryParams.on_missing = onMissing;
     }
 
+    if (format) {
+      if (!['csv', 'jsonl'].includes(format.toLowerCase())) {
+        throw new Error('format must be one of csv, jsonl');
+      }
+
+      queryParams.format = format;
+    }
+
     // Pull items from parameters
     if (items) {
       formData.append('items', items, {
-        filename: 'items.csv',
+        filename: `items.${format}`,
       });
     }
 
     // Pull variations from parameters
     if (variations) {
       formData.append('variations', variations, {
-        filename: 'variations.csv',
+        filename: `variations.${format}`,
       });
     }
 
     // Pull item groups from parameters
     if (itemGroups) {
       formData.append('item_groups', itemGroups, {
-        filename: 'item_groups.csv',
+        filename: `item_groups.${format}`,
       });
     }
   }
@@ -2555,9 +2563,10 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {file} [parameters.items] - The CSV file with all new items
-   * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
+   * @param {file} [parameters.items] - The file with all new items (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.variations] - The file with all new variations (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.itemGroups] - The file with all new itemGroups (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2569,6 +2578,7 @@ class Catalog {
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
    *     itemGroups: itemGroupsFileBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async replaceCatalog(parameters = {}, networkParameters = {}) {
@@ -2607,9 +2617,10 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {file} [parameters.items] - The CSV file with all new items
-   * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
+   * @param {file} [parameters.items] - The file with all new items (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.variations] - The file with all new variations (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.itemGroups] - The file with all new itemGroups (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2621,6 +2632,7 @@ class Catalog {
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
    *     itemGroups: itemGroupsFileBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async updateCatalog(parameters = {}, networkParameters = {}) {
@@ -2660,9 +2672,10 @@ class Catalog {
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
-   * @param {file} [parameters.items] - The CSV file with all new items
-   * @param {file} [parameters.variations] - The CSV file with all new variations
-   * @param {file} [parameters.itemGroups] - The CSV file with all new itemGroups
+   * @param {file} [parameters.items] - The file with all new items (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.variations] - The file with all new variations (csv or jsonl, depending on the format parameter)
+   * @param {file} [parameters.itemGroups] - The file with all new itemGroups (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2674,6 +2687,7 @@ class Catalog {
    *     items: itemsFileBufferOrStream,
    *     variations: variationsFileBufferOrStream,
    *     itemGroups: itemGroupsFileBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async patchCatalog(parameters = {}, networkParameters = {}) {
@@ -2712,7 +2726,8 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {file} [parameters.tarArchive] - The tar file that includes catalog files (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2722,6 +2737,7 @@ class Catalog {
    *     section: 'Products',
    *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async replaceCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
@@ -2768,7 +2784,8 @@ class Catalog {
    * @param {string} parameters.section - The section to update
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
-   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {file} [parameters.tarArchive] - The tar file that includes catalog files (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2778,6 +2795,7 @@ class Catalog {
    *     section: 'Products',
    *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async updateCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {
@@ -2827,7 +2845,8 @@ class Catalog {
    * @param {string} [parameters.notificationEmail] - An email address to receive an email notification if the task fails
    * @param {boolean} [parameters.force=false] - Process the catalog even if it will invalidate a large number of existing items
    * @param {string} [parameters.onMissing="FAIL"] - Defines the strategy for handling items which are present in the file and missing in the system. IGNORE silently prevents adding them to the system, CREATE creates them, FAIL fails the ingestion in case of their presence
-   * @param {file} [parameters.tarArchive] - The tar file that includes csv files
+   * @param {file} [parameters.tarArchive] - The tar file that includes catalog files (csv or jsonl, depending on the format parameter)
+   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
@@ -2837,6 +2856,7 @@ class Catalog {
    *     section: 'Products',
    *     notificationEmail: 'notifications@example.com',
    *     tarArchive: tarArchiveBufferOrStream,
+   *     format: 'csv'
    * });
    */
   async patchCatalogUsingTarArchive(parameters = {}, networkParameters = {}) {

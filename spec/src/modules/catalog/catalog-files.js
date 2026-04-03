@@ -258,6 +258,65 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should replace a catalog of items with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.replaceCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog of items with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.replaceCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -372,6 +431,65 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('task_status_path');
           done();
         });
+      });
+
+      it('Should replace a catalog using tar archive with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should replace a catalog using tar archive with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -569,6 +687,65 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should update a catalog of items with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.updateCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should update a catalog of items with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.updateCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -684,6 +861,65 @@ describe('ConstructorIO - Catalog', () => {
           expect(res).to.have.property('task_status_path');
           done();
         });
+      });
+
+      it('Should update a catalog using tar archive with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should update a catalog using tar archive with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -915,6 +1151,65 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
       });
 
+      it('Should patch a catalog of items with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog of items with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+      });
+
       if (!skipNetworkTimeoutTests) {
         it('Should be rejected when network request timeout is provided and reached', () => {
           const { catalog } = new ConstructorIO(validOptions);
@@ -1012,6 +1307,65 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
+      });
+
+      it('Should patch a catalog using tar archive with format parameter set to csv', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'csv',
+        };
+
+        catalog.patchCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should patch a catalog using tar archive with format parameter set to jsonl', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'jsonl',
+        };
+
+        catalog.patchCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('jsonl');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should be rejected when invalid format parameter is provided', () => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+          format: 'xml',
+        };
+
+        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
