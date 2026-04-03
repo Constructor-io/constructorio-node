@@ -59,8 +59,8 @@ async function createQueryParamsAndFormData(parameters) {
   const formData = new FormData();
 
   if (parameters) {
-    const { section, notification_email, notificationEmail = notification_email, force, item_groups, onMissing } = parameters;
-    let { items, variations, format = 'csv', itemGroups = item_groups } = parameters;
+    const { section, notification_email, notificationEmail = notification_email, force, item_groups, onMissing, format = 'csv' } = parameters;
+    let { items, variations, itemGroups = item_groups } = parameters;
 
     try {
       // Convert items to buffer if passed as stream
@@ -117,21 +117,21 @@ async function createQueryParamsAndFormData(parameters) {
     // Pull items from parameters
     if (items) {
       formData.append('items', items, {
-        filename: 'items.' + format,
+        filename: `items.${format}`,
       });
     }
 
     // Pull variations from parameters
     if (variations) {
       formData.append('variations', variations, {
-        filename: 'variations.' + format,
+        filename: `variations.${format}`,
       });
     }
 
     // Pull item groups from parameters
     if (itemGroups) {
       formData.append('item_groups', itemGroups, {
-        filename: 'item_groups.' + format,
+        filename: `item_groups.${format}`,
       });
     }
   }
