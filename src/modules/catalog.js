@@ -106,11 +106,11 @@ async function createQueryParamsAndFormData(parameters) {
       queryParams.on_missing = onMissing;
     }
 
-    const normalizedFormat = format.toLowerCase();
-
-    if (!['csv', 'jsonl'].includes(normalizedFormat)) {
+    if (typeof format !== 'string' || !['csv', 'jsonl'].includes(format.toLowerCase())) {
       throw new Error('format must be csv or jsonl');
     }
+
+    const normalizedFormat = format.toLowerCase();
 
     queryParams.format = normalizedFormat;
 
