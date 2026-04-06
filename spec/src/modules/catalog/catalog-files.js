@@ -335,7 +335,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.replaceCatalog(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -510,7 +510,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.replaceCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -764,7 +764,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.updateCatalog(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -940,7 +940,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.updateCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -1228,7 +1228,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
@@ -1386,7 +1386,7 @@ describe('ConstructorIO - Catalog', () => {
           format: 'xml',
         };
 
-        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be one of csv, jsonl');
+        return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('format must be csv or jsonl');
       });
 
       if (!skipNetworkTimeoutTests) {
