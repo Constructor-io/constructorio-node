@@ -454,6 +454,27 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should replace a catalog using tar archive with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.replaceCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should replace a catalog using tar archive with format parameter set to csv', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -708,6 +729,27 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should update a catalog of items with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
+
+        catalog.updateCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should update a catalog of items with format parameter set to csv', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -878,6 +920,27 @@ describe('ConstructorIO - Catalog', () => {
 
           expect(requestedUrlParams).to.have.property('section').to.equal(data.section);
           expect(requestedUrlParams).to.have.property('notification_email').to.equal(optionalParameters.notificationEmail);
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
+      it('Should update a catalog using tar archive with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.updateCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
           expect(res).to.have.property('task_id');
           expect(res).to.have.property('task_status_path');
           done();
@@ -1172,6 +1235,27 @@ describe('ConstructorIO - Catalog', () => {
         return expect(catalog.patchCatalog(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
       });
 
+      it('Should patch a catalog of items with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should patch a catalog of items with format parameter set to csv', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
@@ -1328,6 +1412,27 @@ describe('ConstructorIO - Catalog', () => {
         };
 
         return expect(catalog.patchCatalogUsingTarArchive(data)).to.eventually.be.rejectedWith('onMissing must be one of FAIL, IGNORE, or CREATE');
+      });
+
+      it('Should patch a catalog using tar archive with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          tarArchive: tarArchiveBuffer,
+          section: 'Products',
+        };
+
+        catalog.patchCatalogUsingTarArchive(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
       });
 
       it('Should patch a catalog using tar archive with format parameter set to csv', (done) => {
