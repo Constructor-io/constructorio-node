@@ -2564,7 +2564,7 @@ class Catalog {
    * @param {file} [parameters.items] - The file with all new items (csv or jsonl, depending on the format parameter)
    * @param {file} [parameters.variations] - The file with all new variations (csv or jsonl, depending on the format parameter)
    * @param {file} [parameters.itemGroups] - The file with all new itemGroups (csv or jsonl, depending on the format parameter)
-   * @param {string} [parameters.format] - File format of the uploaded items and variations files. Can be either csv or jsonl.
+   * @param {string} [parameters.format] - File format of all uploaded catalog files (items, variations, and itemGroups). Can be either csv or jsonl.
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
