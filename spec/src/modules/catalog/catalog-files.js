@@ -258,6 +258,27 @@ describe('ConstructorIO - Catalog', () => {
         });
       });
 
+      it('Should replace a catalog of items with default format parameter (csv) when format is not specified', (done) => {
+        const { catalog } = new ConstructorIO({
+          ...validOptions,
+          fetch: fetchSpy,
+        });
+
+        const data = {
+          items: itemsBuffer,
+          section: 'Products',
+        };
+
+        catalog.replaceCatalog(data).then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(requestedUrlParams).to.have.property('format').to.equal('csv');
+          expect(res).to.have.property('task_id');
+          expect(res).to.have.property('task_status_path');
+          done();
+        });
+      });
+
       it('Should replace a catalog of items with format parameter set to csv', (done) => {
         const { catalog } = new ConstructorIO({
           ...validOptions,
