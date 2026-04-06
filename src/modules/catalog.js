@@ -106,32 +106,32 @@ async function createQueryParamsAndFormData(parameters) {
       queryParams.on_missing = onMissing;
     }
 
-    if (format) {
-      if (!['csv', 'jsonl'].includes(format.toLowerCase())) {
-        throw new Error('format must be one of csv, jsonl');
-      }
+    const normalizedFormat = format.toLowerCase();
 
-      queryParams.format = format;
+    if (!['csv', 'jsonl'].includes(normalizedFormat)) {
+      throw new Error('format must be csv or jsonl');
     }
+
+    queryParams.format = normalizedFormat;
 
     // Pull items from parameters
     if (items) {
       formData.append('items', items, {
-        filename: `items.${format}`,
+        filename: `items.${normalizedFormat}`,
       });
     }
 
     // Pull variations from parameters
     if (variations) {
       formData.append('variations', variations, {
-        filename: `variations.${format}`,
+        filename: `variations.${normalizedFormat}`,
       });
     }
 
     // Pull item groups from parameters
     if (itemGroups) {
       formData.append('item_groups', itemGroups, {
-        filename: `item_groups.${format}`,
+        filename: `item_groups.${normalizedFormat}`,
       });
     }
   }
