@@ -177,6 +177,7 @@ export interface ReplaceCatalogParameters {
   items?: File | fs.ReadStream | Duplex
   variations?: File | fs.ReadStream | Duplex;
   itemGroups?: File | fs.ReadStream | Duplex;
+  format?: 'csv' | 'jsonl';
 }
 
 export interface UpdateCatalogParameters extends ReplaceCatalogParameters {}
@@ -189,6 +190,7 @@ export interface PatchCatalogParameters {
   items?: File | fs.ReadStream | Duplex
   variations?: File | fs.ReadStream | Duplex;
   itemGroups?: File | fs.ReadStream | Duplex;
+  format?: 'csv' | 'jsonl';
 }
 
 export interface ReplaceCatalogUsingTarArchiveParameters {
@@ -196,6 +198,7 @@ export interface ReplaceCatalogUsingTarArchiveParameters {
   notificationEmail?: string;
   force?: boolean;
   tarArchive?: File | fs.ReadStream | Duplex;
+  format?: 'csv' | 'jsonl';
 }
 
 export interface UpdateCatalogUsingTarArchiveParameters
