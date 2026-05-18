@@ -38,7 +38,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     queryParams.ui = String(userId);
   }
 
-  // Pull origin referrer from options
+  // Pull origin referrer from userParameters
   if (originReferrer) {
     queryParams.origin_referrer = originReferrer;
   }

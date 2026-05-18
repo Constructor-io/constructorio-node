@@ -35,7 +35,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     queryParams.ui = String(userId);
   }
 
-  // Pull origin referrer from options
+  // Pull origin referrer from userParameters
   if (originReferrer) {
     queryParams.origin_referrer = originReferrer;
   }
