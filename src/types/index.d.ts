@@ -27,6 +27,7 @@ export interface UserParameters {
   userId?: string;
   segments?: string[];
   testCells?: Record<string, any>;
+  originReferrer?: string;
   userIp?: string;
   userAgent?: string;
 }

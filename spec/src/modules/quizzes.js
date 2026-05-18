@@ -145,6 +145,24 @@ describe('ConstructorIO - Quizzes', () => {
       });
     });
 
+    it('Should return a result provided a valid apiKey, quizId and origin referrer', () => {
+      const originReferrer = 'https://localhost';
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      return quizzes.getQuizNextQuestion(validQuizId, {}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('quiz_version_id').to.be.an('string');
+        expect(res).to.have.property('quiz_session_id').to.be.an('string');
+        expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
+        expect(res).to.have.property('next_question').to.be.an('object');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+      });
+    });
+
     it('Should return result given answers parameter', () => {
       const { quizzes } = new ConstructorIO({
         apiKey: quizApiKey,
@@ -417,6 +435,38 @@ describe('ConstructorIO - Quizzes', () => {
         expect(res).to.have.property('quiz_id').to.be.an('string').to.equal(validQuizId);
         expect(requestedUrlParams).to.have.property('us').to.deep.equal(segments);
       });
+    });
+
+    it('Should return a result provided a valid apiKey, quizId and origin referrer', () => {
+      const originReferrer = 'https://localhost';
+      const { quizzes } = new ConstructorIO({
+        apiKey: quizApiKey,
+        fetch: fetchSpy,
+      });
+
+      return quizzes
+        .getQuizResults(
+          validQuizId,
+          { answers: validAnswers, quizSessionId },
+          { originReferrer },
+        )
+        .then((res) => {
+          const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+          expect(res).to.have.property('request').to.be.an('object');
+          expect(res).to.have.property('response').to.be.an('object');
+          expect(res).to.have.property('result_id').to.be.an('string');
+          expect(res.response).to.have.property('results').to.be.an('array');
+          expect(res).to.have.property('quiz_version_id').to.be.an('string');
+          expect(res).to.have.property('quiz_session_id').to.be.an('string');
+          expect(res)
+            .to.have.property('quiz_id')
+            .to.be.an('string')
+            .to.equal(validQuizId);
+          expect(requestedUrlParams)
+            .to.have.property('origin_referrer')
+            .to.equal(originReferrer);
+        });
     });
 
     it('Should be rejected if no quizId is provided', () => {

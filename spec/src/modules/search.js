@@ -301,6 +301,24 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should return a response with a valid query, section, and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, { section }, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      });
+    });
+
     it('Should return a response with a valid query, section, and security token', (done) => {
       const securityToken = 'cio-node-test';
       const { search } = new ConstructorIO({
@@ -989,6 +1007,24 @@ describe('ConstructorIO - Search', () => {
         expect(res).to.have.property('response').to.be.an('object');
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+        done();
+      });
+    });
+
+    it('Should return a response with a valid query, section, and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { search } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      search.getVoiceSearchResults(voiceSearchQuery, { section }, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
         done();
       });
     });

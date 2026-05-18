@@ -18,6 +18,7 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
     userId,
     segments,
     testCells,
+    originReferrer,
   } = userParameters;
   let queryParams = { c: version };
 
@@ -45,6 +46,11 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
   // Pull user id from options and ensure string
   if (userId) {
     queryParams.ui = String(userId);
+  }
+
+  // Pull origin referrer from options
+  if (originReferrer) {
+    queryParams.origin_referrer = originReferrer;
   }
 
   if (parameters) {
@@ -186,6 +192,7 @@ class Search {
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -288,6 +295,7 @@ class Search {
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
