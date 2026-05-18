@@ -300,7 +300,7 @@ describe('ConstructorIO - Browse', () => {
         expect(res).to.have.property('result_id').to.be.an('string');
         expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
         done();
-      });
+      }).catch(done);
     });
 
     it('Should return a response with a valid filterName, filterValue, and security token', (done) => {
