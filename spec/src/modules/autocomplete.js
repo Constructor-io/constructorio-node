@@ -322,6 +322,24 @@ describe('ConstructorIO - Autocomplete', () => {
       });
     });
 
+    it('Should return a response with a valid query and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { autocomplete } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      autocomplete.getAutocompleteResults(query, {}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('sections').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with a valid query and security token', (done) => {
       const securityToken = 'cio-node-test';
       const { autocomplete } = new ConstructorIO({

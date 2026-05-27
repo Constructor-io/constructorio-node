@@ -15,6 +15,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     clientId,
     userId,
     segments,
+    originReferrer,
   } = userParameters;
   let queryParams = { c: version };
 
@@ -35,6 +36,11 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   // Pull user id from options and ensure string
   if (userId) {
     queryParams.ui = String(userId);
+  }
+
+  // Pull origin referrer from userParameters
+  if (originReferrer && typeof originReferrer === 'string') {
+    queryParams.origin_referrer = originReferrer;
   }
 
   if (parameters) {
@@ -147,6 +153,7 @@ class Recommendations {
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request

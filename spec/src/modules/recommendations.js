@@ -315,6 +315,24 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should return a response with valid itemIds, result_id, and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds }, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with a valid query, section, and security token', (done) => {
       const securityToken = 'cio-node-test';
       const { recommendations } = new ConstructorIO({

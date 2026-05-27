@@ -15,6 +15,7 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
     clientId,
     userId,
     segments,
+    originReferrer,
   } = userParameters;
   const serviceUrl = 'https://quizzes.cnstrc.com';
   let queryParams = { c: version };
@@ -32,6 +33,11 @@ function createQuizUrl(quizId, parameters, userParameters, options, path) {
   // Pull user id from options and ensure string
   if (userId) {
     queryParams.ui = String(userId);
+  }
+
+  // Pull origin referrer from userParameters
+  if (originReferrer && typeof originReferrer === 'string') {
+    queryParams.origin_referrer = originReferrer;
   }
 
   // Validate quiz id is provided
@@ -124,6 +130,7 @@ class Quizzes {
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request
@@ -207,6 +214,7 @@ class Quizzes {
    * @param {string} [userParameters.userId] - User ID, utilized to personalize results
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Origin user IP, from client
    * @param {string} [userParameters.userAgent] - Origin user agent, from client
    * @param {object} [networkParameters] - Parameters relevant to the network request

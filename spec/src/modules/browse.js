@@ -285,6 +285,24 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with a valid filterName, filterValue, and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, {}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with a valid filterName, filterValue, and security token', (done) => {
       const securityToken = 'cio-node-test';
       const { browse } = new ConstructorIO({
@@ -958,6 +976,24 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with valid ids and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResultsForItemIds(ids, null, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with valid ids and page', (done) => {
       const page = 1;
       const { browse } = new ConstructorIO({
@@ -1426,6 +1462,24 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with valid ids and origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseGroups({}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with valid ids and additional filters', (done) => {
       const filters = { group_id: ['drill_collection'] };
       const { browse } = new ConstructorIO({
@@ -1737,6 +1791,24 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should return a response with origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacets({}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
+    });
+
     it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
       const { browse } = new ConstructorIO({
         ...validOptions,
@@ -1928,6 +2000,24 @@ describe('ConstructorIO - Browse', () => {
         expect(requestedHeaders).to.have.property('User-Agent').to.equal('test2');
         done();
       });
+    });
+
+    it('Should return a response with origin referrer', (done) => {
+      const originReferrer = 'https://localhost';
+      const { browse } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseFacetOptions(facetName, {}, { originReferrer }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        done();
+      }).catch(done);
     });
 
     it('Should combine custom headers from function networkParameters and global networkParameters', (done) => {
