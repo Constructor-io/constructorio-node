@@ -49,7 +49,7 @@ function createSearchUrl(query, parameters, userParameters, options, isVoiceSear
   }
 
   // Pull origin referrer from userParameters
-  if (originReferrer) {
+  if (originReferrer && typeof originReferrer === 'string') {
     queryParams.origin_referrer = originReferrer;
   }
 
