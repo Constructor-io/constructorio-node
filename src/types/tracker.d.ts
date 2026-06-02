@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { ConstructorClientOptions, NetworkParameters, ItemTracked, ItemTrackedPurchased } from '.';
+import { ConstructorClientOptions, ItemTracked, ItemTrackedPurchased, NetworkParameters } from '.';
 
 export default Tracker;
 
@@ -163,6 +163,7 @@ declare class Tracker {
       resultPositionOnPage?: number;
       numResultsPerPage?: number;
       analyticsTags?: Record<string, string>;
+      seedItemIds?: string[] | string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
