@@ -1061,6 +1061,7 @@ class Tracker {
    * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string[]|string} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1087,6 +1088,7 @@ class Tracker {
    *         url: 'https://demo.constructor.io/sandbox/farmstand',
    *         podId: '019927c2-f955-4020',
    *         numResultsViewed: 3,
+   *         seedItemIds: ['UIH976']
    *     },
    *     {
    *         sessionId: 1,
@@ -1117,6 +1119,8 @@ class Tracker {
         numResultsViewed = num_results_viewed,
         items,
         analyticsTags,
+        seed_item_ids,
+        seedItemIds = seed_item_ids,
       } = parameters;
 
       if (!helpers.isNil(resultCount)) {
@@ -1155,6 +1159,14 @@ class Tracker {
 
       if (analyticsTags) {
         bodyParams.analytics_tags = analyticsTags;
+      }
+
+      if (seedItemIds?.length) {
+        if (typeof seedItemIds === 'string') {
+          bodyParams.seed_item_ids = [seedItemIds];
+        } else if (Array.isArray(seedItemIds)) {
+          bodyParams.seed_item_ids = seedItemIds;
+        }
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;

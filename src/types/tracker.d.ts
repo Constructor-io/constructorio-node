@@ -144,6 +144,7 @@ declare class Tracker {
       resultId?: string;
       section?: string;
       analyticsTags?: Record<string, string>;
+      seedItemIds?: string[] | string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
