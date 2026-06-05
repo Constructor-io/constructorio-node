@@ -44,6 +44,14 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         campaignId = res.campaigns[0].id;
       }
     });
+
+    // Create a campaign if none exists so the tests below have an id to work with
+    if (!campaignId) {
+      const created = await campaigns.createCampaign({ name: `test-campaign-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] });
+
+      campaignId = created.id;
+      createdCampaignIds.push(created.id);
+    }
   });
 
   after(async () => {
@@ -51,11 +59,8 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
       ...validOptions,
     });
 
-    // Clean up campaigns created during the suite
-    for (const id of createdCampaignIds) {
-      // eslint-disable-next-line no-await-in-loop
-      await campaigns.deleteCampaign({ id }).catch(() => {});
-    }
+    // Clean up campaigns created during the suite (in parallel to stay within the hook timeout)
+    await Promise.all(createdCampaignIds.map((id) => campaigns.deleteCampaign({ id }).catch(() => {})));
   });
 
   beforeEach(() => {
@@ -446,7 +451,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         fetch: fetchSpy,
       });
 
-      campaigns.createCampaign({ name: createCampaignName }).then((res) => {
+      campaigns.createCampaign({ name: createCampaignName, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -473,7 +478,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         fetch: fetchSpy,
       });
 
-      campaigns.createCampaign({ name: `${createCampaignName}-2`, description, section }).then((res) => {
+      campaigns.createCampaign({ name: `${createCampaignName}-2`, description, section, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -500,8 +505,10 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         fetch: fetchSpy,
       });
 
-      campaigns.createCampaign({ name: `${createCampaignName}-4` }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
+      campaigns.createCampaign({ name: `${createCampaignName}-4`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        createdCampaignIds.push(res.id);
 
         expect(fetchSpy).to.have.been.called;
         expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
@@ -520,8 +527,10 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         },
       });
 
-      campaigns.createCampaign({ name: `${createCampaignName}-5` }).then(() => {
+      campaigns.createCampaign({ name: `${createCampaignName}-5`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        createdCampaignIds.push(res.id);
 
         expect(fetchSpy).to.have.been.called;
         expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test');
@@ -541,8 +550,10 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         },
       });
 
-      campaigns.createCampaign({ name: `${createCampaignName}-6` }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then(() => {
+      campaigns.createCampaign({ name: `${createCampaignName}-6`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        createdCampaignIds.push(res.id);
 
         expect(fetchSpy).to.have.been.called;
         expect(requestedHeaders).to.have.property('X-Constructor-IO-Test').to.equal('test2');
@@ -560,7 +571,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         fetch: fetchSpy,
       });
 
-      return expect(campaigns.createCampaign({ name: `${createCampaignName}-invalid-key` })).to.eventually.be.rejected;
+      return expect(campaigns.createCampaign({ name: `${createCampaignName}-invalid-key`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
     });
 
     it('Should return error when creating a campaign with an invalid API token', () => {
@@ -572,14 +583,14 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         fetch: fetchSpy,
       });
 
-      return expect(campaigns.createCampaign({ name: `${createCampaignName}-invalid-token` })).to.eventually.be.rejected;
+      return expect(campaigns.createCampaign({ name: `${createCampaignName}-invalid-token`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { campaigns } = new ConstructorIO(validOptions);
 
-        return expect(campaigns.createCampaign({ name: `${createCampaignName}-timeout` }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(campaigns.createCampaign({ name: `${createCampaignName}-timeout`, refinedQueries: [{ query: 'test-query' }] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -588,7 +599,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
           networkParameters: { timeout: 20 },
         });
 
-        return expect(campaigns.createCampaign({ name: `${createCampaignName}-global-timeout` })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(campaigns.createCampaign({ name: `${createCampaignName}-global-timeout`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -602,7 +613,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
       });
 
       // Create a campaign to update in the following tests below
-      await campaigns.createCampaign({ name: `test-campaign-update-${Date.now()}` }).then((res) => {
+      await campaigns.createCampaign({ name: `test-campaign-update-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         updateCampaignId = res.id;
         createdCampaignIds.push(res.id);
       });
@@ -766,7 +777,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
         ...validOptions,
       });
 
-      const res = await campaigns.createCampaign({ name: `test-campaign-delete-${Date.now()}-${Math.random()}` });
+      const res = await campaigns.createCampaign({ name: `test-campaign-delete-${Date.now()}-${Math.random()}`, refinedQueries: [{ query: 'test-query' }] });
 
       return res.id;
     }
