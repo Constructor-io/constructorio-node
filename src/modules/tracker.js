@@ -1061,7 +1061,7 @@ class Tracker {
    * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {string[]|string} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
+   * @param {string[]|string|number} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1161,12 +1161,10 @@ class Tracker {
         bodyParams.analytics_tags = analyticsTags;
       }
 
-      if (seedItemIds?.length) {
-        if (typeof seedItemIds === 'string') {
-          bodyParams.seed_item_ids = [seedItemIds];
-        } else if (Array.isArray(seedItemIds)) {
-          bodyParams.seed_item_ids = seedItemIds;
-        }
+      if ((typeof seedItemIds === 'string' || typeof seedItemIds === 'number') && String(seedItemIds).length) {
+        bodyParams.seed_item_ids = [String(seedItemIds)];
+      } else if (Array.isArray(seedItemIds) && seedItemIds.length) {
+        bodyParams.seed_item_ids = seedItemIds.map(String);
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
@@ -1205,7 +1203,7 @@ class Tracker {
    * @param {number} [parameters.resultPositionOnPage] - Position of result on page
    * @param {number} [parameters.numResultsPerPage] - Number of results on page
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
-   * @param {string[]|string} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
+   * @param {string[]|string|number} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1327,12 +1325,10 @@ class Tracker {
         bodyParams.analytics_tags = analyticsTags;
       }
 
-      if (seedItemIds?.length) {
-        if (typeof seedItemIds === 'string') {
-          bodyParams.seed_item_ids = [seedItemIds];
-        } else if (Array.isArray(seedItemIds)) {
-          bodyParams.seed_item_ids = seedItemIds;
-        }
+      if ((typeof seedItemIds === 'string' || typeof seedItemIds === 'number') && String(seedItemIds).length) {
+        bodyParams.seed_item_ids = [String(seedItemIds)];
+      } else if (Array.isArray(seedItemIds) && seedItemIds.length) {
+        bodyParams.seed_item_ids = seedItemIds.map(String);
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
