@@ -1061,6 +1061,7 @@ class Tracker {
    * @param {string} [parameters.resultId] - Recommendation result identifier (returned in response from Constructor)
    * @param {string} [parameters.section="Products"] - Results section
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string[]|string|number} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1087,6 +1088,7 @@ class Tracker {
    *         url: 'https://demo.constructor.io/sandbox/farmstand',
    *         podId: '019927c2-f955-4020',
    *         numResultsViewed: 3,
+   *         seedItemIds: ['UIH976']
    *     },
    *     {
    *         sessionId: 1,
@@ -1117,6 +1119,8 @@ class Tracker {
         numResultsViewed = num_results_viewed,
         items,
         analyticsTags,
+        seed_item_ids,
+        seedItemIds = seed_item_ids,
       } = parameters;
 
       if (!helpers.isNil(resultCount)) {
@@ -1157,6 +1161,12 @@ class Tracker {
         bodyParams.analytics_tags = analyticsTags;
       }
 
+      if ((typeof seedItemIds === 'string' || typeof seedItemIds === 'number') && String(seedItemIds).length) {
+        bodyParams.seed_item_ids = [String(seedItemIds)];
+      } else if (Array.isArray(seedItemIds) && seedItemIds.length) {
+        bodyParams.seed_item_ids = seedItemIds.map(String);
+      }
+
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;
       const requestMethod = 'POST';
       const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
@@ -1193,6 +1203,7 @@ class Tracker {
    * @param {number} [parameters.resultPositionOnPage] - Position of result on page
    * @param {number} [parameters.numResultsPerPage] - Number of results on page
    * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string[]|string|number} [parameters.seedItemIds] - Item ID(s) used to generate recommendations
    * @param {object} userParameters - Parameters relevant to the user request
    * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
    * @param {string} userParameters.clientId - Client ID, utilized to personalize results
@@ -1221,6 +1232,7 @@ class Tracker {
    *         podId: '019927c2-f955-4020',
    *         strategyId: 'complimentary',
    *         itemId: 'KMH876',
+   *         seedItemIds: ['UIH976']
    *     },
    *     {
    *         sessionId: 1,
@@ -1259,6 +1271,8 @@ class Tracker {
         item_name,
         itemName = item_name,
         analyticsTags,
+        seed_item_ids,
+        seedItemIds = seed_item_ids,
       } = parameters;
 
       if (variationId) {
@@ -1309,6 +1323,12 @@ class Tracker {
 
       if (analyticsTags) {
         bodyParams.analytics_tags = analyticsTags;
+      }
+
+      if ((typeof seedItemIds === 'string' || typeof seedItemIds === 'number') && String(seedItemIds).length) {
+        bodyParams.seed_item_ids = [String(seedItemIds)];
+      } else if (Array.isArray(seedItemIds) && seedItemIds.length) {
+        bodyParams.seed_item_ids = seedItemIds.map(String);
       }
 
       const requestUrl = `${requestPath}${applyParamsAsString({}, userParameters, this.options)}`;

@@ -2785,7 +2785,8 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackSearchResultsLoaded(term, {
         ...requiredParameters,
-        ...optionalParameters }, userParameters)).to.equal(true);
+        ...optionalParameters,
+      }, userParameters)).to.equal(true);
     });
 
     it('Should respond with a valid response when term, required parameters and user identifier are provided', (done) => {
@@ -4398,10 +4399,12 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = { ...requiredParameters,
+      const fullParameters = {
+        ...requiredParameters,
         type: 'add_to_loves',
         displayName: 'Add To Loves List',
-        isCustomType: true };
+        isCustomType: true,
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -4457,9 +4460,11 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = { ...requiredParameters,
+      const fullParameters = {
+        ...requiredParameters,
         display_name: 'Add To Loves List',
-        is_custom_type: true };
+        is_custom_type: true,
+      };
 
       tracker.on('success', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -4525,9 +4530,11 @@ describe('ConstructorIO - Tracker', () => {
         apiKey: testApiKey,
         fetch: fetchSpy,
       });
-      const fullParameters = { ...requiredParameters,
+      const fullParameters = {
+        ...requiredParameters,
         type: 'add_to_loves',
-        is_custom_type: true };
+        is_custom_type: true,
+      };
 
       tracker.on('error', (responseParams) => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
@@ -4694,7 +4701,7 @@ describe('ConstructorIO - Tracker', () => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         try {
-        // Request
+          // Request
           expect(fetchSpy).to.have.been.called;
           expect(requestParams).to.have.property('key');
           expect(requestParams).to.have.property('i');
@@ -4729,7 +4736,7 @@ describe('ConstructorIO - Tracker', () => {
         const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
 
         try {
-        // Request
+          // Request
           expect(fetchSpy).to.have.been.called;
           expect(requestParams).to.have.property('key');
           expect(requestParams).to.have.property('i');
@@ -5772,6 +5779,121 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(tracker.trackRecommendationView(requiredParameters, { ...userParameters, userId })).to.equal(true);
     });
+
+    it('Should return valid response and omit seed_item_ids if no seedItemIds provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.not.have.property('seed_item_ids');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView(requiredParameters, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is an array', (done) => {
+      const seedItemIds = ['123', '456'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal(seedItemIds);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is a string', (done) => {
+      const seedItemIds = '123';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal([seedItemIds]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is a number', (done) => {
+      const seedItemIds = 123;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal([String(seedItemIds)]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response and omit seed_item_ids if seedItemIds is not string, number, or array', (done) => {
+      const seedItemIds = { seedItemIds: ['123', '456'] };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.not.have.property('seed_item_ids');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationView({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
   });
 
   describe('trackRecommendationClick', () => {
@@ -6340,6 +6462,121 @@ describe('ConstructorIO - Tracker', () => {
       });
 
       expect(tracker.trackRecommendationClick(requiredParameters, { ...userParameters, userId })).to.equal(true);
+    });
+
+    it('Should return valid response and omit seed_item_ids if no seedItemIds provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.not.have.property('seed_item_ids');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick(requiredParameters, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is an array', (done) => {
+      const seedItemIds = ['123', '456'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal(seedItemIds);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is a string', (done) => {
+      const seedItemIds = '123';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal([seedItemIds]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response with seed_item_ids if seedItemIds is a number', (done) => {
+      const seedItemIds = 123;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_ids').to.deep.equal([String(seedItemIds)]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
+    });
+    it('Should return valid response and omit seed_item_ids if seedItemIds is not string, number, or array', (done) => {
+      const seedItemIds = { seedItemIds: ['123', '456'] };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.not.have.property('seed_item_ids');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackRecommendationClick({ ...requiredParameters, seedItemIds }, userParameters)).to.equal(true);
     });
   });
 
@@ -8095,7 +8332,7 @@ describe('ConstructorIO - Tracker', () => {
     it('Should throw an error when providing no messageType parameter', () => {
       const { tracker } = new ConstructorIO({ apiKey: testApiKey });
 
-      expect(tracker.on(null, () => {})).to.be.an('error');
+      expect(tracker.on(null, () => { })).to.be.an('error');
     });
 
     it('Should throw an error when providing an invalid callback parameter', () => {
