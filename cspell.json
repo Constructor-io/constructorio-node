@@ -44,6 +44,7 @@
     "forcesync",
     "forcedelta",
     "forcepatchdelta",
-    "skippable"
+    "skippable",
+    "timeofday"
   ]
 }

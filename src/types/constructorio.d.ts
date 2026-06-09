@@ -6,6 +6,7 @@ import Tracker from './tracker';
 import Catalog from './catalog';
 import Tasks from './tasks';
 import Quizzes from './quizzes';
+import Campaigns from './campaigns';
 
 import { ConstructorClientOptions } from '.';
 
@@ -31,4 +32,6 @@ declare class ConstructorIO {
   tasks: Tasks;
 
   quizzes: Quizzes;
+
+  campaigns: Campaigns;
 }
