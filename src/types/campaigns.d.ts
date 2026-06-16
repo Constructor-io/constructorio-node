@@ -150,17 +150,55 @@ export interface RecommendationContextExpressionCondition {
   expression: Record<string, string[]>;
 }
 
-export interface CampaignRule extends Record<string, any> {
+export type FiltersObj = Record<string, string[]>;
+
+export interface PositionRange {
+  start: number;
+  end: number;
+}
+
+export interface BoostRuleParameters {
+  filters?: FiltersObj;
+  item_ids?: string[];
+  boost: number;
+}
+
+export interface BlacklistRuleParameters {
+  filters?: FiltersObj;
+  item_ids?: string[];
+}
+
+export interface SlotRuleParameters {
+  item_id: string;
+  position: number;
+  variation_slice?: Record<string, string[]>;
+  fuzzy_match?: boolean;
+  labels?: Record<string, any>;
+}
+
+export interface ContentRuleParameters {
+  data: Record<string, any>;
+}
+
+export interface FiltersSlotRuleParameters {
+  position_ranges: PositionRange[];
+  filters?: FiltersObj;
+  filter_expression?: Record<string, any> | string;
+  labels?: Record<string, any>;
+}
+
+export interface WhitelistRuleParameters {
+  filters: FiltersObj;
+}
+
+export interface VariationSlicingRuleParameters {
+  facet_names: string[];
+  filter_expression?: Record<string, any> | string;
+}
+
+/* shared fields present on every campaign rule */
+export interface RuleObjBase {
   id: number;
-  rule: Record<string, any>;
-  rule_type:
-    | 'boost'
-    | 'blacklist'
-    | 'slot'
-    | 'content'
-    | 'filters_slot'
-    | 'whitelist'
-    | 'variation_slicing';
   request_tag_name?: RequestTag;
   request_tag_value?: string;
   active?: boolean;
@@ -171,6 +209,51 @@ export interface CampaignRule extends Record<string, any> {
   created_at?: string;
   updated_at?: string;
 }
+
+export interface BoostRule extends RuleObjBase {
+  rule_type: 'boost';
+  rule: BoostRuleParameters;
+}
+
+export interface BlacklistRule extends RuleObjBase {
+  rule_type: 'blacklist';
+  rule: BlacklistRuleParameters;
+}
+
+export interface SlotRule extends RuleObjBase {
+  rule_type: 'slot';
+  rule: SlotRuleParameters;
+  request_filters?: Record<string, string[]>;
+}
+
+export interface ContentRule extends RuleObjBase {
+  rule_type: 'content';
+  rule: ContentRuleParameters;
+}
+
+export interface FiltersSlotRule extends RuleObjBase {
+  rule_type: 'filters_slot';
+  rule: FiltersSlotRuleParameters;
+}
+
+export interface WhitelistRule extends RuleObjBase {
+  rule_type: 'whitelist';
+  rule: WhitelistRuleParameters;
+}
+
+export interface VariationSlicingRule extends RuleObjBase {
+  rule_type: 'variation_slicing';
+  rule: VariationSlicingRuleParameters;
+}
+
+export type RuleObj =
+  | BoostRule
+  | BlacklistRule
+  | SlotRule
+  | ContentRule
+  | FiltersSlotRule
+  | WhitelistRule
+  | VariationSlicingRule;
 
 /* rule definition supplied when creating or modifying a campaign */
 export interface CampaignRuleInput extends Record<string, any> {
@@ -210,13 +293,13 @@ export interface Campaign extends Record<string, any> {
   refined_queries?: RefinedQuery[];
   refined_filters?: RefinedFilter[];
   refined_recommendation_contexts?: RecommendationContext[];
-  boost_rules?: CampaignRule[];
-  blacklist_rules?: CampaignRule[];
-  slot_rules?: CampaignRule[];
-  content_rules?: CampaignRule[];
-  filters_slot_rules?: CampaignRule[];
-  whitelist_rule?: CampaignRule;
-  variation_slicing_rule?: CampaignRule;
+  boost_rules?: BoostRule[];
+  blacklist_rules?: BlacklistRule[];
+  slot_rules?: SlotRule[];
+  content_rules?: ContentRule[];
+  filters_slot_rules?: FiltersSlotRule[];
+  whitelist_rule?: WhitelistRule;
+  variation_slicing_rule?: VariationSlicingRule;
   metadata_json?: CampaignMetadata;
 }
 
