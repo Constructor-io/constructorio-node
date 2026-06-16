@@ -36,6 +36,7 @@
   "devDependencies": {
     "@cspell/eslint-plugin": "^6.8.2",
     "@types/events": "^3.0.0",
+    "@types/node": "^22.19.21",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "chai": "^4.3.4",
