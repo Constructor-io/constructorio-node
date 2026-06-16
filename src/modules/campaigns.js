@@ -50,12 +50,12 @@ class Campaigns {
    * @param {object} [parameters] - Additional parameters for retrieving campaigns
    * @param {string} [parameters.section='Products'] - The section of the index to use
    * @param {number|number[]} [parameters.id] - The ID(s) of campaigns to filter by
+   * @param {string[]} [parameters.refinedQueries] - A list of refined queries to filter by
    * @param {object} [parameters.refinedFilters] - An object of refined filters to filter by
+   * @param {object} [parameters.refinedRecommendationContexts] - A filter for refined recommendation contexts
    * @param {number} [parameters.numResultsPerPage=20] - The number of campaigns to return - maximum value 100
    * @param {number} [parameters.page] - The page of results to return
    * @param {number} [parameters.offset] - The number of results to skip from the beginning - cannot be used together with `page`
-   * @param {object} [parameters.refinedRecommendationContexts] - A filter for refined recommendation contexts
-   * @param {string[]} [parameters.refinedQueries] - A list of refined queries to filter by
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {Promise}
