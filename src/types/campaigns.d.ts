@@ -124,9 +124,30 @@ export interface RefinedFilter {
   filter_value: string;
 }
 
-export interface RecommendationContext extends Record<string, any> {
+export interface RecommendationContext {
   pod_id: string;
-  condition: Record<string, any>;
+  condition: RecommendationContextCondition;
+}
+
+export type RecommendationContextCondition =
+  | RecommendationContextItemCondition
+  | RecommendationContextAttributeCondition
+  | RecommendationContextExpressionCondition;
+
+export interface RecommendationContextItemCondition {
+  type: 'item';
+  item_id?: string;
+}
+
+export interface RecommendationContextAttributeCondition {
+  type: 'attribute';
+  filter_name?: string;
+  filter_value?: string;
+}
+
+export interface RecommendationContextExpressionCondition {
+  type: 'expression';
+  expression: Record<string, string[]>;
 }
 
 export interface CampaignRule extends Record<string, any> {
