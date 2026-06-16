@@ -23,29 +23,8 @@ export interface RetrieveCampaignParameters {
   section?: string;
 }
 
-export interface CreateCampaignParameters {
-  name: string;
-  section?: string;
-  description?: string;
-  requestTagName?: RequestTag;
-  requestTagValue?: string;
-  startTime?: string;
-  endTime?: string;
-  refinedQueries?: RefinedQuery[];
-  refinedFilters?: RefinedFilter[];
-  refinedRecommendationContexts?: RecommendationContext[];
-  boostRules?: CampaignRuleInput[];
-  blacklistRules?: CampaignRuleInput[];
-  slotRules?: CampaignRuleInput[];
-  contentRules?: CampaignRuleInput[];
-  filtersSlotRules?: CampaignRuleInput[];
-  whitelistRule?: CampaignRuleInput | null;
-  variationSlicingRule?: CampaignRuleInput | null;
-  metadataJson?: CampaignMetadata;
-}
-
-export interface UpdateCampaignParameters {
-  id: number;
+/* fields shared by create and update campaign requests */
+export interface CampaignParametersBase {
   section?: string;
   name?: string;
   description?: string;
@@ -64,6 +43,14 @@ export interface UpdateCampaignParameters {
   whitelistRule?: CampaignRuleInput | null;
   variationSlicingRule?: CampaignRuleInput | null;
   metadataJson?: CampaignMetadata;
+}
+
+export interface CreateCampaignParameters extends CampaignParametersBase {
+  name: string;
+}
+
+export interface UpdateCampaignParameters extends CampaignParametersBase {
+  id: number;
 }
 
 export interface DeleteCampaignParameters {
