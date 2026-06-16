@@ -23,7 +23,7 @@ export interface RetrieveCampaignParameters {
   section?: string;
 }
 
-export interface CreateCampaignParameters extends Record<string, any> {
+export interface CreateCampaignParameters {
   name: string;
   section?: string;
   description?: string;
@@ -44,7 +44,7 @@ export interface CreateCampaignParameters extends Record<string, any> {
   metadataJson?: CampaignMetadata;
 }
 
-export interface UpdateCampaignParameters extends Record<string, any> {
+export interface UpdateCampaignParameters {
   id: number;
   section?: string;
   name?: string;
