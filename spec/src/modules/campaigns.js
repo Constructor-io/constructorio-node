@@ -99,7 +99,7 @@ describe('ConstructorIO - Campaigns', function ConstructorIOCampaigns() {
     });
 
     it('Should retrieve a list of campaigns given section', (done) => {
-      const section = 'Products';
+      const section = 'Search Suggestions';
       const { campaigns } = new ConstructorIO({
         ...validOptions,
         fetch: fetchSpy,
