@@ -255,25 +255,19 @@ export type RuleObj =
   | WhitelistRule
   | VariationSlicingRule;
 
-/* rule definition supplied when creating or modifying a campaign */
-export interface CampaignRuleInput extends Record<string, any> {
-  rule: Record<string, any>;
-  rule_type?:
-    | 'boost'
-    | 'blacklist'
-    | 'slot'
-    | 'content'
-    | 'filters_slot'
-    | 'whitelist'
-    | 'variation_slicing';
-  request_tag_name?: RequestTag;
-  request_tag_value?: string;
-  active?: boolean;
-  start_time?: string;
-  end_time?: string;
-  campaign_id?: number;
-  automatically_generated?: boolean;
-}
+/*
+ * Omit the server-assigned fields from each rule.
+ * `Omit` does not distribute over unions - applied directly to RuleObj it would merge
+ * all members into one object and decouple rule_type from rule. The `T extends unknown`
+ * conditional forces distribution so each member is omitted individually and the
+ * rule_type/rule discrimination is preserved.
+ */
+type OmitServerFields<T> = T extends unknown
+  ? Omit<T, 'id' | 'created_at' | 'updated_at'>
+  : never;
+
+/* rule definition supplied when creating or modifying a campaign - server-assigned fields are omitted */
+export type CampaignRuleInput = OmitServerFields<RuleObj>;
 
 export interface CampaignMetadata {
   goal?: string;
