@@ -1,6 +1,6 @@
 import { ConstructorClientOptions, NetworkParameters } from '.';
 
-export default Campaigns;
+export default Searchandising;
 
 export interface RetrieveCampaignsParameters {
   section?: string;
@@ -58,7 +58,7 @@ export interface DeleteCampaignParameters {
   section?: string;
 }
 
-declare class Campaigns {
+declare class Searchandising {
   constructor(options: ConstructorClientOptions);
 
   options: ConstructorClientOptions;

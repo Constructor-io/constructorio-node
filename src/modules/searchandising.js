@@ -32,13 +32,13 @@ function createCampaignsUrl(path, options, additionalQueryParams = {}, apiVersio
 }
 
 /**
- * Interface to searchandizing campaign related API calls
+ * Interface to searchandising campaign related API calls
  *
- * @module campaigns
+ * @module searchandising
  * @inner
  * @returns {object}
  */
-class Campaigns {
+class Searchandising {
   constructor(options) {
     this.options = options || {};
   }
@@ -61,7 +61,7 @@ class Campaigns {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-retrieve-campaigns
    * @example
-   * constructorio.campaigns.retrieveCampaigns({
+   * constructorio.searchandising.retrieveCampaigns({
    *     section: 'Products',
    *     numResultsPerPage: 50,
    *     page: 1,
@@ -172,7 +172,7 @@ class Campaigns {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-retrieve-campaign
    * @example
-   * constructorio.campaigns.retrieveCampaign({
+   * constructorio.searchandising.retrieveCampaign({
    *     id: 42,
    *     section: 'Products',
    * });
@@ -247,7 +247,7 @@ class Campaigns {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-create-campaign
    * @example
-   * constructorio.campaigns.createCampaign({
+   * constructorio.searchandising.createCampaign({
    *     name: 'Spring Sale',
    *     section: 'Products',
    *     description: 'Seasonal promotion campaign',
@@ -328,7 +328,7 @@ class Campaigns {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-update-campaign
    * @example
-   * constructorio.campaigns.updateCampaign({
+   * constructorio.searchandising.updateCampaign({
    *     id: 42,
    *     name: 'Spring Sale - Updated',
    *     description: 'Updated seasonal promotion campaign',
@@ -389,7 +389,7 @@ class Campaigns {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-delete-campaign
    * @example
-   * constructorio.campaigns.deleteCampaign({
+   * constructorio.searchandising.deleteCampaign({
    *     id: 42,
    *     section: 'Products',
    * });
@@ -437,4 +437,4 @@ class Campaigns {
   }
 }
 
-module.exports = Campaigns;
+module.exports = Searchandising;
