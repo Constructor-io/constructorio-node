@@ -186,6 +186,181 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
       });
     });
 
+    it('Should retrieve a list of campaigns given a single id', (done) => {
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ id: campaignId }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('id').to.equal(String(campaignId));
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given multiple ids', (done) => {
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ id: [campaignId, campaignId] }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('id').to.deep.equal([String(campaignId), String(campaignId)]);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refinedFilters', (done) => {
+      const refinedFilters = { group_id: ['123', '456'] };
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refinedFilters }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_filters');
+        expect(requestedUrlParams.refined_filters).to.have.property('group_id').to.deep.equal(['123', '456']);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refined_filters (snake_case)', (done) => {
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refined_filters: { group_id: ['123', '456'] } }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_filters');
+        expect(requestedUrlParams.refined_filters).to.have.property('group_id').to.deep.equal(['123', '456']);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refinedRecommendationContexts', (done) => {
+      const refinedRecommendationContexts = { pod_id: ['pod-a', 'pod-b'] };
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refinedRecommendationContexts }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_recommendation_contexts');
+        expect(requestedUrlParams.refined_recommendation_contexts).to.have.property('pod_id').to.deep.equal(['pod-a', 'pod-b']);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refined_recommendation_contexts (snake_case)', (done) => {
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refined_recommendation_contexts: { pod_id: ['pod-a', 'pod-b'] } }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_recommendation_contexts');
+        expect(requestedUrlParams.refined_recommendation_contexts).to.have.property('pod_id').to.deep.equal(['pod-a', 'pod-b']);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refinedQueries', (done) => {
+      const refinedQueries = ['shoes', 'boots'];
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refinedQueries }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_queries').to.deep.equal(refinedQueries);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
+    it('Should retrieve a list of campaigns given refined_queries (snake_case)', (done) => {
+      const { searchandising } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      searchandising.campaigns.retrieveCampaigns({ refined_queries: ['shoes', 'boots'] }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedUrlParams).to.have.property('key');
+        expect(requestedUrlParams).to.have.property('refined_queries').to.deep.equal(['shoes', 'boots']);
+
+        // Response
+        expect(res).to.have.property('campaigns').to.be.an('array');
+
+        done();
+      });
+    });
+
     it('Should pass the correct custom headers passed in function networkParameters', (done) => {
       const { searchandising } = new ConstructorIO({
         ...validOptions,
