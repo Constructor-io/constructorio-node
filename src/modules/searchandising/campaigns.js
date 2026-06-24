@@ -2,7 +2,7 @@
 /* eslint-disable camelcase, no-underscore-dangle, no-unneeded-ternary, brace-style */
 const qs = require('qs');
 const { AbortController } = require('node-abort-controller');
-const helpers = require('../utils/helpers');
+const helpers = require('../../utils/helpers');
 
 // Create URL from supplied path and options
 function createCampaignsUrl(path, options, additionalQueryParams = {}, apiVersion = 'v1') {
@@ -34,11 +34,11 @@ function createCampaignsUrl(path, options, additionalQueryParams = {}, apiVersio
 /**
  * Interface to searchandising campaign related API calls
  *
- * @module searchandising
+ * @module searchandising/campaigns
  * @inner
  * @returns {object}
  */
-class Searchandising {
+class Campaigns {
   constructor(options) {
     this.options = options || {};
   }
@@ -61,7 +61,7 @@ class Searchandising {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-retrieve-campaigns
    * @example
-   * constructorio.searchandising.retrieveCampaigns({
+   * constructorio.searchandising.campaigns.retrieveCampaigns({
    *     section: 'Products',
    *     numResultsPerPage: 50,
    *     page: 1,
@@ -93,42 +93,34 @@ class Searchandising {
         refinedQueries = refined_queries,
       } = parameters;
 
-      // Pull section from parameters
       if (section) {
         queryParams.section = section;
       }
 
-      // Pull id from parameters
       if (id) {
         queryParams.id = id;
       }
 
-      // Pull refined filters from parameters
       if (refinedFilters) {
         queryParams.refined_filters = refinedFilters;
       }
 
-      // Pull number of results per page from parameters
       if (numResultsPerPage) {
         queryParams.num_results_per_page = numResultsPerPage;
       }
 
-      // Pull page from parameters
       if (page) {
         queryParams.page = page;
       }
 
-      // Pull offset from parameters
       if (offset) {
         queryParams.offset = offset;
       }
 
-      // Pull refined recommendation contexts from parameters
       if (refinedRecommendationContexts) {
         queryParams.refined_recommendation_contexts = refinedRecommendationContexts;
       }
 
-      // Pull refined queries from parameters
       if (refinedQueries) {
         queryParams.refined_queries = refinedQueries;
       }
@@ -172,7 +164,7 @@ class Searchandising {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-retrieve-campaign
    * @example
-   * constructorio.searchandising.retrieveCampaign({
+   * constructorio.searchandising.campaigns.retrieveCampaign({
    *     id: 42,
    *     section: 'Products',
    * });
@@ -188,7 +180,6 @@ class Searchandising {
     };
     const { id, section } = parameters;
 
-    // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
@@ -247,7 +238,7 @@ class Searchandising {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-create-campaign
    * @example
-   * constructorio.searchandising.createCampaign({
+   * constructorio.searchandising.campaigns.createCampaign({
    *     name: 'Spring Sale',
    *     section: 'Products',
    *     description: 'Seasonal promotion campaign',
@@ -267,7 +258,6 @@ class Searchandising {
     };
     const { section, ...body } = parameters;
 
-    // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
@@ -328,7 +318,7 @@ class Searchandising {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-update-campaign
    * @example
-   * constructorio.searchandising.updateCampaign({
+   * constructorio.searchandising.campaigns.updateCampaign({
    *     id: 42,
    *     name: 'Spring Sale - Updated',
    *     description: 'Updated seasonal promotion campaign',
@@ -345,7 +335,6 @@ class Searchandising {
     };
     const { id, section, ...body } = parameters;
 
-    // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
@@ -389,7 +378,7 @@ class Searchandising {
    * @returns {Promise}
    * @see https://docs.constructor.com/reference/v1-searchandising-delete-campaign
    * @example
-   * constructorio.searchandising.deleteCampaign({
+   * constructorio.searchandising.campaigns.deleteCampaign({
    *     id: 42,
    *     section: 'Products',
    * });
@@ -405,7 +394,6 @@ class Searchandising {
     };
     const { id, section } = parameters;
 
-    // Pull section from parameters
     if (section) {
       queryParams.section = section;
     }
@@ -437,4 +425,4 @@ class Searchandising {
   }
 }
 
-module.exports = Searchandising;
+module.exports = Campaigns;

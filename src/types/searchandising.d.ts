@@ -58,7 +58,7 @@ export interface DeleteCampaignParameters {
   section?: string;
 }
 
-declare class Searchandising {
+declare class Campaigns {
   constructor(options: ConstructorClientOptions);
 
   options: ConstructorClientOptions;
@@ -87,6 +87,14 @@ declare class Searchandising {
     parameters: DeleteCampaignParameters,
     networkParameters?: NetworkParameters
   ): Promise<void>;
+}
+
+declare class Searchandising {
+  constructor(options: ConstructorClientOptions);
+
+  options: ConstructorClientOptions;
+
+  campaigns: Campaigns;
 }
 
 export type RequestTag =

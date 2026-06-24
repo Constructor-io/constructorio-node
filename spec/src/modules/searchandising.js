@@ -39,7 +39,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
     });
 
     // Save id of an existing campaign for the following tests below
-    await searchandising.retrieveCampaigns({ numResultsPerPage: 1 }).then((res) => {
+    await searchandising.campaigns.retrieveCampaigns({ numResultsPerPage: 1 }).then((res) => {
       if (res.campaigns && res.campaigns.length) {
         campaignId = res.campaigns[0].id;
       }
@@ -47,7 +47,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
 
     // Create a campaign if none exists so the tests below have an id to work with
     if (!campaignId) {
-      const created = await searchandising.createCampaign({ name: `test-campaign-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] });
+      const created = await searchandising.campaigns.createCampaign({ name: `test-campaign-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] });
 
       campaignId = created.id;
       createdCampaignIds.push(created.id);
@@ -60,7 +60,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
     });
 
     // Clean up campaigns created during the suite (in parallel to stay within the hook timeout)
-    await Promise.all(createdCampaignIds.map((id) => searchandising.deleteCampaign({ id }).catch(() => {})));
+    await Promise.all(createdCampaignIds.map((id) => searchandising.campaigns.deleteCampaign({ id }).catch(() => {})));
   });
 
   beforeEach(() => {
@@ -83,7 +83,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns().then((res) => {
+      searchandising.campaigns.retrieveCampaigns().then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -105,7 +105,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns({ section }).then((res) => {
+      searchandising.campaigns.retrieveCampaigns({ section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -126,7 +126,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns({ page: 1, numResultsPerPage: 50 }).then((res) => {
+      searchandising.campaigns.retrieveCampaigns({ page: 1, numResultsPerPage: 50 }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -149,7 +149,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns({ page: 1, num_results_per_page: 50 }).then((res) => {
+      searchandising.campaigns.retrieveCampaigns({ page: 1, num_results_per_page: 50 }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -171,7 +171,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns({ offset: 1 }).then((res) => {
+      searchandising.campaigns.retrieveCampaigns({ offset: 1 }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -192,7 +192,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaigns({}, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
+      searchandising.campaigns.retrieveCampaigns({}, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -212,7 +212,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.retrieveCampaigns().then(() => {
+      searchandising.campaigns.retrieveCampaigns().then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -233,7 +233,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.retrieveCampaigns({}, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then(() => {
+      searchandising.campaigns.retrieveCampaigns({}, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -252,7 +252,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.retrieveCampaigns()).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.retrieveCampaigns()).to.eventually.be.rejected;
     });
 
     it('Should return error when retrieving a list of campaigns with an invalid API token', () => {
@@ -264,14 +264,14 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.retrieveCampaigns()).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.retrieveCampaigns()).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { searchandising } = new ConstructorIO(validOptions);
 
-        return expect(searchandising.retrieveCampaigns({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.retrieveCampaigns({}, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -280,7 +280,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
           networkParameters: { timeout: 20 },
         });
 
-        return expect(searchandising.retrieveCampaigns()).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.retrieveCampaigns()).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -292,7 +292,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaign({ id: campaignId }).then((res) => {
+      searchandising.campaigns.retrieveCampaign({ id: campaignId }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -313,7 +313,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaign({ id: campaignId, section }).then((res) => {
+      searchandising.campaigns.retrieveCampaign({ id: campaignId, section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -334,7 +334,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.retrieveCampaign({ id: campaignId }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
+      searchandising.campaigns.retrieveCampaign({ id: campaignId }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         // Request
@@ -359,7 +359,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.retrieveCampaign({ id: campaignId }).then((res) => {
+      searchandising.campaigns.retrieveCampaign({ id: campaignId }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         // Request
@@ -385,7 +385,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.retrieveCampaign({ id: campaignId }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
+      searchandising.campaigns.retrieveCampaign({ id: campaignId }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         // Request
@@ -409,7 +409,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.retrieveCampaign({ id: campaignId })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.retrieveCampaign({ id: campaignId })).to.eventually.be.rejected;
     });
 
     it('Should return error when retrieving a campaign given a specific id with an invalid API token', () => {
@@ -421,14 +421,14 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.retrieveCampaign({ id: campaignId })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.retrieveCampaign({ id: campaignId })).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { searchandising } = new ConstructorIO(validOptions);
 
-        return expect(searchandising.retrieveCampaign({ id: campaignId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.retrieveCampaign({ id: campaignId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -437,7 +437,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
           networkParameters: { timeout: 20 },
         });
 
-        return expect(searchandising.retrieveCampaign({ id: campaignId })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.retrieveCampaign({ id: campaignId })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -451,7 +451,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.createCampaign({ name: createCampaignName, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
+      searchandising.campaigns.createCampaign({ name: createCampaignName, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -478,7 +478,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.createCampaign({ name: `${createCampaignName}-2`, description, section, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
+      searchandising.campaigns.createCampaign({ name: `${createCampaignName}-2`, description, section, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -505,7 +505,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.createCampaign({ name: `${createCampaignName}-4`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
+      searchandising.campaigns.createCampaign({ name: `${createCampaignName}-4`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         createdCampaignIds.push(res.id);
@@ -527,7 +527,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.createCampaign({ name: `${createCampaignName}-5`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
+      searchandising.campaigns.createCampaign({ name: `${createCampaignName}-5`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         createdCampaignIds.push(res.id);
@@ -550,7 +550,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.createCampaign({ name: `${createCampaignName}-6`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
+      searchandising.campaigns.createCampaign({ name: `${createCampaignName}-6`, refinedQueries: [{ query: 'test-query' }] }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then((res) => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         createdCampaignIds.push(res.id);
@@ -571,7 +571,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.createCampaign({ name: `${createCampaignName}-invalid-key`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.createCampaign({ name: `${createCampaignName}-invalid-key`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
     });
 
     it('Should return error when creating a campaign with an invalid API token', () => {
@@ -583,14 +583,14 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.createCampaign({ name: `${createCampaignName}-invalid-token`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.createCampaign({ name: `${createCampaignName}-invalid-token`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { searchandising } = new ConstructorIO(validOptions);
 
-        return expect(searchandising.createCampaign({ name: `${createCampaignName}-timeout`, refinedQueries: [{ query: 'test-query' }] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.createCampaign({ name: `${createCampaignName}-timeout`, refinedQueries: [{ query: 'test-query' }] }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -599,7 +599,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
           networkParameters: { timeout: 20 },
         });
 
-        return expect(searchandising.createCampaign({ name: `${createCampaignName}-global-timeout`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.createCampaign({ name: `${createCampaignName}-global-timeout`, refinedQueries: [{ query: 'test-query' }] })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -613,7 +613,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
       });
 
       // Create a campaign to update in the following tests below
-      await searchandising.createCampaign({ name: `test-campaign-update-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
+      await searchandising.campaigns.createCampaign({ name: `test-campaign-update-${Date.now()}`, refinedQueries: [{ query: 'test-query' }] }).then((res) => {
         updateCampaignId = res.id;
         createdCampaignIds.push(res.id);
       });
@@ -626,7 +626,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.updateCampaign({ id: updateCampaignId, name: updatedName }).then((res) => {
+      searchandising.campaigns.updateCampaign({ id: updateCampaignId, name: updatedName }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -652,7 +652,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.updateCampaign({ id: updateCampaignId, description, section }).then((res) => {
+      searchandising.campaigns.updateCampaign({ id: updateCampaignId, description, section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
         const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
 
@@ -677,7 +677,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      searchandising.updateCampaign({ id: updateCampaignId }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
+      searchandising.campaigns.updateCampaign({ id: updateCampaignId }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -697,7 +697,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.updateCampaign({ id: updateCampaignId }).then(() => {
+      searchandising.campaigns.updateCampaign({ id: updateCampaignId }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -718,7 +718,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      searchandising.updateCampaign({ id: updateCampaignId }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then(() => {
+      searchandising.campaigns.updateCampaign({ id: updateCampaignId }, { headers: { 'X-Constructor-IO-Test': 'test2' } }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -737,7 +737,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejected;
     });
 
     it('Should return error when updating a campaign with an invalid API token', () => {
@@ -749,14 +749,14 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { searchandising } = new ConstructorIO(validOptions);
 
-        return expect(searchandising.updateCampaign({ id: updateCampaignId, name: 'updated' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.updateCampaign({ id: updateCampaignId, name: 'updated' }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -765,7 +765,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
           networkParameters: { timeout: 20 },
         });
 
-        return expect(searchandising.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.updateCampaign({ id: updateCampaignId, name: 'updated' })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
@@ -777,7 +777,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         ...validOptions,
       });
 
-      const res = await searchandising.createCampaign({ name: `test-campaign-delete-${Date.now()}-${Math.random()}`, refinedQueries: [{ query: 'test-query' }] });
+      const res = await searchandising.campaigns.createCampaign({ name: `test-campaign-delete-${Date.now()}-${Math.random()}`, refinedQueries: [{ query: 'test-query' }] });
 
       return res.id;
     }
@@ -789,7 +789,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      await searchandising.deleteCampaign({ id: idToDelete }).then((res) => {
+      await searchandising.campaigns.deleteCampaign({ id: idToDelete }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -809,7 +809,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      await searchandising.deleteCampaign({ id: idToDelete, section }).then((res) => {
+      await searchandising.campaigns.deleteCampaign({ id: idToDelete, section }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
         // Request
@@ -829,7 +829,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      await searchandising.deleteCampaign({ id: idToDelete }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
+      await searchandising.campaigns.deleteCampaign({ id: idToDelete }, { headers: { 'X-Constructor-IO-Test': 'test' } }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -849,7 +849,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         },
       });
 
-      await searchandising.deleteCampaign({ id: idToDelete }).then(() => {
+      await searchandising.campaigns.deleteCampaign({ id: idToDelete }).then(() => {
         const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
 
         expect(fetchSpy).to.have.been.called;
@@ -866,7 +866,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.deleteCampaign({ id: campaignId })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.deleteCampaign({ id: campaignId })).to.eventually.be.rejected;
     });
 
     it('Should return error when deleting a campaign with an invalid API token', () => {
@@ -878,14 +878,14 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
         fetch: fetchSpy,
       });
 
-      return expect(searchandising.deleteCampaign({ id: campaignId })).to.eventually.be.rejected;
+      return expect(searchandising.campaigns.deleteCampaign({ id: campaignId })).to.eventually.be.rejected;
     });
 
     if (!skipNetworkTimeoutTests) {
       it('Should be rejected when network request timeout is provided and reached', () => {
         const { searchandising } = new ConstructorIO(validOptions);
 
-        return expect(searchandising.deleteCampaign({ id: campaignId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.deleteCampaign({ id: campaignId }, { timeout: 10 })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
 
       it('Should be rejected when global network request timeout is provided and reached', () => {
@@ -894,7 +894,7 @@ describe('ConstructorIO - Searchandising', function ConstructorIOSearchandising(
           networkParameters: { timeout: 20 },
         });
 
-        return expect(searchandising.deleteCampaign({ id: campaignId })).to.eventually.be.rejectedWith('The operation was aborted.');
+        return expect(searchandising.campaigns.deleteCampaign({ id: campaignId })).to.eventually.be.rejectedWith('The operation was aborted.');
       });
     }
   });
