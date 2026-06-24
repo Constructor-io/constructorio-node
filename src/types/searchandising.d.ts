@@ -58,9 +58,7 @@ export interface DeleteCampaignParameters {
   section?: string;
 }
 
-declare class Campaigns {
-  constructor(options: ConstructorClientOptions);
-
+export interface Campaigns {
   options: ConstructorClientOptions;
 
   retrieveCampaigns(
