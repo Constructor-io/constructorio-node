@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>search - Documentation</title>
+    <title>searchandising/campaigns - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -37,7 +37,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">search</h1>
+    <h1 class="page-title">searchandising/campaigns</h1>
     
 
     
@@ -60,13 +60,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li>Interface to search related API calls</li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li>Interface to searchandising campaign related API calls</li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_search.js.html">modules/search.js</a>, <a href="modules_search.js.html#line158">line 158</a>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -105,7 +105,7 @@
 
 
             
-                <div class="description usertext">Interface to search related API calls</div>
+                <div class="description usertext">Interface to searchandising campaign related API calls</div>
             
 
             
@@ -135,7 +135,7 @@
 
     
 
-    <h4 class="name" id="~getSearchResults"><span class="type-signature type-signature-inner">(inner) </span>getSearchResults<span class="signature">(query, parameters<span class="signature-attributes">opt</span>, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="~createCampaign"><span class="type-signature type-signature-inner">(inner) </span>createCampaign<span class="signature">(parameters, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -145,13 +145,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li>Retrieve search results from API</li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li>Create a campaign</li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_search.js.html">modules/search.js</a>, <a href="modules_search.js.html#line170">line 170</a>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line213">line 213</a>
     </li></ul></dd>
     
 
@@ -185,7 +185,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.com/reference/search-search-results">https://docs.constructor.com/reference/search-search-results</a></li>
+            <li><a href="https://docs.constructor.com/reference/v1-searchandising-create-campaign">https://docs.constructor.com/reference/v1-searchandising-create-campaign</a></li>
         </ul>
     </dd>
     
@@ -205,11 +205,13 @@
 
     <h5 class="h5-examples">Example</h5>
     
-    <pre class="prettyprint"><code>constructorio.search.getSearchResults('t-shirt', {
-    resultsPerPage: 40,
-    filters: {
-        size: 'medium'
-    },
+    <pre class="prettyprint"><code>constructorio.searchandising.campaigns.createCampaign({
+    name: 'Spring Sale',
+    section: 'Products',
+    description: 'Seasonal promotion campaign',
+    boostRules: [
+        { rule_type: 'boost', rule: { boost: 5, filters: { brand: ['Nike'] } } },
+    ],
 });</code></pre>
 
 
@@ -242,38 +244,6 @@
 
         <tr>
             
-                <td class="name"><code>query</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Term to use to perform a search</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>parameters</code></td>
             
 
@@ -290,8 +260,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -301,7 +269,7 @@
 
             
 
-            <td class="description last">Additional parameters to refine result set
+            <td class="description last">Additional parameters for the campaign to be created
                 <h6>Properties</h6>
                 
 
@@ -331,159 +299,7 @@
 
         <tr>
             
-                <td class="name"><code>page</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The page number of the results. Can't be used together with 'offset'</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>offset</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The number of results to skip from the beginning. Can't be used together with 'page'</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>resultsPerPage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The number of results per page to return</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>filters</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Filters used to refine search</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sortBy</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -499,8 +315,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -511,52 +325,10 @@
             
                 <td class="default">
                 
-                    <code>'relevance'</code>
-                
                 </td>
             
 
-            <td class="description last">The sort method for results</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sortOrder</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>'descending'</code>
-                
-                </td>
-            
-
-            <td class="description last">The sort order for results</td>
+            <td class="description last">The name of the campaign</td>
         </tr>
 
     
@@ -596,338 +368,14 @@
                 </td>
             
 
-            <td class="description last">The section name for results</td>
+            <td class="description last">The section of the index to use</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>fmtOptions</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The format options used to refine result groups</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hiddenFields</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Hidden metadata fields to return</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hiddenFacets</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Hidden facet fields to return</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>variationsMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>preFilterExpression</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections for details</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>qsParam</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.com/reference/search-search-resultsqueries for details</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userParameters</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Parameters relevant to the user request
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>sessionId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Session ID, utilized to personalize results</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>clientId</code></td>
+                <td class="name"><code>description</code></td>
             
 
             <td class="type">
@@ -953,15 +401,19 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Client ID, utilized to personalize results</td>
+            <td class="description last">The description of the campaign</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>userId</code></td>
+                <td class="name"><code>requestTagName</code></td>
             
 
             <td class="type">
@@ -987,21 +439,25 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">User ID, utilized to personalize results</td>
+            <td class="description last">Request tag name used to activate this campaign for, used only with `request_tag_value`</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>segments</code></td>
+                <td class="name"><code>requestTagValue</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">string</span>
 
 
 
@@ -1021,15 +477,399 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">User segments</td>
+            <td class="description last">Request tag value used to activate this campaign for, used only with `request_tag_name`</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>testCells</code></td>
+                <td class="name"><code>startTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The start time of the campaign (ISO 8601 date-time)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The end time of the campaign (ISO 8601 date-time)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedQueries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined queries</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedFilters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined filters</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedRecommendationContexts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined recommendation contexts</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>boostRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of boost rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>blacklistRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of blacklist rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slotRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of slot rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contentRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of content rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filtersSlotRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of filters slot rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>whitelistRule</code></td>
             
 
             <td class="type">
@@ -1055,21 +895,25 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">User test cells</td>
+            <td class="description last">A whitelist rule</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>originReferrer</code></td>
+                <td class="name"><code>variationSlicingRule</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
 
@@ -1089,21 +933,25 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Client page URL (including path)</td>
+            <td class="description last">A variation slicing rule</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>userIp</code></td>
+                <td class="name"><code>metadataJson</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
 
@@ -1123,42 +971,12 @@
             
 
             
-
-            <td class="description last">Origin user IP, from client</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userAgent</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
+                <td class="default">
                 
                 </td>
             
 
-            
-
-            <td class="description last">Origin user agent, from client</td>
+            <td class="description last">Metadata related to the campaign</td>
         </tr>
 
     
@@ -1310,7 +1128,7 @@
 
     
 
-    <h4 class="name" id="~getVoiceSearchResults"><span class="type-signature type-signature-inner">(inner) </span>getVoiceSearchResults<span class="signature">(query, parameters<span class="signature-attributes">opt</span>, userParameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    <h4 class="name" id="~deleteCampaign"><span class="type-signature type-signature-inner">(inner) </span>deleteCampaign<span class="signature">(parameters, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -1320,13 +1138,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li>Retrieve voice search results from API</li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li>Delete a campaign given a specific id</li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_search.js.html">modules/search.js</a>, <a href="modules_search.js.html#line276">line 276</a>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line369">line 369</a>
     </li></ul></dd>
     
 
@@ -1360,7 +1178,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://docs.constructor.com/reference/search-search-resultsnatural_language_search/">https://docs.constructor.com/reference/search-search-resultsnatural_language_search/</a></li>
+            <li><a href="https://docs.constructor.com/reference/v1-searchandising-delete-campaign">https://docs.constructor.com/reference/v1-searchandising-delete-campaign</a></li>
         </ul>
     </dd>
     
@@ -1380,12 +1198,9 @@
 
     <h5 class="h5-examples">Example</h5>
     
-    <pre class="prettyprint"><code>constructorio.search.getVoiceSearchResults('show me lipstick', {
-    resultsPerPage: 40,
-}, {
-    testCells: {
-        testName: 'cellName',
-   },
+    <pre class="prettyprint"><code>constructorio.searchandising.campaigns.deleteCampaign({
+    id: 42,
+    section: 'Products',
 });</code></pre>
 
 
@@ -1418,38 +1233,6 @@
 
         <tr>
             
-                <td class="name"><code>query</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Term to use to perform a voice search</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>parameters</code></td>
             
 
@@ -1466,8 +1249,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -1477,7 +1258,7 @@
 
             
 
-            <td class="description last">Additional parameters to refine result set
+            <td class="description last">Additional parameters for the campaign to be deleted
                 <h6>Properties</h6>
                 
 
@@ -1507,7 +1288,7 @@
 
         <tr>
             
-                <td class="name"><code>page</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -1523,8 +1304,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -1538,83 +1317,7 @@
                 </td>
             
 
-            <td class="description last">The page number of the results. Can't be used together with 'offset'</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>offset</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The number of results to skip from the beginning. Can't be used together with 'page'</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>resultsPerPage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The number of results per page to return</td>
+            <td class="description last">The ID of the campaign to be deleted</td>
         </tr>
 
     
@@ -1654,235 +1357,7 @@
                 </td>
             
 
-            <td class="description last">The section name for results</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fmtOptions</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The format options used to refine result groups</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hiddenFields</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Hidden metadata fields to return</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hiddenFacets</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Hidden facet fields to return</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>variationsMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>preFilterExpression</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections for details</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>qsParam</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.com/reference/search-search-resultsqueries for details</td>
+            <td class="description last">The section of the index to use</td>
         </tr>
 
     
@@ -1896,7 +1371,7 @@
 
         <tr>
             
-                <td class="name"><code>userParameters</code></td>
+                <td class="name"><code>networkParameters</code></td>
             
 
             <td class="type">
@@ -1923,7 +1398,7 @@
 
             
 
-            <td class="description last">Parameters relevant to the user request
+            <td class="description last">Parameters relevant to the network request
                 <h6>Properties</h6>
                 
 
@@ -1951,7 +1426,7 @@
 
         <tr>
             
-                <td class="name"><code>sessionId</code></td>
+                <td class="name"><code>timeout</code></td>
             
 
             <td class="type">
@@ -1978,14 +1453,259 @@
 
             
 
-            <td class="description last">Session ID, utilized to personalize results</td>
+            <td class="description last">Request timeout (in milliseconds)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~retrieveCampaign"><span class="type-signature type-signature-inner">(inner) </span>retrieveCampaign<span class="signature">(parameters, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Retrieve a campaign given a specific id</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://docs.constructor.com/reference/v1-searchandising-retrieve-campaign">https://docs.constructor.com/reference/v1-searchandising-retrieve-campaign</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-examples">Example</h5>
+    
+    <pre class="prettyprint"><code>constructorio.searchandising.campaigns.retrieveCampaign({
+    id: 42,
+    section: 'Products',
+});</code></pre>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Additional parameters for retrieving a campaign
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The ID of the campaign to be retrieved</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>clientId</code></td>
+                <td class="name"><code>section</code></td>
             
 
             <td class="type">
@@ -2011,83 +1731,28 @@
             
 
             
-
-            <td class="description last">Client ID, utilized to personalize results</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userId</code></td>
-            
-
-            <td class="type">
-            
+                <td class="default">
                 
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
+                    <code>'Products'</code>
                 
                 </td>
             
 
-            
-
-            <td class="description last">User ID, utilized to personalize results</td>
+            <td class="description last">The section of the index to use</td>
         </tr>
 
     
+    </tbody>
+</table>
 
-        <tr>
-            
-                <td class="name"><code>segments</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-
-            
             </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">User segments</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>testCells</code></td>
+                <td class="name"><code>networkParameters</code></td>
             
 
             <td class="type">
@@ -2114,14 +1779,281 @@
 
             
 
-            <td class="description last">User test cells</td>
-        </tr>
+            <td class="description last">Parameters relevant to the network request
+                <h6>Properties</h6>
+                
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>originReferrer</code></td>
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Request timeout (in milliseconds)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~retrieveCampaigns"><span class="type-signature type-signature-inner">(inner) </span>retrieveCampaigns<span class="signature">(parameters<span class="signature-attributes">opt</span>, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Retrieve campaigns</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://docs.constructor.com/reference/v1-searchandising-retrieve-campaigns">https://docs.constructor.com/reference/v1-searchandising-retrieve-campaigns</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-examples">Example</h5>
+    
+    <pre class="prettyprint"><code>constructorio.searchandising.campaigns.retrieveCampaigns({
+    section: 'Products',
+    numResultsPerPage: 50,
+    page: 1,
+});</code></pre>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Additional parameters for retrieving campaigns
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>section</code></td>
             
 
             <td class="type">
@@ -2147,15 +2079,634 @@
             
 
             
+                <td class="default">
+                
+                    <code>'Products'</code>
+                
+                </td>
+            
 
-            <td class="description last">Client page URL (including path)</td>
+            <td class="description last">The section of the index to use</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>userIp</code></td>
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The ID(s) of campaigns to filter by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedQueries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined queries to filter by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedFilters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">An object of refined filters to filter by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedRecommendationContexts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A filter for refined recommendation contexts</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numResultsPerPage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>20</code>
+                
+                </td>
+            
+
+            <td class="description last">The number of campaigns to return - maximum value 100</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>page</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The page of results to return</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number of results to skip from the beginning - cannot be used together with `page`</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>networkParameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters relevant to the network request
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Request timeout (in milliseconds)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~updateCampaign"><span class="type-signature type-signature-inner">(inner) </span>updateCampaign<span class="signature">(parameters, networkParameters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Update a campaign - only the fields present in the request will be updated</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_searchandising_campaigns.js.html">modules/searchandising/campaigns.js</a>, <a href="modules_searchandising_campaigns.js.html#line292">line 292</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://docs.constructor.com/reference/v1-searchandising-update-campaign">https://docs.constructor.com/reference/v1-searchandising-update-campaign</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-examples">Example</h5>
+    
+    <pre class="prettyprint"><code>constructorio.searchandising.campaigns.updateCampaign({
+    id: 42,
+    name: 'Spring Sale - Updated',
+    description: 'Updated seasonal promotion campaign',
+});</code></pre>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parameters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Additional parameters for the campaign to be updated
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The ID of the campaign to be updated</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>section</code></td>
             
 
             <td class="type">
@@ -2181,15 +2732,21 @@
             
 
             
+                <td class="default">
+                
+                    <code>'Products'</code>
+                
+                </td>
+            
 
-            <td class="description last">Origin user IP, from client</td>
+            <td class="description last">The section of the index to use</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>userAgent</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -2215,8 +2772,620 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Origin user agent, from client</td>
+            <td class="description last">The name of the campaign</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The description of the campaign</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>requestTagName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Request tag name used to activate this campaign for, used only with `request_tag_value`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>requestTagValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Request tag value used to activate this campaign for, used only with `request_tag_name`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The start time of the campaign (ISO 8601 date-time)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The end time of the campaign (ISO 8601 date-time)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedQueries</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined queries</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedFilters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined filters</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refinedRecommendationContexts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of refined recommendation contexts</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>boostRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of boost rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>blacklistRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of blacklist rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slotRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of slot rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contentRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of content rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filtersSlotRules</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;object></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A list of filters slot rules</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>whitelistRule</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A whitelist rule</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>variationSlicingRule</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A variation slicing rule</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>metadataJson</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Metadata related to the campaign</td>
         </tr>
 
     
