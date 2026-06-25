@@ -8,6 +8,7 @@ const Autocomplete = require('./modules/autocomplete');
 const Recommendations = require('./modules/recommendations');
 const Tasks = require('./modules/tasks');
 const Quizzes = require('./modules/quizzes');
+const Searchandising = require('./modules/searchandising');
 const { version: packageVersion } = require('../package.json');
 const utils = require('./utils/helpers');
 
@@ -42,6 +43,7 @@ class ConstructorIO {
    * @property {object} catalog - Interface to {@link module:catalog}
    * @property {object} tasks - Interface to {@link module:tasks}
    * @property {object} quizzes - Interface to {@link module:quizzes}
+   * @property {object} searchandising - Interface to {@link module:searchandising}
    * @returns {class}
    */
   constructor(options = {}) {
@@ -83,6 +85,7 @@ class ConstructorIO {
     this.recommendations = new Recommendations(this.options);
     this.tasks = new Tasks(this.options);
     this.quizzes = new Quizzes(this.options);
+    this.searchandising = new Searchandising(this.options);
   }
 }
 

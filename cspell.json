@@ -39,11 +39,13 @@
     "yoink",
     "searchandized",
     "searchandizing",
+    "searchandising",
     "patchdelta",
     "searchabilities",
     "forcesync",
     "forcedelta",
     "forcepatchdelta",
-    "skippable"
+    "skippable",
+    "timeofday"
   ]
 }
