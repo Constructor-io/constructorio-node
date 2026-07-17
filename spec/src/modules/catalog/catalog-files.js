@@ -4,7 +4,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { Duplex } = require('stream');
+const { Duplex, Readable } = require('stream');
 const ConstructorIO = require('../../../../test/constructorio'); // eslint-disable-line import/extensions
 const helpers = require('../../../mocha.helpers');
 
@@ -71,6 +71,28 @@ describe('ConstructorIO - Catalog', () => {
       .that.matches(/^multipart\/form-data; boundary=/);
     expect(requestOptions.headers).to.have.property('content-length')
       .that.matches(/^\d+$/);
+  });
+
+  it('should omit content length when stream length is unknown', async () => {
+    const fetchStub = sinon.stub().resolves({
+      ok: true,
+      json: () => Promise.resolve({}),
+    });
+    const { catalog } = new ConstructorIO({
+      apiKey: 'test-api-key',
+      fetch: fetchStub,
+    });
+
+    await catalog.replaceCatalog({
+      items: Readable.from(['id\nitem-1']),
+      section: 'Products',
+    });
+
+    const [, requestOptions] = fetchStub.firstCall.args;
+
+    expect(requestOptions.headers).to.have.property('content-type')
+      .that.matches(/^multipart\/form-data; boundary=/);
+    expect(requestOptions.headers).to.not.have.property('content-length');
   });
 
   describe('Files', function catalogFiles() {
