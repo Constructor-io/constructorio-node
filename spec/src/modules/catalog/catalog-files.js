@@ -50,6 +50,29 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
+  it('should include multipart headers when uploading catalog files', async () => {
+    const fetchStub = sinon.stub().resolves({
+      ok: true,
+      json: () => Promise.resolve({}),
+    });
+    const { catalog } = new ConstructorIO({
+      apiKey: 'test-api-key',
+      fetch: fetchStub,
+    });
+
+    await catalog.replaceCatalog({
+      items: Buffer.from('id\nitem-1'),
+      section: 'Products',
+    });
+
+    const [, requestOptions] = fetchStub.firstCall.args;
+
+    expect(requestOptions.headers).to.have.property('Content-Type')
+      .that.matches(/^multipart\/form-data; boundary=/);
+    expect(requestOptions.headers).to.have.property('Content-Length')
+      .that.matches(/^\d+$/);
+  });
+
   describe('Files', function catalogFiles() {
     // Ensure Mocha doesn't time out waiting for operation to complete
     this.timeout(10000);

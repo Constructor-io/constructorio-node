@@ -178,6 +178,18 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
   return formData;
 }
 
+function getMultipartHeaders(formData) {
+  const headers = formData.getHeaders();
+
+  try {
+    headers['Content-Length'] = String(formData.getLengthSync());
+  } catch {
+    // Let fetch use chunked transfer when form length cannot be determined.
+  }
+
+  return headers;
+}
+
 /**
  * Interface to catalog related API calls
  *
@@ -2595,7 +2607,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PUT',
         body: formData,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formData),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
@@ -2649,7 +2664,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formData),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
@@ -2704,7 +2722,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formData,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formData),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
@@ -2762,7 +2783,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PUT',
         body: formDataWithTarArchive,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formDataWithTarArchive),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
@@ -2822,7 +2846,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formDataWithTarArchive,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formDataWithTarArchive),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
@@ -2882,7 +2909,10 @@ class Catalog {
       const response = await fetch(requestUrl, {
         method: 'PATCH',
         body: formDataWithTarArchive,
-        headers: helpers.createAuthHeader(this.options),
+        headers: {
+          ...getMultipartHeaders(formDataWithTarArchive),
+          ...helpers.createAuthHeader(this.options),
+        },
         signal,
       });
 
