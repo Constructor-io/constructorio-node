@@ -181,9 +181,9 @@ async function addTarArchiveToFormData(parameters, formData, operation, apiKey) 
 function getMultipartHeaders(formData) {
   const headers = formData.getHeaders();
 
-  try {
-    headers['Content-Length'] = String(formData.getLengthSync());
-  } catch {
+  if (formData.hasKnownLength()) {
+    headers['content-length'] = String(formData.getLengthSync());
+  } else {
     // Let fetch use chunked transfer when form length cannot be determined.
   }
 

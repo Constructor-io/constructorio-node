@@ -67,9 +67,9 @@ describe('ConstructorIO - Catalog', () => {
 
     const [, requestOptions] = fetchStub.firstCall.args;
 
-    expect(requestOptions.headers).to.have.property('Content-Type')
+    expect(requestOptions.headers).to.have.property('content-type')
       .that.matches(/^multipart\/form-data; boundary=/);
-    expect(requestOptions.headers).to.have.property('Content-Length')
+    expect(requestOptions.headers).to.have.property('content-length')
       .that.matches(/^\d+$/);
   });
 
