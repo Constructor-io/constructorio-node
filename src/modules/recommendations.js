@@ -113,6 +113,8 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
     }
   }
 
+  // eslint-disable-next-line no-underscore-dangle
+  queryParams._dt = Date.now();
   queryParams = helpers.cleanParams(queryParams);
 
   const queryString = qs.stringify(queryParams, { indices: false });
