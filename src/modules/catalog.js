@@ -182,9 +182,11 @@ function getMultipartHeaders(formData) {
   const headers = formData.getHeaders();
 
   if (formData.hasKnownLength()) {
-    headers['content-length'] = String(formData.getLengthSync());
-  } else {
-    // Let fetch use chunked transfer when form length cannot be determined.
+    try {
+      headers['content-length'] = String(formData.getLengthSync());
+    } catch {
+      // Let fetch use chunked transfer when form length cannot be determined synchronously.
+    }
   }
 
   return headers;

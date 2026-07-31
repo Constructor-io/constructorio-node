@@ -50,51 +50,6 @@ describe('ConstructorIO - Catalog', () => {
     setTimeout(done, sendTimeout);
   });
 
-  it('should include multipart headers when uploading catalog files', async () => {
-    const fetchStub = sinon.stub().resolves({
-      ok: true,
-      json: () => Promise.resolve({}),
-    });
-    const { catalog } = new ConstructorIO({
-      apiKey: 'test-api-key',
-      fetch: fetchStub,
-    });
-
-    await catalog.replaceCatalog({
-      items: Buffer.from('id\nitem-1'),
-      section: 'Products',
-    });
-
-    const [, requestOptions] = fetchStub.firstCall.args;
-
-    expect(requestOptions.headers).to.have.property('content-type')
-      .that.matches(/^multipart\/form-data; boundary=/);
-    expect(requestOptions.headers).to.have.property('content-length')
-      .that.matches(/^\d+$/);
-  });
-
-  it('should omit content length when stream length is unknown', async () => {
-    const fetchStub = sinon.stub().resolves({
-      ok: true,
-      json: () => Promise.resolve({}),
-    });
-    const { catalog } = new ConstructorIO({
-      apiKey: 'test-api-key',
-      fetch: fetchStub,
-    });
-
-    await catalog.replaceCatalog({
-      items: Readable.from(['id\nitem-1']),
-      section: 'Products',
-    });
-
-    const [, requestOptions] = fetchStub.firstCall.args;
-
-    expect(requestOptions.headers).to.have.property('content-type')
-      .that.matches(/^multipart\/form-data; boundary=/);
-    expect(requestOptions.headers).to.not.have.property('content-length');
-  });
-
   describe('Files', function catalogFiles() {
     // Ensure Mocha doesn't time out waiting for operation to complete
     this.timeout(10000);
@@ -129,6 +84,57 @@ describe('ConstructorIO - Catalog', () => {
       variationsStream = createStreamFromBuffer(variationsBuffer);
       itemGroupsStream = createStreamFromBuffer(itemGroupsBuffer);
       tarArchiveStream = createStreamFromBuffer(tarArchiveBuffer);
+    });
+
+    it('should include multipart headers when uploading catalog files', async () => {
+      const fetchStub = sinon.stub().resolves({
+        ok: true,
+        json: () => Promise.resolve({
+          task_id: 'test-task-id',
+          task_status_path: '/tasks/test-task-id',
+        }),
+      });
+      const { catalog } = new ConstructorIO({
+        apiKey: 'test-api-key',
+        fetch: fetchStub,
+      });
+
+      await catalog.replaceCatalog({
+        items: Buffer.from('id\nitem-1'),
+        section: 'Products',
+      });
+
+      const [, requestOptions] = fetchStub.firstCall.args;
+
+      expect(requestOptions.headers).to.have.property('content-type')
+        .that.matches(/^multipart\/form-data; boundary=/);
+      expect(requestOptions.headers).to.have.property('content-length')
+        .that.matches(/^\d+$/);
+    });
+
+    it('should omit content length when stream length is unknown', async () => {
+      const fetchStub = sinon.stub().resolves({
+        ok: true,
+        json: () => Promise.resolve({
+          task_id: 'test-task-id',
+          task_status_path: '/tasks/test-task-id',
+        }),
+      });
+      const { catalog } = new ConstructorIO({
+        apiKey: 'test-api-key',
+        fetch: fetchStub,
+      });
+
+      await catalog.replaceCatalog({
+        items: Readable.from(['id\nitem-1']),
+        section: 'Products',
+      });
+
+      const [, requestOptions] = fetchStub.firstCall.args;
+
+      expect(requestOptions.headers).to.have.property('content-type')
+        .that.matches(/^multipart\/form-data; boundary=/);
+      expect(requestOptions.headers).to.not.have.property('content-length');
     });
 
     afterEach((done) => {
@@ -416,6 +422,32 @@ describe('ConstructorIO - Catalog', () => {
         force: true,
         notificationEmail: 'test@constructor.io',
       };
+
+      it('should include multipart headers when uploading tar archive', async () => {
+        const fetchStub = sinon.stub().resolves({
+          ok: true,
+          json: () => Promise.resolve({
+            task_id: 'test-task-id',
+            task_status_path: '/tasks/test-task-id',
+          }),
+        });
+        const { catalog } = new ConstructorIO({
+          apiKey: 'test-api-key',
+          fetch: fetchStub,
+        });
+
+        await catalog.replaceCatalogUsingTarArchive({
+          tarArchive: Buffer.from('fake-tar-data'),
+          section: 'Products',
+        });
+
+        const [, requestOptions] = fetchStub.firstCall.args;
+
+        expect(requestOptions.headers).to.have.property('content-type')
+          .that.matches(/^multipart\/form-data; boundary=/);
+        expect(requestOptions.headers).to.have.property('content-length')
+          .that.matches(/^\d+$/);
+      });
 
       it('Should replace a catalog of items, variations, and item groups using buffers', (done) => {
         const { catalog } = new ConstructorIO({
