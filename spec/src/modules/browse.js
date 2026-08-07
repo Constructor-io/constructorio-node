@@ -565,6 +565,59 @@ describe('ConstructorIO - Browse', () => {
       });
     });
 
+    it('Should send refined filters supplied within the qs param as a top level url parameter', (done) => {
+      const qsParam = { refined_filters: { group_id: 'BrandXY' } };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { qsParam }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(requestedUrlParams).to.have.property('refined_filters');
+        expect(requestedUrlParams.refined_filters).to.have.property('group_id').to.equal('BrandXY');
+        expect(requestedUrlParams).to.not.have.property('qs');
+        expect(res.request.refined_filters).to.deep.equal(qsParam.refined_filters);
+        done();
+      });
+    });
+
+    it('Should retain the remaining qs param values when sending refined filters as a top level url parameter', (done) => {
+      const qsParam = {
+        num_results_per_page: '10',
+        refined_filters: { group_id: 'BrandXY' },
+      };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { qsParam }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(requestedUrlParams.refined_filters).to.have.property('group_id').to.equal('BrandXY');
+        expect(JSON.parse(requestedUrlParams.qs)).to.deep.equal({ num_results_per_page: '10' });
+        expect(res.request.num_results_per_page).to.equal(10);
+        expect(res.request.refined_filters).to.deep.equal(qsParam.refined_filters);
+        done();
+      });
+    });
+
+    it('Should not mutate the supplied qs param when sending refined filters as a top level url parameter', (done) => {
+      const qsParam = { refined_filters: { group_id: 'BrandXY' } };
+      const { browse } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      browse.getBrowseResults(filterName, filterValue, { qsParam }).then(() => {
+        expect(qsParam).to.deep.equal({ refined_filters: { group_id: 'BrandXY' } });
+        done();
+      });
+    });
+
     it('Should properly encode path parameters', (done) => {
       const specialCharacters = '+[]&';
       const filterNameSpecialCharacters = `name ${specialCharacters}`;
