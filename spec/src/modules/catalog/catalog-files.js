@@ -54,30 +54,14 @@ describe('ConstructorIO - Catalog', () => {
     // Ensure Mocha doesn't time out waiting for operation to complete
     this.timeout(10000);
 
-    const catalogExamplesBaseUrl = 'https://raw.githubusercontent.com/Constructor-io/integration-examples/main/catalog/';
-    let itemsBuffer = null;
+    const itemsBuffer = helpers.readCatalogFixture('items.csv');
+    const variationsBuffer = helpers.readCatalogFixture('variations.csv');
+    const itemGroupsBuffer = helpers.readCatalogFixture('item_groups.csv');
+    const tarArchiveBuffer = helpers.readCatalogFixture('catalog.tar.gz');
     let itemsStream = null;
-    let variationsBuffer = null;
     let variationsStream = null;
-    let itemGroupsBuffer = null;
     let itemGroupsStream = null;
-    let tarArchiveBuffer = null;
     let tarArchiveStream = null;
-
-    before(async () => {
-      // Grab catalog files from Integration Examples repo
-      const itemsResponse = await nodeFetch(`${catalogExamplesBaseUrl}items.csv`);
-      itemsBuffer = await itemsResponse.buffer();
-
-      const variationsResponse = await nodeFetch(`${catalogExamplesBaseUrl}variations.csv`);
-      variationsBuffer = await variationsResponse.buffer();
-
-      const itemGroupsResponse = await nodeFetch(`${catalogExamplesBaseUrl}item_groups.csv`);
-      itemGroupsBuffer = await itemGroupsResponse.buffer();
-
-      const tarArchiveResponse = await nodeFetch(`${catalogExamplesBaseUrl}catalog.tar.gz`);
-      tarArchiveBuffer = await tarArchiveResponse.buffer();
-    });
 
     beforeEach(async () => {
       itemsStream = createStreamFromBuffer(itemsBuffer);

@@ -36,12 +36,8 @@ describe('ConstructorIO - Tasks', function ConstructorIOTasks() {
       ...validOptions,
     });
 
-    // Grab items file from Integration Examples repo and upload
-    const itemsResponse = await nodeFetch('https://raw.githubusercontent.com/Constructor-io/integration-examples/main/catalog/items.csv');
-    const itemsBuffer = await itemsResponse.buffer();
-
     const data = {
-      items: itemsBuffer,
+      items: helpers.readCatalogFixture('items.csv'),
       section: 'Products',
     };
 

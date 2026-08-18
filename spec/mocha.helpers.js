@@ -1,5 +1,10 @@
 /* eslint-disable import/no-unresolved */
+const fs = require('fs');
+const path = require('path');
 const qs = require('qs');
+
+// Read a vendored catalog fixture as a buffer
+const readCatalogFixture = (name) => fs.readFileSync(path.join(__dirname, 'fixtures', name));
 
 // Extract query parameters as object from url
 const extractUrlParamsFromFetch = (fetch) => {
@@ -53,6 +58,7 @@ const extractUrlFromFetch = (fetch) => {
 };
 
 module.exports = {
+  readCatalogFixture,
   extractUrlParamsFromFetch,
   extractBodyParamsFromFetch,
   extractHeadersFromFetch,

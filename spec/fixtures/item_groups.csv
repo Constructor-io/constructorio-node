@@ -1,0 +1,10 @@
+parent_id,id,name
+,All,All
+All,Brands,Brands
+All,Styles,Styles
+Brands,BrandA,BrandA
+Brands,BrandX,BrandX
+BrandX,BrandXY,BrandXY
+BrandA,BrandAB,BrandAB
+Styles,StyleA,StyleA
+Styles,StyleB,StyleB
