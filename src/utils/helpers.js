@@ -48,15 +48,34 @@ const utils = {
     return snakeCasedObj;
   },
 
-  throwHttpErrorFromResponse: (error, response) => response.json().then((json) => {
-    error.message = json.message;
+  // Attach the details of a non-2XX response to an error and throw it
+  // - Error bodies are not always JSON: rate limit and gateway responses are
+  //   commonly plain text or HTML, so attempting to parse and falling back to
+  //   the raw body keeps the real status and message instead of surfacing a
+  //   SyntaxError from the parse itself
+  throwHttpErrorFromResponse: async (error, response) => {
+    let message = '';
+
+    try {
+      message = await response.text();
+
+      const parsed = JSON.parse(message);
+
+      if (parsed && typeof parsed.message === 'string') {
+        message = parsed.message;
+      }
+    } catch (e) {
+      // Body is either unreadable or not JSON - keep whatever text we have
+    }
+
+    error.message = message.trim() || `HTTP ${response.status}`;
     error.status = response.status;
     error.statusText = response.statusText;
     error.url = response.url;
     error.headers = response.headers;
 
     throw error;
-  }),
+  },
 
   isNil: (value) => value == null,
 

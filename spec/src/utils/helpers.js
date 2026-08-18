@@ -145,22 +145,51 @@ describe('ConstructorIO - Utils - Helpers', () => {
           },
         };
 
-        try {
-          await throwHttpErrorFromResponse(new Error(), {
-            json: () => new Promise((resolve) => {
-              resolve({
-                message: errorMessage,
-              });
-            }),
-            ...responseData,
-          });
-        } catch (e) {
-          expect(e.message).to.equal(errorMessage);
-          expect(e.status).to.equal(responseData.status);
-          expect(e.statusText).to.equal(responseData.statusText);
-          expect(e.url).to.equal(responseData.url);
-          expect(e.headers).to.deep.equal(responseData.headers);
-        }
+        const error = await throwHttpErrorFromResponse(new Error(), {
+          text: () => Promise.resolve(JSON.stringify({ message: errorMessage })),
+          ...responseData,
+        }).catch((e) => e);
+
+        expect(error.message).to.equal(errorMessage);
+        expect(error.status).to.equal(responseData.status);
+        expect(error.statusText).to.equal(responseData.statusText);
+        expect(error.url).to.equal(responseData.url);
+        expect(error.headers).to.deep.equal(responseData.headers);
+      });
+
+      it('Should throw an error with the raw body when the response is not JSON', async () => {
+        const responseData = {
+          status: 429,
+          statusText: 'Too Many Requests',
+          url: 'https://constructor.io',
+          headers: {
+            'retry-after': '30',
+          },
+        };
+
+        const error = await throwHttpErrorFromResponse(new Error(), {
+          text: () => Promise.resolve('Too many requests'),
+          ...responseData,
+        }).catch((e) => e);
+
+        expect(error.message).to.equal('Too many requests');
+        expect(error.status).to.equal(responseData.status);
+        expect(error.statusText).to.equal(responseData.statusText);
+        expect(error.url).to.equal(responseData.url);
+        expect(error.headers).to.deep.equal(responseData.headers);
+      });
+
+      it('Should throw an error with a status fallback when the response body is empty', async () => {
+        const error = await throwHttpErrorFromResponse(new Error(), {
+          text: () => Promise.resolve(''),
+          status: 502,
+          statusText: 'Bad Gateway',
+          url: 'https://constructor.io',
+          headers: {},
+        }).catch((e) => e);
+
+        expect(error.message).to.equal('HTTP 502');
+        expect(error.status).to.equal(502);
       });
     });
 
