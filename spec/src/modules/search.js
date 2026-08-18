@@ -494,7 +494,7 @@ describe('ConstructorIO - Search', () => {
         expect(res.response.results[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
         expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
         done();
-      });
+      }).catch(done);
     });
 
     it('Should return a response with a valid query, section, and qs param', (done) => {
