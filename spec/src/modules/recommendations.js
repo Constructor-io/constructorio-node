@@ -73,6 +73,7 @@ describe('ConstructorIO - Recommendations', () => {
         expect(requestedUrlParams).to.have.property('s');
         expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
         expect(requestedUrlParams).to.have.property('item_id').to.equal(itemId);
+        expect(requestedUrlParams).to.have.property('_dt');
         done();
       });
     });
@@ -95,6 +96,7 @@ describe('ConstructorIO - Recommendations', () => {
         expect(res.response.pod).to.have.property('id').to.equal(podId);
         expect(res.response.pod).to.have.property('display_name');
         expect(requestedUrlParams).to.have.property('item_id').to.deep.equal(itemIds);
+        expect(requestedUrlParams).to.have.property('_dt');
         done();
       });
     });
@@ -118,6 +120,7 @@ describe('ConstructorIO - Recommendations', () => {
         expect(res.response.pod).to.have.property('display_name');
         expect(requestedUrlParams).to.have.property('item_id').to.deep.equal(itemId);
         expect(requestedUrlParams).to.have.property('variation_id').to.deep.equal(variationId);
+        expect(requestedUrlParams).to.have.property('_dt');
         done();
       });
     });

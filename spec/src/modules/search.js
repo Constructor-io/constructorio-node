@@ -473,7 +473,7 @@ describe('ConstructorIO - Search', () => {
           },
           {
             and: [
-              { name: 'Color', value: 'blue' },
+              { name: 'Color', value: 'Blue' },
               { name: 'Brand', value: 'XYZ' },
             ],
           },
@@ -492,7 +492,7 @@ describe('ConstructorIO - Search', () => {
         expect(res.response).to.have.property('results').to.be.an('array');
         expect(res.response.results.length).to.be.eql(2);
         expect(res.response.results[0].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('red');
-        expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('blue');
+        expect(res.response.results[1].data.facets.find((facet) => facet.name === 'Color').values).to.be.an('array').that.include('Blue');
         done();
       });
     });
