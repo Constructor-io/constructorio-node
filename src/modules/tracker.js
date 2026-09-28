@@ -5,6 +5,10 @@ const { AbortController } = require('node-abort-controller');
 const EventEmitter = require('events');
 const helpers = require('../utils/helpers');
 
+// Maps provided userParameters and options to the fields required by the API
+// These are sent in query parameters on every event, and additionally within the body on POST events
+// Fields are added onto the passed parameters object, mutating it in place
+// A cleaned copy is what gets returned, so the returned object is not the one that was passed in
 function applyParams(parameters, userParameters, options) {
   const {
     apiKey,
@@ -17,6 +21,8 @@ function applyParams(parameters, userParameters, options) {
     segments,
     testCells,
     originReferrer,
+    documentReferrer,
+    canonicalUrl,
     dateTime,
   } = userParameters || {};
   let aggregateParams = Object.assign(parameters);
@@ -63,6 +69,14 @@ function applyParams(parameters, userParameters, options) {
 
   if (originReferrer) {
     aggregateParams.origin_referrer = originReferrer;
+  }
+
+  if (documentReferrer) {
+    aggregateParams.document_referrer = documentReferrer;
+  }
+
+  if (canonicalUrl) {
+    aggregateParams.canonical_url = canonicalUrl;
   }
 
   aggregateParams._dt = dateTime || Date.now();
@@ -200,6 +214,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -241,6 +257,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -290,6 +308,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -391,6 +411,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -493,6 +515,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -587,6 +611,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -714,6 +740,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -830,6 +858,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -965,6 +995,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1069,6 +1101,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1211,6 +1245,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1374,6 +1410,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1527,6 +1565,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1675,6 +1715,8 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1748,6 +1790,124 @@ class Tracker {
     }
 
     return new Error('A parameters object with an "itemId" property is required.');
+  }
+
+  /**
+   * Send product insights agent answer feedback event to API
+   *
+   * @function trackProductInsightsAgentAnswerFeedback
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.feedbackLabel - Feedback value: either "thumbs_up" or "thumbs_down"
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.qnaResultId] - Questions and answers result identifier
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User provided feedback on the usefulness of a product insights agent answer
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentAnswerFeedback(
+   *     {
+   *         feedbackLabel: 'thumbs_up',
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentAnswerFeedback(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      feedback_label,
+      feedbackLabel = feedback_label,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      qna_result_id,
+      qnaResultId = qna_result_id,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!feedbackLabel) {
+      return new Error('A parameters object with a "feedbackLabel" property is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      qna_result_id: qnaResultId,
+      thread_id: threadId,
+      feedback_label: feedbackLabel,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_answer_feedback?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
   }
 
   /**

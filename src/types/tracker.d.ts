@@ -10,6 +10,8 @@ export interface TrackerUserParameters {
   segments?: string | string[];
   testCells?: Record<string, any>;
   originReferrer?: string;
+  documentReferrer?: string;
+  canonicalUrl?: string;
   referer?: string;
   userIp?: string;
   userAgent?: string;
@@ -215,6 +217,23 @@ declare class Tracker {
       variationId?: string;
       section?: string;
       analyticsTags?: Record<string, string>;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentAnswerFeedback(
+    parameters: {
+      feedbackLabel: 'thumbs_up' | 'thumbs_down';
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      qnaResultId?: string;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
