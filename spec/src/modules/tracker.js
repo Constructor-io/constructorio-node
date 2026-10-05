@@ -8317,6 +8317,7 @@ describe('ConstructorIO - Tracker', () => {
         qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
 
       tracker.on('success', (responseParams) => {
@@ -8337,6 +8338,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams).to.have.property('qna_result_id').to.equal(snakeCaseParameters.qna_result_id);
         expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
         expect(requestParams).to.have.property('feature_variants').to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -8939,6 +8941,7 @@ describe('ConstructorIO - Tracker', () => {
         qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
         follow_up_questions: [{ value: 'What sizes are available?' }],
       };
       const { tracker } = new ConstructorIO({
@@ -8968,6 +8971,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
         expect(requestParams)
           .to.have.property('follow_up_questions')
           .to.deep.equal(snakeCaseParameters.follow_up_questions);
@@ -9695,6 +9699,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -9719,6 +9724,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -10271,6 +10277,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -10295,6 +10302,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -10850,6 +10858,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
         question_topic: 'care',
       };
       const { tracker } = new ConstructorIO({
@@ -10876,6 +10885,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
         expect(requestParams).to.have.property('question_topic').to.equal(snakeCaseParameters.question_topic);
 
         // Response
@@ -11443,6 +11453,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
         question_topic: 'care',
       };
       const { tracker } = new ConstructorIO({
@@ -11469,6 +11480,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
         expect(requestParams).to.have.property('question_topic').to.equal(snakeCaseParameters.question_topic);
 
         // Response
@@ -12044,6 +12056,7 @@ describe('ConstructorIO - Tracker', () => {
         qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -12073,6 +12086,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -12677,6 +12691,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -12702,6 +12717,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');
@@ -13279,6 +13295,7 @@ describe('ConstructorIO - Tracker', () => {
         variation_id: 'product-variation',
         thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
         feature_variants: { foo: 'bar' },
+        analytics_tags: { foo: 'bar' },
       };
       const { tracker } = new ConstructorIO({
         apiKey: testApiKey,
@@ -13305,6 +13322,7 @@ describe('ConstructorIO - Tracker', () => {
         expect(requestParams)
           .to.have.property('feature_variants')
           .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(snakeCaseParameters.analytics_tags);
 
         // Response
         expect(responseParams).to.have.property('method').to.equal('POST');

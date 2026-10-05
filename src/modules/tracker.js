@@ -1798,9 +1798,9 @@ class Tracker {
    * @function trackProductInsightsAgentAnswerFeedback
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.feedbackLabel - Feedback value: either "thumbs_up" or "thumbs_down"
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.qnaResultId] - Questions and answers result identifier
@@ -1867,7 +1867,8 @@ class Tracker {
       qnaResultId = qna_result_id,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -1917,9 +1918,9 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.question - Question that was asked
    * @param {string} parameters.answerText - The answer to the given question
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
@@ -1997,7 +1998,8 @@ class Tracker {
       items,
       follow_up_questions,
       followUpQuestions = follow_up_questions,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2060,9 +2062,9 @@ class Tracker {
    *
    * @function trackProductInsightsAgentOutOfView
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
@@ -2122,7 +2124,8 @@ class Tracker {
       featureVariants = feature_variants,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2164,9 +2167,9 @@ class Tracker {
    *
    * @function trackProductInsightsAgentFocus
    * @param {object} parameters - Additional parameters to be sent with request
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
@@ -2226,7 +2229,8 @@ class Tracker {
       featureVariants = feature_variants,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2269,9 +2273,9 @@ class Tracker {
    * @function trackProductInsightsAgentQuestionClick
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.question - Question submitted by the user
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
@@ -2336,7 +2340,8 @@ class Tracker {
       questionTopic = question_topic,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2385,9 +2390,9 @@ class Tracker {
    * @function trackProductInsightsAgentQuestionSubmit
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {string} parameters.question - Question submitted by the user
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
@@ -2452,7 +2457,8 @@ class Tracker {
       questionTopic = question_topic,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2504,9 +2510,9 @@ class Tracker {
    * @param {string} parameters.seedItemId - Product id of the page the product insights agent widget is on
    * @param {string} [parameters.seedItemName] - Product name of the page the product insights agent widget is on
    * @param {string} [parameters.seedVariationId] - Variation id of the page the product insights agent widget is on
-   * @param {string} [parameters.itemId] - Clicked product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Clicked product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Clicked product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Clicked product item unique identifier
+   * @param {string} [parameters.itemName] - Clicked product item name
+   * @param {string} [parameters.variationId] - Clicked product item variation unique identifier
    * @param {number} [parameters.position] - Position of the clicked item in the recommendations list
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
@@ -2582,7 +2588,8 @@ class Tracker {
       qnaResultId = qna_result_id,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2639,9 +2646,9 @@ class Tracker {
    * @function trackProductInsightsAgentView
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {object[]} parameters.questions - List of pre-generated questions shown to the user, each in the shape of { question, questionTopic }
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
@@ -2706,7 +2713,8 @@ class Tracker {
       featureVariants = feature_variants,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
@@ -2755,9 +2763,9 @@ class Tracker {
    * @param {object} parameters - Additional parameters to be sent with request
    * @param {object[]} parameters.questions - List of pre-generated questions shown to the user, each in the shape of { question, questionTopic }
    * @param {object[]} parameters.viewTimespans - List of timespans the product insights agent was in the visible part of the screen, each in the shape of { start, end } with ISO 8601 timestamps including a timezone
-   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
-   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
-   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {string} [parameters.itemId] - Product item unique identifier
+   * @param {string} [parameters.itemName] - Product item name
+   * @param {string} [parameters.variationId] - Product item variation unique identifier
    * @param {object} [parameters.features] - Dictionary of feature flags
    * @param {object} [parameters.featureVariants] - Dictionary of feature variants
    * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
@@ -2826,7 +2834,8 @@ class Tracker {
       featureVariants = feature_variants,
       thread_id,
       threadId = thread_id,
-      analyticsTags,
+      analytics_tags,
+      analyticsTags = analytics_tags,
       section,
     } = parameters;
 
