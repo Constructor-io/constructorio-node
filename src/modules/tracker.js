@@ -220,7 +220,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -263,7 +263,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -314,7 +314,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -417,7 +417,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -521,7 +521,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -617,7 +617,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -746,7 +746,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -864,7 +864,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1001,7 +1001,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1107,7 +1107,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1251,7 +1251,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1416,7 +1416,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1571,7 +1571,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1721,7 +1721,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1820,7 +1820,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -1943,7 +1943,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2083,7 +2083,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2188,7 +2188,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2295,7 +2295,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2412,7 +2412,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2533,7 +2533,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2667,7 +2667,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
@@ -2784,7 +2784,7 @@ class Tracker {
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
    * @param {string} [userParameters.acceptLanguage] - Client accept language
-   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {number} [userParameters.dateTime] - Time since epoch in milliseconds
    * @param {object} [networkParameters] - Parameters relevant to the network request
    * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
    * @returns {(true|Error)}
