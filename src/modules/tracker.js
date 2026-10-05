@@ -1911,6 +1911,969 @@ class Tracker {
   }
 
   /**
+   * Send product insights agent answer view event to API
+   *
+   * @function trackProductInsightsAgentAnswerView
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.question - Question that was asked
+   * @param {string} parameters.answerText - The answer to the given question
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
+   * @param {string} [parameters.qnaResultId] - Questions and answers result identifier
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object[]} [parameters.items] - List of recommended product items displayed alongside the answer (maximum 100)
+   * @param {object[]} [parameters.followUpQuestions] - List of follow-up questions displayed alongside the answer, each in the shape of { value } (maximum 100)
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User viewed a product insights agent answer
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentAnswerView(
+   *     {
+   *         question: 'Is this t-shirt machine washable?',
+   *         answerText: 'Yes, it can be machine washed at 30 degrees.',
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *         items: [{ itemId: 'KMH877', itemName: 'Blue T-Shirt' }],
+   *         followUpQuestions: [{ value: 'What sizes are available?' }],
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentAnswerView(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      question,
+      answer_text,
+      answerText = answer_text,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      question_topic,
+      questionTopic = question_topic,
+      qna_result_id,
+      qnaResultId = qna_result_id,
+      thread_id,
+      threadId = thread_id,
+      items,
+      follow_up_questions,
+      followUpQuestions = follow_up_questions,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!question) {
+      return new Error('A parameters object with a "question" property is required.');
+    }
+
+    // answer_text may be an empty string, so only the type is validated
+    if (typeof answerText !== 'string') {
+      return new Error('A parameters object with an "answerText" property of type string is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      question,
+      question_topic: questionTopic,
+      qna_result_id: qnaResultId,
+      thread_id: threadId,
+      answer_text: answerText,
+    };
+
+    if (items && Array.isArray(items)) {
+      bodyParams.items = items.slice(0, 100).map((item) => helpers.toSnakeCaseKeys(item, false));
+    }
+
+    if (followUpQuestions && Array.isArray(followUpQuestions)) {
+      bodyParams.follow_up_questions = followUpQuestions.slice(0, 100);
+    }
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_answer_view?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent out of view event to API
+   *
+   * @function trackProductInsightsAgentOutOfView
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description The product insights agent was scrolled out of view
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentOutOfView(
+   *     {
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentOutOfView(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      thread_id: threadId,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_out_of_view?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent focus event to API
+   *
+   * @function trackProductInsightsAgentFocus
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User focused on the product insights agent
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentFocus(
+   *     {
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentFocus(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      thread_id: threadId,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_focus?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent question click event to API
+   *
+   * @function trackProductInsightsAgentQuestionClick
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.question - Question submitted by the user
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User clicked on a question in the product insights agent
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentQuestionClick(
+   *     {
+   *         question: 'Is this t-shirt machine washable?',
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentQuestionClick(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      question,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      question_topic,
+      questionTopic = question_topic,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!question) {
+      return new Error('A parameters object with a "question" property is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      question,
+      question_topic: questionTopic,
+      thread_id: threadId,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_question_click?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent question submit event to API
+   *
+   * @function trackProductInsightsAgentQuestionSubmit
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.question - Question submitted by the user
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.questionTopic] - Topic category of the question, as assigned during generation
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User submitted a question to the product insights agent
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentQuestionSubmit(
+   *     {
+   *         question: 'Is this t-shirt machine washable?',
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentQuestionSubmit(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      question,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      question_topic,
+      questionTopic = question_topic,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!question) {
+      return new Error('A parameters object with a "question" property is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      question,
+      question_topic: questionTopic,
+      thread_id: threadId,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_question_submit?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent result click event to API
+   *
+   * @function trackProductInsightsAgentResultClick
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {string} parameters.question - Question that produced the answer containing this recommendation
+   * @param {string} parameters.seedItemId - Product id of the page the product insights agent widget is on
+   * @param {string} [parameters.seedItemName] - Product name of the page the product insights agent widget is on
+   * @param {string} [parameters.seedVariationId] - Variation id of the page the product insights agent widget is on
+   * @param {string} [parameters.itemId] - Clicked product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Clicked product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Clicked product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {number} [parameters.position] - Position of the clicked item in the recommendations list
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.qnaResultId] - Questions and answers result identifier
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description User clicked on a recommended item within a product insights agent answer
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentResultClick(
+   *     {
+   *         question: 'Is there a similar t-shirt in blue?',
+   *         seedItemId: 'KMH876',
+   *         seedItemName: 'Red T-Shirt',
+   *         itemId: 'KMH877',
+   *         itemName: 'Blue T-Shirt',
+   *         position: 0,
+   *         qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentResultClick(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      question,
+      seed_item_id,
+      seedItemId = seed_item_id,
+      seed_item_name,
+      seedItemName = seed_item_name,
+      seed_variation_id,
+      seedVariationId = seed_variation_id,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      position,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      qna_result_id,
+      qnaResultId = qna_result_id,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!question) {
+      return new Error('A parameters object with a "question" property is required.');
+    }
+
+    if (!seedItemId) {
+      return new Error('A parameters object with a "seedItemId" property is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      qna_result_id: qnaResultId,
+      thread_id: threadId,
+      position,
+      question,
+      seed_item_id: seedItemId,
+      seed_item_name: seedItemName,
+      seed_variation_id: seedVariationId,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_result_click?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent view event to API
+   *
+   * @function trackProductInsightsAgentView
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {object[]} parameters.questions - List of pre-generated questions shown to the user, each in the shape of { question, questionTopic }
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description The product insights agent, with its pre-generated questions, was shown to the user
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentView(
+   *     {
+   *         questions: [
+   *             { question: 'Is this t-shirt machine washable?', questionTopic: 'care' },
+   *             { question: 'What sizes are available?' },
+   *         ],
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         variationId: 'KMH879-7632',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentView(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      questions,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!questions || !Array.isArray(questions)) {
+      return new Error('A parameters object with a "questions" property of type array is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      thread_id: threadId,
+      questions: questions.map((question) => helpers.toSnakeCaseKeys(question, false)),
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_view?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
+   * Send product insights agent views event to API
+   *
+   * @function trackProductInsightsAgentViews
+   * @param {object} parameters - Additional parameters to be sent with request
+   * @param {object[]} parameters.questions - List of pre-generated questions shown to the user, each in the shape of { question, questionTopic }
+   * @param {object[]} parameters.viewTimespans - List of timespans the product insights agent was in the visible part of the screen, each in the shape of { start, end } with ISO 8601 timestamps including a timezone
+   * @param {string} [parameters.itemId] - Product item unique identifier. Either itemId or itemName is required
+   * @param {string} [parameters.itemName] - Product item name. Either itemId or itemName is required
+   * @param {string} [parameters.variationId] - Product item variation unique identifier. Either itemId or itemName of the related item must be passed along with variationId
+   * @param {object} [parameters.features] - Dictionary of feature flags
+   * @param {object} [parameters.featureVariants] - Dictionary of feature variants
+   * @param {string} [parameters.threadId] - Thread identifier for grouping events within a conversation
+   * @param {object} [parameters.analyticsTags] - Pass additional analytics data
+   * @param {string} [parameters.section] - Index section
+   * @param {object} userParameters - Parameters relevant to the user request
+   * @param {number} userParameters.sessionId - Session ID, utilized to personalize results
+   * @param {string} userParameters.clientId - Client ID, utilized to personalize results
+   * @param {string} [userParameters.userId] - User ID, utilized to personalize results
+   * @param {string[]} [userParameters.segments] - User segments
+   * @param {object} [userParameters.testCells] - User test cells
+   * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - Client page URL the event originated from
+   * @param {string} [userParameters.canonicalUrl] - Canonical URL of the client page
+   * @param {string} [userParameters.referer] - Client page URL (including path)
+   * @param {string} [userParameters.userIp] - Client user IP
+   * @param {string} [userParameters.userAgent] - Client user agent
+   * @param {string} [userParameters.acceptLanguage] - Client accept language
+   * @param {string} [userParameters.dateTime] - Time since epoch in milliseconds
+   * @param {object} [networkParameters] - Parameters relevant to the network request
+   * @param {number} [networkParameters.timeout] - Request timeout (in milliseconds)
+   * @returns {(true|Error)}
+   * @description The product insights agent was in the visible part of the screen for the given timespans
+   * @example
+   * constructorio.tracker.trackProductInsightsAgentViews(
+   *     {
+   *         questions: [
+   *             { question: 'Is this t-shirt machine washable?', questionTopic: 'care' },
+   *         ],
+   *         viewTimespans: [
+   *             { start: '2026-10-05T10:00:00.000Z', end: '2026-10-05T10:00:05.000Z' },
+   *             { start: '2026-10-05T10:01:00.000Z', end: '2026-10-05T10:01:10.000Z' },
+   *         ],
+   *         itemId: 'KMH876',
+   *         itemName: 'Red T-Shirt',
+   *         threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+   *     },
+   *     {
+   *         sessionId: 1,
+   *         clientId: '7a43138f-c87b-29c0-872d-65b00ed0e392',
+   *         testCells: {
+   *             testName: 'cellName',
+   *         },
+   *     },
+   * );
+   */
+  trackProductInsightsAgentViews(parameters, userParameters, networkParameters = {}) {
+    // Ensure parameters are provided (required)
+    if (!parameters || typeof parameters !== 'object' || Array.isArray(parameters)) {
+      return new Error('parameters are required of type object');
+    }
+
+    const {
+      // accept snake_case aliases alongside camelCase
+      questions,
+      view_timespans,
+      viewTimespans = view_timespans,
+      item_id,
+      itemId = item_id,
+      item_name,
+      itemName = item_name,
+      variation_id,
+      variationId = variation_id,
+      features,
+      feature_variants,
+      featureVariants = feature_variants,
+      thread_id,
+      threadId = thread_id,
+      analyticsTags,
+      section,
+    } = parameters;
+
+    if (!questions || !Array.isArray(questions)) {
+      return new Error('A parameters object with a "questions" property of type array is required.');
+    }
+
+    if (!viewTimespans || !Array.isArray(viewTimespans)) {
+      return new Error('A parameters object with a "viewTimespans" property of type array is required.');
+    }
+
+    const bodyParams = {
+      item_id: itemId,
+      item_name: itemName,
+      variation_id: variationId,
+      features,
+      feature_variants: featureVariants,
+      analytics_tags: analyticsTags,
+      thread_id: threadId,
+      questions: questions.map((question) => helpers.toSnakeCaseKeys(question, false)),
+      view_timespans: viewTimespans,
+    };
+
+    // query params that are not assigned in the applyParams()
+    const queryParams = {
+      section,
+    };
+
+    const requestPath = `${this.options.serviceUrl}/v2/behavioral_action/product_insights_agent_views?`;
+    const requestUrl = `${requestPath}${applyParamsAsString(queryParams, userParameters, this.options)}`;
+    const requestMethod = 'POST';
+    // POST events must include common parameters (key, i, s, c, ui, _dt, origin_referrer, canonical_url, document_referrer) both in body and query string
+    const requestBody = applyParams(bodyParams, userParameters, { ...this.options, requestMethod });
+
+    send.call(
+      this,
+      requestUrl,
+      userParameters,
+      networkParameters,
+      requestMethod,
+      requestBody,
+    );
+
+    return true;
+  }
+
+  /**
    * Subscribe to success or error messages emitted by tracking requests
    *
    * @function on

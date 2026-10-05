@@ -8292,6 +8292,5594 @@ describe('ConstructorIO - Tracker', () => {
     });
   });
 
+  describe('trackProductInsightsAgentAnswerFeedback', () => {
+    const requiredParameters = {
+      feedbackLabel: 'thumbs_up',
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+      const snakeCaseParameters = {
+        feedback_label: 'thumbs_down',
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('feedback_label').to.equal(snakeCaseParameters.feedback_label);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(snakeCaseParameters.qna_result_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_answer_feedback?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('feedback_label').to.equal(requiredParameters.feedbackLabel);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when feedbackLabel and itemName are provided', (done) => {
+      const parameters = {
+        feedbackLabel: 'thumbs_down',
+        itemName: optionalParameters.itemName,
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('feedback_label').to.equal(parameters.feedbackLabel);
+        expect(requestParams).to.have.property('item_name').to.equal(parameters.itemName);
+        expect(requestParams).to.not.have.property('item_id');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(parameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('feedback_label').to.equal(requiredParameters.feedbackLabel);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(optionalParameters.qnaResultId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no feedbackLabel is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        { itemId: requiredParameters.itemId },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentAnswerFeedback(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentAnswerFeedback(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerFeedback(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentAnswerView', () => {
+    const requiredParameters = {
+      question: 'Is this product machine washable?',
+      answerText: 'Yes, it can be machine washed at 30 degrees.',
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      questionTopic: 'care',
+      qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        question: 'Is this product machine washable?',
+        answer_text: 'Yes, it can be machine washed at 30 degrees.',
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        question_topic: 'care',
+        qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+        follow_up_questions: [{ value: 'What sizes are available?' }],
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(snakeCaseParameters.question);
+        expect(requestParams).to.have.property('answer_text').to.equal(snakeCaseParameters.answer_text);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('question_topic').to.equal(snakeCaseParameters.question_topic);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(snakeCaseParameters.qna_result_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams)
+          .to.have.property('follow_up_questions')
+          .to.deep.equal(snakeCaseParameters.follow_up_questions);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_answer_view?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(requiredParameters.question);
+        expect(requestParams).to.have.property('answer_text').to.equal(requiredParameters.answerText);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('question_topic').to.equal(optionalParameters.questionTopic);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(optionalParameters.qnaResultId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and items are provided', (done) => {
+      const items = [
+        { itemId: 'product-1', itemName: 'Product One', variationId: 'variation-1' },
+        { itemId: 'product-2', slCampaignId: 'campaign-id', slCampaignOwner: 'campaign-owner' },
+      ];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('items').to.deep.equal([
+          { item_id: 'product-1', item_name: 'Product One', variation_id: 'variation-1' },
+          { item_id: 'product-2', sl_campaign_id: 'campaign-id', sl_campaign_owner: 'campaign-owner' },
+        ]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, items },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response and send at most 100 items when more items are provided', (done) => {
+      const items = Array.from({ length: 101 }, (_, index) => ({ itemId: `product-${index}` }));
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('items').to.have.lengthOf(100);
+        expect(requestParams.items[99]).to.deep.equal({ item_id: 'product-99' });
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, items },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and followUpQuestions are provided', (done) => {
+      const followUpQuestions = [{ value: 'What sizes are available?' }, { value: 'Is it available in blue?' }];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('follow_up_questions').to.deep.equal(followUpQuestions);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, followUpQuestions },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response and send at most 100 followUpQuestions when more are provided', (done) => {
+      const followUpQuestions = Array.from({ length: 101 }, (_, index) => ({ value: `Question ${index}` }));
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('follow_up_questions').to.have.lengthOf(100);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, followUpQuestions },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when an empty answerText is provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('answer_text').to.equal('');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, answerText: '' },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerView([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no question is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, question: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when no answerText is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, answerText: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when answerText is not a string', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        { ...requiredParameters, answerText: 123 },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentAnswerView(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentAnswerView(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentAnswerView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentOutOfView', () => {
+    const requiredParameters = {
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_out_of_view?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentOutOfView([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(null, userParameters)).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentOutOfView(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentOutOfView(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentOutOfView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentFocus', () => {
+    const requiredParameters = {
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_focus?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentFocus([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentFocus(null, userParameters)).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentFocus(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentFocus(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentFocus(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentQuestionClick', () => {
+    const requiredParameters = {
+      question: 'Is this product machine washable?',
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+      questionTopic: 'care',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        question: 'Is this product machine washable?',
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+        question_topic: 'care',
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(snakeCaseParameters.question);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('question_topic').to.equal(snakeCaseParameters.question_topic);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_question_click?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(requiredParameters.question);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+        expect(requestParams).to.have.property('question_topic').to.equal(optionalParameters.questionTopic);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no question is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        { ...requiredParameters, question: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentQuestionClick(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentQuestionClick(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionClick(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentQuestionSubmit', () => {
+    const requiredParameters = {
+      question: 'Is this product machine washable?',
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+      questionTopic: 'care',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        question: 'Is this product machine washable?',
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+        question_topic: 'care',
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(snakeCaseParameters.question);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+        expect(requestParams).to.have.property('question_topic').to.equal(snakeCaseParameters.question_topic);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_question_submit?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(requiredParameters.question);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+        expect(requestParams).to.have.property('question_topic').to.equal(optionalParameters.questionTopic);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no question is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        { ...requiredParameters, question: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentQuestionSubmit(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentQuestionSubmit(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentQuestionSubmit(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentResultClick', () => {
+    const requiredParameters = {
+      question: 'Is there a similar product in blue?',
+      seedItemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+      itemId: 'recommended-item-id',
+    };
+    const optionalParameters = {
+      seedItemName: 'Example Product Name',
+      seedVariationId: 'product-variation',
+      itemName: 'Recommended Product Name',
+      variationId: 'recommended-variation-id',
+      position: 3,
+      qnaResultId: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        question: 'Is there a similar product in blue?',
+        seed_item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        seed_item_name: 'Example Product Name',
+        seed_variation_id: 'product-variation',
+        item_id: 'recommended-item-id',
+        item_name: 'Recommended Product Name',
+        variation_id: 'recommended-variation-id',
+        qna_result_id: '019927c2-f955-4020-8b8d-6b21b93cb5a2',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(snakeCaseParameters.question);
+        expect(requestParams).to.have.property('seed_item_id').to.equal(snakeCaseParameters.seed_item_id);
+        expect(requestParams).to.have.property('seed_item_name').to.equal(snakeCaseParameters.seed_item_name);
+        expect(requestParams).to.have.property('seed_variation_id').to.equal(snakeCaseParameters.seed_variation_id);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(snakeCaseParameters.qna_result_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_result_click?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('question').to.equal(requiredParameters.question);
+        expect(requestParams).to.have.property('seed_item_id').to.equal(requiredParameters.seedItemId);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('seed_item_name').to.equal(optionalParameters.seedItemName);
+        expect(requestParams).to.have.property('seed_variation_id').to.equal(optionalParameters.seedVariationId);
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('position').to.equal(optionalParameters.position);
+        expect(requestParams).to.have.property('qna_result_id').to.equal(optionalParameters.qnaResultId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when position is 0', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('position').to.equal(0);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, position: 0 },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentResultClick([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentResultClick(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no question is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, question: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when no seedItemId is provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        { ...requiredParameters, seedItemId: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentResultClick(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentResultClick(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentResultClick(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentView', () => {
+    const requiredParameters = {
+      questions: [{ question: 'Is this product machine washable?', questionTopic: 'care' }],
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        questions: [{ question: 'Is this product machine washable?', question_topic: 'care' }],
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('questions').to.deep.equal(snakeCaseParameters.questions);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_view?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestParams).to.have.property('questions').to.deep.equal([
+          { question: 'Is this product machine washable?', question_topic: 'care' },
+        ]);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentView([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentView(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no questions are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, questions: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when questions is not an array', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentView(
+        { ...requiredParameters, questions: 'not-an-array' },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentView(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentView(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentView(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
+  describe('trackProductInsightsAgentViews', () => {
+    const requiredParameters = {
+      questions: [{ question: 'Is this product machine washable?', questionTopic: 'care' }],
+      viewTimespans: [{ start: '2026-10-05T10:00:00.000Z', end: '2026-10-05T10:00:05.000Z' }],
+      itemId: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+    };
+    const optionalParameters = {
+      itemName: 'Example Product Name',
+      variationId: 'product-variation',
+      threadId: '0daf0015-fc29-4727-9140-8d5313a1902c',
+    };
+
+    it('Backwards Compatibility - Should respond with a valid response when snake cased parameters are provided', (done) => {
+      const snakeCaseParameters = {
+        questions: [{ question: 'Is this product machine washable?', question_topic: 'care' }],
+        view_timespans: [{ start: '2026-10-05T10:00:00.000Z', end: '2026-10-05T10:00:05.000Z' }],
+        item_id: 'product0dbae320-3950-11ea-9251-8dee6d0eb3cd-new',
+        item_name: 'Example Product Name',
+        variation_id: 'product-variation',
+        thread_id: '0daf0015-fc29-4727-9140-8d5313a1902c',
+        feature_variants: { foo: 'bar' },
+      };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('questions').to.deep.equal(snakeCaseParameters.questions);
+        expect(requestParams).to.have.property('view_timespans').to.deep.equal(snakeCaseParameters.view_timespans);
+        expect(requestParams).to.have.property('item_id').to.equal(snakeCaseParameters.item_id);
+        expect(requestParams).to.have.property('item_name').to.equal(snakeCaseParameters.item_name);
+        expect(requestParams).to.have.property('variation_id').to.equal(snakeCaseParameters.variation_id);
+        expect(requestParams).to.have.property('thread_id').to.equal(snakeCaseParameters.thread_id);
+        expect(requestParams)
+          .to.have.property('feature_variants')
+          .to.deep.equal(snakeCaseParameters.feature_variants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(snakeCaseParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestUrl = helpers.extractUrlFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestUrl).to.include('/v2/behavioral_action/product_insights_agent_views?');
+        expect(requestParams).to.have.property('key');
+        expect(requestParams).to.have.property('i');
+        expect(requestParams).to.have.property('s');
+        expect(requestParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestParams).to.have.property('_dt');
+        expect(requestParams).to.have.property('beacon').to.equal(true);
+        expect(requestParams).to.have.property('item_id').to.equal(requiredParameters.itemId);
+        expect(requestParams).to.have.property('questions').to.deep.equal([
+          { question: 'Is this product machine washable?', question_topic: 'care' },
+        ]);
+        expect(requestParams).to.have.property('view_timespans').to.deep.equal(requiredParameters.viewTimespans);
+        expect(requestQueryParams).to.have.property('key');
+        expect(requestQueryParams).to.have.property('i');
+        expect(requestQueryParams).to.have.property('s');
+        expect(requestQueryParams).to.have.property('c').to.equal(clientVersion);
+        expect(requestQueryParams).to.have.property('_dt');
+        expect(requestQueryParams).to.have.property('beacon').to.equal('true');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required and optional parameters are provided', (done) => {
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('item_name').to.equal(optionalParameters.itemName);
+        expect(requestParams).to.have.property('variation_id').to.equal(optionalParameters.variationId);
+        expect(requestParams).to.have.property('thread_id').to.equal(optionalParameters.threadId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, ...optionalParameters },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and section are provided', (done) => {
+      const section = 'Products';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('section').to.equal(section);
+        expect(requestParams).to.not.have.property('section');
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, section },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters, features and featureVariants are provided', (done) => {
+      const features = { foo: true };
+      const featureVariants = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('features').to.deep.equal(features);
+        expect(requestParams).to.have.property('feature_variants').to.deep.equal(featureVariants);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, features, featureVariants },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and analyticsTags are provided', (done) => {
+      const analyticsTags = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('analytics_tags').to.deep.equal(analyticsTags);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, analyticsTags },
+        userParameters,
+      )).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user identifier are provided', (done) => {
+      const userId = 'bd2d9d1f097614c4b4de';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        userId,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and segments are provided', (done) => {
+      const segments = ['foo', 'bar'];
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('us').to.deep.equal(segments);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        segments,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and test cells are provided', (done) => {
+      const testCells = { foo: 'bar' };
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams)
+          .to.have.property(`ef-${Object.keys(testCells)[0]}`)
+          .to.equal(Object.values(testCells)[0]);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        testCells,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and origin referrer are provided', (done) => {
+      const originReferrer = 'https://localhost';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('origin_referrer').to.equal(originReferrer);
+        expect(requestParams).to.have.property('origin_referrer').to.equal(originReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        originReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and document referrer are provided', (done) => {
+      const documentReferrer = 'https://localhost/previous-page';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('document_referrer').to.equal(documentReferrer);
+        expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and canonical url are provided', (done) => {
+      const canonicalUrl = 'https://localhost/product';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestQueryParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestQueryParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+        expect(requestParams).to.have.property('canonical_url').to.equal(canonicalUrl);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        canonicalUrl,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and security token are provided', (done) => {
+      const securityToken = '5219c4c62f24e9b39ef92979';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+        securityToken,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('x-cnstrc-token').to.equal(securityToken);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, userParameters)).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user ip are provided', (done) => {
+      const userIp = '127.0.0.1';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('X-Forwarded-For').to.equal(userIp);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        userIp,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response when required parameters and user agent are provided', (done) => {
+      const userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedHeaders = helpers.extractHeadersFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedHeaders).to.have.property('User-Agent').to.equal(userAgent);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        userAgent,
+      })).to.equal(true);
+    });
+
+    it('Should respond with a valid response with dateTime', (done) => {
+      const dateTime = 123456789;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestedParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+        const requestedBody = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestedParams).to.have.property('_dt').to.equal(dateTime.toString());
+        expect(requestedBody).to.have.property('_dt').to.equal(dateTime);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(requiredParameters, {
+        ...userParameters,
+        dateTime,
+      })).to.equal(true);
+    });
+
+    it('Should throw an error when invalid parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews([], userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no parameters are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews(null, userParameters)).to.be.an('error');
+    });
+
+    it('Should throw an error when no questions are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, questions: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when questions is not an array', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, questions: 'not-an-array' },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when no viewTimespans are provided', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, viewTimespans: undefined },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    it('Should throw an error when viewTimespans is not an array', () => {
+      const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        { ...requiredParameters, viewTimespans: 'not-an-array' },
+        userParameters,
+      )).to.be.an('error');
+    });
+
+    if (!skipNetworkTimeoutTests) {
+      it('Should throw an error when network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({ apiKey: testApiKey });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentViews(
+          requiredParameters,
+          userParameters,
+          { timeout: 10 },
+        )).to.equal(true);
+      });
+
+      it('Should throw an error when global network request timeout is provided and reached', (done) => {
+        const { tracker } = new ConstructorIO({
+          apiKey: testApiKey,
+          networkParameters: { timeout: 20 },
+        });
+
+        tracker.on('error', () => { done(); });
+
+        expect(tracker.trackProductInsightsAgentViews(requiredParameters, userParameters)).to.equal(true);
+      });
+    }
+
+    it('Should not encode body parameters', (done) => {
+      const specialCharacters = '+[]&';
+      const userId = `user-id ${specialCharacters}`;
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userId);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+
+    it('Should properly transform non-breaking spaces in parameters', (done) => {
+      const breakingSpaces = '   ';
+      const userId = `user-id ${breakingSpaces} user-id`;
+      const userIdExpected = 'user-id     user-id';
+      const { tracker } = new ConstructorIO({
+        apiKey: testApiKey,
+        fetch: fetchSpy,
+      });
+
+      tracker.on('success', (responseParams) => {
+        const requestParams = helpers.extractBodyParamsFromFetch(fetchSpy);
+
+        // Request
+        expect(fetchSpy).to.have.been.called;
+        expect(requestParams).to.have.property('ui').to.equal(userIdExpected);
+
+        // Response
+        expect(responseParams).to.have.property('method').to.equal('POST');
+        expect(responseParams).to.have.property('message').to.equal('ok');
+
+        done();
+      });
+
+      expect(tracker.trackProductInsightsAgentViews(
+        requiredParameters,
+        { ...userParameters, userId },
+      )).to.equal(true);
+    });
+  });
+
   describe('PII Detection', () => {
     const requiredParameters = { originalQuery: 'original-query' };
 
