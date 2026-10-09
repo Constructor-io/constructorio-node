@@ -8,6 +8,10 @@ export * from './tasks';
 export * from './tracker';
 export * from './searchandising';
 
+type RequireAtLeastOne<T, Keys extends keyof T = keyof T> =
+  Pick<T, Exclude<keyof T, Keys>> &
+  { [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>> }[Keys];
+
 export interface NetworkParameters extends Record<string, any> {
   timeout?: number;
 }
@@ -148,16 +152,48 @@ export interface Variation extends Record<string, any> {
   data?: ItemData;
 }
 
+export interface VariationsMapSingleFilter {
+  field: string;
+  value: string | number | boolean;
+}
+
+export interface VariationsMapRange {
+  field: string;
+  range: FilterExpressionRangeValue;
+}
+
+export type FilterNode = VariationsMapSingleFilter | VariationsMapRange;
+
+export type FilterBy = RequireAtLeastOne<{
+  and?: Array<FilterNode | FilterBy>;
+  or?: Array<FilterNode | FilterBy>;
+  not?: FilterNode | FilterBy;
+}>;
+
+export type Aggregation = 'first' | 'min' | 'max' | 'all' | 'count' | 'field_count' | 'value_count';
+
+export interface VariationsMapBaseValue {
+  aggregation: Aggregation;
+  field: string;
+}
+
+export interface VariationsMapValueCount extends VariationsMapBaseValue {
+  aggregation: 'value_count';
+  value: boolean | number | string;
+}
+
+export interface VariationsMapStandardValue extends VariationsMapBaseValue {
+  aggregation: Exclude<Aggregation, 'value_count'>;
+}
+
 export interface VariationsMap {
   group_by: Array<{
     name: string,
     field: string
   }>;
+  filter_by?: FilterBy;
   values: {
-    [key: string]: {
-        aggregation: 'first' | 'min' | 'max' | 'all',
-        field: string
-    },
+    [key: string]: VariationsMapValueCount | VariationsMapStandardValue,
   },
   dtype: 'array' | 'object'
 }
