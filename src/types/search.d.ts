@@ -30,6 +30,7 @@ export interface SearchParameters {
   hiddenFacets?: string[];
   variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
+  filterMatchTypes?: Record<string, 'all' | 'any' | 'none'>;
 }
 
 declare class Search {
@@ -68,6 +69,8 @@ export interface Response extends Record<string, any> {
   refined_content: Record<string, any>[];
   total_num_results: number;
   features: Partial<Feature>[];
+  related_searches?: Record<string, any>[];
+  related_browse_pages?: Record<string, any>[];
 }
 
 export interface SearchRequestType extends Record<string, any> {
