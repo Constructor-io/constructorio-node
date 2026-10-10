@@ -384,6 +384,9 @@ class Recommendations {
   /**
    * Get recommendations for every pod configured on a page
    *
+   * Beta: available to a small group of users and may change. Contact your Customer Success
+   * Manager to request access.
+   *
    * @function getRecommendationPage
    * @description Each pod's `result_id` is appended to that pod's results. The top-level `result_id`
    * identifies the page request; send each pod's own `result_id` with that pod's tracking events.
