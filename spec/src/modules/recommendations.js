@@ -970,6 +970,20 @@ describe('ConstructorIO - Recommendations', () => {
       expect(completeTheLook.fmt_options).to.deep.equal({ groups_max_depth: '2', hidden_fields: ['inventory', 'margin'] });
     });
 
+    it('Should not modify the supplied parameters', async () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+      const parameters = {
+        fmtOptions: { groups_max_depth: 2 },
+        hiddenFields: ['inventory'],
+        podOverrides: { similar_items: { fmtOptions: { groups_max_depth: 1 }, hiddenFields: ['margin'] } },
+      };
+      const original = JSON.parse(JSON.stringify(parameters));
+
+      await recommendations.getRecommendationPage(pageId, parameters);
+
+      expect(parameters).to.deep.equal(original);
+    });
+
     it('Should stamp each pod\'s own result_id onto its results, not the page result_id', async () => {
       const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
 
@@ -1014,6 +1028,14 @@ describe('ConstructorIO - Recommendations', () => {
       })).to.eventually.be.rejectedWith('podOverrides.similar_items contains parameters that cannot be overridden per pod: itemIds');
     });
 
+    it('Should be rejected when a podOverrides value is not an object', () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      return expect(recommendations.getRecommendationPage(pageId, {
+        podOverrides: { similar_items: 'numResults' },
+      })).to.eventually.be.rejectedWith('podOverrides.similar_items must be an object');
+    });
+
     it('Should be rejected when variationId is provided without itemIds', () => {
       const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
 
@@ -1021,8 +1043,7 @@ describe('ConstructorIO - Recommendations', () => {
     });
   });
 
-  // The page endpoint is not yet enabled on the test index, and the test index has no
-  // page configured (`/recommendations/v1/pages/pdp_b2c` returns 404 there)
+  // Skipped: requires a recommendation page configured on the test index
   describe.skip('getRecommendationPage - live', () => {
     const pageId = 'pdp_b2c';
     const itemId = 'power_drill';

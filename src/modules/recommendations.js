@@ -261,6 +261,11 @@ function createRecommendationPageUrl(pageId, parameters, userParameters, options
 
     Object.keys(podOverrides).forEach((podId) => {
       const override = podOverrides[podId] || {};
+
+      if (typeof override !== 'object' || Array.isArray(override)) {
+        throw new Error(`podOverrides.${podId} must be an object`);
+      }
+
       const unsupported = Object.keys(override).filter((name) => !PAGE_OVERRIDABLE_PARAMETERS.includes(name));
 
       if (unsupported.length) {
@@ -387,9 +392,10 @@ class Recommendations {
    * Beta: available to a small group of users and may change. Contact your Customer Success
    * Manager to request access.
    *
-   * @function getRecommendationPage
-   * @description Each pod's `result_id` is appended to that pod's results. The top-level `result_id`
+   * Each pod's `result_id` is appended to that pod's results. The top-level `result_id`
    * identifies the page request; send each pod's own `result_id` with that pod's tracking events.
+   *
+   * @function getRecommendationPage
    * @param {string} pageId - Page identifier
    * @param {object} [parameters] - Additional parameters to refine results, applied to every pod
    * @param {string|array} [parameters.itemIds] - Item ID(s) to retrieve recommendations for (strategy specific). Required for variationId
