@@ -75,6 +75,41 @@ function createRequestHeaders(userParameters, networkParameters, options) {
   return headers;
 }
 
+// Map item, variation, section and term parameters shared by pod and page requests
+function createSharedRecommendationParams(parameters) {
+  const { itemIds, variationId, section, term } = parameters;
+  const params = {};
+
+  // Pull item ids from parameters
+  if (itemIds) {
+    params.item_id = itemIds;
+  }
+
+  if (variationId) {
+    if (!itemIds) {
+      throw new Error('itemIds is a required parameter for variationId');
+    }
+
+    if (Array.isArray(itemIds) && !itemIds.length) {
+      throw new Error('At least one itemId is a required parameter for variationId');
+    }
+
+    params.variation_id = variationId;
+  }
+
+  // Pull section from parameters
+  if (section) {
+    params.section = section;
+  }
+
+  // Pull term from parameters
+  if (term) {
+    params.term = term;
+  }
+
+  return params;
+}
+
 // Create URL from supplied parameters
 function createRecommendationsUrl(podId, parameters, userParameters, options) {
   const { serviceUrl } = options;
@@ -89,10 +124,6 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
   if (parameters) {
     const {
       numResults,
-      itemIds,
-      variationId,
-      section,
-      term,
       filters,
       variationsMap,
       hiddenFields,
@@ -104,32 +135,7 @@ function createRecommendationsUrl(podId, parameters, userParameters, options) {
       queryParams.num_results = numResults;
     }
 
-    // Pull item ids from parameters
-    if (itemIds) {
-      queryParams.item_id = itemIds;
-    }
-
-    if (variationId) {
-      if (!itemIds) {
-        throw new Error('itemIds is a required parameter for variationId');
-      }
-
-      if (Array.isArray(itemIds) && !itemIds.length) {
-        throw new Error('At least one itemId is a required parameter for variationId');
-      }
-
-      queryParams.variation_id = variationId;
-    }
-
-    // Pull section from parameters
-    if (section) {
-      queryParams.section = section;
-    }
-
-    // Pull term from parameters
-    if (term) {
-      queryParams.term = term;
-    }
+    queryParams = { ...queryParams, ...createSharedRecommendationParams(parameters) };
 
     // Pull filters from parameters
     if (filters) {
@@ -220,36 +226,13 @@ function createRecommendationPageUrl(pageId, parameters, userParameters, options
   }
 
   let queryParams = createBaseQueryParams(userParameters, options);
-  const { itemIds, variationId, section, term, podOverrides } = parameters;
+  const { podOverrides } = parameters;
 
-  // Pull item ids from parameters
-  if (itemIds) {
-    queryParams.item_id = itemIds;
-  }
-
-  if (variationId) {
-    if (!itemIds) {
-      throw new Error('itemIds is a required parameter for variationId');
-    }
-
-    if (Array.isArray(itemIds) && !itemIds.length) {
-      throw new Error('At least one itemId is a required parameter for variationId');
-    }
-
-    queryParams.variation_id = variationId;
-  }
-
-  // Pull section from parameters
-  if (section) {
-    queryParams.section = section;
-  }
-
-  // Pull term from parameters
-  if (term) {
-    queryParams.term = term;
-  }
-
-  queryParams = { ...queryParams, ...createPageOverridableParams(parameters) };
+  queryParams = {
+    ...queryParams,
+    ...createSharedRecommendationParams(parameters),
+    ...createPageOverridableParams(parameters),
+  };
 
   // Pull per-pod overrides from parameters
   if (podOverrides) {
