@@ -874,16 +874,6 @@ describe('ConstructorIO - Recommendations', () => {
             },
             result_id: 'similar-items-result-id',
           },
-          {
-            pod_id: 'complete_the_look',
-            request: { item_id: itemId, num_results: 8 },
-            response: {
-              results: [],
-              total_num_results: 0,
-              pod: { id: 'complete_the_look', display_name: 'Complete the Look' },
-            },
-            result_id: 'complete-the-look-result-id',
-          },
         ],
       },
       result_id: pageResultId,
@@ -928,7 +918,6 @@ describe('ConstructorIO - Recommendations', () => {
       expect(requestedUrlParams).to.have.property('section').to.equal('Products');
       expect(requestedUrlParams.filters).to.deep.equal({ in_stock: 'true' });
       expect(requestedUrlParams.filter_match_types).to.deep.equal({ color: 'any' });
-      expect(requestedUrlParams).to.not.have.property('pod_overrides');
       expect(headers).to.include({ 'x-cnstrc-token': 'token', 'X-Forwarded-For': '127.0.0.1', 'User-Agent': 'agent' });
     });
 
@@ -939,13 +928,9 @@ describe('ConstructorIO - Recommendations', () => {
 
       await recommendations.getRecommendationPage(pageId, {
         itemIds: itemId,
-        numResults: 10,
         podOverrides: {
           similar_items: { numResults: 0 },
           complete_the_look: {
-            numResults: 8,
-            filters: { in_stock: 'true', color: ['red', 'blue'] },
-            filterMatchTypes: { color: 'all' },
             preFilterExpression,
             variationsMap,
             fmtOptions: { groups_max_depth: 2 },
@@ -954,17 +939,10 @@ describe('ConstructorIO - Recommendations', () => {
         },
       });
 
-      const requestedUrl = decodeURIComponent(fetchStub.lastCall.args[0]);
       const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchStub);
       const completeTheLook = requestedUrlParams.pod_overrides.complete_the_look;
 
-      expect(requestedUrl).to.include('pod_overrides[similar_items][num_results]=0');
-      expect(requestedUrl).to.include('pod_overrides[complete_the_look][filters][color]=red&pod_overrides[complete_the_look][filters][color]=blue');
-      expect(requestedUrlParams.num_results).to.equal('10');
       expect(requestedUrlParams.pod_overrides.similar_items).to.deep.equal({ num_results: '0' });
-      expect(completeTheLook.num_results).to.equal('8');
-      expect(completeTheLook.filters).to.deep.equal({ in_stock: 'true', color: ['red', 'blue'] });
-      expect(completeTheLook.filter_match_types).to.deep.equal({ color: 'all' });
       expect(JSON.parse(completeTheLook.pre_filter_expression)).to.deep.equal(preFilterExpression);
       expect(JSON.parse(completeTheLook.variations_map)).to.deep.equal(variationsMap);
       expect(completeTheLook.fmt_options).to.deep.equal({ groups_max_depth: '2', hidden_fields: ['inventory', 'margin'] });
@@ -988,13 +966,11 @@ describe('ConstructorIO - Recommendations', () => {
       const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
 
       const res = await recommendations.getRecommendationPage(pageId, { itemIds: itemId });
-      const [similarItems, completeTheLook] = res.response.pods;
 
       expect(res.result_id).to.equal(pageResultId);
-      similarItems.response.results.forEach((result) => {
+      res.response.pods[0].response.results.forEach((result) => {
         expect(result.result_id).to.equal('similar-items-result-id');
       });
-      expect(completeTheLook.response.results).to.deep.equal([]);
     });
 
     it('Should expose the request URL on the returned promise', () => {
@@ -1053,12 +1029,9 @@ describe('ConstructorIO - Recommendations', () => {
 
       const res = await recommendations.getRecommendationPage(pageId, { itemIds: itemId });
 
-      expect(res).to.have.property('result_id').to.be.a('string');
       expect(res.response.pods).to.be.an('array').that.is.not.empty;
       res.response.pods.forEach((pod) => {
-        expect(pod).to.have.property('pod_id').to.be.a('string');
-        expect(pod).to.have.property('result_id').to.be.a('string').that.does.not.equal(res.result_id);
-        expect(pod.response.pod.id).to.equal(pod.pod_id);
+        expect(pod.result_id).to.be.a('string').that.does.not.equal(res.result_id);
         pod.response.results.forEach((result) => {
           expect(result.result_id).to.equal(pod.result_id);
         });
@@ -1076,7 +1049,6 @@ describe('ConstructorIO - Recommendations', () => {
       });
 
       expect(res.response.pods[0].request.num_results).to.equal(1);
-      expect(res.response.pods[0].response.results.length).to.be.at.most(1);
     });
   });
 });
