@@ -235,7 +235,7 @@ function createRecommendationPageUrl(pageId, parameters, userParameters, options
   };
 
   // Pull per-pod overrides from parameters
-  if (podOverrides) {
+  if (!helpers.isNil(podOverrides)) {
     if (typeof podOverrides !== 'object' || Array.isArray(podOverrides)) {
       throw new Error('podOverrides must be an object keyed by pod id');
     }
@@ -243,7 +243,11 @@ function createRecommendationPageUrl(pageId, parameters, userParameters, options
     const podOverrideParams = {};
 
     Object.keys(podOverrides).forEach((podId) => {
-      const override = podOverrides[podId] || {};
+      const override = podOverrides[podId];
+
+      if (helpers.isNil(override)) {
+        return;
+      }
 
       if (typeof override !== 'object' || Array.isArray(override)) {
         throw new Error(`podOverrides.${podId} must be an object`);

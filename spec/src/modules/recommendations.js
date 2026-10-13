@@ -1004,12 +1004,14 @@ describe('ConstructorIO - Recommendations', () => {
       })).to.eventually.be.rejectedWith('podOverrides.similar_items contains parameters that cannot be overridden per pod: itemIds');
     });
 
-    it('Should be rejected when a podOverrides value is not an object', () => {
-      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+    ['numResults', false].forEach((override) => {
+      it(`Should be rejected when a podOverrides value is ${JSON.stringify(override)}`, () => {
+        const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
 
-      return expect(recommendations.getRecommendationPage(pageId, {
-        podOverrides: { similar_items: 'numResults' },
-      })).to.eventually.be.rejectedWith('podOverrides.similar_items must be an object');
+        return expect(recommendations.getRecommendationPage(pageId, {
+          podOverrides: { similar_items: override },
+        })).to.eventually.be.rejectedWith('podOverrides.similar_items must be an object');
+      });
     });
 
     it('Should be rejected when variationId is provided without itemIds', () => {
