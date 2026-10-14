@@ -256,6 +256,25 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should return a response with valid itemIds, fmtOptions, and hiddenFields', (done) => {
+      const fmtOptions = { variations_return_type: 'all' };
+      const hiddenFields = ['hiddenField1', 'hiddenField2'];
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds, fmtOptions, hiddenFields }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res.request.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
+        expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
+        expect(requestedUrlParams.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
+        expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.deep.equal(hiddenFields);
+        done();
+      });
+    });
+
     it('Should return a response with valid itemIds, and numResults', (done) => {
       const numResults = 2;
       const { recommendations } = new ConstructorIO({

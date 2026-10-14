@@ -1,4 +1,4 @@
-import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap, FilterExpression } from '.';
+import { ConstructorClientOptions, NetworkParameters, UserParameters, VariationsMap, FilterExpression, FmtOptions } from '.';
 
 export default Recommendations;
 
@@ -11,6 +11,7 @@ export interface RecommendationsParameters {
   filters?: Record<string, any>;
   preFilterExpression?: FilterExpression;
   variationsMap?: VariationsMap;
+  fmtOptions?: FmtOptions;
   hiddenFields?: string[];
 }
 
