@@ -256,6 +256,26 @@ describe('ConstructorIO - Recommendations', () => {
       });
     });
 
+    it('Should return a response with valid itemIds, and fmtOptions', (done) => {
+      const fmtOptions = { variations_return_type: 'matched' };
+      const { recommendations } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      recommendations.getRecommendations(podId, { itemIds, fmtOptions }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(res.request.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
+        expect(requestedUrlParams.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
+        expect(requestedUrlParams.fmt_options).to.not.have.property('hidden_fields');
+        done();
+      }).catch(done);
+    });
+
     it('Should return a response with valid itemIds, fmtOptions, and hiddenFields', (done) => {
       const fmtOptions = { variations_return_type: 'all' };
       const hiddenFields = ['hiddenField1', 'hiddenField2'];
@@ -267,12 +287,15 @@ describe('ConstructorIO - Recommendations', () => {
       recommendations.getRecommendations(podId, { itemIds, fmtOptions, hiddenFields }).then((res) => {
         const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
 
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
         expect(res.request.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
         expect(res.request.fmt_options.hidden_fields).to.eql(hiddenFields);
         expect(requestedUrlParams.fmt_options).to.have.property('variations_return_type').to.equal(fmtOptions.variations_return_type);
         expect(requestedUrlParams.fmt_options).to.have.property('hidden_fields').to.deep.equal(hiddenFields);
         done();
-      });
+      }).catch(done);
     });
 
     it('Should return a response with valid itemIds, and numResults', (done) => {
