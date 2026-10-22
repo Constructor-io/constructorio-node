@@ -46,6 +46,7 @@
     "forcedelta",
     "forcepatchdelta",
     "skippable",
-    "timeofday"
+    "timeofday",
+    "timespans"
   ]
 }
