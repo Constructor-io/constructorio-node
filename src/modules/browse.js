@@ -108,9 +108,17 @@ function createQueryParams(parameters, userParameters, options) {
       queryParams.pre_filter_expression = JSON.stringify(preFilterExpression);
     }
 
-    // Pull qs param from parameters
+    // Pull qs param from parameters - refined filters are sent as a top level parameter
     if (qsParam) {
-      queryParams.qs = JSON.stringify(qsParam);
+      const { refined_filters: refinedFilters, ...remainingQsParam } = qsParam;
+
+      if (refinedFilters) {
+        queryParams.refined_filters = refinedFilters;
+      }
+
+      if (Object.keys(remainingQsParam).length) {
+        queryParams.qs = JSON.stringify(remainingQsParam);
+      }
     }
   }
 
