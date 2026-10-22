@@ -214,6 +214,30 @@ describe('ConstructorIO - Search', () => {
       });
     });
 
+    it('Should return a response with a valid query, section, filters and filterMatchTypes', (done) => {
+      const filters = { keywords: ['battery-powered'] };
+      const filterMatchTypes = { keywords: 'any' };
+      const { search } = new ConstructorIO({
+        ...validOptions,
+        fetch: fetchSpy,
+      });
+
+      search.getSearchResults(query, {
+        section,
+        filters,
+        filterMatchTypes,
+      }).then((res) => {
+        const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchSpy);
+
+        expect(res).to.have.property('request').to.be.an('object');
+        expect(res).to.have.property('response').to.be.an('object');
+        expect(res).to.have.property('result_id').to.be.an('string');
+        expect(requestedUrlParams).to.have.property('filter_match_types');
+        expect(requestedUrlParams.filter_match_types).to.have.property('keywords').to.equal(filterMatchTypes.keywords);
+        done();
+      });
+    });
+
     it('Should return a response with a valid query, section, and fmtOptions', (done) => {
       const fmtOptions = { groups_max_depth: 2, groups_start: 'current' };
       const { search } = new ConstructorIO({

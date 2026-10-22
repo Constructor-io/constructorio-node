@@ -39,6 +39,7 @@ function createQueryParams(parameters, userParameters, options) {
       variationsMap,
       preFilterExpression,
       qsParam,
+      filterMatchTypes,
     } = parameters;
 
     // Pull page from parameters
@@ -58,6 +59,11 @@ function createQueryParams(parameters, userParameters, options) {
 
     if (filters) {
       queryParams.filters = filters;
+    }
+
+    // Pull filter match types from parameters
+    if (filterMatchTypes) {
+      queryParams.filter_match_types = filterMatchTypes;
     }
 
     // Pull sort by from parameters
@@ -263,6 +269,7 @@ class Browse {
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details
+   * @param {object} [parameters.filterMatchTypes] - An object specifying whether results must match `all`, `any` or `none` of a given filter
    * @param {object} [parameters.preFilterExpression] - Faceting expression to scope search results. Please refer to https://docs.constructor.com/reference/configuration-collections for details
    * @param {object} [parameters.qsParam] - Parameters listed above can be serialized into a JSON object and parsed through this parameter. Please refer to https://docs.constructor.com/reference/browse-browse-results for details
    * @param {object} [userParameters] - Parameters relevant to the user request
@@ -351,6 +358,7 @@ class Browse {
    * @param {string[]} [parameters.hiddenFields] - Hidden metadata fields to return
    * @param {string[]} [parameters.hiddenFacets] - Hidden facet fields to return
    * @param {object} [parameters.variationsMap] - The variations map object to aggregate variations. Please refer to https://docs.constructor.com/reference/shared-variations-mapping for details
+   * @param {object} [parameters.filterMatchTypes] - An object specifying whether results must match `all`, `any` or `none` of a given filter
    * @param {object} [userParameters] - Parameters relevant to the user request
    * @param {number} [userParameters.sessionId] - Session ID, utilized to personalize results
    * @param {string} [userParameters.clientId] - Client ID, utilized to personalize results
