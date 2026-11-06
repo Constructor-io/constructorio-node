@@ -1,5 +1,9 @@
-import { expectAssignable } from 'tsd';
-import { GetBrowseResultsResponse } from '../browse';
+import { expectAssignable, expectNotAssignable } from 'tsd';
+import {
+  BrowseParameters,
+  BrowseResultData,
+  GetBrowseResultsResponse,
+} from '../browse';
 
 expectAssignable<GetBrowseResultsResponse>({
   response: {
@@ -117,4 +121,35 @@ expectAssignable<GetBrowseResultsResponse>({
     searchandized_items: {},
   },
   ad_based: true,
+});
+
+expectAssignable<BrowseParameters>({
+  filters: { size: 'medium' },
+  filterMatchTypes: { size: 'all' },
+});
+
+expectNotAssignable<BrowseParameters>({
+  filterMatchTypes: { size: 'some' },
+});
+
+expectNotAssignable<GetBrowseResultsResponse>({
+  request: {},
+  response: { results: [] },
+});
+
+expectAssignable<GetBrowseResultsResponse>({
+  request: {},
+  response: {
+    related_searches: [{ term: 'dog toys' }],
+    related_browse_pages: [{ filter_name: 'group_id', filter_value: 'toys' }],
+  },
+  result_id: 'e5941e13-f4ca-4efb-9326-893fd49b4e71',
+});
+
+expectAssignable<BrowseResultData>({
+  matched_terms: [],
+  data: { id: '123' },
+  value: 'Name',
+  is_slotted: false,
+  labels: {},
 });

@@ -66,7 +66,7 @@ describe('ConstructorIO - Catalog', () => {
           await catalog.removeFacetConfigurationV2(facetConfig);
         } catch (e) {
           // Log warning for debugging but don't fail cleanup
-          // eslint-disable-line no-console
+          // eslint-disable-next-line no-console
           console.warn(`Cleanup warning: failed to remove facet ${facetConfig.name}:`, e.message);
         }
         // eslint-disable-next-line no-await-in-loop, no-promise-executor-return

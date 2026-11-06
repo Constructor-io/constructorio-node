@@ -3,6 +3,7 @@ import {
   Facet,
   Feature,
   FilterExpression,
+  FilterMatchTypes,
   FmtOptions,
   Group,
   NetworkParameters,
@@ -30,6 +31,7 @@ export interface SearchParameters {
   hiddenFacets?: string[];
   variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
+  filterMatchTypes?: FilterMatchTypes;
 }
 
 declare class Search {
@@ -46,7 +48,7 @@ declare class Search {
 
   getVoiceSearchResults(
     query: string,
-    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder'>,
+    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder' | 'filterMatchTypes'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;
@@ -68,6 +70,8 @@ export interface Response extends Record<string, any> {
   refined_content: Record<string, any>[];
   total_num_results: number;
   features: Partial<Feature>[];
+  related_searches?: Record<string, any>[];
+  related_browse_pages?: Record<string, any>[];
 }
 
 export interface SearchRequestType extends Record<string, any> {
@@ -96,8 +100,8 @@ export interface SearchResultType extends Record<string, any> {
   value: string;
   is_slotted: false;
   labels: Record<string, any>;
-  variations: Record<string, any>[];
-  variations_map: Record<string, any> | Record<string, any>[];
+  variations?: Record<string, any>[];
+  variations_map?: Record<string, any> | Record<string, any>[];
 }
 
 export interface Redirect extends Record<string, any> {
