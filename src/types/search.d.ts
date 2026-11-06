@@ -99,8 +99,8 @@ export interface SearchResultType extends Record<string, any> {
   value: string;
   is_slotted: false;
   labels: Record<string, any>;
-  variations: Record<string, any>[];
-  variations_map: Record<string, any> | Record<string, any>[];
+  variations?: Record<string, any>[];
+  variations_map?: Record<string, any> | Record<string, any>[];
 }
 
 export interface Redirect extends Record<string, any> {
