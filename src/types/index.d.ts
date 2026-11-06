@@ -186,6 +186,10 @@ export interface VariationsMapStandardValue extends VariationsMapBaseValue {
   aggregation: Exclude<Aggregation, 'value_count'>;
 }
 
+export type FilterMatchType = 'all' | 'any' | 'none';
+
+export type FilterMatchTypes = Record<string, FilterMatchType>;
+
 export interface VariationsMap {
   group_by: Array<{
     name: string,

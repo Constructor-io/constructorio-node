@@ -12,6 +12,7 @@ import {
   SortOption,
   FmtOptions,
   FilterExpression,
+  FilterMatchTypes,
   VariationsMap,
 } from '.';
 
@@ -31,7 +32,7 @@ export interface BrowseParameters {
   hiddenFacets?: string[];
   variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
-  filterMatchTypes?: Record<string, 'all' | 'any' | 'none'>;
+  filterMatchTypes?: FilterMatchTypes;
 }
 
 declare class Browse {

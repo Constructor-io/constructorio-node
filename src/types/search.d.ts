@@ -3,6 +3,7 @@ import {
   Facet,
   Feature,
   FilterExpression,
+  FilterMatchTypes,
   FmtOptions,
   Group,
   NetworkParameters,
@@ -30,7 +31,7 @@ export interface SearchParameters {
   hiddenFacets?: string[];
   variationsMap?: VariationsMap;
   qsParam?: Record<string, any>;
-  filterMatchTypes?: Record<string, 'all' | 'any' | 'none'>;
+  filterMatchTypes?: FilterMatchTypes;
 }
 
 declare class Search {
@@ -47,7 +48,7 @@ declare class Search {
 
   getVoiceSearchResults(
     query: string,
-    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder | filterMatchTypes'>,
+    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder' | 'filterMatchTypes'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;
