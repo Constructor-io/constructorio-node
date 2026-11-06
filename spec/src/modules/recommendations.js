@@ -890,4 +890,209 @@ describe('ConstructorIO - Recommendations', () => {
       });
     }
   });
+
+  describe('getRecommendationPage', () => {
+    const mockApiKey = 'key_mock_page_api';
+    const pageId = 'pdp_b2c';
+    const itemId = 'product-123';
+    const pageResultId = 'page-result-id';
+    const pageResponse = () => ({
+      request: { page_id: pageId, item_id: itemId, num_results: 10 },
+      response: {
+        page_id: pageId,
+        display_name: 'PDP - B2C',
+        page_type: 'pdp',
+        pods: [
+          {
+            pod_id: 'similar_items',
+            request: { item_id: itemId, num_results: 12 },
+            response: {
+              results: [
+                { data: { id: 'product-987' }, value: 'Red Running Shoe', strategy: { id: 'alternative_items' } },
+                { data: { id: 'product-988' }, value: 'Blue Running Shoe', strategy: { id: 'alternative_items' } },
+              ],
+              total_num_results: 2,
+              pod: { id: 'similar_items', display_name: 'Similar Items' },
+            },
+            result_id: 'similar-items-result-id',
+          },
+        ],
+      },
+      result_id: pageResultId,
+    });
+    let fetchStub;
+
+    beforeEach(() => {
+      fetchStub = sinon.stub().resolves({ ok: true, json: () => Promise.resolve(pageResponse()) });
+    });
+
+    it('Should request the page endpoint with shared parameters and user parameters', async () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub, securityToken: 'token' });
+
+      await recommendations.getRecommendationPage(pageId, {
+        itemIds: itemId,
+        numResults: 10,
+        section: 'Products',
+        filters: { in_stock: 'true' },
+        filterMatchTypes: { color: 'any' },
+      }, {
+        clientId: validClientId,
+        sessionId: validSessionId,
+        userId: 'user-id',
+        segments: ['vip'],
+        userIp: '127.0.0.1',
+        userAgent: 'agent',
+      });
+
+      const [requestedUrl, { headers }] = fetchStub.lastCall.args;
+      const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchStub);
+
+      expect(requestedUrl).to.match(/\/recommendations\/v1\/pages\/pdp_b2c\?/);
+      expect(requestedUrlParams).to.have.property('key').to.equal(mockApiKey);
+      expect(requestedUrlParams).to.have.property('i').to.equal(validClientId);
+      expect(requestedUrlParams).to.have.property('s').to.equal(validSessionId);
+      expect(requestedUrlParams).to.have.property('ui').to.equal('user-id');
+      expect(requestedUrlParams).to.have.property('us').to.equal('vip');
+      expect(requestedUrlParams).to.have.property('c').to.equal(clientVersion);
+      expect(requestedUrlParams).to.have.property('_dt');
+      expect(requestedUrlParams).to.have.property('item_id').to.equal(itemId);
+      expect(requestedUrlParams).to.have.property('num_results').to.equal('10');
+      expect(requestedUrlParams).to.have.property('section').to.equal('Products');
+      expect(requestedUrlParams.filters).to.deep.equal({ in_stock: 'true' });
+      expect(requestedUrlParams.filter_match_types).to.deep.equal({ color: 'any' });
+      expect(headers).to.include({ 'x-cnstrc-token': 'token', 'X-Forwarded-For': '127.0.0.1', 'User-Agent': 'agent' });
+    });
+
+    it('Should encode podOverrides in bracket notation with the same wire format as shared parameters', async () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+      const preFilterExpression = { or: [{ name: 'brand', value: 'acme' }] };
+      const variationsMap = { group_by: [{ name: 'color', field: 'data.color' }], values: {}, dtype: 'array' };
+
+      await recommendations.getRecommendationPage(pageId, {
+        itemIds: itemId,
+        podOverrides: {
+          similar_items: { numResults: 0 },
+          complete_the_look: {
+            preFilterExpression,
+            variationsMap,
+            fmtOptions: { groups_max_depth: 2 },
+            hiddenFields: ['inventory', 'margin'],
+          },
+        },
+      });
+
+      const requestedUrlParams = helpers.extractUrlParamsFromFetch(fetchStub);
+      const completeTheLook = requestedUrlParams.pod_overrides.complete_the_look;
+
+      expect(requestedUrlParams.pod_overrides.similar_items).to.deep.equal({ num_results: '0' });
+      expect(JSON.parse(completeTheLook.pre_filter_expression)).to.deep.equal(preFilterExpression);
+      expect(JSON.parse(completeTheLook.variations_map)).to.deep.equal(variationsMap);
+      expect(completeTheLook.fmt_options).to.deep.equal({ groups_max_depth: '2', hidden_fields: ['inventory', 'margin'] });
+    });
+
+    it('Should not modify the supplied parameters', async () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+      const parameters = {
+        fmtOptions: { groups_max_depth: 2 },
+        hiddenFields: ['inventory'],
+        podOverrides: { similar_items: { fmtOptions: { groups_max_depth: 1 }, hiddenFields: ['margin'] } },
+      };
+      const original = JSON.parse(JSON.stringify(parameters));
+
+      await recommendations.getRecommendationPage(pageId, parameters);
+
+      expect(parameters).to.deep.equal(original);
+    });
+
+    it('Should stamp each pod\'s own result_id onto its results, not the page result_id', async () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      const res = await recommendations.getRecommendationPage(pageId, { itemIds: itemId });
+
+      expect(res.result_id).to.equal(pageResultId);
+      res.response.pods[0].response.results.forEach((result) => {
+        expect(result.result_id).to.equal('similar-items-result-id');
+      });
+    });
+
+    it('Should expose the request URL on the returned promise', () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      const promise = recommendations.getRecommendationPage(pageId, { itemIds: itemId });
+
+      expect(promise.requestUrl).to.match(/\/recommendations\/v1\/pages\/pdp_b2c\?/);
+
+      return promise;
+    });
+
+    it('Should be rejected when the response has no pods', () => {
+      fetchStub = sinon.stub().resolves({ ok: true, json: () => Promise.resolve({ response: {} }) });
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      return expect(recommendations.getRecommendationPage(pageId)).to.eventually.be.rejectedWith('getRecommendationPage response data is malformed');
+    });
+
+    it('Should be rejected when pageId is not provided', () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      return expect(recommendations.getRecommendationPage(null, { itemIds: itemId })).to.eventually.be.rejectedWith('pageId is a required parameter of type string');
+    });
+
+    it('Should be rejected when podOverrides contains a page-wide parameter', () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      return expect(recommendations.getRecommendationPage(pageId, {
+        podOverrides: { similar_items: { itemIds: 'other' } },
+      })).to.eventually.be.rejectedWith('podOverrides.similar_items contains parameters that cannot be overridden per pod: itemIds');
+    });
+
+    ['numResults', false].forEach((override) => {
+      it(`Should be rejected when a podOverrides value is ${JSON.stringify(override)}`, () => {
+        const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+        return expect(recommendations.getRecommendationPage(pageId, {
+          podOverrides: { similar_items: override },
+        })).to.eventually.be.rejectedWith('podOverrides.similar_items must be an object');
+      });
+    });
+
+    it('Should be rejected when variationId is provided without itemIds', () => {
+      const { recommendations } = new ConstructorIO({ apiKey: mockApiKey, fetch: fetchStub });
+
+      return expect(recommendations.getRecommendationPage(pageId, { variationId: 'v1' })).to.eventually.be.rejectedWith('itemIds is a required parameter for variationId');
+    });
+  });
+
+  // Skipped: requires a recommendation page configured on the test index
+  describe.skip('getRecommendationPage - live', () => {
+    const pageId = 'pdp_b2c';
+    const itemId = 'power_drill';
+
+    it('Should return a response with each pod\'s result_id stamped on its results', async () => {
+      const { recommendations } = new ConstructorIO({ ...validOptions, fetch: fetchSpy });
+
+      const res = await recommendations.getRecommendationPage(pageId, { itemIds: itemId });
+
+      expect(res.response.pods).to.be.an('array').that.is.not.empty;
+      res.response.pods.forEach((pod) => {
+        expect(pod.result_id).to.be.a('string').that.does.not.equal(res.result_id);
+        pod.response.results.forEach((result) => {
+          expect(result.result_id).to.equal(pod.result_id);
+        });
+      });
+    });
+
+    it('Should apply a numResults override to one pod', async () => {
+      const { recommendations } = new ConstructorIO({ ...validOptions, fetch: fetchSpy });
+      const first = await recommendations.getRecommendationPage(pageId, { itemIds: itemId });
+      const overriddenPodId = first.response.pods[0].pod_id;
+
+      const res = await recommendations.getRecommendationPage(pageId, {
+        itemIds: itemId,
+        podOverrides: { [overriddenPodId]: { numResults: 1 } },
+      });
+
+      expect(res.response.pods[0].request.num_results).to.equal(1);
+    });
+  });
 });
