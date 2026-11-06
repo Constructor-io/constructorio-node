@@ -47,7 +47,7 @@ declare class Search {
 
   getVoiceSearchResults(
     query: string,
-    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder'>,
+    parameters?: Omit<SearchParameters, 'filters' | 'sortBy' | 'sortOrder | filterMatchTypes'>,
     userParameters?: UserParameters,
     networkParameters?: NetworkParameters
   ): Promise<SearchResponse>;

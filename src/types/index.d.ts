@@ -157,12 +157,12 @@ export interface VariationsMapSingleFilter {
   value: string | number | boolean;
 }
 
-export interface VariationsMapRange {
+export interface VariationsMapRangeFilter {
   field: string;
   range: FilterExpressionRangeValue;
 }
 
-export type FilterNode = VariationsMapSingleFilter | VariationsMapRange;
+export type FilterNode = VariationsMapSingleFilter | VariationsMapRangeFilter;
 
 export type FilterBy = RequireAtLeastOne<{
   and?: Array<FilterNode | FilterBy>;
