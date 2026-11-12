@@ -10,6 +10,8 @@ export interface TrackerUserParameters {
   segments?: string | string[];
   testCells?: Record<string, any>;
   originReferrer?: string;
+  documentReferrer?: string;
+  canonicalUrl?: string;
   referer?: string;
   userIp?: string;
   userAgent?: string;
@@ -215,6 +217,179 @@ declare class Tracker {
       variationId?: string;
       section?: string;
       analyticsTags?: Record<string, string>;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentAnswerFeedback(
+    parameters: {
+      feedbackLabel: 'thumbs_up' | 'thumbs_down';
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      qnaResultId?: string;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentAnswerView(
+    parameters: {
+      question: string;
+      answerText: string;
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      questionTopic?: string;
+      qnaResultId?: string;
+      threadId?: string;
+      items?: {
+        itemId?: string;
+        itemName?: string;
+        variationId?: string;
+        slCampaignId?: string;
+        slCampaignOwner?: string;
+      }[];
+      followUpQuestions?: {
+        value: string;
+      }[];
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentOutOfView(
+    parameters: {
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentFocus(
+    parameters: {
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentQuestionClick(
+    parameters: {
+      question: string;
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      questionTopic?: string;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentQuestionSubmit(
+    parameters: {
+      question: string;
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      questionTopic?: string;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentResultClick(
+    parameters: {
+      question: string;
+      seedItemId: string;
+      seedItemName?: string;
+      seedVariationId?: string;
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      position?: number;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      qnaResultId?: string;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentView(
+    parameters: {
+      questions: {
+        question: string;
+        questionTopic?: string;
+      }[];
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
+    },
+    userParameters?: TrackerUserParameters,
+    networkParameters?: NetworkParameters
+  ): true | Error;
+
+  trackProductInsightsAgentViews(
+    parameters: {
+      questions: {
+        question: string;
+        questionTopic?: string;
+      }[];
+      viewTimespans: {
+        start: string;
+        end: string;
+      }[];
+      itemId?: string;
+      itemName?: string;
+      variationId?: string;
+      features?: Record<string, boolean>;
+      featureVariants?: Record<string, string>;
+      threadId?: string;
+      analyticsTags?: Record<string, string>;
+      section?: string;
     },
     userParameters?: TrackerUserParameters,
     networkParameters?: NetworkParameters
