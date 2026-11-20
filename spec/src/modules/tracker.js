@@ -339,9 +339,11 @@ describe('ConstructorIO - Tracker', () => {
         fetch: fetchStub,
       });
 
-      [undefined, '', 123, '   '].forEach((documentReferrer) => {
+      [undefined, null, '', '   ', 123, 0, false].forEach((documentReferrer) => {
+        fetchStub.resetHistory();
         tracker.trackSessionStart({ ...userParameters, documentReferrer });
 
+        expect(fetchStub).to.have.been.calledOnce;
         expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
       });
     });
@@ -2970,9 +2972,11 @@ describe('ConstructorIO - Tracker', () => {
         fetch: fetchStub,
       });
 
-      [undefined, '', 123, '   '].forEach((documentReferrer) => {
+      [undefined, null, '', '   ', 123, 0, false].forEach((documentReferrer) => {
+        fetchStub.resetHistory();
         tracker.trackSearchResultsLoaded(term, requiredParameters, { ...userParameters, documentReferrer });
 
+        expect(fetchStub).to.have.been.calledOnce;
         expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
         expect(helpers.extractBodyParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
       });
