@@ -313,6 +313,41 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    it('Should send document_referrer when documentReferrer is provided', () => {
+      const documentReferrer = 'https://gemini.google.com/';
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        documentReferrer,
+      })).to.equal(true);
+
+      const requestParams = helpers.extractUrlParamsFromFetch(fetchStub);
+
+      expect(fetchStub).to.have.been.calledOnce;
+      expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+    });
+
+    it('Should not send document_referrer when documentReferrer is missing, empty or not a string', () => {
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      [undefined, null, '', '   ', 123, 0, false].forEach((documentReferrer) => {
+        fetchStub.resetHistory();
+        tracker.trackSessionStart({ ...userParameters, documentReferrer });
+
+        expect(fetchStub).to.have.been.calledOnce;
+        expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
+      });
+    });
+
     it('Should respond with a valid response with security token', (done) => {
       const securityToken = '5219c4c62f24e9b39ef92979';
       const { tracker } = new ConstructorIO({
@@ -2906,6 +2941,45 @@ describe('ConstructorIO - Tracker', () => {
         originReferrer,
         ...userParameters,
       })).to.equal(true);
+    });
+
+    it('Should send document_referrer in the query and body when documentReferrer is provided', () => {
+      const documentReferrer = 'https://gemini.google.com/';
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        documentReferrer,
+        ...userParameters,
+      })).to.equal(true);
+
+      const requestParams = helpers.extractUrlParamsFromFetch(fetchStub);
+      const bodyParams = helpers.extractBodyParamsFromFetch(fetchStub);
+
+      expect(fetchStub).to.have.been.calledOnce;
+      expect(fetchStub.args[0][1]).to.have.property('method').to.equal('POST');
+      expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
+      expect(bodyParams).to.have.property('document_referrer').to.equal(documentReferrer);
+    });
+
+    it('Should not send document_referrer when documentReferrer is missing, empty or not a string', () => {
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      [undefined, null, '', '   ', 123, 0, false].forEach((documentReferrer) => {
+        fetchStub.resetHistory();
+        tracker.trackSearchResultsLoaded(term, requiredParameters, { ...userParameters, documentReferrer });
+
+        expect(fetchStub).to.have.been.calledOnce;
+        expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
+        expect(helpers.extractBodyParamsFromFetch(fetchStub)).to.not.have.property('document_referrer');
+      });
     });
 
     it('Should respond with a valid response when term, required parameters and security token are provided', (done) => {
