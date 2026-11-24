@@ -13,6 +13,7 @@ const {
   toSnakeCase,
   toSnakeCaseKeys,
   addHTTPSToString,
+  maskPiiInUrl,
 } = require('../../../test/utils/helpers'); // eslint-disable-line import/extensions
 
 chai.use(chaiAsPromised);
@@ -275,6 +276,86 @@ describe('ConstructorIO - Utils - Helpers', () => {
         const testUrl = {};
 
         expect(addHTTPSToString(testUrl)).to.equal(null);
+      });
+    });
+
+    describe('maskPiiInUrl', () => {
+      it('Should mask an email in a query parameter of the url', () => {
+        expect(maskPiiInUrl('https://example.org/?email=test@test.com')).to.equal('https://example.org/?email=%3Cemail_omitted%3E');
+      });
+
+      it('Should keep the other query parameters when masking', () => {
+        const url = 'https://www.example.org/checkout/success?order=123&order_billemail=test%40test.com';
+
+        expect(maskPiiInUrl(url)).to.equal('https://www.example.org/checkout/success?order=123&order_billemail=%3Cemail_omitted%3E');
+      });
+
+      it('Should mask an email in a path segment of the url', () => {
+        expect(maskPiiInUrl('https://example.org/users/test@test.com/orders')).to.equal('https://example.org/users/%3Cemail_omitted%3E/orders');
+      });
+
+      it('Should mask a phone number and a credit card number in query parameters', () => {
+        const url = 'https://example.org/?phone=%2B12345678901&card=4111111111111111';
+
+        expect(maskPiiInUrl(url)).to.equal('https://example.org/?phone=%3Cphone_omitted%3E&card=%3Ccredit_omitted%3E');
+      });
+
+      it('Should mask the whole value when it is not a url and contains PII', () => {
+        expect(maskPiiInUrl('test@test.com')).to.equal('<email_omitted>');
+      });
+
+      it('Should mask the query even when a path segment cannot be decoded', () => {
+        expect(maskPiiInUrl('https://example.org/%E0%A4%A?email=test@test.com')).to.equal('https://example.org/%E0%A4%A?email=%3Cemail_omitted%3E');
+      });
+
+      it('Should mask an email inside a link nested in a query parameter', () => {
+        const url = 'https://example.org/login?return_to=https%3A%2F%2Fexample.org%2F%3Femail%3Dtest%40test.com';
+
+        expect(maskPiiInUrl(url)).to.equal('https://example.org/login?return_to=https%3A%2F%2Fexample.org%2F%3Femail%3D%253Cemail_omitted%253E');
+      });
+
+      it('Should mask an email inside a longer query value and keep the rest of the text', () => {
+        expect(maskPiiInUrl('https://example.org/search?q=my%20email%20test%40test.com')).to.equal('https://example.org/search?q=my%20email%20%3Cemail_omitted%3E');
+      });
+
+      it('Should mask an email or a phone number that has a raw plus sign', () => {
+        const url = 'https://example.org/?a=1&email=jane+shop@test.com&phone=+12345678901';
+
+        expect(maskPiiInUrl(url)).to.equal('https://example.org/?a=1&email=%3Cemail_omitted%3E&phone=%3Cphone_omitted%3E');
+      });
+
+      it('Should keep the other parts of the url exactly as they were when masking', () => {
+        const url = 'https://EXAMPLE.org:443/a%20b?q=a%20b&r=c+d&flag&x=%E0%A4%A&email=test@test.com#top';
+
+        expect(maskPiiInUrl(url)).to.equal('https://EXAMPLE.org:443/a%20b?q=a%20b&r=c+d&flag&x=%E0%A4%A&email=%3Cemail_omitted%3E#top');
+      });
+
+      it('Should not throw on a nested link with a line break in its hash', () => {
+        const url = 'https://site.com/?u=https%3A%2F%2Fa.com%2F%23x%0Ay';
+
+        expect(maskPiiInUrl(url)).to.equal(url);
+      });
+
+      it('Should mask an email in a query value that cannot be decoded', () => {
+        expect(maskPiiInUrl('https://site.com/?email=test@test.com%E0%A4%A')).to.equal('https://site.com/?email=%3Cemail_omitted%3E%E0%A4%A');
+      });
+
+      it('Should not throw on deeply nested links and still mask an email at the bottom', () => {
+        const url = `${'a://x?u='.repeat(20000)}test@test.com`;
+
+        expect(maskPiiInUrl(url)).to.not.include('test@test.com');
+      });
+
+      it('Should return the url unchanged when it has no PII', () => {
+        [
+          'https://gemini.google.com/',
+          'https://www.google.com/search?q=red+shoes&oq=red%20shoes&flag',
+          'https://EXAMPLE.org:443/a%20b?x=%E0%A4%A#top',
+          'android-app://com.google.android.gm/',
+          'not a url',
+        ].forEach((url) => {
+          expect(maskPiiInUrl(url)).to.equal(url);
+        });
       });
     });
   }

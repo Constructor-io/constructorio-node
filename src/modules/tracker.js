@@ -67,7 +67,7 @@ function applyParams(parameters, userParameters, options) {
   }
 
   if (typeof documentReferrer === 'string' && documentReferrer.trim()) {
-    aggregateParams.document_referrer = documentReferrer;
+    aggregateParams.document_referrer = helpers.maskPiiInUrl(documentReferrer);
   }
 
   aggregateParams._dt = dateTime || Date.now();

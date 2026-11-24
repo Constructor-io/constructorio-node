@@ -6,6 +6,23 @@ const PII_REGEX = {
   // Add more PII REGEX
 };
 
+// The email pattern without its anchors, to find an email inside longer text like the JS SDK does.
+// The lookbehind makes a match start only at the edge of a word, so long text is scanned in linear time.
+const EMAIL_WITHIN_TEXT_REGEX = new RegExp(`(?<![\\w\\-+\\\\.])${PII_REGEX.email.source.slice(1, -1)}`, 'g');
+
+// Splits a url into origin, path, query and hash without changing any of it
+const URL_PARTS_REGEX = /^([a-z][a-z\d+.-]*:\/\/[^/?#]*)([^?#]*)(\?[^#]*)?(#[\s\S]*)?$/i;
+
+// How many links inside links get parsed as urls, for example a login page's return_to link
+const MAX_NESTED_URL_DEPTH = 3;
+
+// Same placeholders as constructorio-client-javascript, keyed like PII_REGEX
+const PII_PLACEHOLDERS = {
+  email: '<email_omitted>',
+  phoneNumber: '<phone_omitted>',
+  creditCard: '<credit_omitted>',
+};
+
 const utils = {
   // Replace non-breaking spaces (or any other type of spaces caught by the regex)
   // - with a regular white space
@@ -89,10 +106,56 @@ const utils = {
   },
 
   containsPii(query) {
-    const piiRegex = Object.values(PII_REGEX);
-    const normalizedQuery = query.toLowerCase();
+    return !!utils.getPiiPlaceholder(query);
+  },
 
-    return piiRegex.some((regex) => regex.test(normalizedQuery));
+  getPiiPlaceholder(value) {
+    const normalizedValue = value.toLowerCase();
+    const piiType = Object.keys(PII_REGEX).find((type) => PII_REGEX[type].test(normalizedValue));
+
+    return piiType ? PII_PLACEHOLDERS[piiType] : null;
+  },
+
+  // Mask PII in a plain text value. An email is also masked when it sits inside longer text.
+  maskPiiInText(text) {
+    return utils.getPiiPlaceholder(text) || text.replace(EMAIL_WITHIN_TEXT_REGEX, PII_PLACEHOLDERS.email);
+  },
+
+  // Decode one raw url part with decodeURIComponent, which keeps a raw '+' like requestContainsPii does.
+  // Mask it (as a url when it is one), and re-encode it only when it changed, so parts without PII
+  // keep their exact encoding. A part that cannot be decoded is still masked as raw text.
+  maskPiiInUrlPart(rawPart, depth) {
+    let decodedPart;
+
+    try {
+      decodedPart = decodeURIComponent(rawPart);
+    } catch (e) {
+      const maskedRawPart = utils.maskPiiInText(rawPart);
+
+      return maskedRawPart === rawPart ? rawPart : maskedRawPart.replace(/[<>]/g, encodeURIComponent);
+    }
+
+    const maskedPart = utils.maskPiiInUrl(decodedPart, depth + 1);
+
+    return maskedPart === decodedPart ? rawPart : encodeURIComponent(maskedPart);
+  },
+
+  // Replace PII in each path segment and query value of a url with a placeholder.
+  // Works on the raw string, so everything else in the url stays exactly as it was.
+  // Links nested deeper than MAX_NESTED_URL_DEPTH are masked as plain text, so a crafted
+  // referrer cannot overflow the stack.
+  maskPiiInUrl(urlString, depth = 0) {
+    const urlParts = depth <= MAX_NESTED_URL_DEPTH && urlString.match(URL_PARTS_REGEX);
+
+    if (!urlParts) {
+      return utils.maskPiiInText(urlString);
+    }
+
+    const [, origin, path, query = '', hash = ''] = urlParts;
+    const maskedPath = path.replace(/[^/]+/g, (segment) => utils.maskPiiInUrlPart(segment, depth));
+    const maskedQuery = query.replace(/=([^&]*)/g, (match, value) => `=${utils.maskPiiInUrlPart(value, depth)}`);
+
+    return `${origin}${maskedPath}${maskedQuery}${hash}`;
   },
 
   requestContainsPii(urlString) {

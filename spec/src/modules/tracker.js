@@ -332,6 +332,22 @@ describe('ConstructorIO - Tracker', () => {
       expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
     });
 
+    it('Should mask PII inside documentReferrer and still send the event', () => {
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      expect(tracker.trackSessionStart({
+        ...userParameters,
+        documentReferrer: 'https://example.org/?email=test@test.com',
+      })).to.equal(true);
+
+      expect(fetchStub).to.have.been.calledOnce;
+      expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.have.property('document_referrer').to.equal('https://example.org/?email=%3Cemail_omitted%3E');
+    });
+
     it('Should not send document_referrer when documentReferrer is missing, empty or not a string', () => {
       const fetchStub = sinon.stub().resolves({ ok: true });
       const { tracker } = new ConstructorIO({
@@ -2963,6 +2979,24 @@ describe('ConstructorIO - Tracker', () => {
       expect(fetchStub.args[0][1]).to.have.property('method').to.equal('POST');
       expect(requestParams).to.have.property('document_referrer').to.equal(documentReferrer);
       expect(bodyParams).to.have.property('document_referrer').to.equal(documentReferrer);
+    });
+
+    it('Should mask PII inside documentReferrer in the query and body and still send the event', () => {
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+      const maskedReferrer = 'https://example.org/?email=%3Cemail_omitted%3E';
+
+      expect(tracker.trackSearchResultsLoaded(term, requiredParameters, {
+        ...userParameters,
+        documentReferrer: 'https://example.org/?email=test@test.com',
+      })).to.equal(true);
+
+      expect(fetchStub).to.have.been.calledOnce;
+      expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.have.property('document_referrer').to.equal(maskedReferrer);
+      expect(helpers.extractBodyParamsFromFetch(fetchStub)).to.have.property('document_referrer').to.equal(maskedReferrer);
     });
 
     it('Should not send document_referrer when documentReferrer is missing, empty or not a string', () => {
