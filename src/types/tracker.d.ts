@@ -10,6 +10,7 @@ export interface TrackerUserParameters {
   segments?: string | string[];
   testCells?: Record<string, any>;
   originReferrer?: string;
+  documentReferrer?: string;
   referer?: string;
   userIp?: string;
   userAgent?: string;

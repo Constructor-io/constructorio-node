@@ -17,6 +17,7 @@ function applyParams(parameters, userParameters, options) {
     segments,
     testCells,
     originReferrer,
+    documentReferrer,
     dateTime,
   } = userParameters || {};
   let aggregateParams = Object.assign(parameters);
@@ -63,6 +64,13 @@ function applyParams(parameters, userParameters, options) {
 
   if (originReferrer) {
     aggregateParams.origin_referrer = originReferrer;
+  }
+
+  // Trim before masking, so the masked value is the one that gets sent after cleanParams trims it
+  const trimmedDocumentReferrer = typeof documentReferrer === 'string' ? documentReferrer.trim() : '';
+
+  if (trimmedDocumentReferrer) {
+    aggregateParams.document_referrer = helpers.maskPiiInUrl(trimmedDocumentReferrer);
   }
 
   aggregateParams._dt = dateTime || Date.now();
@@ -200,6 +208,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -241,6 +250,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -290,6 +300,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -391,6 +402,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -493,6 +505,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -587,6 +600,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -714,6 +728,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -830,6 +845,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -965,6 +981,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1069,6 +1086,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1211,6 +1229,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1374,6 +1393,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1527,6 +1547,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
@@ -1675,6 +1696,7 @@ class Tracker {
    * @param {string[]} [userParameters.segments] - User segments
    * @param {object} [userParameters.testCells] - User test cells
    * @param {string} [userParameters.originReferrer] - Client page URL (including path)
+   * @param {string} [userParameters.documentReferrer] - URL of the page that sent the user to the current page (the browser's document.referrer). Send originReferrer with it
    * @param {string} [userParameters.referer] - Client page URL (including path)
    * @param {string} [userParameters.userIp] - Client user IP
    * @param {string} [userParameters.userAgent] - Client user agent
