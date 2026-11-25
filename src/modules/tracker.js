@@ -66,8 +66,11 @@ function applyParams(parameters, userParameters, options) {
     aggregateParams.origin_referrer = originReferrer;
   }
 
-  if (typeof documentReferrer === 'string' && documentReferrer.trim()) {
-    aggregateParams.document_referrer = helpers.maskPiiInUrl(documentReferrer);
+  // Trim before masking, so the masked value is the one that gets sent after cleanParams trims it
+  const trimmedDocumentReferrer = typeof documentReferrer === 'string' ? documentReferrer.trim() : '';
+
+  if (trimmedDocumentReferrer) {
+    aggregateParams.document_referrer = helpers.maskPiiInUrl(trimmedDocumentReferrer);
   }
 
   aggregateParams._dt = dateTime || Date.now();

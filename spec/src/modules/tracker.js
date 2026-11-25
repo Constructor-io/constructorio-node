@@ -313,6 +313,8 @@ describe('ConstructorIO - Tracker', () => {
       })).to.equal(true);
     });
 
+    // documentReferrer is added in applyParams, which every tracker method shares,
+    // so these tests cover one GET method here and one POST method in trackSearchResultsLoaded
     it('Should send document_referrer when documentReferrer is provided', () => {
       const documentReferrer = 'https://gemini.google.com/';
       const fetchStub = sinon.stub().resolves({ ok: true });
@@ -346,6 +348,22 @@ describe('ConstructorIO - Tracker', () => {
 
       expect(fetchStub).to.have.been.calledOnce;
       expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.have.property('document_referrer').to.equal('https://example.org/?email=%3Cemail_omitted%3E');
+    });
+
+    it('Should mask PII inside documentReferrer that has leading or trailing whitespace', () => {
+      const fetchStub = sinon.stub().resolves({ ok: true });
+      const { tracker } = new ConstructorIO({
+        apiKey: 'key-document-referrer-test',
+        fetch: fetchStub,
+      });
+
+      [' https://x.com/?card=4111111111111111', 'https://x.com/?card=4111111111111111 ', ' https://x.com/?card=4111111111111111\n'].forEach((documentReferrer) => {
+        fetchStub.resetHistory();
+        tracker.trackSessionStart({ ...userParameters, documentReferrer });
+
+        expect(fetchStub).to.have.been.calledOnce;
+        expect(helpers.extractUrlParamsFromFetch(fetchStub)).to.have.property('document_referrer').to.equal('https://x.com/?card=%3Ccredit_omitted%3E');
+      });
     });
 
     it('Should not send document_referrer when documentReferrer is missing, empty or not a string', () => {
